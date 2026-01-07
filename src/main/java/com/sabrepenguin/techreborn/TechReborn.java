@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn;
 
+import com.sabrepenguin.techreborn.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
@@ -7,6 +8,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -19,6 +21,13 @@ import org.apache.logging.log4j.Logger;
 public class TechReborn {
 
     public static final Logger LOGGER = LogManager.getLogger(Tags.MODID);
+
+    @SidedProxy(
+            modId = Tags.MODID,
+            clientSide = "com.sabrepenguin.techreborn.proxy.ClientProxy",
+            serverSide = "com.sabrepenguin.techreborn.proxy.CommonProxy"
+    )
+    public static CommonProxy proxy;
 
     @EventHandler
     // preInit "Run before anything else. Read your config, create blocks, items, etc. (Remove if not needed)
