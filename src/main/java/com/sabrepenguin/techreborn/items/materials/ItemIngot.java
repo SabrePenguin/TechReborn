@@ -7,6 +7,7 @@ import com.sabrepenguin.techreborn.items.ItemMetadata;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -29,7 +30,16 @@ public class ItemIngot extends ItemBase{
 
     public ItemIngot() {
         setHasSubtypes(true);
+        setTranslationKey(Tags.MODID + ".ingot");
         setRegistryName(Tags.MODID, "ingot");
+    }
+
+    @Override
+    public void registerOredict() {
+        for (ItemMetadata metadata: metaItems) {
+            ItemStack newItem = new ItemStack(this, 1, metadata.meta());
+            OreDictionary.registerOre("ingot" + metadata.capitalize(), newItem);
+        }
     }
 
     @Override

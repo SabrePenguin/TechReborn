@@ -21,4 +21,6 @@ public abstract class ItemBase extends Item {
     public String getPostfix() {
         return "";
     }
+
+    public void registerOredict() {}
 }
