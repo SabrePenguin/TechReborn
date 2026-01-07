@@ -1,7 +1,7 @@
 package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.items.ModItems;
+import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 public class ModelRegistryHandler {
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        registerModel(ModItems.ingot);
+        registerModel(TRItems.ingot);
     }
 
     private static void registerModel(Item item) {
