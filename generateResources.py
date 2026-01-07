@@ -33,6 +33,75 @@ INGOTS = [
     "uranium",
     "zinc",
 ]
+DUSTS = [
+    "almandine",
+    "aluminum",
+    "andesite",
+    "andradite",
+    "ashes",
+    "basalt",
+    "bauxite",
+    "brass",
+    "bronze",
+    "calcite",
+    "charcoal",
+    "chrome",
+    "cinnabar",
+    "clay",
+    "coal",
+    "copper",
+    "dark_ashes",
+    "diamond",
+    "diorite",
+    "dust",
+    "electrum",
+    "emerald",
+    "ender_eye",
+    "ender_pearl",
+    "endstone",
+    "flint",
+    "galena",
+    "gold",
+    "granite",
+    "grossular",
+    "invar",
+    "iridium",
+    "iron",
+    "lazurite",
+    "lead",
+    "magnesium",
+    "manganese",
+    "marble",
+    "netherrack",
+    "nickel",
+    "obsidian",
+    "olivine",
+    "peridot",
+    "phosphorous",
+    "platinum",
+    "plutonium",
+    "pyrite",
+    "pyrope",
+    "red_garnet",
+    "ruby",
+    "saltpeter",
+    "sapphire",
+    "saw_dust",
+    "silver",
+    "sodalite",
+    "spessartine",
+    "sphalerite",
+    "steel",
+    "sulfur",
+    "thorium",
+    "tin",
+    "titanium",
+    "tungsten",
+    "uranium",
+    "uvarovite",
+    "yellow_garnet",
+    "zinc"
+]
 
 def image_exists(path) -> bool:
     return os.path.exists(path)
@@ -70,9 +139,31 @@ def create_ingots():
     for ingot in INGOTS:
         new_file = ingot_model.joinpath(f"{ingot}_ingot.json")
         if not os.path.exists(ingot_model.joinpath(f"{ingot}_ingot.json")):
-            image = str(ingot_textures) + f"ingot/{ingot}_ingot"
+            image = str(ingot_textures) + f"/{ingot}_ingot"
             if not image_exists(image + ".png"):
                 print(f"Error: image {image}.png doesn't exist")
                 continue
             with open(new_file, "w") as file:
                 file.write(basic_generated(f"items/ingot/{ingot}_ingot"))
+
+# Dust creation
+def create_dust():
+    dust_model = ITEM_MODELS.joinpath("dust")
+    dust_textures = ITEM_TEXTURES.joinpath("dust")
+    if not os.path.exists(dust_model):
+        os.makedirs(dust_model, True)
+
+    for dust in DUSTS:
+        name = "dust" if dust == "dust" else f"{dust}_dust"
+        new_file = dust_model.joinpath(f"{name}.json")
+        if not os.path.exists(new_file):
+            image = str(dust_textures) + f"/{name}"
+            if not image_exists(image + ".png"):
+                print(f"Error: image {image}.png doesn't exist")
+                continue
+            with open(new_file, "w") as file:
+                file.write(basic_generated(f"items/dust/{name}"))
+
+if __name__ == "__main__":
+    create_ingots()
+    create_dust()
