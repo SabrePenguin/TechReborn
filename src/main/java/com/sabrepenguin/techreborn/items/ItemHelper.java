@@ -12,7 +12,7 @@ public class ItemHelper {
     private static final List<Item> allItems = new ArrayList<>();
 
     static {
-        Collections.addAll(allItems, TRItems.ingot, TRItems.dust);
+        Collections.addAll(allItems, TRItems.ingot, TRItems.dust, TRItems.smalldust);
     }
 
     public static List<Item> getAllItems() {
