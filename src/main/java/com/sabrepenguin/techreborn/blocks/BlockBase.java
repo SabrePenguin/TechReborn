@@ -1,10 +1,10 @@
 package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.TechReborn;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 
 public class BlockBase extends Block {
     public BlockBase(Material material, String translationKey, String registryName) {
@@ -15,7 +15,7 @@ public class BlockBase extends Block {
         super(material);
         setTranslationKey("techreborn." + translationKey);
         setRegistryName(Tags.MODID, registryName);
-        setCreativeTab(CreativeTabs.MISC);
+        setCreativeTab(TechReborn.RESOURCE_TAB);
         setSoundType(sound);
     }
 }

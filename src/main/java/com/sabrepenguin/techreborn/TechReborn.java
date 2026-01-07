@@ -1,8 +1,8 @@
 package com.sabrepenguin.techreborn;
 
 import com.sabrepenguin.techreborn.proxy.CommonProxy;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import com.sabrepenguin.techreborn.tabs.TRTab;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -29,6 +29,8 @@ public class TechReborn {
     )
     public static CommonProxy proxy;
 
+    public static final CreativeTabs RESOURCE_TAB = new TRTab("resource_tab");
+
     @EventHandler
     // preInit "Run before anything else. Read your config, create blocks, items, etc. (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
@@ -40,18 +42,6 @@ public class TechReborn {
     @SubscribeEvent
     // Register recipes here (Remove if not needed)
     public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-
-    }
-
-    @SubscribeEvent
-    // Register items here (Remove if not needed)
-    public void registerItems(RegistryEvent.Register<Item> event) {
-
-    }
-
-    @SubscribeEvent
-    // Register blocks here (Remove if not needed)
-    public void registerBlocks(RegistryEvent.Register<Block> event) {
 
     }
 
