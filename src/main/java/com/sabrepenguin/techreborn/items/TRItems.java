@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.items.materials.ItemIngot;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -10,7 +11,7 @@ public class TRItems {
 
     public static Item[] getItems() {
         final Item[] items = {
-                new ItemBase("ingot")
+                new ItemIngot()
         };
 
         return items;

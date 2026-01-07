@@ -1,15 +1,24 @@
 package com.sabrepenguin.techreborn.items;
 
-import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import net.minecraft.item.Item;
 
-public class ItemBase extends Item {
+public abstract class ItemBase extends Item {
 
-    public ItemBase(String name) {
-        super();
-        setTranslationKey("techreborn." + name);
-        setRegistryName(Tags.MODID, name);
+    public ItemBase() {
+        setNoRepair();
         setCreativeTab(TechReborn.RESOURCE_TAB);
+    }
+
+    public String[] getTypes() {
+        return new String[]{};
+    }
+
+    public String getPrefix() {
+        return "";
+    }
+
+    public String getPostfix() {
+        return "";
     }
 }
