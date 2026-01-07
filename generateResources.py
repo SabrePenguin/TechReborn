@@ -1,202 +1,220 @@
 import os
+import json
 from pathlib import Path
 
 BASE = Path("src/main/resources/assets/techreborn")
 ITEM_MODELS = BASE.joinpath("models/item")
 ITEM_TEXTURES = BASE.joinpath("textures/items")
-INGOTS = [
-    "advanced_alloy",
-    "aluminum",
-    "brass",
-    "bronze",
-    "chrome",
-    "copper",
-    "cupro_nickel",
-    "electrum",
-    "hot_tungstensteel",
-    "invar",
-    "iridium_alloy",
-    "iridium",
-    "lead",
-    "mixed_metal",
-    "nickel",
-    "platinum",
-    "plutonium",
-    "refined_iron",
-    "silver",
-    "steel",
-    "thorium",
-    "tin",
-    "titanium",
-    "tungsten",
-    "tungstensteel",
-    "uranium",
-    "zinc",
-]
-DUSTS = [
-    "almandine",
-    "aluminum",
-    "andesite",
-    "andradite",
-    "ashes",
-    "basalt",
-    "bauxite",
-    "brass",
-    "bronze",
-    "calcite",
-    "charcoal",
-    "chrome",
-    "cinnabar",
-    "clay",
-    "coal",
-    "copper",
-    "dark_ashes",
-    "diamond",
-    "diorite",
-    "dust",
-    "electrum",
-    "emerald",
-    "ender_eye",
-    "ender_pearl",
-    "endstone",
-    "flint",
-    "galena",
-    "gold",
-    "granite",
-    "grossular",
-    "invar",
-    "iridium",
-    "iron",
-    "lazurite",
-    "lead",
-    "magnesium",
-    "manganese",
-    "marble",
-    "netherrack",
-    "nickel",
-    "obsidian",
-    "olivine",
-    "peridot",
-    "phosphorous",
-    "platinum",
-    "plutonium",
-    "pyrite",
-    "pyrope",
-    "red_garnet",
-    "ruby",
-    "saltpeter",
-    "sapphire",
-    "saw_dust",
-    "silver",
-    "sodalite",
-    "spessartine",
-    "sphalerite",
-    "steel",
-    "sulfur",
-    "thorium",
-    "tin",
-    "titanium",
-    "tungsten",
-    "uranium",
-    "uvarovite",
-    "yellow_garnet",
-    "zinc"
-]
-SMALL_DUSTS = [
-    "almandine",
-    "aluminum",
-    "andesite",
-    "andradite",
-    "ashes",
-    "basalt",
-    "bauxite",
-    "brass",
-    "bronze",
-    "calcite",
-    "charcoal",
-    "chrome",
-    "cinnabar",
-    "clay",
-    "coal",
-    "copper",
-    "dark_ashes",
-    "diamond",
-    "diorite",
-    "electrum",
-    "emerald",
-    "ender_eye",
-    "ender_pearl",
-    "endstone",
-    "flint",
-    "galena",
-    "glowstone",
-    "gold",
-    "granite",
-    "grossular",
-    "invar",
-    "iridium",
-    "iron",
-    "lazurite",
-    "lead",
-    "magnesium",
-    "manganese",
-    "marble",
-    "netherrack",
-    "nickel",
-    "obsidian",
-    "olivine",
-    "peridot",
-    "phosphorous",
-    "platinum",
-    "plutonium",
-    "pyrite",
-    "pyrope",
-    "red_garnet",
-    "redstone",
-    "ruby",
-    "saltpeter",
-    "sapphire",
-    "saw_dust",
-    "silver",
-    "sodalite",
-    "spessartine",
-    "sphalerite",
-    "steel",
-    "sulfur",
-    "thorium",
-    "tin",
-    "titanium",
-    "tungsten",
-    "uranium",
-    "uvarovite",
-    "yellow_garnet",
-    "zinc"
-]
+INGOTS = {
+    "aluminum": 0,
+    "brass": 1,
+    "bronze": 2,
+    "chrome": 3,
+    "copper": 4,
+    "electrum": 5,
+    "invar": 6,
+    "iridium": 7,
+    "lead": 8,
+    "nickel": 9,
+    "platinum": 10,
+    "silver": 11,
+    "steel": 12,
+    "tin": 13,
+    "titanium": 14,
+    "tungsten": 15,
+    "hot_tungstensteel": 16,
+    "tungstensteel": 17,
+    "zinc": 18,
+    "refined_iron": 19,
+    "advanced_alloy": 20,
+    "mixed_metal": 21,
+    "iridium_alloy": 22,
+    "thorium": 23,
+    "uranium": 24,
+    "plutonium": 25,
+    # "cupro_nickel": 26,
+}
+DUSTS = {
+    "almandine": 0,
+    "aluminum": 1,
+    "andradite": 2,
+    "ashes": 3,
+    "basalt": 4,
+    "bauxite": 5,
+    "brass": 6,
+    "bronze": 7,
+    "calcite": 8,
+    "charcoal": 9,
+    "chrome": 10,
+    "cinnabar": 11,
+    "clay": 12,
+    "coal": 13,
+    "copper": 14,
+    "dark_ashes": 15,
+    "diamond": 16,
+    "electrum": 17,
+    "emerald": 18,
+    "ender_eye": 19,
+    "ender_pearl": 20,
+    "endstone": 21,
+    "flint": 22,
+    "galena": 23,
+    "gold": 24,
+    "grossular": 25,
+    "invar": 26,
+    "iron": 27,
+    "lazurite": 28,
+    "lead": 29,
+    "magnesium": 30,
+    "manganese": 31,
+    "marble": 32,
+    "netherrack": 33,
+    "nickel": 34,
+    "obsidian": 35,
+    "peridot": 36,
+    "phosphorous": 37,
+    "platinum": 38,
+    "pyrite": 39,
+    "pyrope": 40,
+    "red_garnet": 41,
+    # META_PLACEHOLDER: 42,
+    "ruby": 43,
+    "saltpeter": 44,
+    "sapphire": 45,
+    "saw_dust": 46,
+    "silver": 47,
+    "sodalite": 48,
+    "spessartine": 49,
+    "sphalerite": 50,
+    "steel": 51,
+    "sulfur": 52,
+    "tin": 53,
+    "titanium": 54,
+    "tungsten": 55,
+    "uvarovite": 56,
+    # META_PLACEHOLDER: 57,
+    "yellow_garnet": 58,
+    "zinc": 59,
+    # META_PLACEHOLDER: 60,
+    "andesite": 61,
+    "diorite": 62,
+    "granite": 63,
+    "iridium": 64,
+    "thorium": 65,
+    "uranium": 66,
+    "plutonium": 67,
+}
+SMALL_DUSTS = {
+    "almandine": 0,
+    "aluminum": 1,
+    "andradite": 2,
+    "ashes": 3,
+    "basalt": 4,
+    "bauxite": 5,
+    "brass": 6,
+    "bronze": 7,
+    "calcite": 8,
+    "charcoal": 9,
+    "chrome": 10,
+    "cinnabar": 11,
+    "clay": 12,
+    "coal": 13,
+    "copper": 14,
+    "dark_ashes": 15,
+    "diamond": 16,
+    "electrum": 17,
+    "emerald": 18,
+    "ender_eye": 19,
+    "ender_pearl": 20,
+    "endstone": 21,
+    "flint": 22,
+    "galena": 23,
+    "gold": 24,
+    "grossular": 25,
+    "invar": 26,
+    "iron": 27,
+    "lazurite": 28,
+    "lead": 29,
+    "magnesium": 30,
+    "manganese": 31,
+    "marble": 32,
+    "netherrack": 33,
+    "nickel": 34,
+    "obsidian": 35,
+    "peridot": 36,
+    "phosphorous": 37,
+    "platinum": 38,
+    "pyrite": 39,
+    "pyrope": 40,
+    "red_garnet": 41,
+    # META_PLACEHOLDER: 42
+    "ruby": 43,
+    "saltpeter": 44,
+    "sapphire": 45,
+    "saw_dust": 46,
+    "silver": 47,
+    "sodalite": 48,
+    "spessartine": 49,
+    "sphalerite": 50,
+    "steel": 51,
+    "sulfur": 52,
+    "tin": 53,
+    "titanium": 54,
+    "tungsten": 55,
+    "uvarovite": 56,
+    # META_PLACEHOLDER: 57,
+    "yellow_garnet": 58,
+    "zinc": 59,
+    # META_PLACEHOLDER: 60
+    "redstone": 61,
+    "glowstone": 62,
+    "andesite": 63,
+    "diorite": 64,
+    "granite": 65,
+    "iridium": 66,
+    "thorium": 67,
+    "uranium": 68,
+    "plutonium": 69,
+}
+
 
 def image_exists(path) -> bool:
     return os.path.exists(path)
 
+
 def basic_generated(image) -> str:
-    return (
-        f"{{\n"
-        f'    "__comment": "Generated by generateResources.py",\n'
-        f'    "parent": "item/generated",\n'
-        f'    "textures": {{\n'
-        f'        "layer0": "techreborn:{image}"\n'
-        f"    }}\n"
-        f"}}"
-    )
+    result = {
+        "__comment": "Generated by generateResources.py",
+        "parent": "item/generated",
+        "textures": {"layer0": f"techreborn:{image}"},
+    }
+    return json.dumps(result, indent=4)
+
 
 def path_image(path: str, image: str) -> str:
-    return (
-        f"{{\n"
-        f'    "__comment": "Generated by generateResources.py",\n'
-        f'    "parent": "item/generated",\n'
-        f'    "textures": {{\n'
-        f'        "layer0": "techreborn:{path}/{image}"\n'
-        f"    }}\n"
-        f"}}"
-    )
+    result = {
+        "__comment": "Generated by generateResources.py",
+        "parent": "item/generated",
+        "textures": {"layer0": f"techreborn:{path}/{image}"},
+    }
+    return json.dumps(result, indent=4)
+
+
+def two_by_two_metadata(
+    item_input: str,
+    output: str,
+    metadata: int = 0,
+    output_metadata: int = 0,
+    count: int = 1,
+) -> str:
+    result = {
+        "__comment": "Generated by generateResources.py",
+        "type": "crafting_shaped",
+        "pattern": ["X"],
+        "key": {"X": item_input, "data": metadata},
+        "result": {"item": output, "data": output_metadata, "count": count},
+    }
+    return json.dumps(result, indent=4)
 
 
 # INGOT creation
@@ -206,7 +224,7 @@ def create_ingots():
     if not os.path.exists(ingot_model):
         os.makedirs(ingot_model, True)
 
-    for ingot in INGOTS:
+    for ingot in INGOTS.keys():
         new_file = ingot_model.joinpath(f"{ingot}_ingot.json")
         if not os.path.exists(ingot_model.joinpath(f"{ingot}_ingot.json")):
             image = str(ingot_textures) + f"/{ingot}_ingot"
@@ -216,6 +234,7 @@ def create_ingots():
             with open(new_file, "w") as file:
                 file.write(basic_generated(f"items/ingot/{ingot}_ingot"))
 
+
 # Dust creation
 def create_dust():
     dust_model = ITEM_MODELS.joinpath("dust")
@@ -223,7 +242,7 @@ def create_dust():
     if not os.path.exists(dust_model):
         os.makedirs(dust_model, True)
 
-    for dust in DUSTS:
+    for dust in DUSTS.keys():
         name = "dust" if dust == "dust" else f"{dust}_dust"
         new_file = dust_model.joinpath(f"{name}.json")
         if not os.path.exists(new_file):
@@ -234,6 +253,7 @@ def create_dust():
             with open(new_file, "w") as file:
                 file.write(basic_generated(f"items/dust/{name}"))
 
+
 # Smalldust creation
 def create_smalldust():
     smalldust_model = ITEM_MODELS.joinpath("smalldust")
@@ -241,7 +261,7 @@ def create_smalldust():
     if not os.path.exists(smalldust_model):
         os.makedirs(smalldust_model, True)
 
-    for dust in SMALL_DUSTS:
+    for dust in SMALL_DUSTS.keys():
         new_file = smalldust_model.joinpath(f"{dust}_smalldust.json")
         if not os.path.exists(new_file):
             image = str(smalldust_textures) + f"/{dust}_smalldust"
@@ -250,6 +270,7 @@ def create_smalldust():
                 continue
             with open(new_file, "w") as file:
                 file.write(basic_generated(f"items/smalldust/{dust}_smalldust"))
+
 
 if __name__ == "__main__":
     create_ingots()
