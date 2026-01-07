@@ -102,6 +102,76 @@ DUSTS = [
     "yellow_garnet",
     "zinc"
 ]
+SMALL_DUSTS = [
+    "almandine",
+    "aluminum",
+    "andesite",
+    "andradite",
+    "ashes",
+    "basalt",
+    "bauxite",
+    "brass",
+    "bronze",
+    "calcite",
+    "charcoal",
+    "chrome",
+    "cinnabar",
+    "clay",
+    "coal",
+    "copper",
+    "dark_ashes",
+    "diamond",
+    "diorite",
+    "electrum",
+    "emerald",
+    "ender_eye",
+    "ender_pearl",
+    "endstone",
+    "flint",
+    "galena",
+    "glowstone",
+    "gold",
+    "granite",
+    "grossular",
+    "invar",
+    "iridium",
+    "iron",
+    "lazurite",
+    "lead",
+    "magnesium",
+    "manganese",
+    "marble",
+    "netherrack",
+    "nickel",
+    "obsidian",
+    "olivine",
+    "peridot",
+    "phosphorous",
+    "platinum",
+    "plutonium",
+    "pyrite",
+    "pyrope",
+    "red_garnet",
+    "redstone",
+    "ruby",
+    "saltpeter",
+    "sapphire",
+    "saw_dust",
+    "silver",
+    "sodalite",
+    "spessartine",
+    "sphalerite",
+    "steel",
+    "sulfur",
+    "thorium",
+    "tin",
+    "titanium",
+    "tungsten",
+    "uranium",
+    "uvarovite",
+    "yellow_garnet",
+    "zinc"
+]
 
 def image_exists(path) -> bool:
     return os.path.exists(path)
@@ -164,6 +234,24 @@ def create_dust():
             with open(new_file, "w") as file:
                 file.write(basic_generated(f"items/dust/{name}"))
 
+# Smalldust creation
+def create_smalldust():
+    smalldust_model = ITEM_MODELS.joinpath("smalldust")
+    smalldust_textures = ITEM_TEXTURES.joinpath("smalldust")
+    if not os.path.exists(smalldust_model):
+        os.makedirs(smalldust_model, True)
+
+    for dust in SMALL_DUSTS:
+        new_file = smalldust_model.joinpath(f"{dust}_smalldust.json")
+        if not os.path.exists(new_file):
+            image = str(smalldust_textures) + f"/{dust}_smalldust"
+            if not image_exists(image + ".png"):
+                print(f"Error: image {image}.png doesn't exist")
+                continue
+            with open(new_file, "w") as file:
+                file.write(basic_generated(f"items/smalldust/{dust}_smalldust"))
+
 if __name__ == "__main__":
     create_ingots()
     create_dust()
+    create_smalldust()
