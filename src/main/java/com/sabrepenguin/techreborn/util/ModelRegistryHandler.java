@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.items.ItemBase;
+import com.sabrepenguin.techreborn.items.ItemHelper;
 import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -17,7 +18,9 @@ public class ModelRegistryHandler {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        registerModel(TRItems.ingot);
+        for (Item item: ItemHelper.getAllItems()) {
+            registerModel(item);
+        }
     }
 
     private static void registerModel(Item item) {
