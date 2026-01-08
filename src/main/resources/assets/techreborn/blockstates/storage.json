@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "type=0": { "model": "techreborn:storage/silver_block" },
+    "type=1": { "model": "techreborn:storage/aluminum_block" },
+    "type=2": { "model": "techreborn:storage/titanium_block" },
+    "type=3": { "model": "techreborn:storage/chrome_block" },
+    "type=4": { "model": "techreborn:storage/steel_block" },
+    "type=5": { "model": "techreborn:storage/brass_block" },
+    "type=6": { "model": "techreborn:storage/lead_block" },
+    "type=7": { "model": "techreborn:storage/electrum_block" },
+    "type=8": { "model": "techreborn:storage/zinc_block" },
+    "type=9": { "model": "techreborn:storage/platinum_block" },
+    "type=10": { "model": "techreborn:storage/tungsten_block" },
+    "type=11": { "model": "techreborn:storage/nickel_block" },
+    "type=12": { "model": "techreborn:storage/invar_block" },
+    "type=13": { "model": "techreborn:storage/iridium_block" },
+    "type=14": { "model": "techreborn:storage/bronze_block" }
+  }
+}

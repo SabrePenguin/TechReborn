@@ -4,12 +4,14 @@ from pathlib import Path
 
 import recipes
 
-OVERWRITE = True
+OVERWRITE = False
 MODID = "techreborn"
 BASE = Path("src/main/resources/assets/techreborn")
 RECIPES = BASE.joinpath("recipes")
 ITEM_MODELS = BASE.joinpath("models/item")
 ITEM_TEXTURES = BASE.joinpath("textures/items")
+BLOCK_MODELS = BASE.joinpath("models/block")
+BLOCK_TEXTURES = BASE.joinpath("textures/blocks")
 INGOTS = {
     "aluminum": 0,
     "brass": 1,
@@ -208,15 +210,32 @@ SMALL_DUSTS = {
     "uranium": 68,
     "plutonium": 69,
 }
+BLOCK_STORAGE = {
+    "silver": 0,
+    "aluminum": 1,
+    "titanium": 2,
+    "chrome": 3,
+    "steel": 4,
+    "brass": 5,
+    "lead": 6,
+    "electrum": 7,
+    "zinc": 8,
+    "platinum": 9,
+    "tungsten": 10,
+    "nickel": 11,
+    "invar": 12,
+    "iridium": 13,
+    "bronze": 14,
+}
 
 
-def write_to_file(file_name: str | Path, recipe: str | None):
-    if recipe is None:
+def write_to_file(file_name: str | Path, data: str | None):
+    if data is None:
         print(f"Unable to write to file: {file_name}")
         return
     if not os.path.exists(file_name) or OVERWRITE:
         with open(file_name, "w") as file:
-            file.write(recipe)
+            file.write(data)
 
 
 def image_exists(path) -> bool:
@@ -238,6 +257,16 @@ def path_image(path: str, image: str) -> str:
         "parent": "item/generated",
         "textures": {"layer0": f"techreborn:{path}/{image}"},
     }
+    return json.dumps(result, indent=4)
+
+
+def block_all_model(image: str) -> str:
+    result = {"parent": "block/cube_all", "textures": {"all": f"techreborn:{image}"}}
+    return json.dumps(result, indent=4)
+
+
+def default_block_model(parent: str) -> str:
+    result = {"parent": parent}
     return json.dumps(result, indent=4)
 
 
@@ -314,6 +343,28 @@ def create_smalldust():
                 file.write(basic_generated(f"items/smalldust/{dust}_smalldust"))
 
 
+def create_blocks():
+    blocks_model = BLOCK_MODELS.joinpath("storage")
+    blocks_textures = BLOCK_TEXTURES.joinpath("storage")
+    items_model = ITEM_MODELS.joinpath("storage")
+    if not os.path.exists(blocks_model):
+        os.makedirs(blocks_model, True)
+    if not os.path.exists(items_model):
+        os.makedirs(items_model, True)
+
+    for storage in BLOCK_STORAGE.keys():
+        fname = blocks_model.joinpath(f"{storage}_block.json")
+        image = str(blocks_textures) + f"/{storage}_block"
+        if not image_exists(image + ".png"):
+            print(f"Error: image {image}.png doesn't exist")
+            continue
+        write_to_file(fname, block_all_model(f"block/storage/{storage}_block"))
+        fname = items_model.joinpath(f"{storage}_block.json")
+        write_to_file(
+            fname, default_block_model(f"techreborn:block/storage/{storage}_block")
+        )
+
+
 def dust_craft_creation():
     dust_crafts = RECIPES.joinpath("dust")
     if not os.path.exists(dust_crafts):
@@ -378,5 +429,6 @@ if __name__ == "__main__":
     create_nuggets()
     create_dust()
     create_smalldust()
+    create_blocks()
     dust_craft_creation()
     nugget_craft_creation()
