@@ -4,7 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.ItemHelper;
-import com.sabrepenguin.techreborn.items.ItemMetadata;
+import com.sabrepenguin.techreborn.util.MetadataHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -27,11 +27,11 @@ public class ItemDustSmall extends ItemBase {
             ItemHelper.META_PLACEHOLDER, "redstone", "glowstone", "andesite", "diorite", "granite", "iridium", "thorium",
             "uranium", "plutonium" };
 
-    public static List<ItemMetadata> metaItems = new ArrayList<>();
+    public static List<MetadataHelper> metaItems = new ArrayList<>();
     static {
         for(int i = 0; i < types.length; i++) {
             if (!types[i].equals(ItemHelper.META_PLACEHOLDER)) {
-                metaItems.add(new ItemMetadata(i, types[i]));
+                metaItems.add(new MetadataHelper(i, types[i]));
             }
         }
     }
@@ -63,7 +63,7 @@ public class ItemDustSmall extends ItemBase {
 
     @Override
     public void registerOredict() {
-        for (ItemMetadata metadata: metaItems) {
+        for (MetadataHelper metadata: metaItems) {
             ItemStack newItem = new ItemStack(this, 1, metadata.meta());
             OreDictionary.registerOre("dustSmall" + metadata.capitalize(), newItem);
         }

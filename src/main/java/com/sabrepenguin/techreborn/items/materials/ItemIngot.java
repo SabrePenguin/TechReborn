@@ -3,7 +3,7 @@ package com.sabrepenguin.techreborn.items.materials;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.ItemBase;
-import com.sabrepenguin.techreborn.items.ItemMetadata;
+import com.sabrepenguin.techreborn.util.MetadataHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -21,10 +21,10 @@ public class ItemIngot extends ItemBase{
             "hot_tungstensteel", "tungstensteel", "zinc", "refined_iron", "advanced_alloy", "mixed_metal",
             "iridium_alloy", "thorium", "uranium", "plutonium" };
 
-    public static List<ItemMetadata> metaItems = new ArrayList<>();
+    public static List<MetadataHelper> metaItems = new ArrayList<>();
     static {
         for(int i = 0; i < types.length; i++) {
-            metaItems.add(new ItemMetadata(i, types[i]));
+            metaItems.add(new MetadataHelper(i, types[i]));
         }
     }
 
@@ -36,7 +36,7 @@ public class ItemIngot extends ItemBase{
 
     @Override
     public void registerOredict() {
-        for (ItemMetadata metadata: metaItems) {
+        for (MetadataHelper metadata: metaItems) {
             ItemStack newItem = new ItemStack(this, 1, metadata.meta());
             OreDictionary.registerOre("ingot" + metadata.capitalize(), newItem);
         }
