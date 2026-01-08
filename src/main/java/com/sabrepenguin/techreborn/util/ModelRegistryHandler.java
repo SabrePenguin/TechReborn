@@ -3,7 +3,6 @@ package com.sabrepenguin.techreborn.util;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.ItemHelper;
-import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -29,7 +28,7 @@ public class ModelRegistryHandler {
             String prefix = baseItem.getPrefix();
             String postfix = baseItem.getPostfix();
             for(int i = 0; i < names.length; i++) {
-                if (names[i].equals(ItemHelper.META_PLACEHOLDER))
+                if (names[i].equals(MetadataHelper.META_PLACEHOLDER))
                     continue;
                 ModelLoader.setCustomModelResourceLocation(
                         item,

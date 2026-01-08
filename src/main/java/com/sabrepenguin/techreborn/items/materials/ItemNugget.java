@@ -3,7 +3,6 @@ package com.sabrepenguin.techreborn.items.materials;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.ItemBase;
-import com.sabrepenguin.techreborn.items.ItemHelper;
 import com.sabrepenguin.techreborn.util.MetadataHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -18,14 +17,14 @@ import java.util.stream.Collectors;
 public class ItemNugget extends ItemBase {
     public static final String[] types = new String[] { "aluminum", "brass", "bronze", "chrome", "copper", "electrum",
             "invar", "iridium", "lead", "nickel", "platinum", "silver", "steel", "tin", "titanium", "tungsten",
-            "hot_tungstensteel", "tungstensteel", "zinc", "refined_iron", ItemHelper.META_PLACEHOLDER,
-            ItemHelper.META_PLACEHOLDER,
-            ItemHelper.META_PLACEHOLDER, "iron", "diamond" };
+            "hot_tungstensteel", "tungstensteel", "zinc", "refined_iron", MetadataHelper.META_PLACEHOLDER,
+            MetadataHelper.META_PLACEHOLDER,
+            MetadataHelper.META_PLACEHOLDER, "iron", "diamond" };
 
     public static List<MetadataHelper> metaItems = new ArrayList<>();
     static {
         for(int i = 0; i < types.length; i++) {
-            if (!types[i].equals(ItemHelper.META_PLACEHOLDER)) {
+            if (!types[i].equals(MetadataHelper.META_PLACEHOLDER)) {
                 metaItems.add(new MetadataHelper(i, types[i]));
             }
         }

@@ -3,7 +3,6 @@ package com.sabrepenguin.techreborn.items.materials;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.ItemBase;
-import com.sabrepenguin.techreborn.items.ItemHelper;
 import com.sabrepenguin.techreborn.util.MetadataHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -21,15 +20,15 @@ public class ItemDust extends ItemBase {
             "dark_ashes", "diamond", "electrum", "emerald", "ender_eye", "ender_pearl", "endstone", "flint", "galena",
             "gold", "grossular", "invar", "iron", "lazurite", "lead", "magnesium", "manganese", "marble", "netherrack",
             "nickel", "obsidian", "peridot", "phosphorous", "platinum", "pyrite", "pyrope", "red_garnet",
-            ItemHelper.META_PLACEHOLDER,
+            MetadataHelper.META_PLACEHOLDER,
             "ruby", "saltpeter", "sapphire", "saw_dust", "silver", "sodalite", "spessartine", "sphalerite", "steel",
-            "sulfur", "tin", "titanium", "tungsten", "uvarovite", ItemHelper.META_PLACEHOLDER, "yellow_garnet", "zinc",
-            ItemHelper.META_PLACEHOLDER, "andesite", "diorite", "granite", "iridium", "thorium", "uranium", "plutonium" };
+            "sulfur", "tin", "titanium", "tungsten", "uvarovite", MetadataHelper.META_PLACEHOLDER, "yellow_garnet", "zinc",
+            MetadataHelper.META_PLACEHOLDER, "andesite", "diorite", "granite", "iridium", "thorium", "uranium", "plutonium" };
 
     public static List<MetadataHelper> metaItems = new ArrayList<>();
     static {
         for(int i = 0; i < types.length; i++) {
-            if (!types[i].equals(ItemHelper.META_PLACEHOLDER)) {
+            if (!types[i].equals(MetadataHelper.META_PLACEHOLDER)) {
                 metaItems.add(new MetadataHelper(i, types[i]));
             }
         }
