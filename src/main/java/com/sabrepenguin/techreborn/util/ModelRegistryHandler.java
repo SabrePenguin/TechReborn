@@ -1,8 +1,11 @@
 package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.blocks.BlockBase;
+import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.ItemHelper;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -18,11 +21,35 @@ public class ModelRegistryHandler {
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
         for (Item item: ItemHelper.getAllItems()) {
-            registerModel(item);
+            registerItemModel(item);
+        }
+        for (Block block: TRBlocks.getAllBlocks()) {
+            registerBlockstateModel(block);
         }
     }
 
-    private static void registerModel(Item item) {
+    private static void registerBlockstateModel(Block block) {
+        Item item = Item.getItemFromBlock(block);
+        if (block instanceof BlockBase blockBase) {
+            String[] types = blockBase.getTypes();
+            String prefix = blockBase.getPrefix();
+            String postfix = blockBase.getPostfix();
+            for (int i = 0; i < types.length; i++) {
+                if (types[i].equals(MetadataHelper.META_PLACEHOLDER))
+                    continue;
+                ModelLoader.setCustomModelResourceLocation(
+                        item,
+                        i,
+                        new ModelResourceLocation(
+                                block.getRegistryName(),
+                                "type=" + i
+                        )
+                );
+            }
+        }
+    }
+
+    private static void registerItemModel(Item item) {
         if (item instanceof ItemBase baseItem && item.getHasSubtypes()) {
             String[] names = baseItem.getTypes();
             String prefix = baseItem.getPrefix();
