@@ -349,21 +349,26 @@ def dust_craft_creation():
         write_to_file(fname, recipes.shapeless_recipe([rinput], output))
 
 
-def ingot_craft_creation():
-    ingot_crafts = RECIPES.joinpath("ingot")
-    if not os.path.exists(ingot_crafts):
-        os.makedirs(ingot_crafts, True)
+def nugget_craft_creation():
+    nugget_crafts = RECIPES.joinpath("nugget")
+    if not os.path.exists(nugget_crafts):
+        os.makedirs(nugget_crafts, True)
     for name in INGOTS.keys():
-        fname = ingot_crafts.joinpath(f"{name}_nugget.json")
+        fname = nugget_crafts.joinpath(f"{name}_nugget.json")
         rinput = recipes.create_ore("ingot", name)
         mdata = NUGGETS.get(name)
         if mdata is None:
             continue
         output = recipes.create_item(MODID, "nuggets", mdata, 9)
         write_to_file(fname, recipes.shapeless_recipe([rinput], output))
-    fname = ingot_crafts.joinpath(f"iron_nugget.json")
+    fname = nugget_crafts.joinpath(f"iron_nugget.json")
     rinput = recipes.create_ore("ingot", "iron")
     mdata = NUGGETS.get("iron")
+    output = recipes.create_item(MODID, "nuggets", mdata, 9)
+    write_to_file(fname, recipes.shapeless_recipe([rinput], output))
+    fname = nugget_crafts.joinpath(f"diamond_nugget.json")
+    rinput = recipes.create_ore("gem", "diamond")
+    mdata = NUGGETS.get("diamond")
     output = recipes.create_item(MODID, "nuggets", mdata, 9)
     write_to_file(fname, recipes.shapeless_recipe([rinput], output))
 
@@ -374,4 +379,4 @@ if __name__ == "__main__":
     create_dust()
     create_smalldust()
     dust_craft_creation()
-    ingot_craft_creation()
+    nugget_craft_creation()
