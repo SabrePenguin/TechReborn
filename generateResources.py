@@ -4,7 +4,7 @@ from pathlib import Path
 
 import recipes
 
-OVERWRITE = False
+OVERWRITE = True
 MODID = "techreborn"
 BASE = Path("src/main/resources/assets/techreborn")
 RECIPES = BASE.joinpath("recipes")
@@ -227,6 +227,19 @@ BLOCK_STORAGE = {
     "iridium": 13,
     "bronze": 14,
 }
+BLOCK_STORAGE2 = {
+    "tungstensteel": 0,
+    "iridium_reinforced_tungstensteel": 1,
+    "iridium_reinforced_stone": 2,
+    "ruby": 3,
+    "sapphire": 4,
+    "peridot": 5,
+    "yellow_garnet": 6,
+    "red_garnet": 7,
+    "copper": 8,
+    "tin": 9,
+    "refined_iron": 10,
+}
 
 
 def write_to_file(file_name: str | Path, data: str | None):
@@ -352,17 +365,19 @@ def create_blocks():
     if not os.path.exists(items_model):
         os.makedirs(items_model, True)
 
-    for storage in BLOCK_STORAGE.keys():
-        fname = blocks_model.joinpath(f"{storage}_block.json")
-        image = str(blocks_textures) + f"/{storage}_block"
-        if not image_exists(image + ".png"):
-            print(f"Error: image {image}.png doesn't exist")
-            continue
-        write_to_file(fname, block_all_model(f"block/storage/{storage}_block"))
-        fname = items_model.joinpath(f"{storage}_block.json")
-        write_to_file(
-            fname, default_block_model(f"techreborn:block/storage/{storage}_block")
-        )
+    blocks = [BLOCK_STORAGE, BLOCK_STORAGE2]
+    for l in blocks:
+        for storage in l.keys():
+            fname = blocks_model.joinpath(f"{storage}_block.json")
+            image = str(blocks_textures) + f"/{storage}_block"
+            if not image_exists(image + ".png"):
+                print(f"Error: image {image}.png doesn't exist")
+                continue
+            write_to_file(fname, block_all_model(f"blocks/storage/{storage}_block"))
+            # fname = items_model.joinpath(f"{storage}_block.json")
+            # write_to_file(
+            #     fname, default_block_model(f"techreborn:block/storage/{storage}_block")
+            # )
 
 
 def dust_craft_creation():

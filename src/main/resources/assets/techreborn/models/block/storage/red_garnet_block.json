@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "techreborn:blocks/storage/red_garnet_block"
+    }
+}

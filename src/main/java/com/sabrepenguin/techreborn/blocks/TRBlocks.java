@@ -11,17 +11,19 @@ import java.util.List;
 @GameRegistry.ObjectHolder(Tags.MODID)
 public class TRBlocks {
     public static final Block storage = null;
+    public static final Block storage2 = null;
 
     public static Block[] getBlocks() {
         final Block[] blocks = {
-                new BlockStorage()
+                new BlockStorage(),
+                new BlockStorage2()
         };
 
         return blocks;
     }
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
-        Collections.addAll(allBlocks, TRBlocks.storage);
+        Collections.addAll(allBlocks, TRBlocks.storage, TRBlocks.storage2);
         return allBlocks;
     }
 }

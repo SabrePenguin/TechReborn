@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "type=0": { "model": "techreborn:storage/tungstensteel_block" },
+    "type=1": { "model": "techreborn:storage/iridium_reinforced_tungstensteel_block" },
+    "type=2": { "model": "techreborn:storage/iridium_reinforced_stone_block" },
+    "type=3": { "model": "techreborn:storage/ruby_block" },
+    "type=4": { "model": "techreborn:storage/sapphire_block" },
+    "type=5": { "model": "techreborn:storage/peridot_block" },
+    "type=6": { "model": "techreborn:storage/yellow_garnet_block" },
+    "type=7": { "model": "techreborn:storage/red_garnet_block" },
+    "type=8": { "model": "techreborn:storage/copper_block" },
+    "type=9": { "model": "techreborn:storage/tin_block" },
+    "type=10": { "model": "techreborn:storage/refined_iron_block" }
+  }
+}
