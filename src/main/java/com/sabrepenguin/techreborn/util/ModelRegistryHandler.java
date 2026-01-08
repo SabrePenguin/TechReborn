@@ -4,7 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.ItemBase;
-import com.sabrepenguin.techreborn.items.ItemHelper;
+import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -20,7 +20,7 @@ public class ModelRegistryHandler {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        for (Item item: ItemHelper.getAllItems()) {
+        for (Item item: TRItems.getAllItems()) {
             registerItemModel(item);
         }
         for (Block block: TRBlocks.getAllBlocks()) {
