@@ -240,6 +240,7 @@ BLOCK_STORAGE2 = {
     "tin": 9,
     "refined_iron": 10,
 }
+GEM = {"ruby": 0, "sapphire": 1, "peridot": 2, "red_garnet": 3, "yellow_garnet": 4}
 
 
 def write_to_file(file_name: str | Path, data: str | None):
@@ -374,10 +375,19 @@ def create_blocks():
                 print(f"Error: image {image}.png doesn't exist")
                 continue
             write_to_file(fname, block_all_model(f"blocks/storage/{storage}_block"))
-            # fname = items_model.joinpath(f"{storage}_block.json")
-            # write_to_file(
-            #     fname, default_block_model(f"techreborn:block/storage/{storage}_block")
-            # )
+
+def create_gems():
+    gem_model = ITEM_MODELS.joinpath("gem")
+    gem_textures = ITEM_TEXTURES.joinpath("gem")
+    if not os.path.exists(gem_model):
+        os.makedirs(gem_model, True)
+    for name in GEM.keys():
+        fname = gem_model.joinpath(f"{name}.json")
+        image = str(gem_textures) + f"/{name}"
+        if not image_exists(image + ".png"):
+            print(f"Error: image {image}.png doesn't exist")
+            continue
+        write_to_file(fname, basic_generated(f"items/gem/{name}"))
 
 
 def dust_craft_creation():
@@ -439,11 +449,92 @@ def nugget_craft_creation():
     write_to_file(fname, recipes.shapeless_recipe([rinput], output))
 
 
+def ingot_craft_creation():
+    ingot_crafts = RECIPES.joinpath("ingot")
+    if not os.path.exists(ingot_crafts):
+        os.makedirs(ingot_crafts, True)
+    for name in NUGGETS.keys():
+        mdata = INGOTS.get(name)
+        if mdata is None:
+            if name == "iron":
+                fname = ingot_crafts.joinpath(f"{name}_ingotn.json")
+                rinput = recipes.create_ore("nugget", name)
+                output = recipes.create_item("minecraft", "iron_ingot", count=1)
+                write_to_file(
+                    fname,
+                    recipes.shaped_recipe(["XXX", "XXX", "XXX"], {"X": rinput}, output),
+                )
+            continue
+        fname = ingot_crafts.joinpath(f"{name}_ingotn.json")
+        rinput = recipes.create_ore("nugget", name)
+        output = recipes.create_item(MODID, "ingot", mdata, 1)
+        write_to_file(
+            fname, recipes.shaped_recipe(["XXX", "XXX", "XXX"], {"X": rinput}, output)
+        )
+    blocks = [BLOCK_STORAGE, BLOCK_STORAGE2]
+    for block in blocks:
+        for name in block.keys():
+            mdata = INGOTS.get(name)
+            if mdata is None:
+                continue
+            fname = ingot_crafts.joinpath(f"{name}_ingotb.json")
+            rinput = recipes.create_ore("block", name)
+            output = recipes.create_item(MODID, "ingot", mdata, 9)
+            write_to_file(fname, recipes.shapeless_recipe([rinput], output))
+
+def gem_craft_creation():
+    gem_crafts = RECIPES.joinpath("gem")
+    if not os.path.exists(gem_crafts):
+        os.makedirs(gem_crafts, True)
+    blocks = [BLOCK_STORAGE, BLOCK_STORAGE2]
+    for block in blocks:
+        for name in block.keys():
+            mdata = GEM.get(name)
+            if mdata is None:
+                continue
+            fname = gem_crafts.joinpath(f"{name}_gemb.json")
+            rinput = recipes.create_ore("block", name)
+            output = recipes.create_item(MODID, "gem", mdata, 9)
+            write_to_file(fname, recipes.shapeless_recipe([rinput], output))
+
+def block_craft_creation():
+    block_crafts = RECIPES.joinpath("block")
+    if not os.path.exists(block_crafts):
+        os.makedirs(block_crafts, True)
+    for name in INGOTS.keys():
+        mdata = BLOCK_STORAGE.get(name)
+        out_name = "storage"
+        if mdata is None:
+            mdata = BLOCK_STORAGE2.get(name)
+            out_name = "storage2"
+            if mdata is None:
+                continue
+        fname = block_crafts.joinpath(f"{name}_block.json")
+        rinput = recipes.create_ore("ingot", name)
+        output = recipes.create_item(MODID, out_name, mdata, 1)
+        write_to_file(fname, recipes.shaped_recipe(["XXX","XXX","XXX"], {"X": rinput}, output))
+    for name in GEM.keys():
+        mdata = BLOCK_STORAGE.get(name)
+        out_name = "storage"
+        if mdata is None:
+            mdata = BLOCK_STORAGE2.get(name)
+            out_name = "storage2"
+            if mdata is None:
+                continue
+        fname = block_crafts.joinpath(f"{name}_block.json")
+        rinput = recipes.create_ore("gem", name)
+        output = recipes.create_item(MODID, out_name, mdata, 1)
+        write_to_file(fname, recipes.shaped_recipe(["XXX","XXX","XXX"], {"X": rinput}, output))
+
 if __name__ == "__main__":
     create_ingots()
     create_nuggets()
     create_dust()
     create_smalldust()
     create_blocks()
+    create_gems()
     dust_craft_creation()
     nugget_craft_creation()
+    ingot_craft_creation()
+    gem_craft_creation()
+    block_craft_creation()
