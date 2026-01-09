@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 
 import recipes
+import registries
 
 OVERWRITE = True
 MODID = "techreborn"
@@ -12,235 +13,6 @@ ITEM_MODELS = BASE.joinpath("models/item")
 ITEM_TEXTURES = BASE.joinpath("textures/items")
 BLOCK_MODELS = BASE.joinpath("models/block")
 BLOCK_TEXTURES = BASE.joinpath("textures/blocks")
-INGOTS = {
-    "aluminum": 0,
-    "brass": 1,
-    "bronze": 2,
-    "chrome": 3,
-    "copper": 4,
-    "electrum": 5,
-    "invar": 6,
-    "iridium": 7,
-    "lead": 8,
-    "nickel": 9,
-    "platinum": 10,
-    "silver": 11,
-    "steel": 12,
-    "tin": 13,
-    "titanium": 14,
-    "tungsten": 15,
-    "hot_tungstensteel": 16,
-    "tungstensteel": 17,
-    "zinc": 18,
-    "refined_iron": 19,
-    "advanced_alloy": 20,
-    "mixed_metal": 21,
-    "iridium_alloy": 22,
-    "thorium": 23,
-    "uranium": 24,
-    "plutonium": 25,
-    # "cupro_nickel": 26,
-}
-NUGGETS = {
-    "aluminum": 0,
-    "brass": 1,
-    "bronze": 2,
-    "chrome": 3,
-    "copper": 4,
-    "electrum": 5,
-    "invar": 6,
-    "iridium": 7,
-    "lead": 8,
-    "nickel": 9,
-    "platinum": 10,
-    "silver": 11,
-    "steel": 12,
-    "tin": 13,
-    "titanium": 14,
-    "tungsten": 15,
-    "hot_tungstensteel": 16,
-    "tungstensteel": 17,
-    "zinc": 18,
-    "refined_iron": 19,
-    # ItemHelper.META_PLACEHOLDER: 20,
-    # ItemHelper.META_PLACEHOLDER: 21,
-    # ItemHelper.META_PLACEHOLDER: 22,
-    "iron": 23,
-    "diamond": 24,
-}
-DUSTS = {
-    "almandine": 0,
-    "aluminum": 1,
-    "andradite": 2,
-    "ashes": 3,
-    "basalt": 4,
-    "bauxite": 5,
-    "brass": 6,
-    "bronze": 7,
-    "calcite": 8,
-    "charcoal": 9,
-    "chrome": 10,
-    "cinnabar": 11,
-    "clay": 12,
-    "coal": 13,
-    "copper": 14,
-    "dark_ashes": 15,
-    "diamond": 16,
-    "electrum": 17,
-    "emerald": 18,
-    "ender_eye": 19,
-    "ender_pearl": 20,
-    "endstone": 21,
-    "flint": 22,
-    "galena": 23,
-    "gold": 24,
-    "grossular": 25,
-    "invar": 26,
-    "iron": 27,
-    "lazurite": 28,
-    "lead": 29,
-    "magnesium": 30,
-    "manganese": 31,
-    "marble": 32,
-    "netherrack": 33,
-    "nickel": 34,
-    "obsidian": 35,
-    "peridot": 36,
-    "phosphorous": 37,
-    "platinum": 38,
-    "pyrite": 39,
-    "pyrope": 40,
-    "red_garnet": 41,
-    # META_PLACEHOLDER: 42,
-    "ruby": 43,
-    "saltpeter": 44,
-    "sapphire": 45,
-    "saw_dust": 46,
-    "silver": 47,
-    "sodalite": 48,
-    "spessartine": 49,
-    "sphalerite": 50,
-    "steel": 51,
-    "sulfur": 52,
-    "tin": 53,
-    "titanium": 54,
-    "tungsten": 55,
-    "uvarovite": 56,
-    # META_PLACEHOLDER: 57,
-    "yellow_garnet": 58,
-    "zinc": 59,
-    # META_PLACEHOLDER: 60,
-    "andesite": 61,
-    "diorite": 62,
-    "granite": 63,
-    "iridium": 64,
-    "thorium": 65,
-    "uranium": 66,
-    "plutonium": 67,
-}
-SMALL_DUSTS = {
-    "almandine": 0,
-    "aluminum": 1,
-    "andradite": 2,
-    "ashes": 3,
-    "basalt": 4,
-    "bauxite": 5,
-    "brass": 6,
-    "bronze": 7,
-    "calcite": 8,
-    "charcoal": 9,
-    "chrome": 10,
-    "cinnabar": 11,
-    "clay": 12,
-    "coal": 13,
-    "copper": 14,
-    "dark_ashes": 15,
-    "diamond": 16,
-    "electrum": 17,
-    "emerald": 18,
-    "ender_eye": 19,
-    "ender_pearl": 20,
-    "endstone": 21,
-    "flint": 22,
-    "galena": 23,
-    "gold": 24,
-    "grossular": 25,
-    "invar": 26,
-    "iron": 27,
-    "lazurite": 28,
-    "lead": 29,
-    "magnesium": 30,
-    "manganese": 31,
-    "marble": 32,
-    "netherrack": 33,
-    "nickel": 34,
-    "obsidian": 35,
-    "peridot": 36,
-    "phosphorous": 37,
-    "platinum": 38,
-    "pyrite": 39,
-    "pyrope": 40,
-    "red_garnet": 41,
-    # META_PLACEHOLDER: 42
-    "ruby": 43,
-    "saltpeter": 44,
-    "sapphire": 45,
-    "saw_dust": 46,
-    "silver": 47,
-    "sodalite": 48,
-    "spessartine": 49,
-    "sphalerite": 50,
-    "steel": 51,
-    "sulfur": 52,
-    "tin": 53,
-    "titanium": 54,
-    "tungsten": 55,
-    "uvarovite": 56,
-    # META_PLACEHOLDER: 57,
-    "yellow_garnet": 58,
-    "zinc": 59,
-    # META_PLACEHOLDER: 60
-    "redstone": 61,
-    "glowstone": 62,
-    "andesite": 63,
-    "diorite": 64,
-    "granite": 65,
-    "iridium": 66,
-    "thorium": 67,
-    "uranium": 68,
-    "plutonium": 69,
-}
-BLOCK_STORAGE = {
-    "silver": 0,
-    "aluminum": 1,
-    "titanium": 2,
-    "chrome": 3,
-    "steel": 4,
-    "brass": 5,
-    "lead": 6,
-    "electrum": 7,
-    "zinc": 8,
-    "platinum": 9,
-    "tungsten": 10,
-    "nickel": 11,
-    "invar": 12,
-    "iridium": 13,
-    "bronze": 14,
-}
-BLOCK_STORAGE2 = {
-    "tungstensteel": 0,
-    "iridium_reinforced_tungstensteel": 1,
-    "iridium_reinforced_stone": 2,
-    "ruby": 3,
-    "sapphire": 4,
-    "peridot": 5,
-    "yellow_garnet": 6,
-    "red_garnet": 7,
-    "copper": 8,
-    "tin": 9,
-    "refined_iron": 10,
-}
-GEM = {"ruby": 0, "sapphire": 1, "peridot": 2, "red_garnet": 3, "yellow_garnet": 4}
 
 
 def write_to_file(file_name: str | Path, data: str | None):
@@ -291,7 +63,7 @@ def create_ingots():
     if not os.path.exists(ingot_model):
         os.makedirs(ingot_model, True)
 
-    for ingot in INGOTS:
+    for ingot in registries.INGOTS:
         new_file = ingot_model.joinpath(f"{ingot}_ingot.json")
         if not os.path.exists(ingot_model.joinpath(f"{ingot}_ingot.json")):
             image = str(ingot_textures) + f"/{ingot}_ingot"
@@ -309,7 +81,7 @@ def create_nuggets():
     if not os.path.exists(nugget_model):
         os.makedirs(nugget_model, True)
 
-    for dust in NUGGETS:
+    for dust in registries.NUGGETS:
         new_file = nugget_model.joinpath(f"{dust}_nugget.json")
         if not os.path.exists(new_file):
             image = str(nugget_textures) + f"/{dust}_nugget"
@@ -327,7 +99,7 @@ def create_dust():
     if not os.path.exists(dust_model):
         os.makedirs(dust_model, True)
 
-    for dust in DUSTS.keys():
+    for dust in registries.DUSTS.keys():
         name = "dust" if dust == "dust" else f"{dust}_dust"
         new_file = dust_model.joinpath(f"{name}.json")
         if not os.path.exists(new_file):
@@ -346,7 +118,7 @@ def create_smalldust():
     if not os.path.exists(smalldust_model):
         os.makedirs(smalldust_model, True)
 
-    for dust in SMALL_DUSTS.keys():
+    for dust in registries.SMALL_DUSTS.keys():
         new_file = smalldust_model.joinpath(f"{dust}_smalldust.json")
         if not os.path.exists(new_file):
             image = str(smalldust_textures) + f"/{dust}_smalldust"
@@ -366,7 +138,7 @@ def create_blocks():
     if not os.path.exists(items_model):
         os.makedirs(items_model, True)
 
-    blocks = [BLOCK_STORAGE, BLOCK_STORAGE2]
+    blocks = [registries.BLOCK_STORAGE, registries.BLOCK_STORAGE2]
     for l in blocks:
         for storage in l.keys():
             fname = blocks_model.joinpath(f"{storage}_block.json")
@@ -376,12 +148,13 @@ def create_blocks():
                 continue
             write_to_file(fname, block_all_model(f"blocks/storage/{storage}_block"))
 
+
 def create_gems():
     gem_model = ITEM_MODELS.joinpath("gem")
     gem_textures = ITEM_TEXTURES.joinpath("gem")
     if not os.path.exists(gem_model):
         os.makedirs(gem_model, True)
-    for name in GEM.keys():
+    for name in registries.GEM.keys():
         fname = gem_model.joinpath(f"{name}.json")
         image = str(gem_textures) + f"/{name}"
         if not image_exists(image + ".png"):
@@ -390,14 +163,28 @@ def create_gems():
         write_to_file(fname, basic_generated(f"items/gem/{name}"))
 
 
+def create_parts():
+    parts_model = ITEM_MODELS.joinpath("part")
+    parts_textures = ITEM_TEXTURES.joinpath("part")
+    if not os.path.exists(parts_model):
+        os.makedirs(parts_model, True)
+    for name in registries.PARTS.keys():
+        fname = parts_model.joinpath(f"{name}.json")
+        image = str(parts_textures) + f"/{name}"
+        if not image_exists(image + ".png"):
+            print(f"Error: image {image}.png doesn't exist")
+            continue
+        write_to_file(fname, basic_generated(f"items/part/{name}"))
+
+
 def dust_craft_creation():
     dust_crafts = RECIPES.joinpath("dust")
     if not os.path.exists(dust_crafts):
         os.makedirs(dust_crafts, True)
-    for input_name in SMALL_DUSTS.keys():
+    for input_name in registries.SMALL_DUSTS.keys():
         fname = dust_crafts.joinpath(f"{input_name}_dust.json")
         rinput = recipes.create_ore("dustSmall", input_name)
-        mdata = DUSTS.get(input_name)
+        mdata = registries.DUSTS.get(input_name)
         if mdata is None:
             continue
         output = recipes.create_item(MODID, "dust", mdata, 1)
@@ -415,10 +202,10 @@ def dust_craft_creation():
     smalldust_crafts = RECIPES.joinpath("smalldust")
     if not os.path.exists(smalldust_crafts):
         os.makedirs(smalldust_crafts, True)
-    for input_name in DUSTS.keys():
+    for input_name in registries.DUSTS.keys():
         fname = smalldust_crafts.joinpath(f"{input_name}_smalldust.json")
         rinput = recipes.create_ore("dust", input_name)
-        mdata = SMALL_DUSTS.get(input_name)
+        mdata = registries.SMALL_DUSTS.get(input_name)
         if mdata is None:
             continue
         output = recipes.create_item(MODID, "smalldust", mdata, 4)
@@ -429,22 +216,22 @@ def nugget_craft_creation():
     nugget_crafts = RECIPES.joinpath("nugget")
     if not os.path.exists(nugget_crafts):
         os.makedirs(nugget_crafts, True)
-    for name in INGOTS.keys():
+    for name in registries.INGOTS.keys():
         fname = nugget_crafts.joinpath(f"{name}_nugget.json")
         rinput = recipes.create_ore("ingot", name)
-        mdata = NUGGETS.get(name)
+        mdata = registries.NUGGETS.get(name)
         if mdata is None:
             continue
         output = recipes.create_item(MODID, "nuggets", mdata, 9)
         write_to_file(fname, recipes.shapeless_recipe([rinput], output))
     fname = nugget_crafts.joinpath(f"iron_nugget.json")
     rinput = recipes.create_ore("ingot", "iron")
-    mdata = NUGGETS.get("iron")
+    mdata = registries.NUGGETS.get("iron")
     output = recipes.create_item(MODID, "nuggets", mdata, 9)
     write_to_file(fname, recipes.shapeless_recipe([rinput], output))
     fname = nugget_crafts.joinpath(f"diamond_nugget.json")
     rinput = recipes.create_ore("gem", "diamond")
-    mdata = NUGGETS.get("diamond")
+    mdata = registries.NUGGETS.get("diamond")
     output = recipes.create_item(MODID, "nuggets", mdata, 9)
     write_to_file(fname, recipes.shapeless_recipe([rinput], output))
 
@@ -453,8 +240,8 @@ def ingot_craft_creation():
     ingot_crafts = RECIPES.joinpath("ingot")
     if not os.path.exists(ingot_crafts):
         os.makedirs(ingot_crafts, True)
-    for name in NUGGETS.keys():
-        mdata = INGOTS.get(name)
+    for name in registries.NUGGETS.keys():
+        mdata = registries.INGOTS.get(name)
         if mdata is None:
             if name == "iron":
                 fname = ingot_crafts.joinpath(f"{name}_ingotn.json")
@@ -471,10 +258,10 @@ def ingot_craft_creation():
         write_to_file(
             fname, recipes.shaped_recipe(["XXX", "XXX", "XXX"], {"X": rinput}, output)
         )
-    blocks = [BLOCK_STORAGE, BLOCK_STORAGE2]
+    blocks = [registries.BLOCK_STORAGE, registries.BLOCK_STORAGE2]
     for block in blocks:
         for name in block.keys():
-            mdata = INGOTS.get(name)
+            mdata = registries.INGOTS.get(name)
             if mdata is None:
                 continue
             fname = ingot_crafts.joinpath(f"{name}_ingotb.json")
@@ -482,14 +269,15 @@ def ingot_craft_creation():
             output = recipes.create_item(MODID, "ingot", mdata, 9)
             write_to_file(fname, recipes.shapeless_recipe([rinput], output))
 
+
 def gem_craft_creation():
     gem_crafts = RECIPES.joinpath("gem")
     if not os.path.exists(gem_crafts):
         os.makedirs(gem_crafts, True)
-    blocks = [BLOCK_STORAGE, BLOCK_STORAGE2]
+    blocks = [registries.BLOCK_STORAGE, registries.BLOCK_STORAGE2]
     for block in blocks:
         for name in block.keys():
-            mdata = GEM.get(name)
+            mdata = registries.GEM.get(name)
             if mdata is None:
                 continue
             fname = gem_crafts.joinpath(f"{name}_gemb.json")
@@ -497,34 +285,40 @@ def gem_craft_creation():
             output = recipes.create_item(MODID, "gem", mdata, 9)
             write_to_file(fname, recipes.shapeless_recipe([rinput], output))
 
+
 def block_craft_creation():
     block_crafts = RECIPES.joinpath("block")
     if not os.path.exists(block_crafts):
         os.makedirs(block_crafts, True)
-    for name in INGOTS.keys():
-        mdata = BLOCK_STORAGE.get(name)
+    for name in registries.INGOTS.keys():
+        mdata = registries.BLOCK_STORAGE.get(name)
         out_name = "storage"
         if mdata is None:
-            mdata = BLOCK_STORAGE2.get(name)
+            mdata = registries.BLOCK_STORAGE2.get(name)
             out_name = "storage2"
             if mdata is None:
                 continue
         fname = block_crafts.joinpath(f"{name}_block.json")
         rinput = recipes.create_ore("ingot", name)
         output = recipes.create_item(MODID, out_name, mdata, 1)
-        write_to_file(fname, recipes.shaped_recipe(["XXX","XXX","XXX"], {"X": rinput}, output))
-    for name in GEM.keys():
-        mdata = BLOCK_STORAGE.get(name)
+        write_to_file(
+            fname, recipes.shaped_recipe(["XXX", "XXX", "XXX"], {"X": rinput}, output)
+        )
+    for name in registries.GEM.keys():
+        mdata = registries.BLOCK_STORAGE.get(name)
         out_name = "storage"
         if mdata is None:
-            mdata = BLOCK_STORAGE2.get(name)
+            mdata = registries.BLOCK_STORAGE2.get(name)
             out_name = "storage2"
             if mdata is None:
                 continue
         fname = block_crafts.joinpath(f"{name}_block.json")
         rinput = recipes.create_ore("gem", name)
         output = recipes.create_item(MODID, out_name, mdata, 1)
-        write_to_file(fname, recipes.shaped_recipe(["XXX","XXX","XXX"], {"X": rinput}, output))
+        write_to_file(
+            fname, recipes.shaped_recipe(["XXX", "XXX", "XXX"], {"X": rinput}, output)
+        )
+
 
 if __name__ == "__main__":
     create_ingots()
@@ -533,6 +327,7 @@ if __name__ == "__main__":
     create_smalldust()
     create_blocks()
     create_gems()
+    create_parts()
     dust_craft_creation()
     nugget_craft_creation()
     ingot_craft_creation()
