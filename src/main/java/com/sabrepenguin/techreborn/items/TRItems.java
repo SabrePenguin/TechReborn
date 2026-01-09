@@ -17,6 +17,7 @@ public class TRItems {
     public static final Item smalldust = null;
     public static final Item nuggets = null;
     public static final Item gem = null;
+    public static final Item part = null;
 
     public static Item[] getItems() {
         final Item[] items = {
@@ -25,6 +26,7 @@ public class TRItems {
                 new ItemDustSmall(),
                 new ItemNugget(),
                 new ItemGem(),
+                new ItemParts()
         };
 
         return items;
@@ -32,7 +34,14 @@ public class TRItems {
 
     public static List<Item> getAllItems() {
         List<Item> allItems = new ArrayList<>();
-        Collections.addAll(allItems, TRItems.ingot, TRItems.dust, TRItems.smalldust, TRItems.nuggets, TRItems.gem);
+        Collections.addAll(allItems,
+                TRItems.ingot,
+                TRItems.dust,
+                TRItems.smalldust,
+                TRItems.nuggets,
+                TRItems.gem,
+                TRItems.part
+        );
         return allItems;
     }
 }
