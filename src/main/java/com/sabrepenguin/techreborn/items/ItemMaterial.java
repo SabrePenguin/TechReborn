@@ -1,7 +1,7 @@
 package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.items.materials.Material;
+import com.sabrepenguin.techreborn.items.materials.IMaterial;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -15,9 +15,9 @@ public class ItemMaterial extends ItemBase {
 
     private final String material;
     private final String translationKey;
-    private final Material items;
+    private final IMaterial items;
 
-    public ItemMaterial(String material, String translationKey, Material items) {
+    public ItemMaterial(String material, String translationKey, IMaterial items) {
         setTranslationKey(Tags.MODID  + "." + translationKey);
         setRegistryName(Tags.MODID, material);
         setHasSubtypes(true);
