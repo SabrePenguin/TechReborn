@@ -1,16 +1,12 @@
 package com.sabrepenguin.techreborn.items.materials;
 
 import com.sabrepenguin.techreborn.items.MetadataItem;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import java.util.*;
 
-public class Dust implements IMaterial {
+public class Dust extends Material {
 
     // I'll switch later if Sai is fine without metadata
-    private static final List<MetadataItem> ORDERED_ITEMS = new ArrayList<>();
-    private static final Int2ObjectMap<MetadataItem> META = new Int2ObjectOpenHashMap<>();
     static {
         ORDERED_ITEMS.addAll(
                 Arrays.asList(
@@ -93,33 +89,6 @@ public class Dust implements IMaterial {
     public static void addDust(String name, int metadata) {
         if (!META.containsKey(metadata))
             META.put(metadata, new MetadataItem(metadata, name));
-    }
-
-    @Override
-    public Collection<MetadataItem> getItems() {
-        return META.values();
-    }
-
-    @Override
-    public List<MetadataItem> getOrderedItems() {
-        return ORDERED_ITEMS;
-    }
-
-    @Override
-    public String getNameFromMeta(int meta) {
-        if (META.containsKey(meta)) {
-            return META.get(meta).name();
-        }
-        return "";
-    }
-
-    @Override
-    public int getMetaFromName(String name) {
-        for(MetadataItem item: META.values()) {
-            if (item.name().equals(name))
-                return item.meta();
-        }
-        return 0;
     }
 
     @Override
