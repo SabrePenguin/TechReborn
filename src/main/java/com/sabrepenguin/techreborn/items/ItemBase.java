@@ -3,6 +3,9 @@ package com.sabrepenguin.techreborn.items;
 import com.sabrepenguin.techreborn.TechReborn;
 import net.minecraft.item.Item;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public abstract class ItemBase extends Item {
 
     public ItemBase() {
@@ -12,6 +15,10 @@ public abstract class ItemBase extends Item {
 
     public String[] getTypes() {
         return new String[]{};
+    }
+
+    public Collection<MetadataItem> getItems() {
+        return new ArrayList<>();
     }
 
     public String getPrefix() {

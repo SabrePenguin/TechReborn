@@ -22,7 +22,7 @@ public class TRItems {
     public static Item[] getItems() {
         final Item[] items = {
                 new ItemIngot(),
-                new ItemDust(),
+                new ItemMaterial("dust", "dust", new Dust()),
                 new ItemDustSmall(),
                 new ItemNugget(),
                 new ItemGem(),

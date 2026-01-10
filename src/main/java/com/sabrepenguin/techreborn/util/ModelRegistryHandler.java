@@ -4,6 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.ItemBase;
+import com.sabrepenguin.techreborn.items.MetadataItem;
 import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -54,6 +55,21 @@ public class ModelRegistryHandler {
             String[] names = baseItem.getTypes();
             String prefix = baseItem.getPrefix();
             String postfix = baseItem.getPostfix();
+            if (names.length == 0) {
+                for(MetadataItem mitem: baseItem.getItems()) {
+                    ModelLoader.setCustomModelResourceLocation(
+                            item,
+                            mitem.meta(),
+                            new ModelResourceLocation(
+                                    new ResourceLocation(item.getRegistryName().getNamespace(),
+                                            prefix + mitem.name() + postfix),
+                                    "inventory"
+                            )
+                    );
+
+                }
+                return;
+            }
             for(int i = 0; i < names.length; i++) {
                 if (names[i].equals(MetadataHelper.META_PLACEHOLDER))
                     continue;
