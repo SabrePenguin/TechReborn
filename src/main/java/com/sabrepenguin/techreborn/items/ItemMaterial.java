@@ -44,7 +44,7 @@ public class ItemMaterial extends ItemBase {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         items.addAll(
-                this.items.getItems().stream()
+                this.items.getOrderedItems().stream()
                         .map(item -> new ItemStack(this, 1, item.meta()))
                         .collect(Collectors.toList()));
     }
