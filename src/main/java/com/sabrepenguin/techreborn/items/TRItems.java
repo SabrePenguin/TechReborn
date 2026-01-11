@@ -18,15 +18,17 @@ public class TRItems {
     public static final Item nuggets = null;
     public static final Item gem = null;
     public static final Item part = null;
+    public static final Item plates = null;
 
     public static Item[] getItems() {
         final Item[] items = {
-                new ItemIngot(),
                 new ItemMaterial("dust", "dust", new Dust()),
+                new ItemMaterial("gem", "gem", new Gem(), "gem/", ""),
+                new ItemMaterial("ingot", "ingot", new Ingot(), "ingot/", "_ingot"),
+                new ItemMaterial("nuggets", "nuggets", new Nugget(), "nugget/", "_nugget"),
+                new ItemMaterial("part", "part", new Part(), "part/", ""),
+                new ItemMaterial("plates", "plate", new Plate(), "plate", ""),
                 new ItemMaterial("smalldust", "dustsmall", new DustSmall()),
-                new ItemNugget(),
-                new ItemGem(),
-                new ItemParts()
         };
 
         return items;
@@ -35,12 +37,13 @@ public class TRItems {
     public static List<Item> getAllItems() {
         List<Item> allItems = new ArrayList<>();
         Collections.addAll(allItems,
-                TRItems.ingot,
                 TRItems.dust,
-                TRItems.smalldust,
-                TRItems.nuggets,
                 TRItems.gem,
-                TRItems.part
+                TRItems.ingot,
+                TRItems.nuggets,
+                TRItems.part,
+                TRItems.plates,
+                TRItems.smalldust
         );
         return allItems;
     }

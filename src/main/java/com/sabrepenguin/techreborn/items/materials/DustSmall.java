@@ -128,7 +128,7 @@ public class DustSmall implements IMaterial {
     }
 
     @Override
-    public String getOreDict(int meta) {
+    public String getOreDict() {
         return "dustSmall";
     }
 }

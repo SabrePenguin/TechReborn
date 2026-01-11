@@ -10,5 +10,11 @@ public interface IMaterial {
     Collection<MetadataItem> getItems();
     int getMetaFromName(String name);
     List<MetadataItem> getOrderedItems();
-    String getOreDict(int meta);
+    String getOreDict();
+    default boolean hasNonStandardOreDict() {
+        return false;
+    };
+    default String[] getNonStandardOreDict(int meta) {
+        return new String[]{};
+    }
 }

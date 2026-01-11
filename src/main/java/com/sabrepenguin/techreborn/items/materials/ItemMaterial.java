@@ -14,22 +14,22 @@ import java.util.stream.Collectors;
 
 public class ItemMaterial extends ItemBase {
 
-    private final String material;
+    private final String registryName;
     private final String translationKey;
     private final IMaterial items;
     private final String prefix;
     private final String postfix;
 
-    public ItemMaterial(String material, String translationKey, IMaterial items) {
-        this(material, translationKey, items, "", "");
+    public ItemMaterial(String registryName, String translationKey, IMaterial items) {
+        this(registryName, translationKey, items, "", "");
     }
 
-    public ItemMaterial(String material, String translationKey, IMaterial items, String modelPrefix, String modelPostfix) {
+    public ItemMaterial(String registryName, String translationKey, IMaterial items, String modelPrefix, String modelPostfix) {
         setTranslationKey(Tags.MODID  + "." + translationKey);
-        setRegistryName(Tags.MODID, material);
+        setRegistryName(Tags.MODID, registryName);
         setHasSubtypes(true);
         setNoRepair();
-        this.material = material;
+        this.registryName = registryName;
         this.translationKey = translationKey;
         this.items = items;
         this.prefix = modelPrefix;
@@ -39,7 +39,17 @@ public class ItemMaterial extends ItemBase {
     @Override
     public void registerOredict() {
         for (MetadataItem metadata: items.getItems()) {
-            String oredict = items.getOreDict(metadata.meta());
+            String oredict = items.getOreDict();
+            if (oredict.isEmpty() && items.hasNonStandardOreDict()) {
+                String[] ores = items.getNonStandardOreDict(metadata.meta());
+                for (String ore: ores) {
+                    ItemStack newItem = new ItemStack(this, 1, metadata.meta());
+                    OreDictionary.registerOre(ore, newItem);
+                }
+                continue;
+            } else if (oredict.isEmpty()) {
+                continue;
+            }
             ItemStack newItem = new ItemStack(this, 1, metadata.meta());
             OreDictionary.registerOre(oredict + metadata.capitalize(), newItem);
         }
@@ -75,6 +85,6 @@ public class ItemMaterial extends ItemBase {
     }
 
     public String getBlockstateJson() {
-        return this.material;
+        return this.registryName;
     }
 }

@@ -123,7 +123,7 @@ public class Dust implements IMaterial {
     }
 
     @Override
-    public String getOreDict(int meta) {
+    public String getOreDict() {
         return "dust";
     }
 }
