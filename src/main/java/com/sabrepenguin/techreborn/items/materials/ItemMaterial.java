@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.items.materials;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.MetadataItem;
 import net.minecraft.creativetab.CreativeTabs;
@@ -63,6 +64,8 @@ public class ItemMaterial extends ItemBase {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+        if (tab != TechReborn.RESOURCE_TAB)
+            return;
         items.addAll(
                 this.items.getOrderedItems().stream()
                         .map(item -> new ItemStack(this, 1, item.meta()))

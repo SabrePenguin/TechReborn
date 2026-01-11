@@ -29,7 +29,7 @@ public class TechReborn {
     )
     public static CommonProxy proxy;
 
-    public static final CreativeTabs RESOURCE_TAB = new TRTab("resource_tab");
+    public static final CreativeTabs RESOURCE_TAB = new TRTab();
 
     @EventHandler
     // preInit "Run before anything else. Read your config, create blocks, items, etc. (Remove if not needed)

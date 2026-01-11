@@ -19,6 +19,7 @@ public class TRItems {
     public static final Item gem = null;
     public static final Item part = null;
     public static final Item plates = null;
+    public static final Item uumatter = null;
 
     public static Item[] getItems() {
         final Item[] items = {
@@ -29,6 +30,7 @@ public class TRItems {
                 new ItemMaterial("part", "part", new Part(), "part/", ""),
                 new ItemMaterial("plates", "plate", new Plate(), "plate", ""),
                 new ItemMaterial("smalldust", "dustsmall", new DustSmall()),
+                new TechRebornItem("uumatter", "part.uuMatter", "misc/"),
         };
 
         return items;
@@ -43,7 +45,8 @@ public class TRItems {
                 TRItems.nuggets,
                 TRItems.part,
                 TRItems.plates,
-                TRItems.smalldust
+                TRItems.smalldust,
+                TRItems.uumatter
         );
         return allItems;
     }

@@ -6,8 +6,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 
 public class TRTab extends CreativeTabs {
-    public TRTab(String name) {
-        super(Tags.MODID + "." + name);
+    public TRTab() {
+        super(Tags.MODID);
     }
 
     @Override
