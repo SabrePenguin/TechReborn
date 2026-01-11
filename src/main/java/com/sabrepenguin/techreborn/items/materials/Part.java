@@ -72,7 +72,7 @@ public class Part implements IMaterial {
     }
 
 
-    public static void addSmallDust(String name, int metadata) {
+    public static void addPart(String name, int metadata) {
         if (!META.containsKey(metadata))
             META.put(metadata, new MetadataItem(metadata, name));
     }
@@ -103,46 +103,10 @@ public class Part implements IMaterial {
     public List<MetadataItem> getOrderedItems() {
         return ORDERED_ITEMS;
     }
- //        OreDictionary.registerOre("circuitBasic", getPartByName("electronic_circuit"));
- //        OreDictionary.registerOre("circuitAdvanced", getPartByName("advanced_circuit"));
- //        OreDictionary.registerOre("circuitStorage", getPartByName("data_storage_circuit"));
- //        OreDictionary.registerOre("circuitElite", getPartByName("data_control_circuit"));
- //        OreDictionary.registerOre("circuitMaster", getPartByName("energy_flow_circuit"));
- //
- //        OreDictionary.registerOre("reflectorBasic", getPartByName("neutron_reflector"));
- //        OreDictionary.registerOre("reflectorThick", getPartByName("thick_neutron_reflector"));
- //
- //        OreDictionary.registerOre("craftingDiamondGrinder", getPartByName("diamond_grinding_head"));
- //        OreDictionary.registerOre("craftingTungstenGrinder", getPartByName("tungsten_grinding_head"));
- //        OreDictionary.registerOre("craftingSuperconductor", getPartByName("super_conductor"));
- //
- //        OreDictionary.registerOre("materialResin", getPartByName("sap"));
- //        OreDictionary.registerOre("materialRubber", getPartByName("rubber"));
- //        OreDictionary.registerOre("itemRubber", getPartByName("rubber"));
- //
- //        OreDictionary.registerOre("itemScrap", getPartByName("scrap"));
- //        OreDictionary.registerOre("materialScrap", getPartByName("scrap"));
+
     @Override
     public String getOreDict() {
         return "";
-//        return switch (out) {
-//            case "energy_flow_circuit" -> new String[] {"circuitMaster"};
-//            case "data_control_circuit" -> new String[] {"circuitElite"};
-//            case "data_storage_circuit" -> new String[] {"circuitStorage"};
-//            case "electronic_circuit" -> new String[] {"circuitBasic"};
-//            case "advanced_circuit" -> new String[] {"circuitAdvanced"};
-//
-//            case "neutron_reflector" -> new String[] {"reflectorBasic"};
-//            case "thick_neutron_reflector" -> new String[] {"reflectorThick"};
-//
-//            case "diamond_grinding_head" -> new String[] {"craftingDiamondGrinder"};
-//            case "tungsten_grinding_head" -> new String[] {"craftingTungstenGrinder"};
-//            case "super_conductor" -> new String[] {"craftingSuperconductor"};
-//
-//            case "sap" -> new String[] {"materialResin"};
-//            case "rubber" -> new String[] {"materialRubber", "itemRubber"};
-//            default -> new String[] {};
-//        };
     }
 
     @Override

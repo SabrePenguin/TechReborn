@@ -50,7 +50,7 @@ public class Nugget implements IMaterial {
     }
 
 
-    public static void addSmallDust(String name, int metadata) {
+    public static void addNugget(String name, int metadata) {
         if (!META.containsKey(metadata))
             META.put(metadata, new MetadataItem(metadata, name));
     }

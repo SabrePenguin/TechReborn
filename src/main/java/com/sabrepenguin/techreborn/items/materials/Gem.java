@@ -30,7 +30,7 @@ public class Gem implements IMaterial {
     }
 
 
-    public static void addSmallDust(String name, int metadata) {
+    public static void addGem(String name, int metadata) {
         if (!META.containsKey(metadata))
             META.put(metadata, new MetadataItem(metadata, name));
     }

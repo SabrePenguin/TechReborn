@@ -60,21 +60,13 @@ public class Plate implements IMaterial {
                         new MetadataItem(38, "iridium_alloy")
                 )
         );
-        // Verbotten
-        //             "hot", // Hot ingots
-        //            "mixed_metal", // Mixed metal has own version of plate
-        //            "iridium_alloy", // Iridium alloy is plate itself
-        //            "thorium",
-        //            "uranium",
-        //            "plutonium",
-        //            MetadataHelper.META_PLACEHOLDER // ...
         for (MetadataItem item: ORDERED_ITEMS) {
             META.put(item.meta(), item);
         }
     }
 
 
-    public static void addSmallDust(String name, int metadata) {
+    public static void addPlate(String name, int metadata) {
         if (!META.containsKey(metadata))
             META.put(metadata, new MetadataItem(metadata, name));
     }
