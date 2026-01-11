@@ -23,7 +23,7 @@ public class TRItems {
         final Item[] items = {
                 new ItemIngot(),
                 new ItemMaterial("dust", "dust", new Dust()),
-                new ItemDustSmall(),
+                new ItemMaterial("smalldust", "dustsmall", new DustSmall()),
                 new ItemNugget(),
                 new ItemGem(),
                 new ItemParts()

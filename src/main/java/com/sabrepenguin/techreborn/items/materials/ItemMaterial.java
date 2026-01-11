@@ -1,7 +1,8 @@
-package com.sabrepenguin.techreborn.items;
+package com.sabrepenguin.techreborn.items.materials;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.items.materials.IMaterial;
+import com.sabrepenguin.techreborn.items.ItemBase;
+import com.sabrepenguin.techreborn.items.MetadataItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -16,14 +17,23 @@ public class ItemMaterial extends ItemBase {
     private final String material;
     private final String translationKey;
     private final IMaterial items;
+    private final String prefix;
+    private final String postfix;
 
     public ItemMaterial(String material, String translationKey, IMaterial items) {
+        this(material, translationKey, items, "", "");
+    }
+
+    public ItemMaterial(String material, String translationKey, IMaterial items, String modelPrefix, String modelPostfix) {
         setTranslationKey(Tags.MODID  + "." + translationKey);
         setRegistryName(Tags.MODID, material);
         setHasSubtypes(true);
+        setNoRepair();
         this.material = material;
         this.translationKey = translationKey;
         this.items = items;
+        this.prefix = modelPrefix;
+        this.postfix = modelPostfix;
     }
 
     @Override
@@ -51,16 +61,20 @@ public class ItemMaterial extends ItemBase {
 
     @Override
     public String getPrefix() {
-        return material + "/";
+        return prefix;
     }
 
     @Override
     public String getPostfix() {
-        return "_" + this.material;
+        return this.postfix;
     }
 
     @Override
     public Collection<MetadataItem> getItems() {
         return this.items.getItems();
+    }
+
+    public String getBlockstateJson() {
+        return this.material;
     }
 }

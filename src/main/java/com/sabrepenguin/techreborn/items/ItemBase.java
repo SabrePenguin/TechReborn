@@ -9,7 +9,6 @@ import java.util.Collection;
 public abstract class ItemBase extends Item {
 
     public ItemBase() {
-        setNoRepair();
         setCreativeTab(TechReborn.RESOURCE_TAB);
     }
 
