@@ -276,3 +276,29 @@ PARTS = {
     "compressed_plantball": 45,
     "bio_cell": 46,
 }
+PLATES = {
+    "iron": 0,
+    "gold": 1,
+    "carbon": 2,
+    "wood": 3,
+    "redstone": 4,
+    "diamond": 5,
+    "emerald": 6,
+    # META_PLACEHOLDER: 7,
+    "coal": 8,
+    "obsidian": 9,
+    "lazurite": 10,
+    "silicon": 11,
+}
+
+
+MISC = [
+    "uu_matter"
+]
+
+TOOLS = [
+    "bronze",
+    "ruby",
+    "peridot",
+    "sapphire",
+]

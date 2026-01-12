@@ -1,14 +1,25 @@
 package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.blocks.BlockBase;
+import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.itemblock.ItemBlockMeta;
 import com.sabrepenguin.techreborn.items.materials.*;
+import com.sabrepenguin.techreborn.items.tools.*;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+@Mod.EventBusSubscriber(modid = Tags.MODID)
 @GameRegistry.ObjectHolder(Tags.MODID)
 public class TRItems {
 
@@ -21,8 +32,33 @@ public class TRItems {
     public static final Item plates = null;
     public static final Item uumatter = null;
 
-    public static Item[] getItems() {
-        final Item[] items = {
+    public static final TRAxe bronzeaxe = null;
+    public static final TRHoe bronzehoe = null;
+    public static final TRPickaxe bronzepickaxe = null;
+    public static final TRSpade bronzespade = null;
+    public static final TRSword bronzesword = null;
+
+    public static final TRAxe rubyaxe = null;
+    public static final TRHoe rubyhoe = null;
+    public static final TRPickaxe rubypickaxe = null;
+    public static final TRSpade rubyspade = null;
+    public static final TRSword rubysword = null;
+
+    public static final TRAxe sapphireaxe = null;
+    public static final TRHoe sapphirehoe = null;
+    public static final TRPickaxe sapphirepickaxe = null;
+    public static final TRSpade sapphirespade = null;
+    public static final TRSword sapphiresword = null;
+
+    public static final TRAxe peridotaxe = null;
+    public static final TRHoe peridothoe = null;
+    public static final TRPickaxe peridotpickaxe = null;
+    public static final TRSpade peridotspade = null;
+    public static final TRSword peridotsword = null;
+
+    public static List<Item> getItems() {
+        final List<Item> items = new ArrayList<>(
+            Arrays.asList(
                 new ItemMaterial("dust", "dust", new Dust()),
                 new ItemMaterial("gem", "gem", new Gem(), "gem/", ""),
                 new ItemMaterial("ingot", "ingot", new Ingot(), "ingot/", "_ingot"),
@@ -30,8 +66,32 @@ public class TRItems {
                 new ItemMaterial("part", "part", new Part(), "part/", ""),
                 new ItemMaterial("plates", "plate", new Plate(), "plate", ""),
                 new ItemMaterial("smalldust", "dustsmall", new DustSmall()),
-                new TechRebornItem("uumatter", "part.uuMatter", "misc/"),
-        };
+                new TechRebornItem("uumatter", "part.uuMatter", "misc/")
+            )
+        );
+        items.add(new TRAxe(MaterialsTR.BRONZE_TOOL, "ingotBronze"));
+        items.add(new TRHoe(MaterialsTR.BRONZE_TOOL, "ingotBronze"));
+        items.add(new TRPickaxe(MaterialsTR.BRONZE_TOOL, "ingotBronze"));
+        items.add(new TRSpade(MaterialsTR.BRONZE_TOOL, "ingotBronze"));
+        items.add(new TRSword(MaterialsTR.BRONZE_TOOL, "ingotBronze"));
+
+        items.add(new TRAxe(MaterialsTR.PERIDOT_TOOL, "gemPeridot"));
+        items.add(new TRHoe(MaterialsTR.PERIDOT_TOOL, "gemPeridot"));
+        items.add(new TRPickaxe(MaterialsTR.PERIDOT_TOOL, "gemPeridot"));
+        items.add(new TRSpade(MaterialsTR.PERIDOT_TOOL, "gemPeridot"));
+        items.add(new TRSword(MaterialsTR.PERIDOT_TOOL, "gemPeridot"));
+
+        items.add(new TRAxe(MaterialsTR.RUBY_TOOL, "gemRuby"));
+        items.add(new TRHoe(MaterialsTR.RUBY_TOOL, "gemRuby"));
+        items.add(new TRPickaxe(MaterialsTR.RUBY_TOOL, "gemRuby"));
+        items.add(new TRSpade(MaterialsTR.RUBY_TOOL, "gemRuby"));
+        items.add(new TRSword(MaterialsTR.RUBY_TOOL, "gemRuby"));
+
+        items.add(new TRAxe(MaterialsTR.SAPPHIRE_TOOL, "gemSapphire"));
+        items.add(new TRHoe(MaterialsTR.SAPPHIRE_TOOL, "gemSapphire"));
+        items.add(new TRPickaxe(MaterialsTR.SAPPHIRE_TOOL, "gemSapphire"));
+        items.add(new TRSpade(MaterialsTR.SAPPHIRE_TOOL, "gemSapphire"));
+        items.add(new TRSword(MaterialsTR.SAPPHIRE_TOOL, "gemSapphire"));
 
         return items;
     }
@@ -46,8 +106,45 @@ public class TRItems {
                 TRItems.part,
                 TRItems.plates,
                 TRItems.smalldust,
-                TRItems.uumatter
+                TRItems.uumatter,
+                TRItems.bronzeaxe,
+                TRItems.bronzehoe,
+                TRItems.bronzepickaxe,
+                TRItems.bronzespade,
+                TRItems.bronzesword,
+                TRItems.rubyaxe,
+                TRItems.rubyhoe,
+                TRItems.rubypickaxe,
+                TRItems.rubyspade,
+                TRItems.rubysword,
+                TRItems.peridotaxe,
+                TRItems.peridothoe,
+                TRItems.peridotpickaxe,
+                TRItems.peridotspade,
+                TRItems.peridotsword,
+                TRItems.sapphireaxe,
+                TRItems.sapphirehoe,
+                TRItems.sapphirepickaxe,
+                TRItems.sapphirespade,
+                TRItems.sapphiresword
         );
         return allItems;
+    }
+
+    @SubscribeEvent
+    public static void registerItems(RegistryEvent.Register<Item> event) {
+        IForgeRegistry<Item> registry = event.getRegistry();
+        for (Item item: TRItems.getItems()) {
+            registry.register(item);
+            if (item instanceof ItemBase baseItem) {
+                baseItem.registerOredict();
+            }
+        }
+        for (Block block: TRBlocks.getAllBlocks()) {
+            registry.register(new ItemBlockMeta(block).setRegistryName(block.getRegistryName()));
+            if (block instanceof BlockBase baseBlock) {
+                baseBlock.registerOredict();
+            }
+        }
     }
 }

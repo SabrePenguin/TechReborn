@@ -176,6 +176,33 @@ def create_parts():
             continue
         write_to_file(fname, basic_generated(f"items/part/{name}"))
 
+def create_misc():
+    misc_model = ITEM_MODELS.joinpath("misc")
+    misc_textures = ITEM_TEXTURES.joinpath("misc")
+    if not os.path.exists(misc_model):
+        os.makedirs(misc_model, True)
+    for name in registries.MISC:
+        fname = misc_model.joinpath(f"{name}.json")
+        image = str(misc_textures) + f"/{name}"
+        if not image_exists(image + ".png"):
+            print(f"Error: image {image}.png doesn't exist")
+            continue
+        write_to_file(fname, basic_generated(f"items/misc/{name}"))
+
+def create_tools():
+    tool_model = ITEM_MODELS.joinpath("tool")
+    tool_textures = ITEM_TEXTURES.joinpath("tool")
+    if not os.path.exists(tool_model):
+        os.makedirs(tool_model, True)
+    for name in registries.TOOLS:
+        for t in ["axe", "boots", "chestplate", "helmet", "hoe", "leggings", "pickaxe", "spade", "sword"]:
+            fname = tool_model.joinpath(f"{name}{t}.json")
+            image = str(tool_textures) + f"/{name}_{t}"
+            if not image_exists(image + ".png"):
+                print(f"Error: image {image}_{t}.png doesn't exist")
+                continue
+            write_to_file(fname, basic_generated(f"items/tool/{name}_{t}"))
+
 
 def dust_craft_creation():
     dust_crafts = RECIPES.joinpath("dust")
@@ -328,6 +355,8 @@ if __name__ == "__main__":
     create_blocks()
     create_gems()
     create_parts()
+    create_misc()
+    create_tools()
     dust_craft_creation()
     nugget_craft_creation()
     ingot_craft_creation()
