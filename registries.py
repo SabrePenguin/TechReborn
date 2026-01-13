@@ -302,3 +302,9 @@ TOOLS = [
     "peridot",
     "sapphire",
 ]
+
+ARMOR = [
+    "cloaking_device",
+    "lapotronic_orbpack",
+    "lithium_batpack"
+]

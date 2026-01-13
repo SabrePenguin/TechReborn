@@ -203,6 +203,33 @@ def create_tools():
                 continue
             write_to_file(fname, basic_generated(f"items/tool/{name}_{t}"))
 
+def create_item_x(directory: str, registry: dict|list, postfix: str=""):
+    model = ITEM_MODELS.joinpath(directory)
+    textures = ITEM_TEXTURES.joinpath(directory)
+    if not os.path.exists(model):
+        os.makedirs(model, True)
+    local_keys = []
+    if isinstance(registry, list):
+        local_keys = registry
+    elif isinstance(registry, dict):
+        local_keys = registry.keys()
+    else:
+        return
+    for key in local_keys:
+        fname = model.joinpath(f"{key}{postfix}.json")
+        image = str(textures) + f"/{key}{postfix}"
+        if not image_exists(image + ".png"):
+            print(f"Error: image {image}{postfix}.png doesn't exist")
+            continue
+        directory = fix_directory(directory)
+        write_to_file(fname, basic_generated(f"items/{directory}{key}{postfix}"))
+
+def fix_directory(directory: str) -> str:
+    if directory.endswith("/"):
+        return directory
+    if directory == "":
+        return ""
+    return directory + "/"
 
 def dust_craft_creation():
     dust_crafts = RECIPES.joinpath("dust")
@@ -357,6 +384,7 @@ if __name__ == "__main__":
     create_parts()
     create_misc()
     create_tools()
+    create_item_x("armor", registries.ARMOR)
     dust_craft_creation()
     nugget_craft_creation()
     ingot_craft_creation()
