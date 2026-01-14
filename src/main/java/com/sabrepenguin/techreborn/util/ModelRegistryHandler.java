@@ -9,13 +9,15 @@ import com.sabrepenguin.techreborn.items.MetadataItem;
 import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.item.Item;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.List;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Tags.MODID)
 public class ModelRegistryHandler {
@@ -33,12 +35,10 @@ public class ModelRegistryHandler {
     private static void registerBlockstateModel(Block block) {
         Item item = Item.getItemFromBlock(block);
         if (block instanceof BlockBase blockBase) {
-            String[] types = blockBase.getTypes();
+            List<MetadataHelper> types = blockBase.getTypes();
             String prefix = blockBase.getPrefix();
             String postfix = blockBase.getPostfix();
-            for (int i = 0; i < types.length; i++) {
-                if (types[i].equals(MetadataHelper.META_PLACEHOLDER))
-                    continue;
+            for (int i = 0; i < types.size(); i++) {
                 ModelLoader.setCustomModelResourceLocation(
                         item,
                         i,
@@ -52,7 +52,18 @@ public class ModelRegistryHandler {
     }
 
     private static void registerItemModel(Item item) {
-        if (item instanceof ItemBase baseItem && item.getHasSubtypes()) {
+        if (item instanceof INonStandardLocation nonStandardItem) {
+            ModelLoader.setCustomModelResourceLocation(
+                    item,
+                    0,
+                    new ModelResourceLocation(
+                            new ResourceLocation(item.getRegistryName().getNamespace(),
+                                    nonStandardItem.getPrefix() + item.getRegistryName().getPath() + nonStandardItem.getPostfix()
+                            ),
+                            "inventory")
+            );
+        }
+        else if (item instanceof ItemBase baseItem && item.getHasSubtypes()) {
             String[] names = baseItem.getTypes();
             String prefix = baseItem.getPrefix();
             String postfix = baseItem.getPostfix();
@@ -86,6 +97,16 @@ public class ModelRegistryHandler {
                         )
                 );
             }
+        } else if (item instanceof ItemBase base) {
+            ModelLoader.setCustomModelResourceLocation(
+                    item,
+                    0,
+                    new ModelResourceLocation(
+                            new ResourceLocation(item.getRegistryName().getNamespace(),
+                                    base.getPrefix() + item.getRegistryName().getPath() + base.getPostfix()
+                                    ),
+                            "inventory")
+            );
         } else {
             ModelLoader.setCustomModelResourceLocation(
                     item,
