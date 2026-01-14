@@ -1,6 +1,8 @@
 package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.blocks.meta.BlockStorage;
+import com.sabrepenguin.techreborn.blocks.meta.BlockStorage2;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -23,7 +25,10 @@ public class TRBlocks {
     }
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
-        Collections.addAll(allBlocks, TRBlocks.storage, TRBlocks.storage2);
+        Collections.addAll(allBlocks,
+                TRBlocks.storage,
+                TRBlocks.storage2
+        );
         return allBlocks;
     }
 }

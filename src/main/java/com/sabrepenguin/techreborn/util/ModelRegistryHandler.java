@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
+import com.sabrepenguin.techreborn.blocks.IMetaBlock;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.materials.ItemMaterial;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.Collection;
 import java.util.List;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Tags.MODID)
@@ -35,16 +37,35 @@ public class ModelRegistryHandler {
     private static void registerBlockstateModel(Block block) {
         Item item = Item.getItemFromBlock(block);
         if (block instanceof BlockBase blockBase) {
-            List<MetadataHelper> types = blockBase.getTypes();
-            String prefix = blockBase.getPrefix();
-            String postfix = blockBase.getPostfix();
-            for (int i = 0; i < types.size(); i++) {
+            String prefix = "";
+            String postfix = "";
+            if (blockBase instanceof INonStandardLocation location) {
+                prefix = location.getPrefix();
+                postfix = location.getPostfix();
+            }
+            if (block instanceof IMetaBlock metaBlock) {
+                List<MetadataHelper> types = metaBlock.getListMetadata();
+
+                for (int i = 0; i < types.size(); i++) {
+                    ModelLoader.setCustomModelResourceLocation(
+                            item,
+                            i,
+                            new ModelResourceLocation(
+                                    new ResourceLocation(block.getRegistryName().getNamespace(),
+                                            prefix + block.getRegistryName().getPath() + postfix
+                                    ),
+                                    "type=" + i
+                            )
+                    );
+                }
+            } else {
                 ModelLoader.setCustomModelResourceLocation(
                         item,
-                        i,
+                        0,
                         new ModelResourceLocation(
-                                block.getRegistryName(),
-                                "type=" + i
+                                new ResourceLocation(block.getRegistryName().getNamespace(),
+                                        prefix + block.getRegistryName().getPath() + postfix),
+                                "normal"
                         )
                 );
             }
