@@ -1,7 +1,6 @@
 package com.sabrepenguin.techreborn.itemblock;
 
-import com.sabrepenguin.techreborn.blocks.BlockBase;
-import com.sabrepenguin.techreborn.blocks.IMetaBlock;
+import com.sabrepenguin.techreborn.blocks.IVariants;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -21,7 +20,7 @@ public class ItemBlockMeta extends ItemBlock {
 
     @Override
     public @NotNull String getTranslationKey(@NotNull ItemStack stack) {
-        if (this.block instanceof IMetaBlock base) {
+        if (this.block instanceof IVariants base) {
             int meta = stack.getMetadata();
             if (meta < 0 || meta >= base.getListMetadata().size())
                 meta = 0;

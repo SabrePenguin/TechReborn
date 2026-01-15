@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
-import com.sabrepenguin.techreborn.blocks.IMetaBlock;
+import com.sabrepenguin.techreborn.blocks.IVariants;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.materials.ItemMaterial;
@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
-import java.util.Collection;
 import java.util.List;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Tags.MODID)
@@ -42,8 +41,27 @@ public class ModelRegistryHandler {
             if (blockBase instanceof INonStandardLocation location) {
                 prefix = location.getPrefix();
                 postfix = location.getPostfix();
+                if (location.getProperties().length > 0) {
+                    ModelLoader.setCustomStateMapper(
+                            block,
+                            ModelRegistryUtils.createMapper(
+                                    new ResourceLocation(block.getRegistryName().getNamespace(),
+                                            prefix + block.getRegistryName().getPath() + postfix),
+                                    location.getIgnoredProperties()
+                            )
+                    );
+                    ModelLoader.setCustomModelResourceLocation(
+                            item,
+                            0,
+                            new ModelResourceLocation(
+                                    ModelRegistryUtils.fixLocation(block.getRegistryName(), prefix, postfix),
+                                    "inventory"
+                            )
+                    );
+                    return;
+                }
             }
-            if (block instanceof IMetaBlock metaBlock) {
+            if (block instanceof IVariants metaBlock) {
                 List<MetadataHelper> types = metaBlock.getListMetadata();
 
                 for (int i = 0; i < types.size(); i++) {
@@ -78,9 +96,7 @@ public class ModelRegistryHandler {
                     item,
                     0,
                     new ModelResourceLocation(
-                            new ResourceLocation(item.getRegistryName().getNamespace(),
-                                    nonStandardItem.getPrefix() + item.getRegistryName().getPath() + nonStandardItem.getPostfix()
-                            ),
+                            ModelRegistryUtils.fixLocation(item.getRegistryName(), nonStandardItem.getPrefix(), nonStandardItem.getPostfix()),
                             "inventory")
             );
         }

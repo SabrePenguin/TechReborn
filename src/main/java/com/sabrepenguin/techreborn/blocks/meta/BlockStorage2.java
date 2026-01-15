@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.blocks.meta;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
-import com.sabrepenguin.techreborn.blocks.IMetaBlock;
+import com.sabrepenguin.techreborn.blocks.IVariants;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.MetadataHelper;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -27,7 +27,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockStorage2 extends BlockBase implements INonStandardLocation, IMetaBlock {
+public class BlockStorage2 extends BlockBase implements INonStandardLocation, IVariants {
 
     private static final List<MetadataHelper> ORDERED_BLOCKS = new ArrayList<>();
     private static final Int2ObjectMap<MetadataHelper> META = new Int2ObjectOpenHashMap<>();
