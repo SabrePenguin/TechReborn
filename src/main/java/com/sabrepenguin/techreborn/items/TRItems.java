@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
+import com.sabrepenguin.techreborn.blocks.IVariants;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockMeta;
 import com.sabrepenguin.techreborn.items.armor.ItemCloak;
@@ -11,6 +12,7 @@ import com.sabrepenguin.techreborn.items.tools.*;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -76,6 +78,7 @@ public class TRItems {
 	public static final TRArmor peridotboots = null;
 
 	public static final ItemCloak cloakingdevice = null;
+    public static final ItemWrench wrench = null;
 
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
@@ -131,6 +134,7 @@ public class TRItems {
 		items.add(new TRArmor("sapphire", MaterialsTR.SAPPHIRE_ARMOR, EntityEquipmentSlot.FEET, "gemSapphire"));
 
 		items.add(new ItemCloak(MaterialsTR.CLOAKING_ARMOR));
+        items.add(new ItemWrench());
 
         return items;
     }
@@ -187,7 +191,8 @@ public class TRItems {
 				TRItems.sapphireleggings,
 				TRItems.sapphireboots,
 
-				TRItems.cloakingdevice
+				TRItems.cloakingdevice,
+                TRItems.wrench
         );
         return allItems;
     }
@@ -202,7 +207,10 @@ public class TRItems {
             }
         }
         for (Block block: TRBlocks.getAllBlocks()) {
-            registry.register(new ItemBlockMeta(block).setRegistryName(block.getRegistryName()));
+            if (block instanceof IVariants)
+                registry.register(new ItemBlockMeta(block).setRegistryName(block.getRegistryName()));
+            else
+                registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
             if (block instanceof BlockBase baseBlock) {
                 baseBlock.registerOredict();
             }
