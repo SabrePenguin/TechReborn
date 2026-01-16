@@ -303,6 +303,10 @@ TOOLS = [
     "sapphire",
 ]
 
+TOOL = [
+    "wrench"
+]
+
 ARMOR = [
     "cloaking_device",
     "lapotronic_orbpack",

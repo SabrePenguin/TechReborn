@@ -385,6 +385,7 @@ if __name__ == "__main__":
     create_misc()
     create_tools()
     create_item_x("armor", registries.ARMOR)
+    create_item_x("tool", registries.TOOL)
     dust_craft_creation()
     nugget_craft_creation()
     ingot_craft_creation()
