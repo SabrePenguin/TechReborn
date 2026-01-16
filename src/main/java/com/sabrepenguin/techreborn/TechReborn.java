@@ -20,6 +20,9 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = Tags.MODID, version = Tags.VERSION, name = Tags.MODNAME, acceptedMinecraftVersions = "[1.12.2]")
 public class TechReborn {
 
+    @Mod.Instance
+    public static TechReborn instance;
+
     public static final Logger LOGGER = LogManager.getLogger(Tags.MODID);
 
     @SidedProxy(
