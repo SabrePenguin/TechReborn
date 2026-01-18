@@ -9,6 +9,7 @@ import com.sabrepenguin.techreborn.tileentity.TileEntityIronFurnace;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -27,7 +28,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class IronFurnace extends BlockBase implements INonStandardLocation {
+public class IronFurnace extends BlockBase implements INonStandardLocation, ITileEntityProvider {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool BURNING = PropertyBool.create("active");
 
@@ -173,4 +174,14 @@ public class IronFurnace extends BlockBase implements INonStandardLocation {
     public IProperty<?>[] getProperties() {
         return new IProperty[] {FACING, BURNING};
     }
+
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public @Nullable TileEntity createNewTileEntity(World worldIn, int meta) {
+		return new TileEntityIronFurnace();
+	}
 }
