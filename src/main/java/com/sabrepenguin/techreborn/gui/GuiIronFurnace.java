@@ -45,7 +45,7 @@ public class GuiIronFurnace extends GuiContainer {
 	}
 
 	private int getBurnLeftScaled(int pixels) {
-		int i = this.furnace.getBurnTime();
+		int i = this.furnace.getCurrentBurnTime();
 		if (i == 0) i = 200;
 		return this.furnace.getBurnTime() * pixels / i;
 	}
