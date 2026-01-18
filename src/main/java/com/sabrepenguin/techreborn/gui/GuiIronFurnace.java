@@ -41,7 +41,7 @@ public class GuiIronFurnace extends GuiContainer {
 			drawTexturedModalRect(guiLeft + 56, guiTop + 36 + 12 - k, 176, 12 - k, 14, k + 1);
 		}
 		int l = this.getCookProgressScaled(24);
-		drawTexturedModalRect(guiLeft + 44, guiTop + 36, 176, 14, l + 1, 16);
+		drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 14, l + 1, 16);
 	}
 
 	private int getBurnLeftScaled(int pixels) {
