@@ -5,6 +5,7 @@ import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.gui.GUI;
+import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.tileentity.TileEntityIronFurnace;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
@@ -114,6 +115,12 @@ public class IronFurnace extends BlockBase implements INonStandardLocation, ITil
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		if (stack.hasDisplayName()) {
+			TileEntity te = worldIn.getTileEntity(pos);
+			if (te instanceof ISetWorldNameable named) {
+				named.setCustomName(stack.getDisplayName());
+			}
+		}
     }
 
     @Override

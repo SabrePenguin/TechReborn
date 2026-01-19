@@ -28,7 +28,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TileEntityIronFurnace extends TileEntity implements ITickable, IChangedTileEntity { //, IWorldNameable {
+public class TileEntityIronFurnace extends TileEntity implements ITickable, IChangedTileEntity, ISetWorldNameable {
 
 	private final ItemStackHandler inventory = new ChangedItemStackHandler(3, this);
 	private final RestrictedItemStackHandler input = new RestrictedItemStackHandler(inventory, 0);
@@ -78,15 +78,26 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	}
 
 	@Override
-	public @Nullable ITextComponent getDisplayName() {
+	public @NotNull ITextComponent getDisplayName() {
 		if (hasCustomName()) {
 			return new TextComponentString(customName);
 		}
 		return new TextComponentTranslation("tile.techreborn.iron_furnace.name");
 	}
 
-	private boolean hasCustomName() {
+	@Override
+	public boolean hasCustomName() {
 		return customName != null && !customName.isEmpty();
+	}
+
+	@Override
+	public @NotNull String getName() {
+		return customName;
+	}
+
+	@Override
+	public void setCustomName(String name) {
+		this.customName = name;
 	}
 
 	@Override
@@ -109,12 +120,22 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 		cachedResult = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(0));
 		if (!fuel.getStackInSlot(0).isEmpty())
 			this.currentItemBurnTime = (int)(TileEntityFurnace.getItemBurnTime(fuel.getStackInSlot(0)) * 1.25);
-		if (hasCustomName())
+		if (compound.hasKey("CustomName"))
 			this.customName = compound.getString("CustomName");
         super.readFromNBT(compound);
     }
 
-    @Override
+	@Override
+	public @NotNull NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		this.readFromNBT(tag);
+	}
+
+	@Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
