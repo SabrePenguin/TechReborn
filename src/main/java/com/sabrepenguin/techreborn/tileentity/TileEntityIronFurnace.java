@@ -1,11 +1,11 @@
 package com.sabrepenguin.techreborn.tileentity;
 
-import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.ChangedItemStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.LimitedItemStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.RestrictedItemStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotType;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -14,10 +14,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -151,13 +153,13 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 					this.burnTime = (int)(TileEntityFurnace.getItemBurnTime(fuel)*1.25);
 					this.currentItemBurnTime = this.burnTime;
 					if (this.isBurning()) {
-						IronFurnace.setState(isBurning(), world, pos);
 						markDirty = true;
 						if (!fuel.isEmpty()) {
 							Item item = fuel.getItem();
 							fuel.shrink(1);
-							if (fuel.isEmpty()) {
-								inventory.insertItem(1, item.getContainerItem(fuel), false);
+							ItemStack container = item.getContainerItem(fuel);
+							if (!container.isEmpty()) {
+								inventory.insertItem(1, container, false);
 							}
 						}
 					}
@@ -201,6 +203,11 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean shouldRefresh(@NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState oldState, @NotNull IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
 	}
 
 	// We love setters and getters
