@@ -54,24 +54,6 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 		return inventory.getBurnTime() > 0;
 	}
 
-	private ItemStack getCachedResult(ItemStack input) {
-		if (input.isEmpty() && !cachedResult.isEmpty()) {
-			if (world.getTotalWorldTime() % 20 == 0)
-				TechReborn.LOGGER.info("Input is empty, clearing");
-			lastInput = ItemStack.EMPTY;
-			cachedResult = ItemStack.EMPTY;
-			return ItemStack.EMPTY;
-		}
-		if (!ItemStack.areItemsEqual(input, lastInput)) {
-			if (world.getTotalWorldTime() % 20 == 0)
-				TechReborn.LOGGER.info("Input doesn't equal last input, copying");
-			lastInput = input.copy();
-			lastInput.setCount(1);
-			cachedResult = FurnaceRecipes.instance().getSmeltingResult(input);
-		}
-		return cachedResult;
-	}
-
 	private boolean canSmelt() {
 		ItemStack output = inventory.getStackInSlot(2);
 		if (output.isEmpty()) return true;
@@ -122,6 +104,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 		this.burnTime = compound.getInteger("BurnTime");
 		this.cookTime = compound.getInteger("CookTime");
 		this.totalCookTime = compound.getInteger("CookTimeTotal");
+		cachedResult = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(0));
 		if (!fuel.getStackInSlot(0).isEmpty())
 			this.currentItemBurnTime = (int)(TileEntityFurnace.getItemBurnTime(fuel.getStackInSlot(0)) * 1.25);
 		if (hasCustomName())
@@ -160,7 +143,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 
 		if (!world.isRemote) {
 			ItemStack input = inventory.getStackInSlot(0);
-			ItemStack result = getCachedResult(input);
+			ItemStack result = cachedResult;
 			if (result.isEmpty()) return;
 			ItemStack fuel = inventory.getStackInSlot(1);
 			if (this.isBurning() || (!fuel.isEmpty() && !input.isEmpty())) {
@@ -206,8 +189,16 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	public void onInputChanged(int slot, ItemStack stack) {
 		markDirty();
 		if (slot == 0) {
-			totalCookTime = getDefaultTotalCookTime();
-			cookTime = 0;
+			if (!stack.isEmpty()) {
+				ItemStack copy = stack.copy();
+				copy.setCount(1);
+				if (!ItemStack.areItemsEqual(copy, lastInput)) {
+					lastInput = copy;
+					cachedResult = FurnaceRecipes.instance().getSmeltingResult(stack);
+					totalCookTime = getDefaultTotalCookTime();
+					cookTime = 0;
+				}
+			}
 		}
 	}
 
