@@ -6,7 +6,7 @@ import com.sabrepenguin.techreborn.blocks.BlockBase;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.gui.GUI;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
-import com.sabrepenguin.techreborn.tileentity.TileEntityIronFurnace;
+import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.BlockHorizontal;

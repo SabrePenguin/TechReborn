@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.container;
 
-import com.sabrepenguin.techreborn.tileentity.TileEntityIronFurnace;
+import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

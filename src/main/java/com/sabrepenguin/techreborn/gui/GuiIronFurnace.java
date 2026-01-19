@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.gui;
 
 
 import com.sabrepenguin.techreborn.container.ContainerIronFurnace;
-import com.sabrepenguin.techreborn.tileentity.TileEntityIronFurnace;
+import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;

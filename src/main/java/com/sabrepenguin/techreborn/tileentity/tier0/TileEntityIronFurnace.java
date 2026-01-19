@@ -1,10 +1,12 @@
-package com.sabrepenguin.techreborn.tileentity;
+package com.sabrepenguin.techreborn.tileentity.tier0;
 
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.ChangedItemStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.LimitedItemStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.RestrictedItemStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotType;
+import com.sabrepenguin.techreborn.tileentity.IChangedTileEntity;
+import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
