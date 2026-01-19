@@ -151,6 +151,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 					this.burnTime = (int)(TileEntityFurnace.getItemBurnTime(fuel)*1.25);
 					this.currentItemBurnTime = this.burnTime;
 					if (this.isBurning()) {
+						IronFurnace.setState(isBurning(), world, pos);
 						markDirty = true;
 						if (!fuel.isEmpty()) {
 							Item item = fuel.getItem();
