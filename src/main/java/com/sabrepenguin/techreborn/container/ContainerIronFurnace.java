@@ -14,9 +14,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerIronFurnace extends Container {
-	private final IItemHandler inventory;
 	private final TileEntityIronFurnace tileEntityIronFurnace;
 	private int cookTime;
 	private int totalCookTime;
@@ -24,11 +24,16 @@ public class ContainerIronFurnace extends Container {
 	private int currentBurnTime;
 
 	public ContainerIronFurnace(InventoryPlayer playerInventory, TileEntityIronFurnace furnace) {
-		this.inventory = furnace.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+		IItemHandler inventory = furnace.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		this.tileEntityIronFurnace = furnace;
 		this.addSlotToContainer(new SlotItemHandler(inventory, 0, 56, 17));
 		this.addSlotToContainer(new SlotItemHandler(inventory, 1, 56, 53));
-		this.addSlotToContainer(new SlotItemHandler(inventory, 2, 116, 35));
+		this.addSlotToContainer(new SlotItemHandler(inventory, 2, 116, 35) {
+			@Override
+			public boolean isItemValid(ItemStack stack) {
+				return false;
+			}
+		});
 
 		for (int y = 0; y < 3; ++y)
 		{
@@ -100,68 +105,51 @@ public class ContainerIronFurnace extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+	public @NotNull ItemStack transferStackInSlot(@NotNull EntityPlayer playerIn, int index) {
 		ItemStack original = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(index);
 
-		if (slot != null && slot.getHasStack())
-		{
+		if (slot != null && slot.getHasStack()) {
 			ItemStack itemInSlot = slot.getStack();
 			original = itemInSlot.copy();
-
-			if (index == 2)
-			{
-				if (!this.mergeItemStack(itemInSlot, 3, 39, true))
-				{
+			if (index == 2) { // Output
+				if (!this.mergeItemStack(itemInSlot, 3, 39, true)) {
 					return ItemStack.EMPTY;
 				}
-
 				slot.onSlotChange(itemInSlot, original);
 			}
-			else if (index != 1 && index != 0)
-			{
-				if (!FurnaceRecipes.instance().getSmeltingResult(itemInSlot).isEmpty())
-				{
-					if (!this.mergeItemStack(itemInSlot, 0, 1, false))
-					{
+			else if (index != 1 && index != 0) {
+				if (!FurnaceRecipes.instance().getSmeltingResult(itemInSlot).isEmpty()) {
+					if (!this.mergeItemStack(itemInSlot, 0, 1, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
-				else if (TileEntityFurnace.isItemFuel(itemInSlot))
-				{
-					if (!this.mergeItemStack(itemInSlot, 1, 2, false))
-					{
+				else if (TileEntityFurnace.isItemFuel(itemInSlot)) {
+					if (!this.mergeItemStack(itemInSlot, 1, 2, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
-				else if (index >= 3 && index < 30)
-				{
-					if (!this.mergeItemStack(itemInSlot, 30, 39, false))
-					{
+				else if (index >= 3 && index < 30) {
+					if (!this.mergeItemStack(itemInSlot, 30, 39, false)) {
 						return ItemStack.EMPTY;
 					}
 				}
-				else if (index >= 30 && index < 39 && !this.mergeItemStack(itemInSlot, 3, 30, false))
-				{
+				else if (index >= 30 && index < 39 && !this.mergeItemStack(itemInSlot, 3, 30, false)) {
 					return ItemStack.EMPTY;
 				}
 			}
-			else if (!this.mergeItemStack(itemInSlot, 3, 39, false))
-			{
+			else if (!this.mergeItemStack(itemInSlot, 3, 39, false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (itemInSlot.isEmpty())
-			{
+			if (itemInSlot.isEmpty()) {
 				slot.putStack(ItemStack.EMPTY);
 			}
-			else
-			{
+			else {
 				slot.onSlotChanged();
 			}
 
-			if (itemInSlot.getCount() == original.getCount())
-			{
+			if (itemInSlot.getCount() == original.getCount()) {
 				return ItemStack.EMPTY;
 			}
 
