@@ -178,9 +178,10 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 					if (this.isBurning()) {
 						markDirty = true;
 						if (!fuel.isEmpty()) {
-							Item item = fuel.getItem();
-							fuel.shrink(1);
-							ItemStack container = item.getContainerItem(fuel);
+							ItemStack realFuel = inventory.extractItem(1, 1, false);
+							Item item = realFuel.getItem();
+							realFuel.shrink(1);
+							ItemStack container = item.getContainerItem(realFuel);
 							if (!container.isEmpty()) {
 								inventory.insertItem(1, container, false);
 							}
