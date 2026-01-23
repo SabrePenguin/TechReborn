@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn;
 
 import com.sabrepenguin.techreborn.proxy.CommonProxy;
+import com.sabrepenguin.techreborn.recipe.TRRecipeLoader;
 import com.sabrepenguin.techreborn.tabs.TRTab;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.crafting.IRecipe;
@@ -45,7 +46,8 @@ public class TechReborn {
     @SubscribeEvent
     // Register recipes here (Remove if not needed)
     public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-
+		TRRecipeLoader loader = new TRRecipeLoader();
+		loader.loadRecipes();
     }
 
     @EventHandler
