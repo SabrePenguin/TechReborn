@@ -1,10 +1,7 @@
 package com.sabrepenguin.techreborn.tileentity.tier0;
 
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
-import com.sabrepenguin.techreborn.capability.stackhandler.ChangedItemStackHandler;
-import com.sabrepenguin.techreborn.capability.stackhandler.LimitedItemStackHandler;
-import com.sabrepenguin.techreborn.capability.stackhandler.RestrictedItemStackHandler;
-import com.sabrepenguin.techreborn.capability.stackhandler.SlotType;
+import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.tileentity.IChangedTileEntity;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import net.minecraft.block.state.IBlockState;
@@ -32,7 +29,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TileEntityIronFurnace extends TileEntity implements ITickable, IChangedTileEntity, ISetWorldNameable {
 
-	private final ItemStackHandler inventory = new ChangedItemStackHandler(3, this);
+	private final ItemStackHandler inventory = new TRItemStackHandler(3, this);
 	private final RestrictedItemStackHandler input = new RestrictedItemStackHandler(inventory, 0);
 	private final RestrictedItemStackHandler fuel = new RestrictedItemStackHandler(inventory, 1);
 	private final LimitedItemStackHandler output =
@@ -46,7 +43,6 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	private int totalCookTime;
 
 	private ItemStack cachedResult = ItemStack.EMPTY;
-	private ItemStack lastInput = ItemStack.EMPTY;
 
 	public boolean isBurning() {
 		return this.burnTime > 0;
@@ -180,7 +176,6 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 						if (!fuel.isEmpty()) {
 							ItemStack realFuel = inventory.extractItem(1, 1, false);
 							Item item = realFuel.getItem();
-							realFuel.shrink(1);
 							ItemStack container = item.getContainerItem(realFuel);
 							if (!container.isEmpty()) {
 								inventory.insertItem(1, container, false);
@@ -213,18 +208,18 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
     }
 
 	@Override
-	public void onInputChanged(int slot, ItemStack stack) {
+	public void onInputChanged(int slot, ItemStack removedStack, ItemStack addedStack) {
+		if (world.isRemote) return;
 		markDirty();
 		if (slot == 0) {
-			if (!stack.isEmpty()) {
-				ItemStack copy = stack.copy();
-				copy.setCount(1);
-				if (!ItemStack.areItemsEqual(copy, lastInput)) {
-					lastInput = copy;
-					cachedResult = FurnaceRecipes.instance().getSmeltingResult(stack);
-					totalCookTime = getDefaultTotalCookTime();
-					cookTime = 0;
-				}
+			if (ItemStack.areItemsEqual(removedStack, addedStack)) return;
+			cookTime = 0;
+			totalCookTime = getDefaultTotalCookTime();
+			if (addedStack.isEmpty()) {
+				cachedResult = ItemStack.EMPTY;
+			}
+			else {
+				cachedResult = FurnaceRecipes.instance().getSmeltingResult(addedStack);
 			}
 		}
 	}
