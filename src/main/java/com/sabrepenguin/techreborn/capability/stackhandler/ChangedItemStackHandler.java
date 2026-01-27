@@ -14,6 +14,6 @@ public class ChangedItemStackHandler extends ItemStackHandler {
 
 	@Override
 	protected void onContentsChanged(int slot) {
-		te.onInputChanged(slot, getStackInSlot(slot));
+		te.onSlotCountChanged(slot);
 	}
 }
