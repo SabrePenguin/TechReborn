@@ -1,19 +1,18 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class LimitedItemStackHandler implements IItemHandler {
+public class LimitedItemStackHandler implements IItemHandlerModifiable {
 
 	private final List<SlotType> slots;
-	private final IItemHandler itemHandler;
+	private final IItemHandlerModifiable itemHandler;
 
-	public LimitedItemStackHandler(IItemHandler itemHandler, SlotType... slots) {
+	public LimitedItemStackHandler(IItemHandlerModifiable itemHandler, SlotType... slots) {
 		this.itemHandler = itemHandler;
 		this.slots = Arrays.asList(slots);
 	}
@@ -53,4 +52,8 @@ public class LimitedItemStackHandler implements IItemHandler {
 		};
 	}
 
+	@Override
+	public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+		itemHandler.setStackInSlot(slot, stack);
+	}
 }

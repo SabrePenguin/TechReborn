@@ -1,17 +1,16 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
-public class RestrictedItemStackHandler implements IItemHandler {
+public class RestrictedItemStackHandler implements IItemHandlerModifiable {
 
-	private final IItemHandler inventory;
+	private final IItemHandlerModifiable inventory;
 	private final int minSlot;
 	private final int size;
 
-	public RestrictedItemStackHandler(IItemHandler inventory, int slot) {
+	public RestrictedItemStackHandler(IItemHandlerModifiable inventory, int slot) {
 		this(inventory, slot, slot+1);
 	}
 
@@ -31,7 +30,7 @@ public class RestrictedItemStackHandler implements IItemHandler {
 	 * @param minSlot The minimum slot (inclusive)
 	 * @param maxSlot The maximum slot (exclusive)
 	 */
-	public RestrictedItemStackHandler(IItemHandler inventory, int minSlot, int maxSlot) {
+	public RestrictedItemStackHandler(IItemHandlerModifiable inventory, int minSlot, int maxSlot) {
 		this.inventory = inventory;
 		this.minSlot = minSlot;
 		this.size = maxSlot - minSlot;
@@ -63,5 +62,10 @@ public class RestrictedItemStackHandler implements IItemHandler {
 	@Override
 	public int getSlotLimit(int slot) {
 		return inventory.getSlotLimit(minSlot + slot);
+	}
+
+	@Override
+	public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+		inventory.setStackInSlot(minSlot + slot, stack);
 	}
 }
