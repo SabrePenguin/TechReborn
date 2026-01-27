@@ -209,10 +209,9 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 
 	@Override
 	public void onInputChanged(int slot, ItemStack removedStack, ItemStack addedStack) {
-		if (world.isRemote) return;
 		markDirty();
 		if (slot == 0) {
-			if (ItemStack.areItemsEqual(removedStack, addedStack)) return;
+			if (ItemStack.areItemsEqual(removedStack, addedStack) && ItemStack.areItemStackTagsEqual(removedStack, addedStack)) return;
 			cookTime = 0;
 			totalCookTime = getDefaultTotalCookTime();
 			if (addedStack.isEmpty()) {
@@ -223,6 +222,12 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 			}
 		}
 	}
+
+//	@Override
+//	public void onSlotCountChanged(int slot) {
+//		if (world.isRemote) return;
+//		markDirty();
+//	}
 
 	@Override
 	public boolean shouldRefresh(@NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState oldState, @NotNull IBlockState newState) {

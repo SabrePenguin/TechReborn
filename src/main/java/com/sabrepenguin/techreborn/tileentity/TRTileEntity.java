@@ -1,0 +1,14 @@
+package com.sabrepenguin.techreborn.tileentity;
+
+import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronAlloyFurnace;
+import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+
+public class TRTileEntity {
+	public static void registerTileEntity() {
+		GameRegistry.registerTileEntity(TileEntityIronFurnace.class, new ResourceLocation(Tags.MODID, "iron_furnace"));
+		GameRegistry.registerTileEntity(TileEntityIronAlloyFurnace.class, new ResourceLocation(Tags.MODID, "iron_alloy_furnace"));
+	}
+}
