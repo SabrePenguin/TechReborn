@@ -25,6 +25,10 @@ public class CountedIngredient {
 		}
 	}
 
+	public int getCount() {
+		return this.count;
+	}
+
 	public boolean matches(ItemStack stack) {
 		if (stack.isEmpty()) return false;
 		if (stack.getCount() < count) return false;

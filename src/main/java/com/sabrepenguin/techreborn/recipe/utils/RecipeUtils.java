@@ -10,6 +10,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.items.IItemHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeUtils {
 	public static ItemStack getResult(JsonObject json, JsonContext context) {
@@ -46,5 +50,26 @@ public class RecipeUtils {
 			throw new JsonSyntaxException("Invalid ingredient " + ingredient);
 		}
 		return ingredients;
+	}
+
+	public static boolean checkRecipeValid(IItemHandler handler, List<CountedIngredient> ingredientList) {
+		if (handler.getSlots() < ingredientList.size()) return false;
+		List<CountedIngredient> copy = new ArrayList<>(ingredientList);
+		for (int i = 0; i < handler.getSlots(); i++) {
+			int finalI = i;
+			copy.stream().filter(ingredient -> ingredient.matches(handler.getStackInSlot(finalI))).findFirst().ifPresent(copy::remove);
+		}
+		return copy.isEmpty();
+	}
+
+	public static void applyRecipeToHandler(IItemHandler handler, List<CountedIngredient> ingredientList) {
+		List<CountedIngredient> copy = new ArrayList<>(ingredientList);
+		for (int i = 0; i < handler.getSlots(); i++) {
+			int finalI = i;
+			copy.stream()
+					.filter(ingredient -> ingredient.matches(handler.getStackInSlot(finalI)))
+					.findFirst()
+					.map(ingredient -> handler.extractItem(finalI, ingredient.getCount(), false));
+		}
 	}
 }

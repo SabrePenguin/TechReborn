@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.blocks.machines;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
+import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -19,6 +20,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class HorizontalMachineBlock extends BlockBase {
@@ -69,6 +71,15 @@ public abstract class HorizontalMachineBlock extends BlockBase {
 
 			worldIn.setBlockState(pos, state.withProperty(FACING, face), 2);
 		}
+	}
+
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+			InventoryUtils.spawnDroppedItems(te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), worldIn, pos);
+		}
+		super.breakBlock(worldIn, pos, state);
 	}
 
 	@SuppressWarnings("deprecation")
