@@ -9,6 +9,10 @@ thumbs.db
 
 *.class
 
+### Python ###
+
+__pycache__/;
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
