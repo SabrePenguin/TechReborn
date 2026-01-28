@@ -1,8 +1,6 @@
 package com.sabrepenguin.techreborn.items.armor;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.capability.ItemEnergyStorage;
-import com.sabrepenguin.techreborn.capability.ItemPowerProvider;
 import com.sabrepenguin.techreborn.capability.PoweredItemCapability;
 import com.sabrepenguin.techreborn.items.IEnergy;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
@@ -73,9 +71,9 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation, IEnerg
     public void setEnergy(ItemStack stack, int energy) {
         if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
             IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
-            if (storage instanceof ItemEnergyStorage energyStorage) {
-                energyStorage.setEnergyStored(energy);
-            }
+//            if (storage instanceof ItemEnergyStorage energyStorage) {
+//                energyStorage.setEnergyStored(energy);
+//            }
         }
     }
 
