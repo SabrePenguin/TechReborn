@@ -26,7 +26,16 @@ public class ContainerIronFurnace extends Container {
 	public ContainerIronFurnace(InventoryPlayer playerInventory, TileEntityIronFurnace furnace) {
 		IItemHandler inventory = furnace.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		this.tileEntityIronFurnace = furnace;
-		this.addSlotToContainer(new SlotItemHandler(inventory, 0, 56, 17));
+		this.addSlotToContainer(new SlotItemHandler(inventory, 0, 56, 17) {
+			@Override
+			public boolean isItemValid(@NotNull ItemStack stack) {
+				IItemHandler handler = this.getItemHandler();
+				if (stack.isEmpty() || !handler.isItemValid(0, stack))
+					return false;
+				ItemStack remainder = handler.insertItem(0, stack, true);
+				return remainder.getCount() < stack.getCount();
+			}
+		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 1, 56, 53));
 		this.addSlotToContainer(new SlotItemHandler(inventory, 2, 116, 35) {
 			@Override

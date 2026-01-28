@@ -27,6 +27,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+//TODO: Extend IronFurnace instead of TE
 public class TileEntityIronFurnace extends TileEntity implements ITickable, IChangedTileEntity, ISetWorldNameable {
 
 	private final ItemStackHandler inventory = new TRItemStackHandler(3, this);
