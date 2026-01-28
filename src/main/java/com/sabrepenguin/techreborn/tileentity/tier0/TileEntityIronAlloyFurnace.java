@@ -12,6 +12,7 @@ import com.cleanroommc.modularui.widgets.ProgressWidget;
 import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
@@ -35,8 +36,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -102,12 +101,6 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 		return burnTime > 0;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static boolean isBurning(TileEntityIronAlloyFurnace inventory)
-	{
-		return inventory.getBurnTime() > 0;
-	}
-
 	private void refreshRecipe() {
 		shouldChange = false;
 		if (cachedRecipe != null) {
@@ -134,12 +127,10 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	}
 
 	private void processItem() {
-//		if (canProcess()) { //90% sure unnecessary, as processItem is guarded by canProcess
-			ItemStack output = this.output.getStackInSlot(0);
-			if (output.isEmpty() || output.isItemEqual(cachedRecipe.getOutput().copy()))
-				this.inventory.insertItem(3, cachedRecipe.getOutput().copy(), false);
-			RecipeUtils.applyRecipeToHandler(input, cachedRecipe.getInputs());
-//		}
+		ItemStack output = this.output.getStackInSlot(0);
+		if (output.isEmpty() || output.isItemEqual(cachedRecipe.getOutput().copy()))
+			this.inventory.insertItem(3, cachedRecipe.getOutput().copy(), false);
+		RecipeUtils.applyRecipeToHandler(input, cachedRecipe.getInputs());
 	}
 
 	@Override
@@ -159,9 +150,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 		boolean markDirty = false;
 		ItemStack inputLeft = input.getStackInSlot(0);
 		ItemStack inputRight = input.getStackInSlot(1);
-		// Input isn't empty, run logic
 		if (!inputLeft.isEmpty() && !inputRight.isEmpty()) {
-			// Off
 			if (!isBurning() && canProcess()) {
 				ItemStack fuel = this.fuel.getStackInSlot(0);
 				this.burnTime = (int) (TileEntityFurnace.getItemBurnTime(fuel) * 1.25);
@@ -273,11 +262,11 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	@Override
 	public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
 		ModularPanel panel = ModularPanel.defaultPanel("iron_alloy_furnace");
-		syncManager.registerSlotGroup("inputs", 2);
+		syncManager.registerSlotGroup("inputs", 2)
+				.registerSlotGroup(new SlotGroup("fuel", 1, 120, true));
 		panel.bindPlayerInventory();
 		panel.child(new ProgressWidget()
 				.size(20)
-//				.leftRel(0.6f)
 				.leftRelOffset(0.5f, 3)
 				.topRelOffset(0.25f, -2)
 				.texture(GuiTextures.PROGRESS_ARROW, 20)
@@ -299,44 +288,13 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 								.slotGroup("inputs")
 								.changeListener(this)))
 				.child(new ItemSlot().pos(56, 53)
-						.slot(new ModularSlot(fuel, 0)))
+						.slot(new ModularSlot(fuel, 0)
+								.slotGroup("fuel")
+								.filter(item -> TileEntityFurnace.getItemBurnTime(item) != 0)))
 				.child(new ItemSlot().pos(116, 35)
 						.slot(new ModularSlot(output, 0)
 								.accessibility(false, true)));
 
 		return panel;
-	}
-
-
-	public int getCookTime() {
-		return cookTime;
-	}
-
-	public int getBurnTime() {
-		return burnTime;
-	}
-
-	public int getTotalBurnTime() {
-		return totalBurnTime;
-	}
-
-	public int getTotalCookTime() {
-		return totalCookTime;
-	}
-
-	public void setCookTime(int cookTime) {
-		this.cookTime = cookTime;
-	}
-
-	public void setBurnTime(int burnTime) {
-		this.burnTime = burnTime;
-	}
-
-	public void setTotalBurnTime(int totalBurnTime) {
-		this.totalBurnTime = totalBurnTime;
-	}
-
-	public void setTotalCookTime(int totalCookTime) {
-		this.totalCookTime = totalCookTime;
 	}
 }
