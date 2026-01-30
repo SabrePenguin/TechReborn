@@ -38,11 +38,16 @@ public class MaterialItem extends ItemBase {
 	public void registerOredict() {
 		for (Pair<String, Integer> metadata: this.meta.getMeta()) {
 			String oredict = this.meta.getOreDict();
-			if (this.meta.hasNonStandardOreDict()) {
-				continue;
+			if (oredict.isEmpty() && this.meta.hasNonStandardOreDict()) {
+				String[] ores = this.meta.getNonStandardOreDict(metadata.getRight());
+				for (String ore: ores) {
+					ItemStack newItem = new ItemStack(this, 1, metadata.getRight());
+					OreDictionary.registerOre(ore, newItem);
+				}
+			} else {
+				ItemStack newItem = new ItemStack(this, 1, metadata.getRight());
+				OreDictionary.registerOre(oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()), newItem);
 			}
-			ItemStack newItem = new ItemStack(this, 1, metadata.getRight());
-			OreDictionary.registerOre(oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()), newItem);
 		}
 	}
 

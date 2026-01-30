@@ -22,7 +22,7 @@ public class Dust implements IMetaMaterial {
 		return MetaDust.META_MAP.get(stack.getMetadata()).getName();
 	}
 
-	private enum MetaDust implements IStringSerializable {
+	public enum MetaDust implements IStringSerializable {
 		almandine(0),
 		aluminum(1),
 		andradite(2),

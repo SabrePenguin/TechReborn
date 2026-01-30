@@ -1,69 +1,55 @@
 package com.sabrepenguin.techreborn.items.materials;
 
-import com.sabrepenguin.techreborn.items.MetadataItem;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Gem implements IMaterial {
+public class Gem implements IMetaMaterial {
 
-    private static final List<MetadataItem> ORDERED_ITEMS = new ArrayList<>();
-    private static final Int2ObjectMap<MetadataItem> META = new Int2ObjectOpenHashMap<>();
-    // I'll switch later if Sai is fine without metadata
-    static {
-        ORDERED_ITEMS.addAll(
-                Arrays.asList(
-                        new MetadataItem(0, "ruby"),
-                        new MetadataItem(1, "sapphire"),
-                        new MetadataItem(2, "peridot"),
-                        new MetadataItem(3, "red_garnet"),
-                        new MetadataItem(4, "yellow_garnet")
-                )
-        );
-        for (MetadataItem item: ORDERED_ITEMS) {
-            META.put(item.meta(), item);
-        }
-    }
+	@Override
+	public String getName(ItemStack stack) {
+		return GemMeta.META_MAP.get(stack.getMetadata()).getName();
+	}
 
-
-    public static void addGem(String name, int metadata) {
-        if (!META.containsKey(metadata))
-            META.put(metadata, new MetadataItem(metadata, name));
-    }
-
-    @Override
-    public String getNameFromMeta(int meta) {
-        if (META.containsKey(meta)) {
-            return META.get(meta).name();
-        }
-        return "";
-    }
-
-    @Override
-    public Collection<MetadataItem> getItems() {
-        return META.values();
-    }
-
-    @Override
-    public int getMetaFromName(String name) {
-        for(MetadataItem item: META.values()) {
-            if (item.name().equals(name))
-                return item.meta();
-        }
-        return 0;
-    }
-
-    @Override
-    public List<MetadataItem> getOrderedItems() {
-        return ORDERED_ITEMS;
-    }
-
-    @Override
+	@Override
     public String getOreDict() {
         return "gem";
     }
+
+	public enum GemMeta implements IStringSerializable {
+		ruby(0),
+		sapphire(1),
+		peridot(2),
+		red_garnet(3),
+		yellow_garnet(4);
+
+		final static Int2ObjectMap<GemMeta> META_MAP = new Int2ObjectOpenHashMap<>();
+
+		static {
+			for (GemMeta gem: values()) META_MAP.put(gem.metadata, gem);
+			META_MAP.defaultReturnValue(ruby);
+		}
+
+		final int metadata;
+
+		GemMeta(int metadata) {
+			this.metadata = metadata;
+		}
+
+		@Override
+		public @NotNull String getName() {
+			return name();
+		}
+	}
+	@Override
+	public List<Pair<String, Integer>> getMeta() {
+		return Arrays.stream(GemMeta.values()).map(gem -> Pair.of(gem.getName(), gem.metadata)).collect(Collectors.toList());
+	}
 }

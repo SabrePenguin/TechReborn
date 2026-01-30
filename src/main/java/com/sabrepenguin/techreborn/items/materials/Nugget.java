@@ -1,89 +1,74 @@
 package com.sabrepenguin.techreborn.items.materials;
 
-import com.sabrepenguin.techreborn.items.MetadataItem;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Nugget implements IMaterial {
+public class Nugget implements IMetaMaterial {
 
-    private static final List<MetadataItem> ORDERED_ITEMS = new ArrayList<>();
-    private static final Int2ObjectMap<MetadataItem> META = new Int2ObjectOpenHashMap<>();
-    // I'll switch later if Sai is fine without metadata
-    static {
-        ORDERED_ITEMS.addAll(
-                Arrays.asList(
-                        new MetadataItem(0, "aluminum"),
-                        new MetadataItem(1, "brass"),
-                        new MetadataItem(2, "bronze"),
-                        new MetadataItem(3, "chrome"),
-                        new MetadataItem(4, "copper"),
-                        new MetadataItem(5, "electrum"),
-                        new MetadataItem(6, "invar"),
-                        new MetadataItem(7, "iridium"),
-                        new MetadataItem(8, "lead"),
-                        new MetadataItem(9, "nickel"),
-                        new MetadataItem(10, "platinum"),
-                        new MetadataItem(11, "silver"),
-                        new MetadataItem(12, "steel"),
-                        new MetadataItem(13, "tin"),
-                        new MetadataItem(14, "titanium"),
-                        new MetadataItem(15, "tungsten"),
-                        new MetadataItem(16, "hot_tungstensteel"),
-                        new MetadataItem(17, "tungstensteel"),
-                        new MetadataItem(18, "zinc"),
-                        new MetadataItem(19, "refined_iron"),
-//                        new MetadataItem(20, "advanced_alloy"),
-//                        new MetadataItem(21, "mixed_metal"),
-//                        new MetadataItem(22, "iridium_alloy"),
-                        new MetadataItem(23, "iron"),
-                        new MetadataItem(24, "diamond")
-                )
-        );
-        for (MetadataItem item: ORDERED_ITEMS) {
-            META.put(item.meta(), item);
-        }
-    }
+	@Override
+	public String getName(ItemStack stack) {
+		return NuggetMeta.META_MAP.get(stack.getMetadata()).getName();
+	}
 
-
-    public static void addNugget(String name, int metadata) {
-        if (!META.containsKey(metadata))
-            META.put(metadata, new MetadataItem(metadata, name));
-    }
-
-    @Override
-    public String getNameFromMeta(int meta) {
-        if (META.containsKey(meta)) {
-            return META.get(meta).name();
-        }
-        return "";
-    }
-
-    @Override
-    public Collection<MetadataItem> getItems() {
-        return META.values();
-    }
-
-    @Override
-    public int getMetaFromName(String name) {
-        for(MetadataItem item: META.values()) {
-            if (item.name().equals(name))
-                return item.meta();
-        }
-        return 0;
-    }
-
-    @Override
-    public List<MetadataItem> getOrderedItems() {
-        return ORDERED_ITEMS;
-    }
-
-    @Override
+	@Override
     public String getOreDict() {
         return "nugget";
     }
+
+	public enum NuggetMeta implements IStringSerializable {
+		aluminum(0),
+		brass(1),
+		bronze(2),
+		chrome(3),
+		copper(4),
+		electrum(5),
+		invar(6),
+		iridium(7),
+		lead(8),
+		nickel(9),
+		platinum(10),
+		silver(11),
+		steel(12),
+		tin(13),
+		titanium(14),
+		tungsten(15),
+		hot_tungstensteel(16),
+		tungstensteel(17),
+		zinc(18),
+		refined_iron(19),
+		iron(23),
+		diamond(24);
+
+		static final Int2ObjectMap<NuggetMeta> META_MAP = new Int2ObjectOpenHashMap<>();
+
+		static {
+			for (NuggetMeta nugget: values()) META_MAP.put(nugget.metadata, nugget);
+			META_MAP.defaultReturnValue(aluminum);
+		}
+
+		final int metadata;
+
+		NuggetMeta(int metadata) {
+			this.metadata = metadata;
+		}
+
+
+		@Override
+		public @NotNull String getName() {
+			return name();
+		}
+	}
+
+	@Override
+	public List<Pair<String, Integer>> getMeta() {
+		return Arrays.stream(NuggetMeta.values()).map(nugget -> Pair.of(nugget.getName(), nugget.metadata)).collect(Collectors.toList());
+	}
 }

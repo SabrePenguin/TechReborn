@@ -1,110 +1,24 @@
 package com.sabrepenguin.techreborn.items.materials;
 
-import com.sabrepenguin.techreborn.items.MetadataItem;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Part implements IMaterial {
+public class Part implements IMetaMaterial {
 
-    private static final List<MetadataItem> ORDERED_ITEMS = new ArrayList<>();
-    private static final Int2ObjectMap<MetadataItem> META = new Int2ObjectOpenHashMap<>();
-    // I'll switch later if Sai is fine without metadata
-    static {
-        ORDERED_ITEMS.addAll(
-                Arrays.asList(
-                        new MetadataItem(0, "energy_flow_circuit"),
-                        new MetadataItem(1, "data_control_circuit"),
-                        new MetadataItem(2, "data_storage_circuit"),
-                        new MetadataItem(3, "data_orb"),
-                        new MetadataItem(4, "diamond_grinding_head"),
-                        new MetadataItem(5, "diamond_saw_blade"),
-                        new MetadataItem(6, "tungsten_grinding_head"),
-                        new MetadataItem(7, "helium_coolant_simple"),
-                        new MetadataItem(8, "helium_coolant_triple"),
-                        new MetadataItem(9, "helium_coolant_six"),
-                        new MetadataItem(10, "nak_coolant_simple"),
-                        new MetadataItem(11, "nak_coolant_triple"),
-                        new MetadataItem(12, "nak_coolant_six"),
-                        new MetadataItem(13, "cupronickel_heating_coil"),
-                        new MetadataItem(14, "nichrome_heating_coil"),
-                        new MetadataItem(15, "kanthal_heating_coil"),
-//                        new MetadataItem(16, "none"),
-                        new MetadataItem(17, "super_conductor"),
-//                        new MetadataItem(18, "none"),
-//                        new MetadataItem(19, "none"),
-//                        new MetadataItem(20, "none"),
-                        new MetadataItem(21, "plutonium_cell"),
-                        new MetadataItem(22, "double_plutonium_cell"),
-                        new MetadataItem(23, "quad_plutonium_cell"),
-                        new MetadataItem(24, "computer_monitor"),
-                        new MetadataItem(25, "machine_parts"),
-                        new MetadataItem(26, "neutron_reflector"),
-//                        new MetadataItem(27, "none"),
-                        new MetadataItem(28, "thick_neutron_reflector"),
-                        new MetadataItem(29, "electronic_circuit"),
-                        new MetadataItem(30, "advanced_circuit"),
-                        new MetadataItem(31, "sap"),
-                        new MetadataItem(32, "rubber"),
-                        new MetadataItem(33, "scrap"),
-                        new MetadataItem(34, "carbon_mesh"),
-                        new MetadataItem(35, "carbon_fiber"),
-                        new MetadataItem(36, "coolant_simple"),
-                        new MetadataItem(37, "coolant_triple"),
-                        new MetadataItem(38, "coolant_six"),
-                        new MetadataItem(39, "enhanced_super_conductor"),
-                        new MetadataItem(40, "basic_circuit_board"),
-                        new MetadataItem(41, "advanced_circuit_board"),
-                        new MetadataItem(42, "advanced_circuit_parts"),
-                        new MetadataItem(43, "processor_circuit_board"),
-                        new MetadataItem(44, "plantball"),
-                        new MetadataItem(45, "compressed_plantball"),
-                        new MetadataItem(46, "bio_cell")
-                )
-        );
-        for (MetadataItem item: ORDERED_ITEMS) {
-            META.put(item.meta(), item);
-        }
-    }
+	@Override
+	public String getName(ItemStack stack) {
+		return PartMeta.META_MAP.get(stack.getMetadata()).getName();
+	}
 
-
-    public static void addPart(String name, int metadata) {
-        if (!META.containsKey(metadata))
-            META.put(metadata, new MetadataItem(metadata, name));
-    }
-
-    @Override
-    public String getNameFromMeta(int meta) {
-        if (META.containsKey(meta)) {
-            return META.get(meta).name();
-        }
-        return "";
-    }
-
-    @Override
-    public Collection<MetadataItem> getItems() {
-        return META.values();
-    }
-
-    @Override
-    public int getMetaFromName(String name) {
-        for(MetadataItem item: META.values()) {
-            if (item.name().equals(name))
-                return item.meta();
-        }
-        return 0;
-    }
-
-    @Override
-    public List<MetadataItem> getOrderedItems() {
-        return ORDERED_ITEMS;
-    }
-
-    @Override
+	@Override
     public String getOreDict() {
         return "";
     }
@@ -116,7 +30,7 @@ public class Part implements IMaterial {
 
     @Override
     public String[] getNonStandardOreDict(int meta) {
-        String out = getNameFromMeta(meta);
+        String out = PartMeta.META_MAP.get(meta).getName();
         return switch (out) {
             case "energy_flow_circuit" -> new String[] {"circuitMaster"};
             case "data_control_circuit" -> new String[] {"circuitElite"};
@@ -136,4 +50,72 @@ public class Part implements IMaterial {
             default -> new String[] {};
         };
     }
+
+	public enum PartMeta implements IStringSerializable {
+		energy_flow_circuit(0),
+		data_control_circuit(1),
+		data_storage_circuit(2),
+		data_orb(3),
+		diamond_grinding_head(4),
+		diamond_saw_blade(5),
+		tungsten_grinding_head(6),
+		helium_coolant_simple(7),
+		helium_coolant_triple(8),
+		helium_coolant_six(9),
+		nak_coolant_simple(10),
+		nak_coolant_triple(11),
+		nak_coolant_six(12),
+		cupronickel_heating_coil(13),
+		nichrome_heating_coil(14),
+		kanthal_heating_coil(15),
+		super_conductor(17),
+		plutonium_cell(21),
+		double_plutonium_cell(22),
+		quad_plutonium_cell(23),
+		computer_monitor(24),
+		machine_parts(25),
+		neutron_reflector(26),
+		thick_neutron_reflector(28),
+		electronic_circuit(29),
+		advanced_circuit(30),
+		sap(31),
+		rubber(32),
+		scrap(33),
+		carbon_mesh(34),
+		carbon_fiber(35),
+		coolant_simple(36),
+		coolant_triple(37),
+		coolant_six(38),
+		enhanced_super_conductor(39),
+		basic_circuit_board(40),
+		advanced_circuit_board(41),
+		advanced_circuit_parts(42),
+		processor_circuit_board(43),
+		plantball(44),
+		compressed_plantball(45),
+		bio_cell(46);
+
+		static final Int2ObjectMap<PartMeta> META_MAP = new Int2ObjectOpenHashMap<>();
+
+		static {
+			for (PartMeta part: values()) META_MAP.put(part.metadata, part);
+			META_MAP.defaultReturnValue(energy_flow_circuit);
+		}
+
+		final int metadata;
+
+		PartMeta(int metadata) {
+			this.metadata = metadata;
+		}
+
+		@Override
+		public @NotNull String getName() {
+			return name();
+		}
+	}
+
+	@Override
+	public List<Pair<String, Integer>> getMeta() {
+		return Arrays.stream(PartMeta.values()).map(part -> Pair.of(part.getName(), part.metadata)).collect(Collectors.toList());
+	}
 }

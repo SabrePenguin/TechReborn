@@ -6,8 +6,6 @@ import com.sabrepenguin.techreborn.blocks.IVariants;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
 import com.sabrepenguin.techreborn.items.ItemBase;
-import com.sabrepenguin.techreborn.items.materials.ItemMaterial;
-import com.sabrepenguin.techreborn.items.MetadataItem;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.MaterialItem;
 import com.sabrepenguin.techreborn.util.models.IPropertyBlockstate;
@@ -126,23 +124,6 @@ public class ModelRegistryHandler {
             String[] names = baseItem.getTypes();
             String prefix = baseItem.getPrefix();
             String postfix = baseItem.getPostfix();
-            if (item instanceof ItemMaterial material) {
-                for(MetadataItem mitem: material.getItems()) {
-                    ModelLoader.setCustomModelResourceLocation(
-                            item,
-                            mitem.meta(),
-                            new ModelResourceLocation(
-                                    new ResourceLocation(item.getRegistryName().getNamespace(),
-                                            "items/materials/" + material.getBlockstateJson()),
-//                                            prefix + mitem.name() + postfix),
-//                                    "inventory"
-                                    "type=" + mitem.name()
-                            )
-                    );
-
-                }
-                return;
-            }
 			if (item instanceof MaterialItem material) {
 				for (Pair<String, Integer> metadata: material.getMeta()) {
 					ModelLoader.setCustomModelResourceLocation(
