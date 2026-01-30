@@ -2,11 +2,12 @@ package com.sabrepenguin.techreborn.items.materials;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
 import com.sabrepenguin.techreborn.items.ItemBase;
+import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,9 +17,13 @@ import java.util.stream.Collectors;
 public class MaterialItem extends ItemBase {
 	private final String prefix;
 	private final String postfix;
-	private final IEnumMeta meta;
+	private final IMetaMaterial meta;
 
-	public MaterialItem(String registryName, String translationKey, IEnumMeta item, String prefix, String postfix) {
+	public MaterialItem(String registryName, String translationKey, IMetaMaterial item) {
+		this(registryName, translationKey, item, "",  "");
+	}
+
+	public MaterialItem(String registryName, String translationKey, IMetaMaterial item, String prefix, String postfix) {
 		this.setRegistryName(Tags.MODID, registryName);
 		this.setTranslationKey(Tags.MODID + "." + translationKey);
 		this.setHasSubtypes(true);
@@ -27,6 +32,18 @@ public class MaterialItem extends ItemBase {
 		this.prefix = prefix;
 		this.postfix = postfix;
 		this.meta = item;
+	}
+
+	@Override
+	public void registerOredict() {
+		for (Pair<String, Integer> metadata: this.meta.getMeta()) {
+			String oredict = this.meta.getOreDict();
+			if (this.meta.hasNonStandardOreDict()) {
+				continue;
+			}
+			ItemStack newItem = new ItemStack(this, 1, metadata.getRight());
+			OreDictionary.registerOre(oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()), newItem);
+		}
 	}
 
 	@Override
