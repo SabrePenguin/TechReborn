@@ -1,139 +1,129 @@
 package com.sabrepenguin.techreborn.blocks.meta;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.blocks.BlockBase;
-import com.sabrepenguin.techreborn.blocks.IVariants;
-import com.sabrepenguin.techreborn.util.INonStandardLocation;
-import com.sabrepenguin.techreborn.util.MetadataHelper;
+import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
+import com.sabrepenguin.techreborn.util.models.IPropertyBlockstate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.Explosion;
-import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
-import org.jetbrains.annotations.Nullable;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockStorage2 extends BlockBase implements INonStandardLocation, IVariants {
+public class BlockStorage2 extends Block implements IEnumMeta, IPropertyBlockstate {
+	public static final PropertyEnum<Storage2> TYPE = PropertyEnum.create(
+			"type", Storage2.class);
 
-    private static final List<MetadataHelper> ORDERED_BLOCKS = new ArrayList<>();
-    private static final Int2ObjectMap<MetadataHelper> META = new Int2ObjectOpenHashMap<>();
+	public BlockStorage2() {
+		super(Material.IRON);
+		setHardness(2f);
+		setRegistryName(Tags.MODID, "storage2");
+		setTranslationKey(Tags.MODID + ".storage2");
+		setDefaultState(this.getDefaultState().withProperty(TYPE, Storage2.TUNGSTENSTEEL));
+	}
 
-    static {
-        ORDERED_BLOCKS.addAll(
-                Arrays.asList(
-                        new MetadataHelper(0, "tungstensteel"),
-                        new MetadataHelper(1, "iridium_reinforced_tungstensteel"),
-                        new MetadataHelper(2, "iridium_reinforced_stone"),
-                        new MetadataHelper(3, "ruby"),
-                        new MetadataHelper(4, "sapphire"),
-                        new MetadataHelper(5, "peridot"),
-                        new MetadataHelper(6, "yellow_garnet"),
-                        new MetadataHelper(7, "red_garnet"),
-                        new MetadataHelper(8, "copper"),
-                        new MetadataHelper(9, "tin"),
-                        new MetadataHelper(10, "refined_iron")
-                )
-        );
-        for (MetadataHelper item: ORDERED_BLOCKS) {
-            META.put(item.meta(), item);
-        }
-    }
-    public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, META.size()-1);
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, TYPE);
+	}
 
-    private static int TUNGSTENSTEEL;
-    private static int IRIDIUM_REINFORCED_STONE;
-    private static int IRIDIUM_REINFORCED_TUNGSTENSTEEL;
-    static {
-        for(int i = 0; i < META.size(); i++) {
-            if (META.get(i).name().equals("tungstensteel")) {
-                TUNGSTENSTEEL = i;
-            } else if (META.get(i).name().equals("iridium_reinforced_tungstensteel")) {
-                IRIDIUM_REINFORCED_TUNGSTENSTEEL = i;
-            } else if (META.get(i).name().equals("iridium_reinforced_stone")) {
-                IRIDIUM_REINFORCED_STONE = i;
-            }
-        }
-    }
+	@Override
+	public int damageDropped(@NotNull IBlockState state) {
+		return getMetaFromState(state);
+	}
 
-    public BlockStorage2() {
-        super(Material.IRON);
-        setHardness(2f);
-        setRegistryName(Tags.MODID, "storage2");
-        setTranslationKey(Tags.MODID + ".storage2");
-        setDefaultState(this.getDefaultState().withProperty(TYPE, 0));
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(TYPE).metadata;
+	}
 
-    @Override
-    public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
-        int blockType = world.getBlockState(pos).getValue(TYPE);
-        if (blockType == TUNGSTENSTEEL || blockType == IRIDIUM_REINFORCED_STONE) {
-            return 300f;
-        } else if (blockType == IRIDIUM_REINFORCED_TUNGSTENSTEEL) {
-            return 400f;
-        }
-        return 30f;
-    }
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(TYPE, Storage2.META_MAP.get(meta));
+	}
 
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, TYPE);
-    }
+	@Override
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+		for (Storage2 ore: Storage2.values()) {
+			items.add(new ItemStack(this, 1, ore.meta()));
+		}
+	}
 
-    @Override
-    public int damageDropped(IBlockState state) {
-        return getMetaFromState(state);
-    }
+	@Override
+	protected boolean canSilkHarvest() {
+		return true;
+	}
 
-    @Override
-    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        items.addAll(
-                ORDERED_BLOCKS.stream()
-                        .map(blocks -> new ItemStack(this, 1, blocks.meta()))
-                        .collect(Collectors.toList()));
-    }
+	@Override
+	public String getName(ItemStack stack) {
+		return Storage2.META_MAP.get(stack.getMetadata()).getName();
+	}
 
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        if (meta >= META.size() || meta < 0) {
-            meta = 0;
-        }
-        return getDefaultState().withProperty(TYPE, meta);
-    }
+	@Override
+	public IProperty<?>[] getProperties() {
+		return new IProperty[] {TYPE};
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(TYPE);
-    }
+	public enum Storage2 implements IStringSerializable {
+		TUNGSTENSTEEL(0),
+		IRIDIUM_REINFORCED_TUNGSTENSTEEL(1),
+		IRIDIUM_REINFORCED_STONE(2),
+		RUBY(3),
+		SAPPHIRE(4),
+		PERIDOT(5),
+		YELLOW_GARNET(6),
+		RED_GARNET(7),
+		COPPER(8),
+		TIN(9),
+		REFINED_IRON(10);
 
-    @Override
-    public void registerOredict() {
-        for (MetadataHelper metadata: META.values()) {
-            ItemStack newItem = new ItemStack(this, 1, metadata.meta());
-            OreDictionary.registerOre("block" + metadata.capitalize(), newItem);
-        }
-    }
+		final static Int2ObjectMap<Storage2> META_MAP = new Int2ObjectOpenHashMap<>();
 
-    @Override
-    public Collection<MetadataHelper> getMetadata() {
-        return META.values();
-    }
+		static {
+			for (Storage2 ore: values()) META_MAP.put(ore.metadata, ore);
+			META_MAP.defaultReturnValue(TUNGSTENSTEEL);
+		}
 
-    @Override
-    public List<MetadataHelper> getListMetadata() {
-        return ORDERED_BLOCKS;
-    }
+		final int metadata;
+		final int blast_resistance;
+
+		Storage2(int metadata) {
+			this(metadata, 0);
+		}
+
+		Storage2(int metadata, int blast_resistance) {
+			this.metadata = metadata;
+			this.blast_resistance = blast_resistance;
+		}
+
+		public int meta() {
+			return this.metadata;
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
+
+	@Override
+	public List<Pair<String, Integer>> getMeta() {
+		return Arrays.stream(Storage2.values()).map(storage -> Pair.of(storage.getName(), storage.metadata)).collect(Collectors.toList());
+	}
+
+	public Storage2[] getOre() {
+		return Storage2.values();
+	}
 }
