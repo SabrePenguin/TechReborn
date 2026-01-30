@@ -9,6 +9,7 @@ import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.materials.ItemMaterial;
 import com.sabrepenguin.techreborn.items.MetadataItem;
 import com.sabrepenguin.techreborn.items.TRItems;
+import com.sabrepenguin.techreborn.items.materials.MaterialItem;
 import com.sabrepenguin.techreborn.util.models.IPropertyBlockstate;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -142,6 +143,18 @@ public class ModelRegistryHandler {
                 }
                 return;
             }
+			if (item instanceof MaterialItem material) {
+				for (Pair<String, Integer> metadata: material.getMeta()) {
+					ModelLoader.setCustomModelResourceLocation(
+							item,
+							metadata.getRight(),
+							new ModelResourceLocation(
+									ModelRegistryUtils.fixLocation(item.getRegistryName(), "items/materials/", ""),
+									"type=" + metadata.getLeft()
+							)
+					);
+				}
+			}
             for(int i = 0; i < names.length; i++) {
                 ModelLoader.setCustomModelResourceLocation(
                         item,

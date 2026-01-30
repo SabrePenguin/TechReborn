@@ -85,7 +85,7 @@ public class TRItems {
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
             Arrays.asList(
-                new ItemMaterial("dust", "dust", new Dust()),
+                new MaterialItem("dust", "dust", new Dust(), "", ""),
                 new ItemMaterial("gem", "gem", new Gem(), "gem/", ""),
                 new ItemMaterial("ingot", "ingot", new Ingot(), "ingot/", "_ingot"),
                 new ItemMaterial("nuggets", "nuggets", new Nugget(), "nugget/", "_nugget"),
