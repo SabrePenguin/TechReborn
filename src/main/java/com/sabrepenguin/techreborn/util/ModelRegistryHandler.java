@@ -28,7 +28,7 @@ public class ModelRegistryHandler {
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
         for (Item item: TRItems.getAllItems()) {
-            registerItemModel(item);
+			registerItemModels(item);
         }
         for (Block block: TRBlocks.getAllBlocks()) {
             registerBlockstateModel(block);
@@ -110,59 +110,31 @@ public class ModelRegistryHandler {
         }
     }
 
-    private static void registerItemModel(Item item) {
-        if (item instanceof INonStandardLocation nonStandardItem) {
-            ModelLoader.setCustomModelResourceLocation(
-                    item,
-                    0,
-                    new ModelResourceLocation(
-                            ModelRegistryUtils.fixLocation(item.getRegistryName(), nonStandardItem.getPrefix(), nonStandardItem.getPostfix()),
-                            "inventory")
-            );
-        }
-        else if (item instanceof ItemBase baseItem && item.getHasSubtypes()) {
-            String[] names = baseItem.getTypes();
-            String prefix = baseItem.getPrefix();
-            String postfix = baseItem.getPostfix();
+	private static void registerItemModels(Item item) {
+		String prefix = "";
+		String postfix = "";
+		if (item instanceof INonStandardLocation nonStandardLocation) {
+			prefix = nonStandardLocation.getPrefix();
+			postfix = nonStandardLocation.getPostfix();
+		}
+		ResourceLocation location = ModelRegistryUtils.fixLocation(item.getRegistryName(), prefix, postfix);
+
+		if (item instanceof ItemBase baseItem && baseItem.getHasSubtypes()) {
 			if (item instanceof MaterialItem material) {
 				for (Pair<String, Integer> metadata: material.getMeta()) {
 					ModelLoader.setCustomModelResourceLocation(
 							item,
 							metadata.getRight(),
-							new ModelResourceLocation(
-									ModelRegistryUtils.fixLocation(item.getRegistryName(), "items/materials/", ""),
-									"type=" + metadata.getLeft()
-							)
+							new ModelResourceLocation(location, "type=" + metadata.getLeft())
 					);
 				}
+				return;
 			}
-            for(int i = 0; i < names.length; i++) {
-                ModelLoader.setCustomModelResourceLocation(
-                        item,
-                        i,
-                        new ModelResourceLocation(
-                                new ResourceLocation(item.getRegistryName().getNamespace(),
-                                prefix + names[i] + postfix),
-                                "inventory"
-                        )
-                );
-            }
-        } else if (item instanceof ItemBase base) {
-            ModelLoader.setCustomModelResourceLocation(
-                    item,
-                    0,
-                    new ModelResourceLocation(
-                            new ResourceLocation(item.getRegistryName().getNamespace(),
-                                    base.getPrefix() + item.getRegistryName().getPath() + base.getPostfix()
-                                    ),
-                            "inventory")
-            );
-        } else {
-            ModelLoader.setCustomModelResourceLocation(
-                    item,
-                    0,
-                    new ModelResourceLocation(item.getRegistryName(), "inventory")
-            );
-        }
-    }
+		}
+		ModelLoader.setCustomModelResourceLocation(
+				item,
+				0,
+				new ModelResourceLocation(location, "inventory")
+		);
+	}
 }

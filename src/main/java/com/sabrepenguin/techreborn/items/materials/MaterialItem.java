@@ -4,6 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
+import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -14,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class MaterialItem extends ItemBase {
+public class MaterialItem extends ItemBase implements INonStandardLocation {
 	private final String prefix;
 	private final String postfix;
 	private final IMetaMaterial meta;

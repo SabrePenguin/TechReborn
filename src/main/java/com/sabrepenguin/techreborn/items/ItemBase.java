@@ -9,17 +9,5 @@ public abstract class ItemBase extends Item {
         setCreativeTab(TechReborn.RESOURCE_TAB);
     }
 
-    public String[] getTypes() {
-        return new String[]{};
-    }
-
-    public String getPrefix() {
-        return "";
-    }
-
-    public String getPostfix() {
-        return "";
-    }
-
     public void registerOredict() {}
 }

@@ -85,13 +85,13 @@ public class TRItems {
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
             Arrays.asList(
-                new MaterialItem("dust", "dust", new Dust()),
-				new MaterialItem("gem", "gem", new Gem(), "gem/", ""),
-                new MaterialItem("ingot", "ingot", new Ingot(), "ingot/", "_ingot"),
-                new MaterialItem("nuggets", "nuggets", new Nugget(), "nugget/", "_nugget"),
-                new MaterialItem("part", "part", new Part(), "part/", ""),
-                new MaterialItem("plates", "plate", new Plate(), "plate", ""),
-				new MaterialItem("smalldust", "dustsmall", new DustSmall()),
+                new MaterialItem("dust", "dust", new Dust(), "items/materials/", ""),
+				new MaterialItem("gem", "gem", new Gem(), "items/materials/", ""),
+                new MaterialItem("ingot", "ingot", new Ingot(), "items/materials/", ""),
+                new MaterialItem("nuggets", "nuggets", new Nugget(), "items/materials/", ""),
+                new MaterialItem("part", "part", new Part(), "items/materials/", ""),
+                new MaterialItem("plates", "plate", new Plate(), "items/materials/", ""),
+				new MaterialItem("smalldust", "dustsmall", new DustSmall(), "items/materials/", ""),
                 new TechRebornItem("uumatter", "part.uuMatter", "misc/")
             )
         );
