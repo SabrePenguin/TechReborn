@@ -4,6 +4,8 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
 import com.sabrepenguin.techreborn.blocks.IVariants;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
+import com.sabrepenguin.techreborn.itemblock.ItemBlockEnum;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockMeta;
 import com.sabrepenguin.techreborn.items.armor.ItemCloak;
 import com.sabrepenguin.techreborn.items.armor.TRArmor;
@@ -207,10 +209,13 @@ public class TRItems {
             }
         }
         for (Block block: TRBlocks.getAllBlocks()) {
-            if (block instanceof IVariants)
-                registry.register(new ItemBlockMeta(block).setRegistryName(block.getRegistryName()));
-            else
-                registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+            if (block instanceof IVariants) {
+				registry.register(new ItemBlockMeta(block).setRegistryName(block.getRegistryName()));
+			} else if (block instanceof IEnumMeta) {
+				registry.register(new ItemBlockEnum(block).setRegistryName(block.getRegistryName()));
+			} else {
+				registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+			}
             if (block instanceof BlockBase baseBlock) {
                 baseBlock.registerOredict();
             }
