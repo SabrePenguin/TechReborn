@@ -4,10 +4,12 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockBase;
 import com.sabrepenguin.techreborn.blocks.IVariants;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.materials.ItemMaterial;
 import com.sabrepenguin.techreborn.items.MetadataItem;
 import com.sabrepenguin.techreborn.items.TRItems;
+import com.sabrepenguin.techreborn.util.models.IPropertyBlockstate;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.*;
@@ -17,6 +19,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
@@ -35,6 +38,24 @@ public class ModelRegistryHandler {
 
     private static void registerBlockstateModel(Block block) {
         Item item = Item.getItemFromBlock(block);
+		if (block instanceof IEnumMeta meta) {
+			String prefix = "";
+			String postfix = "";
+			if (block instanceof INonStandardLocation location) {
+				prefix = location.getPrefix();
+				postfix = location.getPostfix();
+			}
+			ResourceLocation fixed = ModelRegistryUtils.fixLocation(block.getRegistryName(), prefix, postfix);
+			if (block instanceof IPropertyBlockstate property) {
+				ModelLoader.setCustomStateMapper(
+						block, ModelRegistryUtils.createMapper(fixed, property.getIgnoredProperties()));
+			}
+			for (Pair<String, Integer> i: meta.getMeta()) {
+				ModelLoader.setCustomModelResourceLocation(
+						item, i.getRight(), new ModelResourceLocation(fixed, "type=" + i.getLeft()));
+			}
+			return;
+		}
         if (block instanceof BlockBase blockBase) {
             String prefix = "";
             String postfix = "";
@@ -122,8 +143,6 @@ public class ModelRegistryHandler {
                 return;
             }
             for(int i = 0; i < names.length; i++) {
-                if (names[i].equals(MetadataHelper.META_PLACEHOLDER))
-                    continue;
                 ModelLoader.setCustomModelResourceLocation(
                         item,
                         i,
