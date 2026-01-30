@@ -6,7 +6,6 @@ import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.MaterialItem;
-import com.sabrepenguin.techreborn.util.models.IPropertyBlockstate;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.*;
@@ -35,7 +34,7 @@ public class ModelRegistryHandler {
 		Item item = Item.getItemFromBlock(block);
 		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(block);
 		if (block instanceof IEnumMeta meta) {
-			if (block instanceof IPropertyBlockstate property) {
+			if (block instanceof INonStandardLocation property && property.getProperties().length > 0) {
 				ModelLoader.setCustomStateMapper(
 						block, ModelRegistryUtils.createMapper(customLocation, property.getIgnoredProperties())
 				);

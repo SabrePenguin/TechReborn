@@ -3,7 +3,7 @@ package com.sabrepenguin.techreborn.blocks.meta;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.materials.IMetaMaterial;
-import com.sabrepenguin.techreborn.util.models.IPropertyBlockstate;
+import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.block.Block;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OreBlock extends Block implements IMetaMaterial, IPropertyBlockstate {
+public class OreBlock extends Block implements IMetaMaterial, INonStandardLocation {
 	public static final PropertyEnum<Ore> TYPE = PropertyEnum.create(
 			"type", Ore.class);
 
