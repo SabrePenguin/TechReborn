@@ -1,9 +1,10 @@
 package com.sabrepenguin.techreborn.blocks.machines;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.blocks.BlockBase;
+import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -23,13 +24,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class HorizontalMachineBlock extends BlockBase {
+public abstract class HorizontalMachineBlock extends Block {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
 	public HorizontalMachineBlock(String registryName) {
 		super(Material.IRON);
+		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setRegistryName(Tags.MODID, registryName);
 		this.setTranslationKey(Tags.MODID + "." + registryName);
 		this.setHardness(2.0f);

@@ -2,13 +2,13 @@ package com.sabrepenguin.techreborn.blocks.machines;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.blocks.BlockBase;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.gui.GUI;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -29,12 +29,13 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class IronFurnace extends BlockBase implements INonStandardLocation, ITileEntityProvider {
+public class IronFurnace extends Block implements INonStandardLocation, ITileEntityProvider {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool BURNING = PropertyBool.create("active");
 
     public IronFurnace() {
         super(Material.IRON);
+		setCreativeTab(TechReborn.RESOURCE_TAB);
         setRegistryName(Tags.MODID, "iron_furnace");
         setTranslationKey(Tags.MODID + ".iron_furnace");
         setHardness(2.0f);

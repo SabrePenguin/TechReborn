@@ -1,16 +1,14 @@
 package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.blocks.BlockBase;
-import com.sabrepenguin.techreborn.blocks.IVariants;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockEnum;
-import com.sabrepenguin.techreborn.itemblock.ItemBlockMeta;
 import com.sabrepenguin.techreborn.items.armor.ItemCloak;
 import com.sabrepenguin.techreborn.items.armor.TRArmor;
 import com.sabrepenguin.techreborn.items.materials.*;
 import com.sabrepenguin.techreborn.items.tools.*;
+import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -19,7 +17,9 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -209,16 +209,17 @@ public class TRItems {
             }
         }
         for (Block block: TRBlocks.getAllBlocks()) {
-            if (block instanceof IVariants) {
-				registry.register(new ItemBlockMeta(block).setRegistryName(block.getRegistryName()));
-			} else if (block instanceof IEnumMeta) {
+            if (block instanceof IEnumMeta) {
 				registry.register(new ItemBlockEnum(block).setRegistryName(block.getRegistryName()));
 			} else {
 				registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 			}
-            if (block instanceof BlockBase baseBlock) {
-                baseBlock.registerOredict();
-            }
+			if (block instanceof IMetaMaterial meta) {
+				for(Pair<String, Integer> metadata: meta.getMeta()) {
+					String oredict = meta.getOreDict();
+					OreDictionary.registerOre(oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()), Item.getItemFromBlock(block));
+				}
+			}
         }
     }
 }
