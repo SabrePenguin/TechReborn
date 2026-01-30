@@ -1,8 +1,6 @@
 package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.blocks.BlockBase;
-import com.sabrepenguin.techreborn.blocks.IVariants;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
 import com.sabrepenguin.techreborn.items.ItemBase;
@@ -20,8 +18,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
-
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Tags.MODID)
 public class ModelRegistryHandler {
 
@@ -31,84 +27,41 @@ public class ModelRegistryHandler {
 			registerItemModels(item);
         }
         for (Block block: TRBlocks.getAllBlocks()) {
-            registerBlockstateModel(block);
+            registerBlockstateModels(block);
         }
     }
 
-    private static void registerBlockstateModel(Block block) {
-        Item item = Item.getItemFromBlock(block);
+	private static void registerBlockstateModels(Block block) {
+		Item item = Item.getItemFromBlock(block);
+		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(block);
 		if (block instanceof IEnumMeta meta) {
-			String prefix = "";
-			String postfix = "";
-			if (block instanceof INonStandardLocation location) {
-				prefix = location.getPrefix();
-				postfix = location.getPostfix();
-			}
-			ResourceLocation fixed = ModelRegistryUtils.fixLocation(block.getRegistryName(), prefix, postfix);
 			if (block instanceof IPropertyBlockstate property) {
 				ModelLoader.setCustomStateMapper(
-						block, ModelRegistryUtils.createMapper(fixed, property.getIgnoredProperties()));
+						block, ModelRegistryUtils.createMapper(customLocation, property.getIgnoredProperties())
+				);
 			}
-			for (Pair<String, Integer> i: meta.getMeta()) {
+			for (Pair<String, Integer> pair: meta.getMeta()) {
 				ModelLoader.setCustomModelResourceLocation(
-						item, i.getRight(), new ModelResourceLocation(fixed, "type=" + i.getLeft()));
+						item, pair.getRight(), new ModelResourceLocation(customLocation, "type=" + pair.getLeft())
+				);
 			}
 			return;
+		} else if (block instanceof INonStandardLocation location && location.getProperties().length > 0) {
+			ModelLoader.setCustomStateMapper(
+					block,
+					ModelRegistryUtils.createMapper(customLocation, location.getIgnoredProperties())
+			);
+			ModelLoader.setCustomModelResourceLocation(
+					item,
+					0,
+					new ModelResourceLocation(customLocation, "inventory")
+			);
+			return;
 		}
-        if (block instanceof BlockBase blockBase) {
-            String prefix = "";
-            String postfix = "";
-            if (blockBase instanceof INonStandardLocation location) {
-                prefix = location.getPrefix();
-                postfix = location.getPostfix();
-                if (location.getProperties().length > 0) {
-                    ModelLoader.setCustomStateMapper(
-                            block,
-                            ModelRegistryUtils.createMapper(
-                                    new ResourceLocation(block.getRegistryName().getNamespace(),
-                                            prefix + block.getRegistryName().getPath() + postfix),
-                                    location.getIgnoredProperties()
-                            )
-                    );
-                    ModelLoader.setCustomModelResourceLocation(
-                            item,
-                            0,
-                            new ModelResourceLocation(
-                                    ModelRegistryUtils.fixLocation(block.getRegistryName(), prefix, postfix),
-                                    "inventory"
-                            )
-                    );
-                    return;
-                }
-            }
-            if (block instanceof IVariants metaBlock) {
-                List<MetadataHelper> types = metaBlock.getListMetadata();
-
-                for (int i = 0; i < types.size(); i++) {
-                    ModelLoader.setCustomModelResourceLocation(
-                            item,
-                            i,
-                            new ModelResourceLocation(
-                                    new ResourceLocation(block.getRegistryName().getNamespace(),
-                                            prefix + block.getRegistryName().getPath() + postfix
-                                    ),
-                                    "type=" + i
-                            )
-                    );
-                }
-            } else {
-                ModelLoader.setCustomModelResourceLocation(
-                        item,
-                        0,
-                        new ModelResourceLocation(
-                                new ResourceLocation(block.getRegistryName().getNamespace(),
-                                        prefix + block.getRegistryName().getPath() + postfix),
-                                "normal"
-                        )
-                );
-            }
-        }
-    }
+		ModelLoader.setCustomModelResourceLocation(item,
+				0,
+				new ModelResourceLocation(customLocation, "normal"));
+	}
 
 	private static void registerItemModels(Item item) {
 		String prefix = "";

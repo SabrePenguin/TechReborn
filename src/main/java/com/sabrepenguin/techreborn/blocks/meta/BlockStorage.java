@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.blocks.meta;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
 import com.sabrepenguin.techreborn.util.models.IPropertyBlockstate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
@@ -28,6 +29,7 @@ public class BlockStorage extends Block implements IEnumMeta, IPropertyBlockstat
 
 	public BlockStorage() {
 		super(Material.IRON);
+		setCreativeTab(TechReborn.RESOURCE_TAB);
 		setHardness(2f);
 		setRegistryName(Tags.MODID, "storage");
 		setTranslationKey(Tags.MODID + ".storage");
