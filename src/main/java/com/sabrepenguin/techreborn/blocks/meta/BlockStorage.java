@@ -1,111 +1,133 @@
 package com.sabrepenguin.techreborn.blocks.meta;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.blocks.BlockBase;
-import com.sabrepenguin.techreborn.blocks.IVariants;
-import com.sabrepenguin.techreborn.util.INonStandardLocation;
-import com.sabrepenguin.techreborn.util.MetadataHelper;
+import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
+import com.sabrepenguin.techreborn.util.models.IPropertyBlockstate;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
-import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockStorage extends BlockBase implements INonStandardLocation, IVariants {
-    private static final List<MetadataHelper> ORDERED_BLOCKS = new ArrayList<>();
-    private static final Int2ObjectMap<MetadataHelper> META = new Int2ObjectOpenHashMap<>();
+public class BlockStorage extends Block implements IEnumMeta, IPropertyBlockstate {
+	public static final PropertyEnum<Storage> TYPE = PropertyEnum.create(
+			"type", Storage.class);
 
-    static {
-        ORDERED_BLOCKS.addAll(
-                Arrays.asList(
-                        new MetadataHelper(0, "silver"),
-                        new MetadataHelper(1, "aluminum"),
-                        new MetadataHelper(2, "titanium"),
-                        new MetadataHelper(3, "chrome"),
-                        new MetadataHelper(4, "steel"),
-                        new MetadataHelper(5, "brass"),
-                        new MetadataHelper(6, "lead"),
-                        new MetadataHelper(7, "electrum"),
-                        new MetadataHelper(8, "zinc"),
-                        new MetadataHelper(9, "platinum"),
-                        new MetadataHelper(10, "tungsten"),
-                        new MetadataHelper(11, "nickel"),
-                        new MetadataHelper(12, "invar"),
-                        new MetadataHelper(13, "iridium"),
-                        new MetadataHelper(14, "bronze")
-                )
-        );
-        for (MetadataHelper item: ORDERED_BLOCKS) {
-            META.put(item.meta(), item);
-        }
-    }
-    public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, META.size()-1);
+	public BlockStorage() {
+		super(Material.IRON);
+		setHardness(2f);
+		setRegistryName(Tags.MODID, "storage");
+		setTranslationKey(Tags.MODID + ".storage");
+		setDefaultState(this.getDefaultState().withProperty(TYPE, Storage.SILVER));
+	}
 
-    public BlockStorage() {
-        super(Material.IRON);
-        setHardness(2f);
-        setRegistryName(Tags.MODID, "storage");
-        setTranslationKey(Tags.MODID + ".storage");
-        setDefaultState(this.getDefaultState().withProperty(TYPE, 0));
-    }
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, TYPE);
+	}
 
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, TYPE);
-    }
+	@Override
+	public int damageDropped(@NotNull IBlockState state) {
+		return getMetaFromState(state);
+	}
 
-    @Override
-    public int damageDropped(IBlockState state) {
-        return getMetaFromState(state);
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(TYPE).metadata;
+	}
 
-    @Override
-    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
-        items.addAll(
-                ORDERED_BLOCKS.stream()
-                        .map(blocks -> new ItemStack(this, 1, blocks.meta()))
-                        .collect(Collectors.toList()));
-    }
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(TYPE, Storage.META_MAP.get(meta));
+	}
 
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        if (meta >= META.size() || meta < 0) {
-            meta = 0;
-        }
-        return getDefaultState().withProperty(TYPE, meta);
-    }
+	@Override
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+		for (Storage ore: Storage.values()) {
+			items.add(new ItemStack(this, 1, ore.meta()));
+		}
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(TYPE);
-    }
+	@Override
+	protected boolean canSilkHarvest() {
+		return true;
+	}
 
-    @Override
-    public void registerOredict() {
-        for (MetadataHelper metadata: META.values()) {
-            ItemStack newItem = new ItemStack(this, 1, metadata.meta());
-            OreDictionary.registerOre("block" + metadata.capitalize(), newItem);
-        }
-    }
+	@Override
+	public String getName(ItemStack stack) {
+		return Storage.META_MAP.get(stack.getMetadata()).getName();
+	}
 
-    @Override
-    public Collection<MetadataHelper> getMetadata() {
-        return META.values();
-    }
+	@Override
+	public IProperty<?>[] getProperties() {
+		return new IProperty[] {TYPE};
+	}
 
-    @Override
-    public List<MetadataHelper> getListMetadata() {
-        return ORDERED_BLOCKS;
-    }
+	public enum Storage implements IStringSerializable {
+		SILVER(0),
+		ALUMINUM(1),
+		TITANIUM(2),
+		CHROME(3),
+		STEEL(4),
+		BRASS(5),
+		LEAD(6),
+		ELECTRUM(7),
+		ZINC(8),
+		PLATINUM(9),
+		TUNGSTEN(10),
+		NICKEL(11),
+		INVAR(12),
+		IRIDIUM(13),
+		BRONZE(14);
+
+		final static Int2ObjectMap<Storage> META_MAP = new Int2ObjectOpenHashMap<>();
+
+		static {
+			for (Storage ore: values()) META_MAP.put(ore.metadata, ore);
+			META_MAP.defaultReturnValue(SILVER);
+		}
+
+		final int metadata;
+		final int blast_resistance;
+
+		Storage(int metadata) {
+			this(metadata, 0);
+		}
+
+		Storage(int metadata, int blast_resistance) {
+			this.metadata = metadata;
+			this.blast_resistance = blast_resistance;
+		}
+
+		public int meta() {
+			return this.metadata;
+		}
+
+		@Override
+		public String getName() {
+			return name().toLowerCase();
+		}
+	}
+
+	@Override
+	public List<Pair<String, Integer>> getMeta() {
+		return Arrays.stream(Storage.values()).map(storage -> Pair.of(storage.getName(), storage.metadata)).collect(Collectors.toList());
+	}
+
+	public Storage[] getOre() {
+		return Storage.values();
+	}
 }
