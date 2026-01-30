@@ -9,6 +9,7 @@ OVERWRITE = True
 MODID = "techreborn"
 BASE = Path("src/main/resources/assets/techreborn")
 RECIPES = BASE.joinpath("recipes")
+CUSTOM_RECIPES = BASE.joinpath("trrecipes")
 ITEM_MODELS = BASE.joinpath("models/item")
 ITEM_TEXTURES = BASE.joinpath("textures/items")
 BLOCK_MODELS = BASE.joinpath("models/block")
@@ -176,6 +177,7 @@ def create_parts():
             continue
         write_to_file(fname, basic_generated(f"items/part/{name}"))
 
+
 def create_misc():
     misc_model = ITEM_MODELS.joinpath("misc")
     misc_textures = ITEM_TEXTURES.joinpath("misc")
@@ -189,13 +191,24 @@ def create_misc():
             continue
         write_to_file(fname, basic_generated(f"items/misc/{name}"))
 
+
 def create_tools():
     tool_model = ITEM_MODELS.joinpath("tool")
     tool_textures = ITEM_TEXTURES.joinpath("tool")
     if not os.path.exists(tool_model):
         os.makedirs(tool_model, True)
     for name in registries.TOOLS:
-        for t in ["axe", "boots", "chestplate", "helmet", "hoe", "leggings", "pickaxe", "spade", "sword"]:
+        for t in [
+            "axe",
+            "boots",
+            "chestplate",
+            "helmet",
+            "hoe",
+            "leggings",
+            "pickaxe",
+            "spade",
+            "sword",
+        ]:
             fname = tool_model.joinpath(f"{name}{t}.json")
             image = str(tool_textures) + f"/{name}_{t}"
             if not image_exists(image + ".png"):
@@ -203,7 +216,8 @@ def create_tools():
                 continue
             write_to_file(fname, basic_generated(f"items/tool/{name}_{t}"))
 
-def create_item_x(directory: str, registry: dict|list, postfix: str=""):
+
+def create_item_x(directory: str, registry: dict | list, postfix: str = ""):
     model = ITEM_MODELS.joinpath(directory)
     textures = ITEM_TEXTURES.joinpath(directory)
     if not os.path.exists(model):
@@ -224,12 +238,14 @@ def create_item_x(directory: str, registry: dict|list, postfix: str=""):
         directory = fix_directory(directory)
         write_to_file(fname, basic_generated(f"items/{directory}{key}{postfix}"))
 
+
 def fix_directory(directory: str) -> str:
     if directory.endswith("/"):
         return directory
     if directory == "":
         return ""
     return directory + "/"
+
 
 def dust_craft_creation():
     dust_crafts = RECIPES.joinpath("dust")
@@ -374,6 +390,29 @@ def block_craft_creation():
         )
 
 
+def generate_furnace(
+    subpath: str,
+    item: str,
+    modid: str,
+    registry: list,
+    input_registry: dict,
+    output_name: str,
+    target_registry: dict,
+):
+    target_dir = CUSTOM_RECIPES.joinpath(subpath)
+    if not os.path.exists(target_dir):
+        os.makedirs(target_dir, exist_ok=True)
+    for name in registry:
+        input_mdata = input_registry.get(name)
+        mdata = target_registry.get(name)
+        if mdata is None:
+            continue
+        input_name = recipes.create_item(modid, item, input_mdata)
+        fname = target_dir.joinpath(f"{name}_{item}.json")
+        output = recipes.create_item(modid, output_name, mdata, 1)
+        write_to_file(fname, recipes.furnace_recipe([input_name], output, 1.0))
+
+
 if __name__ == "__main__":
     create_ingots()
     create_nuggets()
@@ -386,6 +425,24 @@ if __name__ == "__main__":
     create_tools()
     create_item_x("armor", registries.ARMOR)
     create_item_x("tool", registries.TOOL)
+    generate_furnace(
+        "techreborn",
+        "dust",
+        "techreborn",
+        registries.SMELTABLE_DUSTS,
+        registries.DUSTS,
+        "ingot",
+        registries.INGOTS,
+    )
+    generate_furnace(
+        "techreborn",
+        "ore",
+        "techreborn",
+        registries.SMELTABLE_ORES,
+        registries.ORES,
+        "ingot",
+        registries.INGOTS,
+    )
     dust_craft_creation()
     nugget_craft_creation()
     ingot_craft_creation()

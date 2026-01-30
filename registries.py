@@ -27,6 +27,24 @@ INGOTS = {
     "plutonium": 25,
     # "cupro_nickel": 26,
 }
+
+ORES = {
+    "galena": 0,
+    "iridium": 1,
+    "ruby": 2,
+    "sapphire": 3,
+    "bauxite": 4,
+    "pyrite": 5,
+    "cinnabar": 6,
+    "sphalerite": 7,
+    "tungsten": 8,
+    "sheldonite": 9,
+    "peridot": 10,
+    "sodalite": 11,
+    "lead": 12,
+    "silver": 13
+}
+
 NUGGETS = {
     "aluminum": 0,
     "brass": 1,
@@ -292,9 +310,7 @@ PLATES = {
 }
 
 
-MISC = [
-    "uu_matter"
-]
+MISC = ["uu_matter"]
 
 TOOLS = [
     "bronze",
@@ -303,12 +319,31 @@ TOOLS = [
     "sapphire",
 ]
 
-TOOL = [
-    "wrench"
+TOOL = ["wrench"]
+
+ARMOR = ["cloaking_device", "lapotronic_orbpack", "lithium_batpack"]
+
+##################################
+#                                #
+#   Smelting Recipe Registries   #
+#                                #
+##################################
+
+SMELTABLE_DUSTS = [
+    "brass",
+    "bronze",
+    "copper",
+    "electrum",
+    "gold",
+    "invar",
+    "iron",
+    "lead",
+    "nickel",
+    "silver",
+    "tin",
+    "zinc",
 ]
 
-ARMOR = [
-    "cloaking_device",
-    "lapotronic_orbpack",
-    "lithium_batpack"
-]
+SMELTABLE_ORES = ["lead", "silver"]
+
+SMELTABLE_ORES2 = ["copper", "tin"]
