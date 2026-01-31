@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
@@ -117,6 +118,16 @@ public class OreBlock extends Block implements IMetaMaterial, INonStandardLocati
 		}
 
 		drops.add(new ItemStack(item, count, metadata));
+	}
+
+	@Override
+	public int getExpDrop(IBlockState state, @NotNull IBlockAccess world, @NotNull BlockPos pos, int fortune) {
+		Ore ore = state.getValue(TYPE);
+		if (!useFortune(ore)) return 0;
+		Random rand = world instanceof World
+				? ((World) world).rand
+				: RANDOM;
+		return MathHelper.getInt(rand, 1, 4);
 	}
 
 	private boolean useFortune(Ore ore) {
