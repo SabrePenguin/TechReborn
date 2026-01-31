@@ -217,13 +217,13 @@ public class TRItems {
 					String oredict = meta.getOreDict();
 					if (meta.hasNonStandardOreDict()) {
 						String[] ores = meta.getNonStandardOreDict(metadata.getRight());
-						for (String ore: ores) {
+						for (String ore : ores) {
 							OreDictionary.registerOre(
 									ore,
 									new ItemStack(itemBlock, 1, metadata.getRight())
 							);
 						}
-					} else {
+					} else if (!oredict.isEmpty()) {
 						OreDictionary.registerOre(
 								oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()),
 								new ItemStack(itemBlock, 1, metadata.getRight()));
