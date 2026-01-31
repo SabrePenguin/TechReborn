@@ -6,6 +6,7 @@ import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.blocks.meta.BlockStorage;
 import com.sabrepenguin.techreborn.blocks.meta.BlockStorage2;
 import com.sabrepenguin.techreborn.blocks.meta.OreBlock;
+import com.sabrepenguin.techreborn.blocks.meta.OreBlock2;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import net.minecraft.block.Block;
 import net.minecraftforge.event.RegistryEvent;
@@ -25,6 +26,7 @@ public class TRBlocks {
 	public static final Block ore = null;
     public static final IronFurnace iron_furnace = null;
 	public static final BlockIronAlloyFurnace iron_alloy_furnace = null;
+	public static final Block ore2 = null;
 
     public static Block[] getBlocks() {
         final Block[] blocks = {
@@ -33,6 +35,7 @@ public class TRBlocks {
                 new IronFurnace(),
 				new BlockIronAlloyFurnace(),
 				new OreBlock(),
+				new OreBlock2(),
         };
 
         return blocks;
@@ -44,7 +47,8 @@ public class TRBlocks {
                 TRBlocks.storage2,
                 TRBlocks.iron_furnace,
 				TRBlocks.iron_alloy_furnace,
-				TRBlocks.ore
+				TRBlocks.ore,
+				TRBlocks.ore2
         );
         return allBlocks;
     }
