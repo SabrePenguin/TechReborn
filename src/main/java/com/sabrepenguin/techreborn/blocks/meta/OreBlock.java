@@ -3,6 +3,9 @@ package com.sabrepenguin.techreborn.blocks.meta;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.items.TRItems;
+import com.sabrepenguin.techreborn.items.materials.Dust;
+import com.sabrepenguin.techreborn.items.materials.Gem;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -13,14 +16,19 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class OreBlock extends Block implements IMetaMaterial, INonStandardLocation {
@@ -43,7 +51,7 @@ public class OreBlock extends Block implements IMetaMaterial, INonStandardLocati
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
+	protected @NotNull BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, TYPE);
 	}
 
@@ -58,12 +66,12 @@ public class OreBlock extends Block implements IMetaMaterial, INonStandardLocati
 	}
 
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
+	public @NotNull IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(TYPE, Ore.META_MAP.get(meta));
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+	public void getSubBlocks(@NotNull CreativeTabs itemIn, @NotNull NonNullList<ItemStack> items) {
 		for (Ore ore: Ore.values()) {
 			items.add(new ItemStack(this, 1, ore.meta()));
 		}
@@ -72,6 +80,47 @@ public class OreBlock extends Block implements IMetaMaterial, INonStandardLocati
 	@Override
 	protected boolean canSilkHarvest() {
 		return true;
+	}
+
+	@Override
+	public void getDrops(@NotNull NonNullList<ItemStack> drops, @NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull IBlockState state, int fortune) {
+		Ore ore = state.getValue(TYPE);
+		if (!useFortune(ore)) {
+			drops.add(new ItemStack(Item.getItemFromBlock(this), 1, ore.metadata));
+			return;
+		}
+
+		Random rand = world instanceof World
+				? ((World) world).rand
+				: RANDOM;
+
+		Item item;
+		if (ore == Ore.RUBY || ore == Ore.SAPPHIRE)
+			item = TRItems.gem;
+		else
+			item = TRItems.dust;
+
+		int metadata = switch (ore) {
+			case RUBY -> Gem.GemMeta.ruby.metadata();
+			case SAPPHIRE -> Gem.GemMeta.sapphire.metadata();
+			case PYRITE -> Dust.MetaDust.pyrite.metadata();
+			case SPHALERITE -> Dust.MetaDust.sphalerite.metadata();
+			case CINNABAR -> Dust.MetaDust.cinnabar.metadata();
+			case SODALITE -> Dust.MetaDust.sodalite.metadata();
+			default -> throw new IllegalStateException("Unexpected value: " + ore);
+		};
+		int count = 1;
+		if (fortune > 0) {
+			int bonus = rand.nextInt(fortune + 2) - 1;
+			if (bonus < 0) bonus = 0;
+			count += bonus;
+		}
+
+		drops.add(new ItemStack(item, count, metadata));
+	}
+
+	private boolean useFortune(Ore ore) {
+		return ore == Ore.RUBY || ore == Ore.SAPPHIRE || ore == Ore.PYRITE || ore == Ore.CINNABAR || ore == Ore.SODALITE || ore == Ore.SPHALERITE;
 	}
 
 	@Override
