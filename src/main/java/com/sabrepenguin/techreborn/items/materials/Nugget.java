@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn.items.materials;
 
+import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;

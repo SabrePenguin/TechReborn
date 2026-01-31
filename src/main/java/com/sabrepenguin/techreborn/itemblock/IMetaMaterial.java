@@ -5,7 +5,14 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
-public interface IEnumMeta {
+public interface IMetaMaterial {
+    String getOreDict();
+    default boolean hasNonStandardOreDict() {
+        return false;
+    };
+    default String[] getNonStandardOreDict(int meta) {
+        return new String[]{};
+    }
 	String getName(ItemStack stack);
 	List<Pair<String, Integer>> getMeta();
 }

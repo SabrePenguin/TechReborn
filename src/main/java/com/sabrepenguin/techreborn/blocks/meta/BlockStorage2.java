@@ -2,7 +2,8 @@ package com.sabrepenguin.techreborn.blocks.meta;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
+import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockStorage2 extends Block implements IEnumMeta, INonStandardLocation {
+public class BlockStorage2 extends Block implements IMetaMaterial, INonStandardLocation {
 	public static final PropertyEnum<Storage2> TYPE = PropertyEnum.create(
 			"type", Storage2.class);
 
@@ -64,8 +65,24 @@ public class BlockStorage2 extends Block implements IEnumMeta, INonStandardLocat
 	}
 
 	@Override
-	protected boolean canSilkHarvest() {
+	public String getOreDict() {
+		return "block";
+	}
+
+	@Override
+	public boolean hasNonStandardOreDict() {
 		return true;
+	}
+
+	@Override
+	public String[] getNonStandardOreDict(int meta) {
+		Storage2 block = Storage2.META_MAP.get(meta);
+		if (block == Storage2.IRIDIUM_REINFORCED_STONE
+				|| block == Storage2.IRIDIUM_REINFORCED_TUNGSTENSTEEL
+				|| block == Storage2.REFINED_IRON) {
+			return new String[0];
+		}
+		return new String[] {getOreDict() + ExtraStringUtils.capitalizeByUnderscore(block.getName())};
 	}
 
 	@Override

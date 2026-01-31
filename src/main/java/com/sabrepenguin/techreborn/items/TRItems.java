@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
-import com.sabrepenguin.techreborn.itemblock.IEnumMeta;
+import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockEnum;
 import com.sabrepenguin.techreborn.items.armor.ItemCloak;
 import com.sabrepenguin.techreborn.items.armor.TRArmor;
@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -209,16 +210,27 @@ public class TRItems {
             }
         }
         for (Block block: TRBlocks.getAllBlocks()) {
-            if (block instanceof IEnumMeta) {
-				registry.register(new ItemBlockEnum(block).setRegistryName(block.getRegistryName()));
-			} else {
-				registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
-			}
 			if (block instanceof IMetaMaterial meta) {
+				Item itemBlock = new ItemBlockEnum(block).setRegistryName(block.getRegistryName());
+				registry.register(itemBlock);
 				for(Pair<String, Integer> metadata: meta.getMeta()) {
 					String oredict = meta.getOreDict();
-					OreDictionary.registerOre(oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()), Item.getItemFromBlock(block));
+					if (meta.hasNonStandardOreDict()) {
+						String[] ores = meta.getNonStandardOreDict(metadata.getRight());
+						for (String ore: ores) {
+							OreDictionary.registerOre(
+									ore,
+									new ItemStack(itemBlock, 1, metadata.getRight())
+							);
+						}
+					} else {
+						OreDictionary.registerOre(
+								oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()),
+								new ItemStack(itemBlock, 1, metadata.getRight()));
+					}
 				}
+			} else {
+				registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 			}
         }
     }

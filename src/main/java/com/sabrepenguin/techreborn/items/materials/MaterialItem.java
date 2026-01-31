@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.items.materials;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
+import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
 import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;

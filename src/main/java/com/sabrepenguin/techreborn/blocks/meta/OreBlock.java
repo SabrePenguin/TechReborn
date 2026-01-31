@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.blocks.meta;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.items.materials.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;

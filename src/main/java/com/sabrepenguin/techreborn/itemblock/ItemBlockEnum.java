@@ -18,7 +18,7 @@ public class ItemBlockEnum extends ItemBlock {
 
 	@Override
 	public String getTranslationKey(ItemStack stack) {
-		if (this.block instanceof IEnumMeta metaBlock) {
+		if (this.block instanceof IMetaMaterial metaBlock) {
 			return super.getTranslationKey() + "." + metaBlock.getName(stack);
 		}
 		return super.getTranslationKey(stack);
