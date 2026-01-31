@@ -14,11 +14,16 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -65,6 +70,11 @@ public class BlockStorage2 extends Block implements IMetaMaterial, INonStandardL
 	}
 
 	@Override
+	public float getExplosionResistance(World world, BlockPos pos, @Nullable Entity exploder, Explosion explosion) {
+		return world.getBlockState(pos).getValue(TYPE).blast_resistance;
+	}
+
+	@Override
 	public String getOreDict() {
 		return "block";
 	}
@@ -96,9 +106,9 @@ public class BlockStorage2 extends Block implements IMetaMaterial, INonStandardL
 	}
 
 	public enum Storage2 implements IStringSerializable {
-		TUNGSTENSTEEL(0),
-		IRIDIUM_REINFORCED_TUNGSTENSTEEL(1),
-		IRIDIUM_REINFORCED_STONE(2),
+		TUNGSTENSTEEL(0, 300f),
+		IRIDIUM_REINFORCED_TUNGSTENSTEEL(1, 400f),
+		IRIDIUM_REINFORCED_STONE(2, 300f),
 		RUBY(3),
 		SAPPHIRE(4),
 		PERIDOT(5),
@@ -116,13 +126,13 @@ public class BlockStorage2 extends Block implements IMetaMaterial, INonStandardL
 		}
 
 		final int metadata;
-		final int blast_resistance;
+		final float blast_resistance;
 
 		Storage2(int metadata) {
-			this(metadata, 0);
+			this(metadata, 30f);
 		}
 
-		Storage2(int metadata, int blast_resistance) {
+		Storage2(int metadata, float blast_resistance) {
 			this.metadata = metadata;
 			this.blast_resistance = blast_resistance;
 		}
