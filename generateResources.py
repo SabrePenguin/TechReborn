@@ -123,6 +123,26 @@ def create_item_x(directory: str, registry: dict | list, postfix: str = ""):
         write_to_file(fname, basic_generated(f"items/{directory}{key}{postfix}"))
 
 
+def create_block_x(directory: str, registry: dict | list, postfix: str = ""):
+    blocks_model = BLOCK_MODELS.joinpath(directory)
+    blocks_textures = BLOCK_TEXTURES.joinpath(directory)
+    items_model = ITEM_MODELS.joinpath(directory)
+    if not os.path.exists(blocks_model):
+        os.makedirs(blocks_model, exist_ok=True)
+    if not os.path.exists(items_model):
+        os.makedirs(items_model, exist_ok=True)
+    if isinstance(registry, dict):
+        registry = registry.keys()
+    for name in registry:
+        fname = blocks_model.joinpath(f"{name}{postfix}.json")
+        image = str(blocks_textures) + f"/{name}{postfix}"
+        if not image_exists(image + ".png"):
+            print(f"Error: image {image}.png doesn't exist")
+            continue
+        directory = fix_directory(directory)
+        write_to_file(fname, block_all_model(f"blocks/{directory}{name}{postfix}"))
+
+
 def fix_directory(directory: str) -> str:
     if directory.endswith("/"):
         return directory
@@ -309,6 +329,7 @@ if __name__ == "__main__":
     create_tools()
     create_item_x("armor", registries.ARMOR)
     create_item_x("tool", registries.SINGLE_TOOLS)
+    create_block_x("", registries.BLOCKS)
     generate_furnace(
         "techreborn",
         "dust",

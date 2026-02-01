@@ -294,6 +294,9 @@ PLATES = {
     "silicon": 11,
 }
 
+BLOCKS = [
+    "rubber_leaves"
+]
 
 MISC = ["uu_matter"]
 
