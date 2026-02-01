@@ -65,6 +65,10 @@ public class Ingot implements IMetaMaterial {
 			this.metadata = metadata;
 		}
 
+		public int metadata() {
+			return this.metadata;
+		}
+
 		@Override
 		public @NotNull String getName() {
 			return name();

@@ -111,6 +111,9 @@ public class DustSmall implements IMetaMaterial {
 			this.metadata = metadata;
 		}
 
+		public int metadata() {
+			return this.metadata;
+		}
 
 		@Override
 		public String getName() {
