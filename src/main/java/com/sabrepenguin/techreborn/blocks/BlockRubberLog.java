@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.util.WorldUtils;
@@ -16,6 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,6 +29,7 @@ public class BlockRubberLog extends BlockLog {
 
 	public BlockRubberLog() {
 		super();
+		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setHardness(2.0f);
 		this.setRegistryName(Tags.MODID, "rubber_log");
 		this.setTranslationKey(Tags.MODID + ".rubber_log");
@@ -34,7 +37,15 @@ public class BlockRubberLog extends BlockLog {
 		this.setTickRandomly(true);
 	}
 
+	@Override
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		return 30;
+	}
 
+	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		return 60;
+	}
 
 	@Override
 	public @NotNull IBlockState getStateFromMeta(int meta) {

@@ -22,6 +22,7 @@ import java.util.List;
 public class BlockRubberLeaves extends BlockLeaves {
 	public BlockRubberLeaves() {
 		super();
+		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setRegistryName(Tags.MODID, "rubber_leaves");
 		this.setTranslationKey(Tags.MODID + ".rubber_leaves");
 		this.setDefaultState(blockState.getBaseState().withProperty(CHECK_DECAY, true).withProperty(DECAYABLE, false));
