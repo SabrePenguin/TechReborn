@@ -40,18 +40,20 @@ public class BlockRubberLog extends BlockLog {
 	public @NotNull IBlockState getStateFromMeta(int meta) {
 		/*
 		 * God this is gonna be fun.
-		 * 3 is on - Sap is enabled
-		 * 0 - North, 1 - South, 2 - East, 3 - West (00, 01, 10, 11)
-		 * 3 is off - Direction saved instead
+		 * 0 is on - Sap is enabled 1000
+		 * 0 - North (00), 1 - South (01), 2 - East (10), 3 - West (11)
+		 * 0 is off - Direction saved instead
 		 * 1 - X, 2 - Z 3 - NONE, 4 - Y
 		 */
 		IBlockState state = this.getDefaultState();
-		if ((meta & 8) != 0) {
+		boolean hasSap = (meta & 1) != 0;
+		int payload = meta >> 2 & 3;
+		if (hasSap) {
 			return state.withProperty(LOG_AXIS, EnumAxis.Y)
 					.withProperty(HAS_SAP, true)
-					.withProperty(SAP, EnumFacing.byHorizontalIndex(meta & 3));
+					.withProperty(SAP, EnumFacing.byHorizontalIndex(payload));
 		}
-		state = switch (meta & 3) {
+		state = switch (payload) {
 			case 1 -> state.withProperty(LOG_AXIS, EnumAxis.X);
 			case 2 -> state.withProperty(LOG_AXIS, EnumAxis.Z);
 			case 3 -> state.withProperty(LOG_AXIS, EnumAxis.NONE);
@@ -65,15 +67,16 @@ public class BlockRubberLog extends BlockLog {
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
 		if (state.getValue(HAS_SAP)) {
-			meta |= 8;
-			meta |= state.getValue(SAP).getHorizontalIndex();
+			meta |= 1;
+			meta |= state.getValue(SAP).getHorizontalIndex() << 2;
 		} else {
-			meta |= switch (state.getValue(LOG_AXIS)) {
+			int axis = switch (state.getValue(LOG_AXIS)) {
 				case X -> 1;
 				case Z -> 2;
 				case NONE -> 3;
 				default -> 0;
 			};
+			meta |= axis << 2;
 		}
 		return meta;
 	}
@@ -82,14 +85,12 @@ public class BlockRubberLog extends BlockLog {
 	public void updateTick(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Random rand) {
 		if (worldIn.isRemote || state.getValue(LOG_AXIS) != EnumAxis.Y) return;
 		super.updateTick(worldIn, pos, state, rand);
-		if (!worldIn.isRemote && state.getValue(LOG_AXIS) == EnumAxis.Y) {
-			if (!state.getValue(HAS_SAP)) {
-				if (rand.nextInt(50) == 0) {
-					EnumFacing facing = EnumFacing.byHorizontalIndex(rand.nextInt(4));
-					if (worldIn.getBlockState(pos.down()).getBlock() == this &&
-						worldIn.getBlockState(pos.up()).getBlock() == this) {
-						worldIn.setBlockState(pos, state.withProperty(HAS_SAP, true).withProperty(SAP, facing));
-					}
+		if (!state.getValue(HAS_SAP)) {
+			if (rand.nextInt(50) == 0) {
+				EnumFacing facing = EnumFacing.byHorizontalIndex(rand.nextInt(4));
+				if (worldIn.getBlockState(pos.down()).getBlock() == this &&
+					worldIn.getBlockState(pos.up()).getBlock() == this) {
+					worldIn.setBlockState(pos, state.withProperty(HAS_SAP, true).withProperty(SAP, facing));
 				}
 			}
 		}
