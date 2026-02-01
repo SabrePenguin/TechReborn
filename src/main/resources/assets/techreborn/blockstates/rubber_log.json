@@ -1,0 +1,37 @@
+{
+  "multipart": [
+    {
+      "when": {"axis": "y", "has_sap": "false"},
+      "apply": {"model": "techreborn:rubber_log"}
+    },
+    {
+      "when": {"axis": "x", "has_sap": "false"},
+      "apply": {"model": "techreborn:rubber_log", "x": 90, "y": 90}
+    },
+    {
+      "when": {"axis": "z", "has_sap": "false"},
+      "apply": {"model": "techreborn:rubber_log", "x": 90}
+    },
+    {
+      "when": {"axis": "none", "has_sap": "false"},
+      "apply": {"model": "techreborn:rubber_log"}
+    },
+
+    {
+      "when": {"has_sap": "true", "sap": "north"},
+      "apply": {"model": "techreborn:rubber_log_sap"}
+    },
+    {
+      "when": {"has_sap": "true", "sap": "south"},
+      "apply": {"model": "techreborn:rubber_log_sap", "y": 180}
+    },
+    {
+      "when": {"has_sap": "true", "sap": "east"},
+      "apply": {"model": "techreborn:rubber_log_sap", "y": 90}
+    },
+    {
+      "when": {"has_sap": "true", "sap": "west"},
+      "apply": {"model": "techreborn:rubber_log_sap", "y": 270}
+    }
+  ]
+}

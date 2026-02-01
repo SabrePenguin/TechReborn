@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "techreborn:blocks/rubber_log_side",
+    "north": "techreborn:blocks/rubber_log_sap",
+    "south": "techreborn:blocks/rubber_log_side",
+    "east": "techreborn:blocks/rubber_log_side",
+    "west": "techreborn:blocks/rubber_log_side",
+    "up": "techreborn:blocks/rubber_log_top",
+    "down": "techreborn:blocks/rubber_log_top"
+  }
+}
