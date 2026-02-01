@@ -56,88 +56,14 @@ def default_block_model(parent: str) -> str:
     result = {"parent": parent}
     return json.dumps(result, indent=4)
 
-
-# INGOT creation
-def create_ingots():
-    ingot_model = ITEM_MODELS.joinpath("ingot")
-    ingot_textures = ITEM_TEXTURES.joinpath("ingot")
-    if not os.path.exists(ingot_model):
-        os.makedirs(ingot_model, True)
-
-    for ingot in registries.INGOTS:
-        new_file = ingot_model.joinpath(f"{ingot}_ingot.json")
-        if not os.path.exists(ingot_model.joinpath(f"{ingot}_ingot.json")):
-            image = str(ingot_textures) + f"/{ingot}_ingot"
-            if not image_exists(image + ".png"):
-                print(f"Error: image {image}.png doesn't exist")
-                continue
-            with open(new_file, "w") as file:
-                file.write(basic_generated(f"items/ingot/{ingot}_ingot"))
-
-
-# Smalldust creation
-def create_nuggets():
-    nugget_model = ITEM_MODELS.joinpath("nugget")
-    nugget_textures = ITEM_TEXTURES.joinpath("nugget")
-    if not os.path.exists(nugget_model):
-        os.makedirs(nugget_model, True)
-
-    for dust in registries.NUGGETS:
-        new_file = nugget_model.joinpath(f"{dust}_nugget.json")
-        if not os.path.exists(new_file):
-            image = str(nugget_textures) + f"/{dust}_nugget"
-            if not image_exists(image + ".png"):
-                print(f"Error: image {image}.png doesn't exist")
-                continue
-            with open(new_file, "w") as file:
-                file.write(basic_generated(f"items/nugget/{dust}_nugget"))
-
-
-# Dust creation
-def create_dust():
-    dust_model = ITEM_MODELS.joinpath("dust")
-    dust_textures = ITEM_TEXTURES.joinpath("dust")
-    if not os.path.exists(dust_model):
-        os.makedirs(dust_model, True)
-
-    for dust in registries.DUSTS.keys():
-        name = "dust" if dust == "dust" else f"{dust}_dust"
-        new_file = dust_model.joinpath(f"{name}.json")
-        if not os.path.exists(new_file):
-            image = str(dust_textures) + f"/{name}"
-            if not image_exists(image + ".png"):
-                print(f"Error: image {image}.png doesn't exist")
-                continue
-            with open(new_file, "w") as file:
-                file.write(basic_generated(f"items/dust/{name}"))
-
-
-# Smalldust creation
-def create_smalldust():
-    smalldust_model = ITEM_MODELS.joinpath("smalldust")
-    smalldust_textures = ITEM_TEXTURES.joinpath("smalldust")
-    if not os.path.exists(smalldust_model):
-        os.makedirs(smalldust_model, True)
-
-    for dust in registries.SMALL_DUSTS.keys():
-        new_file = smalldust_model.joinpath(f"{dust}_smalldust.json")
-        if not os.path.exists(new_file):
-            image = str(smalldust_textures) + f"/{dust}_smalldust"
-            if not image_exists(image + ".png"):
-                print(f"Error: image {image}.png doesn't exist")
-                continue
-            with open(new_file, "w") as file:
-                file.write(basic_generated(f"items/smalldust/{dust}_smalldust"))
-
-
 def create_blocks():
     blocks_model = BLOCK_MODELS.joinpath("storage")
     blocks_textures = BLOCK_TEXTURES.joinpath("storage")
     items_model = ITEM_MODELS.joinpath("storage")
     if not os.path.exists(blocks_model):
-        os.makedirs(blocks_model, True)
+        os.makedirs(blocks_model, exist_ok=True)
     if not os.path.exists(items_model):
-        os.makedirs(items_model, True)
+        os.makedirs(items_model, exist_ok=True)
 
     blocks = [registries.BLOCK_STORAGE, registries.BLOCK_STORAGE2]
     for l in blocks:
@@ -150,53 +76,11 @@ def create_blocks():
             write_to_file(fname, block_all_model(f"blocks/storage/{storage}_block"))
 
 
-def create_gems():
-    gem_model = ITEM_MODELS.joinpath("gem")
-    gem_textures = ITEM_TEXTURES.joinpath("gem")
-    if not os.path.exists(gem_model):
-        os.makedirs(gem_model, True)
-    for name in registries.GEM.keys():
-        fname = gem_model.joinpath(f"{name}.json")
-        image = str(gem_textures) + f"/{name}"
-        if not image_exists(image + ".png"):
-            print(f"Error: image {image}.png doesn't exist")
-            continue
-        write_to_file(fname, basic_generated(f"items/gem/{name}"))
-
-
-def create_parts():
-    parts_model = ITEM_MODELS.joinpath("part")
-    parts_textures = ITEM_TEXTURES.joinpath("part")
-    if not os.path.exists(parts_model):
-        os.makedirs(parts_model, True)
-    for name in registries.PARTS.keys():
-        fname = parts_model.joinpath(f"{name}.json")
-        image = str(parts_textures) + f"/{name}"
-        if not image_exists(image + ".png"):
-            print(f"Error: image {image}.png doesn't exist")
-            continue
-        write_to_file(fname, basic_generated(f"items/part/{name}"))
-
-
-def create_misc():
-    misc_model = ITEM_MODELS.joinpath("misc")
-    misc_textures = ITEM_TEXTURES.joinpath("misc")
-    if not os.path.exists(misc_model):
-        os.makedirs(misc_model, True)
-    for name in registries.MISC:
-        fname = misc_model.joinpath(f"{name}.json")
-        image = str(misc_textures) + f"/{name}"
-        if not image_exists(image + ".png"):
-            print(f"Error: image {image}.png doesn't exist")
-            continue
-        write_to_file(fname, basic_generated(f"items/misc/{name}"))
-
-
 def create_tools():
     tool_model = ITEM_MODELS.joinpath("tool")
     tool_textures = ITEM_TEXTURES.joinpath("tool")
     if not os.path.exists(tool_model):
-        os.makedirs(tool_model, True)
+        os.makedirs(tool_model, exist_ok=True)
     for name in registries.TOOLS:
         for t in [
             "axe",
@@ -221,7 +105,7 @@ def create_item_x(directory: str, registry: dict | list, postfix: str = ""):
     model = ITEM_MODELS.joinpath(directory)
     textures = ITEM_TEXTURES.joinpath(directory)
     if not os.path.exists(model):
-        os.makedirs(model, True)
+        os.makedirs(model, exist_ok=True)
     local_keys = []
     if isinstance(registry, list):
         local_keys = registry
@@ -250,7 +134,7 @@ def fix_directory(directory: str) -> str:
 def dust_craft_creation():
     dust_crafts = RECIPES.joinpath("dust")
     if not os.path.exists(dust_crafts):
-        os.makedirs(dust_crafts, True)
+        os.makedirs(dust_crafts, exist_ok=True)
     for input_name in registries.SMALL_DUSTS.keys():
         fname = dust_crafts.joinpath(f"{input_name}_dust.json")
         rinput = recipes.create_ore("dustSmall", input_name)
@@ -271,7 +155,7 @@ def dust_craft_creation():
 
     smalldust_crafts = RECIPES.joinpath("smalldust")
     if not os.path.exists(smalldust_crafts):
-        os.makedirs(smalldust_crafts, True)
+        os.makedirs(smalldust_crafts, exist_ok=True)
     for input_name in registries.DUSTS.keys():
         fname = smalldust_crafts.joinpath(f"{input_name}_smalldust.json")
         rinput = recipes.create_ore("dust", input_name)
@@ -285,7 +169,7 @@ def dust_craft_creation():
 def nugget_craft_creation():
     nugget_crafts = RECIPES.joinpath("nugget")
     if not os.path.exists(nugget_crafts):
-        os.makedirs(nugget_crafts, True)
+        os.makedirs(nugget_crafts, exist_ok=True)
     for name in registries.INGOTS.keys():
         fname = nugget_crafts.joinpath(f"{name}_nugget.json")
         rinput = recipes.create_ore("ingot", name)
@@ -309,7 +193,7 @@ def nugget_craft_creation():
 def ingot_craft_creation():
     ingot_crafts = RECIPES.joinpath("ingot")
     if not os.path.exists(ingot_crafts):
-        os.makedirs(ingot_crafts, True)
+        os.makedirs(ingot_crafts, exist_ok=True)
     for name in registries.NUGGETS.keys():
         mdata = registries.INGOTS.get(name)
         if mdata is None:
@@ -343,7 +227,7 @@ def ingot_craft_creation():
 def gem_craft_creation():
     gem_crafts = RECIPES.joinpath("gem")
     if not os.path.exists(gem_crafts):
-        os.makedirs(gem_crafts, True)
+        os.makedirs(gem_crafts, exist_ok=True)
     blocks = [registries.BLOCK_STORAGE, registries.BLOCK_STORAGE2]
     for block in blocks:
         for name in block.keys():
@@ -359,7 +243,7 @@ def gem_craft_creation():
 def block_craft_creation():
     block_crafts = RECIPES.joinpath("block")
     if not os.path.exists(block_crafts):
-        os.makedirs(block_crafts, True)
+        os.makedirs(block_crafts, exist_ok=True)
     for name in registries.INGOTS.keys():
         mdata = registries.BLOCK_STORAGE.get(name)
         out_name = "storage"
@@ -414,17 +298,17 @@ def generate_furnace(
 
 
 if __name__ == "__main__":
-    create_ingots()
-    create_nuggets()
-    create_dust()
-    create_smalldust()
+    create_item_x("ingot", registries.INGOTS, "_ingot")
+    create_item_x("nugget", registries.NUGGETS, "_nugget")
+    create_item_x("dust", registries.DUSTS, "_dust")
+    create_item_x("smalldust", registries.SMALL_DUSTS, "_smalldust")
+    create_item_x("gem", registries.GEM)
+    create_item_x("part", registries.PARTS)
+    create_item_x("misc", registries.MISC)
     create_blocks()
-    create_gems()
-    create_parts()
-    create_misc()
     create_tools()
     create_item_x("armor", registries.ARMOR)
-    create_item_x("tool", registries.TOOL)
+    create_item_x("tool", registries.SINGLE_TOOLS)
     generate_furnace(
         "techreborn",
         "dust",

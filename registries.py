@@ -27,7 +27,6 @@ INGOTS = {
     "plutonium": 25,
     # "cupro_nickel": 26,
 }
-
 ORES = {
     "galena": 0,
     "iridium": 1,
@@ -44,7 +43,6 @@ ORES = {
     "lead": 12,
     "silver": 13
 }
-
 NUGGETS = {
     "aluminum": 0,
     "brass": 1,
@@ -66,9 +64,6 @@ NUGGETS = {
     "tungstensteel": 17,
     "zinc": 18,
     "refined_iron": 19,
-    # ItemHelper.META_PLACEHOLDER: 20,
-    # ItemHelper.META_PLACEHOLDER: 21,
-    # ItemHelper.META_PLACEHOLDER: 22,
     "iron": 23,
     "diamond": 24,
 }
@@ -115,7 +110,6 @@ DUSTS = {
     "pyrite": 39,
     "pyrope": 40,
     "red_garnet": 41,
-    # META_PLACEHOLDER: 42,
     "ruby": 43,
     "saltpeter": 44,
     "sapphire": 45,
@@ -130,10 +124,8 @@ DUSTS = {
     "titanium": 54,
     "tungsten": 55,
     "uvarovite": 56,
-    # META_PLACEHOLDER: 57,
     "yellow_garnet": 58,
     "zinc": 59,
-    # META_PLACEHOLDER: 60,
     "andesite": 61,
     "diorite": 62,
     "granite": 63,
@@ -185,7 +177,6 @@ SMALL_DUSTS = {
     "pyrite": 39,
     "pyrope": 40,
     "red_garnet": 41,
-    # META_PLACEHOLDER: 42
     "ruby": 43,
     "saltpeter": 44,
     "sapphire": 45,
@@ -262,18 +253,13 @@ PARTS = {
     "cupronickel_heating_coil": 13,
     "nichrome_heating_coil": 14,
     "kanthal_heating_coil": 15,
-    # META_PLACEHOLDER: 16,
     "super_conductor": 17,
-    # META_PLACEHOLDER: 18,
-    # META_PLACEHOLDER: 19,
-    # META_PLACEHOLDER: 20,
     "plutonium_cell": 21,
     "double_plutonium_cell": 22,
     "quad_plutonium_cell": 23,
     "computer_monitor": 24,
     "machine_parts": 25,
     "neutron_reflector": 26,
-    # META_PLACEHOLDER: 27,
     "thick_neutron_reflector": 28,
     "electronic_circuit": 29,
     "advanced_circuit": 30,
@@ -302,7 +288,6 @@ PLATES = {
     "redstone": 4,
     "diamond": 5,
     "emerald": 6,
-    # META_PLACEHOLDER: 7,
     "coal": 8,
     "obsidian": 9,
     "lazurite": 10,
@@ -319,7 +304,7 @@ TOOLS = [
     "sapphire",
 ]
 
-TOOL = ["wrench"]
+SINGLE_TOOLS = ["wrench", "treetap"]
 
 ARMOR = ["cloaking_device", "lapotronic_orbpack", "lithium_batpack"]
 
