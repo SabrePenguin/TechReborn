@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -116,7 +117,7 @@ public class DustSmall implements IMetaMaterial {
 		}
 
 		@Override
-		public String getName() {
+		public @NotNull String getName() {
 			return name();
 		}
 	}

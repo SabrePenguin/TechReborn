@@ -19,11 +19,6 @@ public class Part implements IMetaMaterial {
 		return PartMeta.META_MAP.get(stack.getMetadata()).getName();
 	}
 
-	@Override
-    public String getOreDict() {
-        return "";
-    }
-
     @Override
     public boolean hasNonStandardOreDict() {
         return true;
