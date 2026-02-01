@@ -1,12 +1,20 @@
 package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.items.TRItems;
+import com.sabrepenguin.techreborn.items.materials.Part;
+import com.sabrepenguin.techreborn.util.WorldUtils;
+import com.sabrepenguin.techreborn.util.handlers.ModSounds;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -72,10 +80,11 @@ public class BlockRubberLog extends BlockLog {
 
 	@Override
 	public void updateTick(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Random rand) {
+		if (worldIn.isRemote || state.getValue(LOG_AXIS) != EnumAxis.Y) return;
 		super.updateTick(worldIn, pos, state, rand);
 		if (!worldIn.isRemote && state.getValue(LOG_AXIS) == EnumAxis.Y) {
 			if (!state.getValue(HAS_SAP)) {
-				if (rand.nextInt(2) == 0) {
+				if (rand.nextInt(50) == 0) {
 					EnumFacing facing = EnumFacing.byHorizontalIndex(rand.nextInt(4));
 					if (worldIn.getBlockState(pos.down()).getBlock() == this &&
 						worldIn.getBlockState(pos.up()).getBlock() == this) {
@@ -84,6 +93,32 @@ public class BlockRubberLog extends BlockLog {
 				}
 			}
 		}
+	}
+
+	@Override
+	@SuppressWarnings("ConstantConditions")
+	public boolean onBlockActivated(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
+									@NotNull EntityPlayer playerIn, @NotNull EnumHand hand, @NotNull EnumFacing facing,
+									float hitX, float hitY, float hitZ) {
+		super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+		ItemStack itemInHand = playerIn.getHeldItem(hand);
+		if (itemInHand.isEmpty())
+			return false;
+		if (itemInHand.getItem() == TRItems.treetap) {
+			if (state.getValue(HAS_SAP) && state.getValue(SAP) == facing) {
+				worldIn.setBlockState(pos, state.withProperty(HAS_SAP, false).withProperty(SAP, EnumFacing.NORTH));
+				worldIn.playSound(null, pos, ModSounds.SAP_EXTRACT, SoundCategory.BLOCKS, 0.6f, 1f);
+				if (!worldIn.isRemote) {
+					playerIn.getHeldItem(hand).damageItem(1,playerIn);
+					ItemStack drop = new ItemStack(TRItems.part, 1, Part.PartMeta.sap.metadata());
+					if (!playerIn.inventory.addItemStackToInventory(drop)) {
+						WorldUtils.dropItem(drop, worldIn, pos.offset(facing));
+					}
+				}
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

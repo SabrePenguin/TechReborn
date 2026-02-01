@@ -82,6 +82,7 @@ public class TRItems {
 
 	public static final ItemCloak cloakingdevice = null;
     public static final ItemWrench wrench = null;
+	public static final TreeTap treetap = null;
 
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
@@ -138,6 +139,7 @@ public class TRItems {
 
 		items.add(new ItemCloak(MaterialsTR.CLOAKING_ARMOR));
         items.add(new ItemWrench());
+		items.add(new TreeTap());
 
         return items;
     }
@@ -195,7 +197,8 @@ public class TRItems {
 				TRItems.sapphireboots,
 
 				TRItems.cloakingdevice,
-                TRItems.wrench
+                TRItems.wrench,
+				TRItems.treetap
         );
         return allItems;
     }
