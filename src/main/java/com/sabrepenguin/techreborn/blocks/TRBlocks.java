@@ -26,8 +26,9 @@ public class TRBlocks {
 	public static final Block ore2 = null;
 	public static final Block machine_frame = null;
 	public static final Block machine_casing = null;
-	public static final Block rubber_log = null;
+	public static final BlockRubberLog rubber_log = null;
 	public static final BlockRubberLeaves rubber_leaves = null;
+	public static final BlockRubberSapling rubber_sapling = null;
 
     public static Block[] getBlocks() {
         final Block[] blocks = {
@@ -40,7 +41,8 @@ public class TRBlocks {
 				new BlockMachineFrame(),
 				new BlockMachineCasing(),
 				new BlockRubberLog(),
-				new BlockRubberLeaves()
+				new BlockRubberLeaves(),
+				new BlockRubberSapling()
         };
 
         return blocks;
@@ -57,7 +59,8 @@ public class TRBlocks {
 				TRBlocks.machine_frame,
 				TRBlocks.machine_casing,
 				TRBlocks.rubber_log,
-				TRBlocks.rubber_leaves
+				TRBlocks.rubber_leaves,
+				TRBlocks.rubber_sapling
         );
         return allBlocks;
     }

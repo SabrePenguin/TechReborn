@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Random;
 
 public class BlockRubberLeaves extends BlockLeaves {
 	public BlockRubberLeaves() {
@@ -29,12 +30,12 @@ public class BlockRubberLeaves extends BlockLeaves {
 	}
 
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public int getFireSpreadSpeed(@NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EnumFacing face) {
 		return 30;
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public int getFlammability(@NotNull IBlockAccess world, @NotNull BlockPos pos, @NotNull EnumFacing face) {
 		return 60;
 	}
 
@@ -61,8 +62,15 @@ public class BlockRubberLeaves extends BlockLeaves {
 	}
 
 	@Override
+	@SuppressWarnings("ConstantConditions")
 	public BlockPlanks.EnumType getWoodType(int meta) {
 		return null;
+	}
+
+	@Override
+	@SuppressWarnings("ConstantConditions")
+	public @NotNull Item getItemDropped(@NotNull IBlockState state, @NotNull Random rand, int fortune) {
+		return Item.getItemFromBlock(TRBlocks.rubber_sapling);
 	}
 
 	@Override
