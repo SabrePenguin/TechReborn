@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.worldgen.WorldGenRubberTrees;
+import com.sabrepenguin.techreborn.worldgen.generators.WorldGenRubberTrees;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;

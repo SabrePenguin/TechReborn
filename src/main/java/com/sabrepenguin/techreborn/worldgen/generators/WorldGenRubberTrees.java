@@ -1,10 +1,9 @@
-package com.sabrepenguin.techreborn.worldgen;
+package com.sabrepenguin.techreborn.worldgen.generators;
 
 import com.sabrepenguin.techreborn.blocks.BlockRubberLog;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
