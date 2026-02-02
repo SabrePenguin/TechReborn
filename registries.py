@@ -295,7 +295,12 @@ PLATES = {
 }
 
 BLOCKS = [
-    "rubber_leaves"
+    "rubber_leaves",
+    "rubber_planks"
+]
+
+FLAT_BLOCKS = [
+    "rubber_sapling"
 ]
 
 MISC = ["uu_matter"]
