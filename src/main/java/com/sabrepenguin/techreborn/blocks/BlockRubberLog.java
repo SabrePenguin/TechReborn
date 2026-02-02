@@ -6,6 +6,7 @@ import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.util.WorldUtils;
 import com.sabrepenguin.techreborn.util.handlers.ModSounds;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
@@ -15,14 +16,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class BlockRubberLog extends BlockLog {
 	public static PropertyDirection SAP = PropertyDirection.create("sap", EnumFacing.Plane.HORIZONTAL);
 	public static PropertyBool HAS_SAP = PropertyBool.create("has_sap");
@@ -48,7 +52,7 @@ public class BlockRubberLog extends BlockLog {
 	}
 
 	@Override
-	public @NotNull IBlockState getStateFromMeta(int meta) {
+	public IBlockState getStateFromMeta(int meta) {
 		/*
 		 * God this is gonna be fun.
 		 * 0 is on - Sap is enabled 1000
@@ -93,7 +97,7 @@ public class BlockRubberLog extends BlockLog {
 	}
 
 	@Override
-	public void updateTick(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, @NotNull Random rand) {
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (worldIn.isRemote || state.getValue(LOG_AXIS) != EnumAxis.Y) return;
 		super.updateTick(worldIn, pos, state, rand);
 		if (!state.getValue(HAS_SAP)) {
@@ -109,8 +113,8 @@ public class BlockRubberLog extends BlockLog {
 
 	@Override
 	@SuppressWarnings("ConstantConditions")
-	public boolean onBlockActivated(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state,
-									@NotNull EntityPlayer playerIn, @NotNull EnumHand hand, @NotNull EnumFacing facing,
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state,
+									EntityPlayer playerIn, EnumHand hand, EnumFacing facing,
 									float hitX, float hitY, float hitZ) {
 		super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 		ItemStack itemInHand = playerIn.getHeldItem(hand);
@@ -134,7 +138,16 @@ public class BlockRubberLog extends BlockLog {
 	}
 
 	@Override
-	protected @NotNull BlockStateContainer createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, LOG_AXIS, SAP, HAS_SAP);
+	}
+
+	@Override
+	@SuppressWarnings("ConstantConditions")
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		super.getDrops(drops, world, pos, state, fortune);
+		if (state.getValue(HAS_SAP) && new Random().nextInt(4) == 0) {
+			drops.add(new ItemStack(TRItems.part, 1, Part.PartMeta.sap.metadata()));
+		}
 	}
 }
