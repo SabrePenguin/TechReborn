@@ -56,6 +56,17 @@ public class BlockRubberSapling extends BlockBush implements IGrowable {
 	}
 
 	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		if (!worldIn.isRemote) {
+			super.updateTick(worldIn, pos, state, rand);
+			if (!worldIn.isAreaLoaded(pos, 1)) return;
+			if (worldIn.getLightFromNeighbors(pos.up()) >= 9 && rand.nextInt(7) == 0) {
+				grow(worldIn, rand, pos, state);
+			}
+		}
+	}
+
+	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
 		if (state.getValue(STAGE) == 0) {
 			worldIn.setBlockState(pos, state.cycleProperty(STAGE), 4);
