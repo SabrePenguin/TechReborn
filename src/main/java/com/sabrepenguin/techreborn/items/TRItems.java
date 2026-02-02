@@ -1,14 +1,17 @@
 package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.blocks.IBurnable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.ItemBlockBurnable;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockEnum;
 import com.sabrepenguin.techreborn.items.armor.ItemCloak;
 import com.sabrepenguin.techreborn.items.armor.TRArmor;
 import com.sabrepenguin.techreborn.items.materials.*;
 import com.sabrepenguin.techreborn.items.tools.*;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
+import com.sabrepenguin.techreborn.util.handlers.OreHandler;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -216,7 +219,7 @@ public class TRItems {
 			if (block instanceof IMetaMaterial meta) {
 				Item itemBlock = new ItemBlockEnum(block).setRegistryName(block.getRegistryName());
 				registry.register(itemBlock);
-				for(Pair<String, Integer> metadata: meta.getMeta()) {
+				for (Pair<String, Integer> metadata : meta.getMeta()) {
 					String oredict = meta.getOreDict();
 					if (meta.hasNonStandardOreDict()) {
 						String[] ores = meta.getNonStandardOreDict(metadata.getRight());
@@ -232,9 +235,12 @@ public class TRItems {
 								new ItemStack(itemBlock, 1, metadata.getRight()));
 					}
 				}
+			} else if (block instanceof IBurnable burnable) {
+				registry.register(new ItemBlockBurnable(block, burnable).setRegistryName(block.getRegistryName()));
 			} else {
 				registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 			}
         }
+		OreHandler.initOres();
     }
 }
