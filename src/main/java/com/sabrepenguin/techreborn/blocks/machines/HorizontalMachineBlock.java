@@ -3,11 +3,13 @@ package com.sabrepenguin.techreborn.blocks.machines;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
+import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -24,7 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class HorizontalMachineBlock extends Block {
+public abstract class HorizontalMachineBlock extends Block implements INonStandardLocation {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
@@ -34,6 +36,14 @@ public abstract class HorizontalMachineBlock extends Block {
 		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setRegistryName(Tags.MODID, registryName);
 		this.setTranslationKey(Tags.MODID + "." + registryName);
+		this.setHardness(2.0f);
+		this.setSoundType(SoundType.METAL);
+		this.setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
+	}
+
+	public HorizontalMachineBlock() {
+		super(Material.IRON);
+		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setHardness(2.0f);
 		this.setSoundType(SoundType.METAL);
 		this.setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
@@ -137,5 +147,10 @@ public abstract class HorizontalMachineBlock extends Block {
 	@Override
 	public @NotNull EnumBlockRenderType getRenderType(@NotNull IBlockState state) {
 		return EnumBlockRenderType.MODEL;
+	}
+
+	@Override
+	public IProperty<?>[] getProperties() {
+		return new IProperty[] {FACING, ACTIVE};
 	}
 }
