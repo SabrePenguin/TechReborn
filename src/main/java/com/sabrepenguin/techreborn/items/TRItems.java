@@ -240,6 +240,12 @@ public class TRItems {
 				registry.register(new ItemBlockBurnable(block, burnable).setRegistryName(block.getRegistryName()));
 			}
         }
+		registerNormalItems(registry);
+		OreHandler.initOres();
+    }
+
+	@SuppressWarnings("ConstantConditions")
+	private static void registerNormalItems(IForgeRegistry<Item> registry) {
 		{
 			ItemSlab slab = new ItemSlab(TRBlocks.rubber_plank_slab, TRBlocks.rubber_plank_slab, TRBlocks.rubber_plank_double_slab);
 			registry.register(slab.setRegistryName(TRBlocks.rubber_plank_double_slab.getRegistryName()));
@@ -252,6 +258,5 @@ public class TRItems {
 			registry.register(new ItemBlock(TRBlocks.iron_alloy_furnace).setRegistryName(TRBlocks.iron_alloy_furnace.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.reinforced_glass).setRegistryName(TRBlocks.reinforced_glass.getRegistryName()));
 		}
-		OreHandler.initOres();
-    }
+	}
 }
