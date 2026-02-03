@@ -3,10 +3,10 @@ package com.sabrepenguin.techreborn.items.materials;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
-import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class MaterialItem extends ItemBase implements INonStandardLocation {
+public class MaterialItem extends Item implements INonStandardLocation {
 	private final String prefix;
 	private final String postfix;
 	private final IMetaMaterial meta;
@@ -36,7 +36,6 @@ public class MaterialItem extends ItemBase implements INonStandardLocation {
 		this.meta = item;
 	}
 
-	@Override
 	public void registerOredict() {
 		for (Pair<String, Integer> metadata: this.meta.getMeta()) {
 			String oredict = this.meta.getOreDict();

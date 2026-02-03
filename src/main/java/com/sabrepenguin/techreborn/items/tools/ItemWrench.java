@@ -1,10 +1,11 @@
 package com.sabrepenguin.techreborn.items.tools;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.items.ItemBase;
+import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -12,12 +13,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemWrench extends ItemBase implements INonStandardLocation {
+public class ItemWrench extends Item implements INonStandardLocation {
     public ItemWrench() {
         super();
         this.setRegistryName(Tags.MODID, "wrench");
         this.setTranslationKey(Tags.MODID + ".wrench");
         this.setFull3D();
+		this.setCreativeTab(TechReborn.RESOURCE_TAB);
     }
 
     @Override

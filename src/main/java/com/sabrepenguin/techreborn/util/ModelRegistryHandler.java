@@ -2,7 +2,6 @@ package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
-import com.sabrepenguin.techreborn.items.ItemBase;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
 import com.sabrepenguin.techreborn.items.materials.MaterialItem;
@@ -71,7 +70,7 @@ public class ModelRegistryHandler {
 		}
 		ResourceLocation location = ModelRegistryUtils.fixLocation(item.getRegistryName(), prefix, postfix);
 
-		if (item instanceof ItemBase baseItem && baseItem.getHasSubtypes()) {
+		if (item.getHasSubtypes()) {
 			if (item instanceof MaterialItem material) {
 				for (Pair<String, Integer> metadata: material.getMeta()) {
 					ModelLoader.setCustomModelResourceLocation(

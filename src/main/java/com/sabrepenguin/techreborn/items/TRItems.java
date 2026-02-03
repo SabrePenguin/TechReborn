@@ -211,8 +211,8 @@ public class TRItems {
         IForgeRegistry<Item> registry = event.getRegistry();
         for (Item item: TRItems.getItems()) {
             registry.register(item);
-            if (item instanceof ItemBase baseItem) {
-                baseItem.registerOredict();
+            if (item instanceof MaterialItem materialItem) {
+                materialItem.registerOredict();
             }
         }
         for (Block block: TRBlocks.getAllBlocks()) {
