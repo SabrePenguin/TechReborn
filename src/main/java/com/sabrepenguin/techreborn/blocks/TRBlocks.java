@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.blocks.machines.BlockComputerCube;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.blocks.meta.*;
@@ -36,6 +37,7 @@ public class TRBlocks {
 	public static final BlockTRWoodenStairs rubber_plank_stair = null;
 	public static final BlockReinforcedGlass reinforced_glass = null;
 	public static final BlockAlarm alarm = null;
+	public static final BlockComputerCube computercube = null;
 
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
@@ -56,7 +58,8 @@ public class TRBlocks {
 				TRBlocks.rubber_plank_double_slab,
 				TRBlocks.rubber_plank_stair,
 				TRBlocks.reinforced_glass,
-				TRBlocks.alarm
+				TRBlocks.alarm,
+				TRBlocks.computercube
         );
         return allBlocks;
     }
@@ -81,7 +84,8 @@ public class TRBlocks {
 				new BlockTRWoodenSlabs.Double(Material.WOOD, "rubber_plank_double_slab"),
 				new BlockTRWoodenStairs(planks, "rubber_plank_stair"),
 				new BlockReinforcedGlass(),
-				new BlockAlarm()
+				new BlockAlarm(),
+				new BlockComputerCube()
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);

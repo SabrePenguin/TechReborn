@@ -258,6 +258,7 @@ public class TRItems {
 			registry.register(new ItemBlock(TRBlocks.iron_alloy_furnace).setRegistryName(TRBlocks.iron_alloy_furnace.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.reinforced_glass).setRegistryName(TRBlocks.reinforced_glass.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.alarm).setRegistryName(TRBlocks.alarm.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.computercube).setRegistryName(TRBlocks.computercube.getRegistryName()));
 		}
 	}
 }
