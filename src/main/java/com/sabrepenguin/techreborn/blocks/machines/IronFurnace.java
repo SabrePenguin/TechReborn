@@ -29,7 +29,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class IronFurnace extends Block implements INonStandardLocation, ITileEntityProvider {
+public class IronFurnace extends Block implements INonStandardLocation {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool BURNING = PropertyBool.create("active");
 
@@ -186,10 +186,5 @@ public class IronFurnace extends Block implements INonStandardLocation, ITileEnt
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
 		return true;
-	}
-
-	@Override
-	public @Nullable TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityIronFurnace();
 	}
 }

@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockIronAlloyFurnace extends HorizontalMachineBlock implements INonStandardLocation, ITileEntityProvider {
+public class BlockIronAlloyFurnace extends HorizontalMachineBlock implements INonStandardLocation {
 	public BlockIronAlloyFurnace() {
 		super("iron_alloy_furnace");
 	}
@@ -27,7 +27,6 @@ public class BlockIronAlloyFurnace extends HorizontalMachineBlock implements INo
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
 			GuiFactories.tileEntity().open(playerIn, pos);
-			//playerIn.openGui(TechReborn.instance, GUI.IRON_ALLOY_FURNACE.getId(), worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return true;
 	}
@@ -35,11 +34,6 @@ public class BlockIronAlloyFurnace extends HorizontalMachineBlock implements INo
 	@Override
 	public boolean hasTileEntity(@NotNull IBlockState state) {
 		return true;
-	}
-
-	@Override
-	public @Nullable TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityIronAlloyFurnace();
 	}
 
 	@Override
