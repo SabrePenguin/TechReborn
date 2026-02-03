@@ -1,10 +1,9 @@
 package com.sabrepenguin.techreborn.proxy;
 
-import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-public class ClientProxy implements IProxy {
+public class ServerProxy implements IProxy{
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
 
@@ -17,7 +16,6 @@ public class ClientProxy implements IProxy {
 
 	@Override
 	public boolean hasFancyGraphics() {
-		return Minecraft.getMinecraft().gameSettings.fancyGraphics;
+		return false;
 	}
-
 }

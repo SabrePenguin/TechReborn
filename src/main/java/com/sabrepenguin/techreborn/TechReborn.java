@@ -1,8 +1,10 @@
 package com.sabrepenguin.techreborn;
 
-import com.sabrepenguin.techreborn.proxy.CommonProxy;
+import com.sabrepenguin.techreborn.gui.GuiHandler;
+import com.sabrepenguin.techreborn.proxy.IProxy;
 import com.sabrepenguin.techreborn.recipe.TRRecipeLoader;
 import com.sabrepenguin.techreborn.tabs.TRTab;
+import com.sabrepenguin.techreborn.worldgen.WorldGenTrees;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,6 +17,8 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,9 +33,9 @@ public class TechReborn {
     @SidedProxy(
             modId = Tags.MODID,
             clientSide = "com.sabrepenguin.techreborn.proxy.ClientProxy",
-            serverSide = "com.sabrepenguin.techreborn.proxy.CommonProxy"
+            serverSide = "com.sabrepenguin.techreborn.proxy.ServerProxy"
     )
-    public static CommonProxy proxy;
+    public static IProxy proxy;
 
     public static final CreativeTabs RESOURCE_TAB = new TRTab();
 
@@ -40,6 +44,7 @@ public class TechReborn {
     public void preInit(FMLPreInitializationEvent event) {
         // register to the event bus so that we can listen to events
         MinecraftForge.EVENT_BUS.register(this);
+		NetworkRegistry.INSTANCE.registerGuiHandler(TechReborn.instance, new GuiHandler());
 		proxy.preInit(event);
     }
 
@@ -53,6 +58,7 @@ public class TechReborn {
     @EventHandler
     // load "Do your mod setup. Build whatever data structures you care about." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
+		GameRegistry.registerWorldGenerator(new WorldGenTrees(), 0);
 		proxy.init(event);
     }
 
