@@ -32,7 +32,7 @@ public abstract class BlockTRWoodenSlabs extends BlockSlab {
 			state.withProperty(BlockSlab.HALF, EnumBlockHalf.BOTTOM);
 		}
 		this.setDefaultState(state);
-		this.useNeighborBrightness = !this.isDouble();
+		this.useNeighborBrightness = true;
 	}
 
 	@Override

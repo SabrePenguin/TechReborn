@@ -245,6 +245,7 @@ public class TRItems {
 			registry.register(slab.setRegistryName(TRBlocks.rubber_plank_double_slab.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.rubber_log).setRegistryName(TRBlocks.rubber_log.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.rubber_planks).setRegistryName(TRBlocks.rubber_planks.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.rubber_plank_stair).setRegistryName(TRBlocks.rubber_plank_stair.getRegistryName()));
 		}
 		{
 			registry.register(new ItemBlock(TRBlocks.iron_furnace).setRegistryName(TRBlocks.iron_furnace.getRegistryName()));

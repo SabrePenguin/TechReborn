@@ -13,9 +13,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockPlanks extends Block{
+public class BlockTRPlanks extends Block{
 
-	public BlockPlanks(String registryName, String translationKey) {
+	public BlockTRPlanks(String registryName, String translationKey) {
 		super(Material.WOOD);
 		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setRegistryName(Tags.MODID, registryName);

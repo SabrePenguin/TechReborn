@@ -6,7 +6,6 @@ import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -31,30 +30,11 @@ public class TRBlocks {
 	public static final BlockRubberLog rubber_log = null;
 	public static final BlockRubberLeaves rubber_leaves = null;
 	public static final BlockRubberSapling rubber_sapling = null;
-	public static final BlockPlanks rubber_planks = null;
+	public static final BlockTRPlanks rubber_planks = null;
 	public static final BlockTRWoodenSlabs rubber_plank_slab = null;
 	public static final BlockTRWoodenSlabs rubber_plank_double_slab = null;
+	public static final BlockTRWoodenStairs rubber_plank_stair = null;
 
-    public static Block[] getBlocks() {
-        final Block[] blocks = {
-                new BlockStorage(),
-                new BlockStorage2(),
-                new IronFurnace(),
-				new BlockIronAlloyFurnace(),
-				new OreBlock(),
-				new OreBlock2(),
-				new BlockMachineFrame(),
-				new BlockMachineCasing(),
-				new BlockRubberLog(),
-				new BlockRubberLeaves(),
-				new BlockRubberSapling(),
-				new BlockPlanks("rubber_planks", "rubber_planks"),
-				new BlockTRWoodenSlabs.Half(Material.WOOD, "rubber_plank_slab"),
-				new BlockTRWoodenSlabs.Double(Material.WOOD, "rubber_plank_double_slab")
-        };
-
-        return blocks;
-    }
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
         Collections.addAll(allBlocks,
@@ -71,14 +51,33 @@ public class TRBlocks {
 				TRBlocks.rubber_sapling,
 				TRBlocks.rubber_planks,
 				TRBlocks.rubber_plank_slab,
-				TRBlocks.rubber_plank_double_slab
+				TRBlocks.rubber_plank_double_slab,
+				TRBlocks.rubber_plank_stair
         );
         return allBlocks;
     }
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
-		for (Block block: TRBlocks.getBlocks()) {
+		BlockTRPlanks planks = new BlockTRPlanks("rubber_planks", "rubber_planks");
+		final Block[] blocks = {
+				new BlockStorage(),
+				new BlockStorage2(),
+				new IronFurnace(),
+				new BlockIronAlloyFurnace(),
+				new OreBlock(),
+				new OreBlock2(),
+				new BlockMachineFrame(),
+				new BlockMachineCasing(),
+				new BlockRubberLog(),
+				new BlockRubberLeaves(),
+				new BlockRubberSapling(),
+				planks,
+				new BlockTRWoodenSlabs.Half(Material.WOOD, "rubber_plank_slab"),
+				new BlockTRWoodenSlabs.Double(Material.WOOD, "rubber_plank_double_slab"),
+				new BlockTRWoodenStairs(planks, "rubber_plank_stair")
+		};
+		for (Block block: blocks) {
 			event.getRegistry().register(block);
 		}
 		TRTileEntity.registerTileEntity();
