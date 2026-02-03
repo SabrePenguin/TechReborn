@@ -250,6 +250,7 @@ public class TRItems {
 		{
 			registry.register(new ItemBlock(TRBlocks.iron_furnace).setRegistryName(TRBlocks.iron_furnace.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.iron_alloy_furnace).setRegistryName(TRBlocks.iron_alloy_furnace.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.reinforced_glass).setRegistryName(TRBlocks.reinforced_glass.getRegistryName()));
 		}
 		OreHandler.initOres();
     }

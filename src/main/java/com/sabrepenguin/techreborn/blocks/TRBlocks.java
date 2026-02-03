@@ -34,6 +34,7 @@ public class TRBlocks {
 	public static final BlockTRWoodenSlabs rubber_plank_slab = null;
 	public static final BlockTRWoodenSlabs rubber_plank_double_slab = null;
 	public static final BlockTRWoodenStairs rubber_plank_stair = null;
+	public static final BlockReinforcedGlass reinforced_glass = null;
 
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
@@ -52,7 +53,8 @@ public class TRBlocks {
 				TRBlocks.rubber_planks,
 				TRBlocks.rubber_plank_slab,
 				TRBlocks.rubber_plank_double_slab,
-				TRBlocks.rubber_plank_stair
+				TRBlocks.rubber_plank_stair,
+				TRBlocks.reinforced_glass
         );
         return allBlocks;
     }
@@ -75,7 +77,8 @@ public class TRBlocks {
 				planks,
 				new BlockTRWoodenSlabs.Half(Material.WOOD, "rubber_plank_slab"),
 				new BlockTRWoodenSlabs.Double(Material.WOOD, "rubber_plank_double_slab"),
-				new BlockTRWoodenStairs(planks, "rubber_plank_stair")
+				new BlockTRWoodenStairs(planks, "rubber_plank_stair"),
+				new BlockReinforcedGlass()
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);
