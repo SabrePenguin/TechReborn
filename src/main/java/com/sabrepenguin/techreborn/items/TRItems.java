@@ -16,6 +16,7 @@ import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemSlab;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -237,10 +238,18 @@ public class TRItems {
 				}
 			} else if (block instanceof IBurnable burnable) {
 				registry.register(new ItemBlockBurnable(block, burnable).setRegistryName(block.getRegistryName()));
-			} else {
-				registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 			}
         }
+		{
+			ItemSlab slab = new ItemSlab(TRBlocks.rubber_plank_slab, TRBlocks.rubber_plank_slab, TRBlocks.rubber_plank_double_slab);
+			registry.register(slab.setRegistryName(TRBlocks.rubber_plank_double_slab.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.rubber_log).setRegistryName(TRBlocks.rubber_log.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.rubber_planks).setRegistryName(TRBlocks.rubber_planks.getRegistryName()));
+		}
+		{
+			registry.register(new ItemBlock(TRBlocks.iron_furnace).setRegistryName(TRBlocks.iron_furnace.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.iron_alloy_furnace).setRegistryName(TRBlocks.iron_alloy_furnace.getRegistryName()));
+		}
 		OreHandler.initOres();
     }
 }

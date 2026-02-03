@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "half_slab",
+    "textures": {
+      "top": "techreborn:blocks/rubber_planks",
+      "bottom": "techreborn:blocks/rubber_planks",
+      "side": "techreborn:blocks/rubber_planks"
+    }
+  },
+  "variants": {
+    "normal": {
+      "transform": "forge:default-block",
+      "textures": {
+      }
+    },
+    "half": {
+      "top": { "model": "upper_slab" },
+      "bottom": { "model": "half_slab" }
+    },
+    "variant": {
+      "default": {}
+    }
+  }
+}

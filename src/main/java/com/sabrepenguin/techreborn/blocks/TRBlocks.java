@@ -6,6 +6,8 @@ import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -30,6 +32,8 @@ public class TRBlocks {
 	public static final BlockRubberLeaves rubber_leaves = null;
 	public static final BlockRubberSapling rubber_sapling = null;
 	public static final BlockPlanks rubber_planks = null;
+	public static final BlockTRWoodenSlabs rubber_plank_slab = null;
+	public static final BlockTRWoodenSlabs rubber_plank_double_slab = null;
 
     public static Block[] getBlocks() {
         final Block[] blocks = {
@@ -44,7 +48,9 @@ public class TRBlocks {
 				new BlockRubberLog(),
 				new BlockRubberLeaves(),
 				new BlockRubberSapling(),
-				new BlockPlanks("rubber_planks", "rubber_planks")
+				new BlockPlanks("rubber_planks", "rubber_planks"),
+				new BlockTRWoodenSlabs.Half(Material.WOOD, "rubber_plank_slab"),
+				new BlockTRWoodenSlabs.Double(Material.WOOD, "rubber_plank_double_slab")
         };
 
         return blocks;
@@ -63,7 +69,9 @@ public class TRBlocks {
 				TRBlocks.rubber_log,
 				TRBlocks.rubber_leaves,
 				TRBlocks.rubber_sapling,
-				TRBlocks.rubber_planks
+				TRBlocks.rubber_planks,
+				TRBlocks.rubber_plank_slab,
+				TRBlocks.rubber_plank_double_slab
         );
         return allBlocks;
     }
