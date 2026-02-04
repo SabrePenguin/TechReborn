@@ -38,6 +38,10 @@ public class TRBlocks {
 	public static final BlockReinforcedGlass reinforced_glass = null;
 	public static final BlockAlarm alarm = null;
 	public static final BlockComputerCube computercube = null;
+	public static final BlockRefinedIronFence refined_iron_fence = null;
+	public static final BlockFusionCoil fusion_coil = null;
+	public static final BlockFusionControlComputer fusion_control_computer = null;
+	public static final BlockNuke nuke = null;
 
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
@@ -59,7 +63,11 @@ public class TRBlocks {
 				TRBlocks.rubber_plank_stair,
 				TRBlocks.reinforced_glass,
 				TRBlocks.alarm,
-				TRBlocks.computercube
+				TRBlocks.computercube,
+				refined_iron_fence,
+				fusion_coil,
+				fusion_control_computer,
+				nuke
         );
         return allBlocks;
     }
@@ -85,7 +93,11 @@ public class TRBlocks {
 				new BlockTRWoodenStairs(planks, "rubber_plank_stair"),
 				new BlockReinforcedGlass(),
 				new BlockAlarm(),
-				new BlockComputerCube()
+				new BlockComputerCube(),
+				new BlockRefinedIronFence(),
+				new BlockFusionCoil(),
+				new BlockFusionControlComputer(),
+				new BlockNuke()
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);

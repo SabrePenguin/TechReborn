@@ -39,6 +39,9 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.iron_alloy_furnace);
 		propertiesRegistration(TRBlocks.computercube);
 		propertiesRegistration(TRBlocks.alarm);
+		propertiesRegistration(TRBlocks.fusion_coil);
+		propertiesRegistration(TRBlocks.fusion_control_computer);
+		propertiesRegistration(TRBlocks.nuke);
 
 		itemBlockRegistration(TRBlocks.rubber_leaves);
 		itemBlockRegistration(TRBlocks.rubber_plank_stair);
@@ -46,6 +49,7 @@ public class ModelRegistryHandler {
 		itemBlockRegistration(TRBlocks.rubber_log);
 		itemBlockRegistration(TRBlocks.rubber_sapling);
 		itemBlockRegistration(TRBlocks.rubber_plank_slab);
+		itemBlockRegistration(TRBlocks.refined_iron_fence);
 		itemBlockRegistration(TRBlocks.reinforced_glass);
 	}
 

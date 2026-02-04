@@ -13,7 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockTRPlanks extends Block{
+public class BlockTRPlanks extends Block {
 
 	public BlockTRPlanks(String registryName, String translationKey) {
 		super(Material.WOOD);
