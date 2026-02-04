@@ -42,13 +42,20 @@ public class ModelRegistryUtils {
 
 	private static ResourceLocation getResourceLocation(INonStandardLocation location, ResourceLocation original) {
 		ResourceLocation customLoc = location.hasResourceLocation() ? location.getResourceLocation() : original;
+		String prefix = location.getPrefix();
+		if (!prefix.isEmpty()) {
+			prefix = prefix.endsWith("/") ? prefix : prefix + "/";
+		}
 		return new ResourceLocation(customLoc.getNamespace(),
-				location.getPrefix() +
+				prefix +
 						customLoc.getPath() +
 						location.getPostfix());
 	}
 
     public static ResourceLocation fixLocation(ResourceLocation original, String prefix, String postfix) {
+		if (!prefix.isEmpty()) {
+			prefix = prefix.endsWith("/") ? prefix : prefix + "/";
+		}
         return new ResourceLocation(original.getNamespace(), prefix + original.getPath() + postfix);
     }
 }
