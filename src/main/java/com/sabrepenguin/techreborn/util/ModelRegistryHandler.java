@@ -42,6 +42,10 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.fusion_coil);
 		propertiesRegistration(TRBlocks.fusion_control_computer);
 		propertiesRegistration(TRBlocks.nuke);
+		propertiesRegistration(TRBlocks.lv_transformer);
+		propertiesRegistration(TRBlocks.mv_transformer);
+		propertiesRegistration(TRBlocks.hv_transformer);
+		propertiesRegistration(TRBlocks.ev_transformer);
 
 		itemBlockRegistration(TRBlocks.rubber_leaves);
 		itemBlockRegistration(TRBlocks.rubber_plank_stair);

@@ -263,6 +263,10 @@ public class TRItems {
 			registry.register(new ItemBlock(TRBlocks.fusion_coil).setRegistryName(TRBlocks.fusion_coil.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.fusion_control_computer).setRegistryName(TRBlocks.fusion_control_computer.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.nuke).setRegistryName(TRBlocks.nuke.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.lv_transformer).setRegistryName(TRBlocks.lv_transformer.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.mv_transformer).setRegistryName(TRBlocks.mv_transformer.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.hv_transformer).setRegistryName(TRBlocks.hv_transformer.getRegistryName()));
+			registry.register(new ItemBlock(TRBlocks.ev_transformer).setRegistryName(TRBlocks.ev_transformer.getRegistryName()));
 		}
 	}
 }

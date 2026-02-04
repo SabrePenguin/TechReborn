@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.blocks;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.machines.BlockComputerCube;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
+import com.sabrepenguin.techreborn.blocks.machines.BlockTransformer;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
@@ -42,6 +43,10 @@ public class TRBlocks {
 	public static final BlockFusionCoil fusion_coil = null;
 	public static final BlockFusionControlComputer fusion_control_computer = null;
 	public static final BlockNuke nuke = null;
+	public static final BlockTransformer lv_transformer = null;
+	public static final BlockTransformer mv_transformer = null;
+	public static final BlockTransformer hv_transformer = null;
+	public static final BlockTransformer ev_transformer = null;
 
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
@@ -67,7 +72,11 @@ public class TRBlocks {
 				refined_iron_fence,
 				fusion_coil,
 				fusion_control_computer,
-				nuke
+				nuke,
+				lv_transformer,
+				mv_transformer,
+				hv_transformer,
+				ev_transformer
         );
         return allBlocks;
     }
@@ -97,7 +106,11 @@ public class TRBlocks {
 				new BlockRefinedIronFence(),
 				new BlockFusionCoil(),
 				new BlockFusionControlComputer(),
-				new BlockNuke()
+				new BlockNuke(),
+				new BlockTransformer("lv_transformer"),
+				new BlockTransformer("mv_transformer"),
+				new BlockTransformer("hv_transformer"),
+				new BlockTransformer("ev_transformer"),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);
