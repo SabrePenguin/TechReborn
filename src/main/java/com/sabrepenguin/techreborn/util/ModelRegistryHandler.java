@@ -25,9 +25,6 @@ public class ModelRegistryHandler {
 			registerItemModels(item);
         }
 		registerBlockModels();
-//        for (Block block: TRBlocks.getAllBlocks()) {
-//            registerBlockstateModels(block);
-//        }
     }
 
 	private static void registerBlockModels() {
@@ -37,8 +34,19 @@ public class ModelRegistryHandler {
 		propertiesMetaRegistration(TRBlocks.ore2);
 		propertiesMetaRegistration(TRBlocks.machine_casing);
 		propertiesMetaRegistration(TRBlocks.machine_frame);
+
 		propertiesRegistration(TRBlocks.iron_furnace);
 		propertiesRegistration(TRBlocks.iron_alloy_furnace);
+		propertiesRegistration(TRBlocks.computercube);
+		propertiesRegistration(TRBlocks.alarm);
+
+		itemBlockRegistration(TRBlocks.rubber_leaves);
+		itemBlockRegistration(TRBlocks.rubber_plank_stair);
+		itemBlockRegistration(TRBlocks.rubber_planks);
+		itemBlockRegistration(TRBlocks.rubber_log);
+		itemBlockRegistration(TRBlocks.rubber_sapling);
+		itemBlockRegistration(TRBlocks.rubber_plank_slab);
+		itemBlockRegistration(TRBlocks.reinforced_glass);
 	}
 
 	private static void registerBlockstateModels(Block block) {
@@ -100,7 +108,13 @@ public class ModelRegistryHandler {
 	}
 
 	private static void itemBlockRegistration(Block block) {
-
+		Item item = Item.getItemFromBlock(block);
+		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(block);
+		ModelLoader.setCustomModelResourceLocation(
+				item,
+				0,
+				new ModelResourceLocation(customLocation, "inventory")
+		);
 	}
 
 	private static void registerItemModels(Item item) {
