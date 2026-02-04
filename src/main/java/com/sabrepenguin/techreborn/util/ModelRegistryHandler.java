@@ -24,10 +24,22 @@ public class ModelRegistryHandler {
         for (Item item: TRItems.getAllItems()) {
 			registerItemModels(item);
         }
-        for (Block block: TRBlocks.getAllBlocks()) {
-            registerBlockstateModels(block);
-        }
+		registerBlockModels();
+//        for (Block block: TRBlocks.getAllBlocks()) {
+//            registerBlockstateModels(block);
+//        }
     }
+
+	private static void registerBlockModels() {
+		propertiesMetaRegistration(TRBlocks.storage);
+		propertiesMetaRegistration(TRBlocks.storage2);
+		propertiesMetaRegistration(TRBlocks.ore);
+		propertiesMetaRegistration(TRBlocks.ore2);
+		propertiesMetaRegistration(TRBlocks.machine_casing);
+		propertiesMetaRegistration(TRBlocks.machine_frame);
+		propertiesRegistration(TRBlocks.iron_furnace);
+		propertiesRegistration(TRBlocks.iron_alloy_furnace);
+	}
 
 	private static void registerBlockstateModels(Block block) {
 		Item item = Item.getItemFromBlock(block);
@@ -58,7 +70,37 @@ public class ModelRegistryHandler {
 		}
 		ModelLoader.setCustomModelResourceLocation(item,
 				0,
-				new ModelResourceLocation(customLocation, "normal"));
+				new ModelResourceLocation(customLocation, "inventory"));
+	}
+
+	private static void propertiesMetaRegistration(Block block) {
+		if (!(block instanceof IMetaMaterial metaMaterial) || !(block instanceof INonStandardLocation property)) return;
+		Item item = Item.getItemFromBlock(block);
+		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(block);
+		ModelLoader.setCustomStateMapper(
+				block, ModelRegistryUtils.createMapper(customLocation, property.getIgnoredProperties())
+		);
+		for (Pair<String, Integer> pair: metaMaterial.getMeta()) {
+			ModelLoader.setCustomModelResourceLocation(
+					item, pair.getRight(), new ModelResourceLocation(customLocation, "type=" + pair.getLeft())
+			);
+		}
+	}
+
+	private static void propertiesRegistration(Block block) {
+		if (!(block instanceof INonStandardLocation property)) return;
+		Item item = Item.getItemFromBlock(block);
+		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(block);
+		ModelLoader.setCustomStateMapper(
+				block, ModelRegistryUtils.createMapper(customLocation, property.getIgnoredProperties())
+		);
+		ModelLoader.setCustomModelResourceLocation(
+				item, 0, new ModelResourceLocation(customLocation, "inventory")
+		);
+	}
+
+	private static void itemBlockRegistration(Block block) {
+
 	}
 
 	private static void registerItemModels(Item item) {
