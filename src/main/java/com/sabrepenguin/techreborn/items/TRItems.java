@@ -267,6 +267,18 @@ public class TRItems {
 			registry.register(new ItemBlock(TRBlocks.mv_transformer).setRegistryName(TRBlocks.mv_transformer.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.hv_transformer).setRegistryName(TRBlocks.hv_transformer.getRegistryName()));
 			registry.register(new ItemBlock(TRBlocks.ev_transformer).setRegistryName(TRBlocks.ev_transformer.getRegistryName()));
+			register(registry, TRBlocks.quantum_chest);
+			register(registry, TRBlocks.quantum_tank);
+			register(registry, TRBlocks.creative_quantum_tank);
+			register(registry, TRBlocks.creative_quantum_chest);
+			register(registry, TRBlocks.chunk_loader);
+			register(registry, TRBlocks.fluid_replicator);
+			register(registry, TRBlocks.matter_fabricator);
 		}
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	private static void register(IForgeRegistry<Item> registry, Block block) {
+		registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 	}
 }

@@ -46,6 +46,13 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.mv_transformer);
 		propertiesRegistration(TRBlocks.hv_transformer);
 		propertiesRegistration(TRBlocks.ev_transformer);
+		propertiesRegistration(TRBlocks.quantum_tank);
+		propertiesRegistration(TRBlocks.quantum_chest);
+		propertiesRegistration(TRBlocks.creative_quantum_tank);
+		propertiesRegistration(TRBlocks.creative_quantum_chest);
+		propertiesRegistration(TRBlocks.chunk_loader);
+		propertiesRegistration(TRBlocks.fluid_replicator);
+		propertiesRegistration(TRBlocks.matter_fabricator);
 
 		itemBlockRegistration(TRBlocks.rubber_leaves);
 		itemBlockRegistration(TRBlocks.rubber_plank_stair);

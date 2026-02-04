@@ -5,6 +5,7 @@ import com.sabrepenguin.techreborn.blocks.machines.BlockComputerCube;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
 import com.sabrepenguin.techreborn.blocks.machines.BlockTransformer;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
+import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import net.minecraft.block.Block;
@@ -47,6 +48,13 @@ public class TRBlocks {
 	public static final BlockTransformer mv_transformer = null;
 	public static final BlockTransformer hv_transformer = null;
 	public static final BlockTransformer ev_transformer = null;
+	public static final BlockQuantumTank quantum_tank = null;
+	public static final BlockQuantumChest quantum_chest = null;
+	public static final BlockCreativeQuantumTank creative_quantum_tank = null;
+	public static final BlockCreativeQuantumChest creative_quantum_chest = null;
+	public static final BlockFluidReplicator fluid_replicator = null;
+	public static final BlockChunkLoader chunk_loader = null;
+	public static final BlockMatterFabricator matter_fabricator = null;
 
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
@@ -76,7 +84,14 @@ public class TRBlocks {
 				lv_transformer,
 				mv_transformer,
 				hv_transformer,
-				ev_transformer
+				ev_transformer,
+				quantum_tank,
+				quantum_chest,
+				creative_quantum_tank,
+				creative_quantum_chest,
+				chunk_loader,
+				fluid_replicator,
+				matter_fabricator
         );
         return allBlocks;
     }
@@ -111,6 +126,13 @@ public class TRBlocks {
 				new BlockTransformer("mv_transformer"),
 				new BlockTransformer("hv_transformer"),
 				new BlockTransformer("ev_transformer"),
+				new BlockQuantumTank(),
+				new BlockQuantumChest(),
+				new BlockCreativeQuantumTank(),
+				new BlockCreativeQuantumChest(),
+				new BlockChunkLoader(),
+				new BlockFluidReplicator(),
+				new BlockMatterFabricator(),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);
