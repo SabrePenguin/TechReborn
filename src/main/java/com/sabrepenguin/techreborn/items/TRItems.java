@@ -249,42 +249,40 @@ public class TRItems {
 		{
 			ItemSlab slab = new ItemSlab(TRBlocks.rubber_plank_slab, TRBlocks.rubber_plank_slab, TRBlocks.rubber_plank_double_slab);
 			registry.register(slab.setRegistryName(TRBlocks.rubber_plank_double_slab.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.rubber_log).setRegistryName(TRBlocks.rubber_log.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.rubber_planks).setRegistryName(TRBlocks.rubber_planks.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.rubber_plank_stair).setRegistryName(TRBlocks.rubber_plank_stair.getRegistryName()));
 		}
-		{
-			registry.register(new ItemBlock(TRBlocks.iron_furnace).setRegistryName(TRBlocks.iron_furnace.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.iron_alloy_furnace).setRegistryName(TRBlocks.iron_alloy_furnace.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.reinforced_glass).setRegistryName(TRBlocks.reinforced_glass.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.alarm).setRegistryName(TRBlocks.alarm.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.computercube).setRegistryName(TRBlocks.computercube.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.refined_iron_fence).setRegistryName(TRBlocks.refined_iron_fence.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.fusion_coil).setRegistryName(TRBlocks.fusion_coil.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.fusion_control_computer).setRegistryName(TRBlocks.fusion_control_computer.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.nuke).setRegistryName(TRBlocks.nuke.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.lv_transformer).setRegistryName(TRBlocks.lv_transformer.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.mv_transformer).setRegistryName(TRBlocks.mv_transformer.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.hv_transformer).setRegistryName(TRBlocks.hv_transformer.getRegistryName()));
-			registry.register(new ItemBlock(TRBlocks.ev_transformer).setRegistryName(TRBlocks.ev_transformer.getRegistryName()));
-			register(registry, TRBlocks.quantum_chest);
-			register(registry, TRBlocks.quantum_tank);
-			register(registry, TRBlocks.creative_quantum_tank);
-			register(registry, TRBlocks.creative_quantum_chest);
-			register(registry, TRBlocks.chunk_loader);
-			register(registry, TRBlocks.fluid_replicator);
-			register(registry, TRBlocks.matter_fabricator);
-			register(registry, TRBlocks.charge_o_mat);
-			register(registry, TRBlocks.chemical_reactor);
-			register(registry, TRBlocks.digital_chest);
-			register(registry, TRBlocks.distillation_tower);
-			register(registry, TRBlocks.implosion_compressor);
-			register(registry, TRBlocks.industrial_blast_furnace);
-			register(registry, TRBlocks.industrial_centrifuge);
-			register(registry, TRBlocks.industrial_grinder);
-			register(registry, TRBlocks.industrial_sawmill);
-			register(registry, TRBlocks.vacuum_freezer);
-		}
+		register(registry, TRBlocks.rubber_log);
+		register(registry, TRBlocks.rubber_planks);
+		register(registry, TRBlocks.rubber_plank_stair);
+		register(registry, TRBlocks.iron_furnace);
+		register(registry, TRBlocks.iron_alloy_furnace);
+		register(registry, TRBlocks.reinforced_glass);
+		register(registry, TRBlocks.alarm);
+		register(registry, TRBlocks.computercube);
+		register(registry, TRBlocks.refined_iron_fence);
+		register(registry, TRBlocks.fusion_coil);
+		register(registry, TRBlocks.fusion_control_computer);
+		register(registry, TRBlocks.nuke);
+		register(registry, TRBlocks.lv_transformer);
+		register(registry, TRBlocks.mv_transformer);
+		register(registry, TRBlocks.hv_transformer);
+		register(registry, TRBlocks.ev_transformer);
+		register(registry, TRBlocks.quantum_chest);
+		register(registry, TRBlocks.quantum_tank);
+		register(registry, TRBlocks.creative_quantum_tank);
+		register(registry, TRBlocks.creative_quantum_chest);
+		register(registry, TRBlocks.chunk_loader);
+		register(registry, TRBlocks.fluid_replicator);
+		register(registry, TRBlocks.matter_fabricator);
+		register(registry, TRBlocks.charge_o_mat);
+		register(registry, TRBlocks.chemical_reactor);
+		register(registry, TRBlocks.digital_chest);
+		register(registry, TRBlocks.distillation_tower);
+		register(registry, TRBlocks.implosion_compressor);
+		register(registry, TRBlocks.industrial_blast_furnace);
+		register(registry, TRBlocks.industrial_centrifuge);
+		register(registry, TRBlocks.industrial_grinder);
+		register(registry, TRBlocks.industrial_sawmill);
+		register(registry, TRBlocks.vacuum_freezer);
 	}
 
 	@SuppressWarnings("ConstantConditions")
