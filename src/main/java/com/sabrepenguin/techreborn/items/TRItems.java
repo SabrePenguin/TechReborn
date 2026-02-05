@@ -216,40 +216,24 @@ public class TRItems {
                 materialItem.registerOredict();
             }
         }
-        for (Block block: TRBlocks.getAllBlocks()) {
-			if (block instanceof IMetaMaterial meta) {
-				Item itemBlock = new ItemBlockEnum(block).setRegistryName(block.getRegistryName());
-				registry.register(itemBlock);
-				for (Pair<String, Integer> metadata : meta.getMeta()) {
-					String oredict = meta.getOreDict();
-					if (meta.hasNonStandardOreDict()) {
-						String[] ores = meta.getNonStandardOreDict(metadata.getRight());
-						for (String ore : ores) {
-							OreDictionary.registerOre(
-									ore,
-									new ItemStack(itemBlock, 1, metadata.getRight())
-							);
-						}
-					} else if (!oredict.isEmpty()) {
-						OreDictionary.registerOre(
-								oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()),
-								new ItemStack(itemBlock, 1, metadata.getRight()));
-					}
-				}
-			} else if (block instanceof IBurnable burnable) {
-				registry.register(new ItemBlockBurnable(block, burnable).setRegistryName(block.getRegistryName()));
-			}
-        }
 		registerNormalItems(registry);
 		OreHandler.initOres();
     }
 
 	@SuppressWarnings("ConstantConditions")
 	private static void registerNormalItems(IForgeRegistry<Item> registry) {
+		registerMetaBlock(registry, TRBlocks.storage);
+		registerMetaBlock(registry, TRBlocks.storage2);
+		registerMetaBlock(registry, TRBlocks.ore);
+		registerMetaBlock(registry, TRBlocks.ore2);
+		registerMetaBlock(registry, TRBlocks.machine_frame);
+		registerMetaBlock(registry, TRBlocks.machine_casing);
 		{
 			ItemSlab slab = new ItemSlab(TRBlocks.rubber_plank_slab, TRBlocks.rubber_plank_slab, TRBlocks.rubber_plank_double_slab);
 			registry.register(slab.setRegistryName(TRBlocks.rubber_plank_double_slab.getRegistryName()));
 		}
+		registerBurnable(registry, TRBlocks.rubber_leaves);
+		registerBurnable(registry, TRBlocks.rubber_sapling);
 		register(registry, TRBlocks.rubber_log);
 		register(registry, TRBlocks.rubber_planks);
 		register(registry, TRBlocks.rubber_plank_stair);
@@ -288,5 +272,38 @@ public class TRItems {
 	@SuppressWarnings("ConstantConditions")
 	private static void register(IForgeRegistry<Item> registry, Block block) {
 		registry.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	private static void registerBurnable(IForgeRegistry<Item> registry, Block block) {
+		if (!(block instanceof IBurnable burnable))
+			throw new RuntimeException("Block " + block.getRegistryName() +
+					" was passed in to register as a burnable, but does not implement IBurnable");
+		registry.register(new ItemBlockBurnable(block, burnable).setRegistryName(block.getRegistryName()));
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	private static void registerMetaBlock(IForgeRegistry<Item> registry, Block block) {
+		if (!(block instanceof IMetaInformation meta))
+			throw new RuntimeException("Block " + block.getRegistryName() +
+					" was passed in to register with metadata, but does not implement IMetaInformation");
+		Item itemBlock = new ItemBlockEnum(block).setRegistryName(block.getRegistryName());
+		registry.register(itemBlock);
+		for (Pair<String, Integer> metadata : meta.getMeta()) {
+			String oredict = meta.getOreDict();
+			if (meta.hasNonStandardOreDict()) {
+				String[] ores = meta.getNonStandardOreDict(metadata.getRight());
+				for (String ore : ores) {
+					OreDictionary.registerOre(
+							ore,
+							new ItemStack(itemBlock, 1, metadata.getRight())
+					);
+				}
+			} else if (!oredict.isEmpty()) {
+				OreDictionary.registerOre(
+						oredict + ExtraStringUtils.capitalizeByUnderscore(metadata.getLeft()),
+						new ItemStack(itemBlock, 1, metadata.getRight()));
+			}
+		}
 	}
 }
