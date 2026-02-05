@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.blocks.meta;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockStorage extends Block implements IMetaMaterial, INonStandardLocation {
+public class BlockStorage extends Block implements IMetaInformation, INonStandardLocation {
 	public static final PropertyEnum<Storage> TYPE = PropertyEnum.create(
 			"type", Storage.class);
 

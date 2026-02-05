@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.blocks.meta;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Dust;
 import com.sabrepenguin.techreborn.items.materials.Gem;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-public class OreBlock extends Block implements IMetaMaterial, INonStandardLocation {
+public class OreBlock extends Block implements IMetaInformation, INonStandardLocation {
 	public static final PropertyEnum<Ore> TYPE = PropertyEnum.create(
 			"type", Ore.class);
 

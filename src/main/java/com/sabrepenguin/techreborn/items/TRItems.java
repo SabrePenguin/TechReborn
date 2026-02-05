@@ -3,7 +3,7 @@ package com.sabrepenguin.techreborn.items;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.IBurnable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
-import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockBurnable;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockEnum;
 import com.sabrepenguin.techreborn.items.armor.ItemCloak;

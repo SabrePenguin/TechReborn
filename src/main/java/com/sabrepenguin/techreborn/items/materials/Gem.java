@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.items.materials;
 
-import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Gem implements IMetaMaterial {
+public class Gem implements IMetaInformation {
 
 	@Override
 	public String getName(ItemStack stack) {

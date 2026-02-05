@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.items.materials;
 
-import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Dust implements IMetaMaterial {
+public class Dust implements IMetaInformation {
 
     @Override
     public String getOreDict() {

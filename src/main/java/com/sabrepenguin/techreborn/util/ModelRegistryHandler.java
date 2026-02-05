@@ -3,7 +3,7 @@ package com.sabrepenguin.techreborn.util;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.TRItems;
-import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.items.materials.MaterialItem;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -76,7 +76,7 @@ public class ModelRegistryHandler {
 	}
 
 	private static void propertiesMetaRegistration(Block block) {
-		if (!(block instanceof IMetaMaterial metaMaterial) || !(block instanceof INonStandardLocation property)) return;
+		if (!(block instanceof IMetaInformation metaMaterial) || !(block instanceof INonStandardLocation property)) return;
 		Item item = Item.getItemFromBlock(block);
 		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(block);
 		ModelLoader.setCustomStateMapper(

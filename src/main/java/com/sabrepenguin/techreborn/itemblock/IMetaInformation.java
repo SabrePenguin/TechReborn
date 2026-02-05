@@ -5,7 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
-public interface IMetaMaterial {
+public interface IMetaInformation {
     default String getOreDict() {return "";}
     default boolean hasNonStandardOreDict() {
         return false;

@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.items.materials;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.itemblock.IMetaMaterial;
+import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 public class MaterialItem extends Item implements INonStandardLocation {
 	private final String prefix;
 	private final String postfix;
-	private final IMetaMaterial meta;
+	private final IMetaInformation meta;
 
-	public MaterialItem(String registryName, String translationKey, IMetaMaterial item) {
+	public MaterialItem(String registryName, String translationKey, IMetaInformation item) {
 		this(registryName, translationKey, item, "",  "");
 	}
 
-	public MaterialItem(String registryName, String translationKey, IMetaMaterial item, String prefix, String postfix) {
+	public MaterialItem(String registryName, String translationKey, IMetaInformation item, String prefix, String postfix) {
 		this.setRegistryName(Tags.MODID, registryName);
 		this.setTranslationKey(Tags.MODID + "." + translationKey);
 		this.setHasSubtypes(true);
