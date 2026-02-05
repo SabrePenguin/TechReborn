@@ -53,6 +53,17 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.chunk_loader);
 		propertiesRegistration(TRBlocks.fluid_replicator);
 		propertiesRegistration(TRBlocks.matter_fabricator);
+		propertiesRegistration(TRBlocks.charge_o_mat);
+		propertiesRegistration(TRBlocks.digital_chest);
+		propertiesRegistration(TRBlocks.chemical_reactor);
+		propertiesRegistration(TRBlocks.distillation_tower);
+		propertiesRegistration(TRBlocks.implosion_compressor);
+		propertiesRegistration(TRBlocks.industrial_blast_furnace);
+		propertiesRegistration(TRBlocks.industrial_centrifuge);
+		propertiesRegistration(TRBlocks.industrial_electrolyzer);
+		propertiesRegistration(TRBlocks.industrial_grinder);
+		propertiesRegistration(TRBlocks.industrial_sawmill);
+		propertiesRegistration(TRBlocks.vacuum_freezer);
 
 		itemBlockRegistration(TRBlocks.rubber_leaves);
 		itemBlockRegistration(TRBlocks.rubber_plank_stair);
@@ -62,38 +73,6 @@ public class ModelRegistryHandler {
 		itemBlockRegistration(TRBlocks.rubber_plank_slab);
 		itemBlockRegistration(TRBlocks.refined_iron_fence);
 		itemBlockRegistration(TRBlocks.reinforced_glass);
-	}
-
-	private static void registerBlockstateModels(Block block) {
-		Item item = Item.getItemFromBlock(block);
-		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(block);
-		if (block instanceof IMetaMaterial meta) {
-			if (block instanceof INonStandardLocation property && property.getProperties().length > 0) {
-				ModelLoader.setCustomStateMapper(
-						block, ModelRegistryUtils.createMapper(customLocation, property.getIgnoredProperties())
-				);
-			}
-			for (Pair<String, Integer> pair: meta.getMeta()) {
-				ModelLoader.setCustomModelResourceLocation(
-						item, pair.getRight(), new ModelResourceLocation(customLocation, "type=" + pair.getLeft())
-				);
-			}
-			return;
-		} else if (block instanceof INonStandardLocation location && location.getProperties().length > 0) {
-			ModelLoader.setCustomStateMapper(
-					block,
-					ModelRegistryUtils.createMapper(customLocation, location.getIgnoredProperties())
-			);
-			ModelLoader.setCustomModelResourceLocation(
-					item,
-					0,
-					new ModelResourceLocation(customLocation, "inventory")
-			);
-			return;
-		}
-		ModelLoader.setCustomModelResourceLocation(item,
-				0,
-				new ModelResourceLocation(customLocation, "inventory"));
 	}
 
 	private static void propertiesMetaRegistration(Block block) {

@@ -5,6 +5,7 @@ import com.sabrepenguin.techreborn.blocks.machines.BlockComputerCube;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
 import com.sabrepenguin.techreborn.blocks.machines.BlockTransformer;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
+import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
@@ -55,6 +56,17 @@ public class TRBlocks {
 	public static final BlockFluidReplicator fluid_replicator = null;
 	public static final BlockChunkLoader chunk_loader = null;
 	public static final BlockMatterFabricator matter_fabricator = null;
+	public static final BlockChargeOMat charge_o_mat = null;
+	public static final BlockChemicalReactor chemical_reactor = null;
+	public static final BlockDigitalChest digital_chest = null;
+	public static final BlockDistillationTower distillation_tower = null;
+	public static final BlockImplosionCompressor implosion_compressor = null;
+	public static final BlockIndustrialBlastFurnace industrial_blast_furnace = null;
+	public static final BlockIndustrialCentrifuge industrial_centrifuge = null;
+	public static final BlockIndustrialElectrolyzer industrial_electrolyzer = null;
+	public static final BlockIndustrialGrinder industrial_grinder = null;
+	public static final BlockIndustrialSawmill industrial_sawmill = null;
+	public static final BlockVacuumFreezer vacuum_freezer = null;
 
     public static List<Block> getAllBlocks() {
         List<Block> allBlocks = new ArrayList<>();
@@ -91,7 +103,18 @@ public class TRBlocks {
 				creative_quantum_chest,
 				chunk_loader,
 				fluid_replicator,
-				matter_fabricator
+				matter_fabricator,
+				charge_o_mat,
+				chemical_reactor,
+				digital_chest,
+				distillation_tower,
+				implosion_compressor,
+				industrial_blast_furnace,
+				industrial_centrifuge,
+				industrial_electrolyzer,
+				industrial_grinder,
+				industrial_sawmill,
+				vacuum_freezer
         );
         return allBlocks;
     }
@@ -133,6 +156,17 @@ public class TRBlocks {
 				new BlockChunkLoader(),
 				new BlockFluidReplicator(),
 				new BlockMatterFabricator(),
+				new BlockChargeOMat(),
+				new BlockChemicalReactor(),
+				new BlockDigitalChest(),
+				new BlockDistillationTower(),
+				new BlockImplosionCompressor(),
+				new BlockIndustrialBlastFurnace(),
+				new BlockIndustrialCentrifuge(),
+				new BlockIndustrialElectrolyzer(),
+				new BlockIndustrialGrinder(),
+				new BlockIndustrialSawmill(),
+				new BlockVacuumFreezer(),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);

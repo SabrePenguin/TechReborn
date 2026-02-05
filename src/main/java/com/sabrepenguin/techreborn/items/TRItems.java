@@ -274,6 +274,16 @@ public class TRItems {
 			register(registry, TRBlocks.chunk_loader);
 			register(registry, TRBlocks.fluid_replicator);
 			register(registry, TRBlocks.matter_fabricator);
+			register(registry, TRBlocks.charge_o_mat);
+			register(registry, TRBlocks.chemical_reactor);
+			register(registry, TRBlocks.digital_chest);
+			register(registry, TRBlocks.distillation_tower);
+			register(registry, TRBlocks.implosion_compressor);
+			register(registry, TRBlocks.industrial_blast_furnace);
+			register(registry, TRBlocks.industrial_centrifuge);
+			register(registry, TRBlocks.industrial_grinder);
+			register(registry, TRBlocks.industrial_sawmill);
+			register(registry, TRBlocks.vacuum_freezer);
 		}
 	}
 
