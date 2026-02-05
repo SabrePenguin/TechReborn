@@ -26,6 +26,15 @@ public class ModelRegistryUtils {
         };
     }
 
+	public static IStateMapper createEmptyMapper(ResourceLocation location) {
+		return new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return new ModelResourceLocation(location, "normal");
+			}
+		};
+	}
+
 	public static ResourceLocation getResourceLocation(Item item) {
 		if (item instanceof INonStandardLocation location) {
 			return getResourceLocation(location, item.getRegistryName());

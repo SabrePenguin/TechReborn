@@ -267,6 +267,12 @@ public class TRItems {
 		register(registry, TRBlocks.industrial_grinder);
 		register(registry, TRBlocks.industrial_sawmill);
 		register(registry, TRBlocks.vacuum_freezer);
+		register(registry, TRBlocks.auto_crafting_table);
+		register(registry, TRBlocks.electric_furnace);
+		registerMetaBlock(registry, TRBlocks.player_detector);
+		register(registry, TRBlocks.pump);
+		register(registry, TRBlocks.rolling_machine);
+		register(registry, TRBlocks.scrapboxinator);
 	}
 
 	@SuppressWarnings("ConstantConditions")

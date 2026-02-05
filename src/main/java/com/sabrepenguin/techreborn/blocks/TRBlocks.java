@@ -5,6 +5,7 @@ import com.sabrepenguin.techreborn.blocks.machines.BlockComputerCube;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
 import com.sabrepenguin.techreborn.blocks.machines.BlockTransformer;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
+import com.sabrepenguin.techreborn.blocks.machines.tier1.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
 import com.sabrepenguin.techreborn.blocks.meta.*;
@@ -67,57 +68,12 @@ public class TRBlocks {
 	public static final BlockIndustrialGrinder industrial_grinder = null;
 	public static final BlockIndustrialSawmill industrial_sawmill = null;
 	public static final BlockVacuumFreezer vacuum_freezer = null;
-
-    public static List<Block> getAllBlocks() {
-        List<Block> allBlocks = new ArrayList<>();
-        Collections.addAll(allBlocks,
-                TRBlocks.storage,
-                TRBlocks.storage2,
-                TRBlocks.iron_furnace,
-				TRBlocks.iron_alloy_furnace,
-				TRBlocks.ore,
-				TRBlocks.ore2,
-				TRBlocks.machine_frame,
-				TRBlocks.machine_casing,
-				TRBlocks.rubber_log,
-				TRBlocks.rubber_leaves,
-				TRBlocks.rubber_sapling,
-				TRBlocks.rubber_planks,
-				TRBlocks.rubber_plank_slab,
-				TRBlocks.rubber_plank_double_slab,
-				TRBlocks.rubber_plank_stair,
-				TRBlocks.reinforced_glass,
-				TRBlocks.alarm,
-				TRBlocks.computercube,
-				refined_iron_fence,
-				fusion_coil,
-				fusion_control_computer,
-				nuke,
-				lv_transformer,
-				mv_transformer,
-				hv_transformer,
-				ev_transformer,
-				quantum_tank,
-				quantum_chest,
-				creative_quantum_tank,
-				creative_quantum_chest,
-				chunk_loader,
-				fluid_replicator,
-				matter_fabricator,
-				charge_o_mat,
-				chemical_reactor,
-				digital_chest,
-				distillation_tower,
-				implosion_compressor,
-				industrial_blast_furnace,
-				industrial_centrifuge,
-				industrial_electrolyzer,
-				industrial_grinder,
-				industrial_sawmill,
-				vacuum_freezer
-        );
-        return allBlocks;
-    }
+	public static final BlockAutoCraftingTable auto_crafting_table = null;
+	public static final BlockElectricFurnace electric_furnace = null;
+	public static final BlockPlayerDetector player_detector = null;
+	public static final BlockPump pump = null;
+	public static final BlockRollingMachine rolling_machine = null;
+	public static final BlockScrapBoxinator scrapboxinator = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -167,6 +123,12 @@ public class TRBlocks {
 				new BlockIndustrialGrinder(),
 				new BlockIndustrialSawmill(),
 				new BlockVacuumFreezer(),
+				new BlockAutoCraftingTable(),
+				new BlockElectricFurnace(),
+				new BlockPlayerDetector(),
+				new BlockPump(),
+				new BlockRollingMachine(),
+				new BlockScrapBoxinator(),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);

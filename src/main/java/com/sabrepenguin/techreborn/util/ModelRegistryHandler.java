@@ -73,6 +73,13 @@ public class ModelRegistryHandler {
 		itemBlockRegistration(TRBlocks.rubber_plank_slab);
 		itemBlockRegistration(TRBlocks.refined_iron_fence);
 		itemBlockRegistration(TRBlocks.reinforced_glass);
+
+		itemBlockRegistration(TRBlocks.auto_crafting_table, true);
+		propertiesRegistration(TRBlocks.electric_furnace);
+		propertiesMetaRegistration(TRBlocks.player_detector);
+		propertiesRegistration(TRBlocks.pump);
+		propertiesRegistration(TRBlocks.rolling_machine);
+		propertiesRegistration(TRBlocks.scrapboxinator);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {
@@ -102,8 +109,15 @@ public class ModelRegistryHandler {
 	}
 
 	private static void itemBlockRegistration(Block block) {
+		itemBlockRegistration(block, false);
+	}
+
+	private static void itemBlockRegistration(Block block, boolean differentLocation) {
 		Item item = Item.getItemFromBlock(block);
 		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(block);
+		if (differentLocation) {
+			ModelLoader.setCustomStateMapper(block, ModelRegistryUtils.createEmptyMapper(customLocation));
+		}
 		ModelLoader.setCustomModelResourceLocation(
 				item,
 				0,
