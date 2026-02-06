@@ -26,17 +26,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class HorizontalMachineGuiBlock extends Block implements INonStandardLocation {
+public class BlockHorizontalMachine extends Block implements INonStandardLocation {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 	private final String prefix;
 
-	public HorizontalMachineGuiBlock(String registryName) {
+	public BlockHorizontalMachine(String registryName) {
 		this(registryName, "");
 	}
 
-	public HorizontalMachineGuiBlock(String registryName, String prefix) {
+	public BlockHorizontalMachine(String registryName, String prefix) {
 		super(Material.IRON);
 		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setRegistryName(Tags.MODID, registryName);
@@ -47,7 +47,7 @@ public class HorizontalMachineGuiBlock extends Block implements INonStandardLoca
 		this.prefix = prefix;
 	}
 
-	public HorizontalMachineGuiBlock() {
+	public BlockHorizontalMachine() {
 		super(Material.IRON);
 		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setHardness(2.0f);

@@ -18,16 +18,15 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockTransformer extends Block implements INonStandardLocation {
+public class BlockOmnidirectionalMachine extends Block implements INonStandardLocation {
 	public final static PropertyDirection FACING = PropertyDirection.create("facing");
 
-	public BlockTransformer(String name) {
+	public BlockOmnidirectionalMachine(String name) {
 		super(Material.IRON);
 		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setHardness(2.0f);

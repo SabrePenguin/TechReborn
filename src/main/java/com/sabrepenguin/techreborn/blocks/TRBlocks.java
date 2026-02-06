@@ -14,10 +14,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 @Mod.EventBusSubscriber(modid = Tags.MODID)
 @GameRegistry.ObjectHolder(Tags.MODID)
 public class TRBlocks {
@@ -43,10 +39,10 @@ public class TRBlocks {
 	public static final BlockFusionCoil fusion_coil = null;
 	public static final BlockFusionControlComputer fusion_control_computer = null;
 	public static final BlockNuke nuke = null;
-	public static final BlockTransformer lv_transformer = null;
-	public static final BlockTransformer mv_transformer = null;
-	public static final BlockTransformer hv_transformer = null;
-	public static final BlockTransformer ev_transformer = null;
+	public static final BlockOmnidirectionalMachine lv_transformer = null;
+	public static final BlockOmnidirectionalMachine mv_transformer = null;
+	public static final BlockOmnidirectionalMachine hv_transformer = null;
+	public static final BlockOmnidirectionalMachine ev_transformer = null;
 	public static final BlockQuantumTank quantum_tank = null;
 	public static final BlockQuantumChest quantum_chest = null;
 	public static final BlockCreativeQuantumTank creative_quantum_tank = null;
@@ -66,11 +62,11 @@ public class TRBlocks {
 	public static final BlockIndustrialSawmill industrial_sawmill = null;
 	public static final BlockVacuumFreezer vacuum_freezer = null;
 	public static final BlockAutoCraftingTable auto_crafting_table = null;
-	public static final HorizontalMachineGuiBlock electric_furnace = null;
+	public static final BlockHorizontalMachine electric_furnace = null;
 	public static final BlockPlayerDetector player_detector = null;
-	public static final HorizontalMachineGuiBlock pump = null;
-	public static final HorizontalMachineGuiBlock rolling_machine = null;
-	public static final HorizontalMachineGuiBlock scrapboxinator = null;
+	public static final BlockHorizontalMachine pump = null;
+	public static final BlockHorizontalMachine rolling_machine = null;
+	public static final BlockHorizontalMachine scrapboxinator = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -98,10 +94,10 @@ public class TRBlocks {
 				new BlockFusionCoil(),
 				new BlockFusionControlComputer(),
 				new BlockNuke(),
-				new BlockTransformer("lv_transformer"),
-				new BlockTransformer("mv_transformer"),
-				new BlockTransformer("hv_transformer"),
-				new BlockTransformer("ev_transformer"),
+				new BlockOmnidirectionalMachine("lv_transformer"),
+				new BlockOmnidirectionalMachine("mv_transformer"),
+				new BlockOmnidirectionalMachine("hv_transformer"),
+				new BlockOmnidirectionalMachine("ev_transformer"),
 				new BlockQuantumTank(),
 				new BlockQuantumChest(),
 				new BlockCreativeQuantumTank(),
@@ -121,11 +117,11 @@ public class TRBlocks {
 				new BlockIndustrialSawmill(),
 				new BlockVacuumFreezer(),
 				new BlockAutoCraftingTable(),
-				new HorizontalMachineGuiBlock("electric_furnace", "machines/tier1"),
+				new BlockHorizontalMachine("electric_furnace", "machines/tier1"),
 				new BlockPlayerDetector(),
-				new HorizontalMachineGuiBlock("pump", "machines/tier1"),
-				new HorizontalMachineGuiBlock("rolling_machine", "machines/tier1"),
-				new HorizontalMachineGuiBlock("scrapboxinator", "machines/tier1"),
+				new BlockHorizontalMachine("pump", "machines/tier1"),
+				new BlockHorizontalMachine("rolling_machine", "machines/tier1"),
+				new BlockHorizontalMachine("scrapboxinator", "machines/tier1"),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);
