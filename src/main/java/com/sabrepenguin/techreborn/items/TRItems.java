@@ -290,6 +290,7 @@ public class TRItems {
 		register(registry, TRBlocks.recycler);
 		register(registry, TRBlocks.solid_canning_machine);
 		register(registry, TRBlocks.wire_mill);
+		register(registry, TRBlocks.lamp_incandescent);
 	}
 
 	@SuppressWarnings("ConstantConditions")

@@ -98,6 +98,7 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.recycler);
 		propertiesRegistration(TRBlocks.solid_canning_machine);
 		propertiesRegistration(TRBlocks.wire_mill);
+		propertiesRegistration(TRBlocks.lamp_incandescent);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {
