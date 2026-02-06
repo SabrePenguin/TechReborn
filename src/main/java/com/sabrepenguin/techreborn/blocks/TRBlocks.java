@@ -1,10 +1,7 @@
 package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.blocks.machines.BlockComputerCube;
-import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
-import com.sabrepenguin.techreborn.blocks.machines.BlockTransformer;
-import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
+import com.sabrepenguin.techreborn.blocks.machines.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier1.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
@@ -69,11 +66,11 @@ public class TRBlocks {
 	public static final BlockIndustrialSawmill industrial_sawmill = null;
 	public static final BlockVacuumFreezer vacuum_freezer = null;
 	public static final BlockAutoCraftingTable auto_crafting_table = null;
-	public static final BlockElectricFurnace electric_furnace = null;
+	public static final HorizontalMachineGuiBlock electric_furnace = null;
 	public static final BlockPlayerDetector player_detector = null;
-	public static final BlockPump pump = null;
-	public static final BlockRollingMachine rolling_machine = null;
-	public static final BlockScrapBoxinator scrapboxinator = null;
+	public static final HorizontalMachineGuiBlock pump = null;
+	public static final HorizontalMachineGuiBlock rolling_machine = null;
+	public static final HorizontalMachineGuiBlock scrapboxinator = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -124,11 +121,11 @@ public class TRBlocks {
 				new BlockIndustrialSawmill(),
 				new BlockVacuumFreezer(),
 				new BlockAutoCraftingTable(),
-				new BlockElectricFurnace(),
+				new HorizontalMachineGuiBlock("electric_furnace", "machines/tier1"),
 				new BlockPlayerDetector(),
-				new BlockPump(),
-				new BlockRollingMachine(),
-				new BlockScrapBoxinator(),
+				new HorizontalMachineGuiBlock("pump", "machines/tier1"),
+				new HorizontalMachineGuiBlock("rolling_machine", "machines/tier1"),
+				new HorizontalMachineGuiBlock("scrapboxinator", "machines/tier1"),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);
