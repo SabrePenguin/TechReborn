@@ -273,6 +273,13 @@ public class TRItems {
 		register(registry, TRBlocks.pump);
 		register(registry, TRBlocks.rolling_machine);
 		register(registry, TRBlocks.scrapboxinator);
+		register(registry, TRBlocks.low_voltage_su);
+		register(registry, TRBlocks.medium_voltage_su);
+		register(registry, TRBlocks.high_voltage_su);
+		register(registry, TRBlocks.adjustable_su); //TODO: ItemBlock adjustment
+		register(registry, TRBlocks.interdimensional_su);
+		register(registry, TRBlocks.lapotronic_su);
+		register(registry, TRBlocks.lsu_storage);
 	}
 
 	@SuppressWarnings("ConstantConditions")

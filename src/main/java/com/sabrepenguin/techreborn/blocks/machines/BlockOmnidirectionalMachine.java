@@ -25,14 +25,20 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class BlockOmnidirectionalMachine extends Block implements INonStandardLocation {
 	public final static PropertyDirection FACING = PropertyDirection.create("facing");
+	private final String prefix;
 
 	public BlockOmnidirectionalMachine(String name) {
+		this(name, "");
+	}
+
+	public BlockOmnidirectionalMachine(String name, String prefix) {
 		super(Material.IRON);
 		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setHardness(2.0f);
 		this.setRegistryName(Tags.MODID, name);
 		this.setTranslationKey(Tags.MODID + "." + name);
 		this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.NORTH));
+		this.prefix = prefix;
 	}
 
 	@Override
@@ -45,7 +51,7 @@ public class BlockOmnidirectionalMachine extends Block implements INonStandardLo
 
 	@Override
 	public String getPrefix() {
-		return "machines/energy";
+		return prefix;
 	}
 
 	@Override

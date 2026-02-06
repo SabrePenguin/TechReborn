@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.machines.*;
+import com.sabrepenguin.techreborn.blocks.machines.energy.BlockLSUStorage;
 import com.sabrepenguin.techreborn.blocks.machines.tier1.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
@@ -67,6 +68,13 @@ public class TRBlocks {
 	public static final BlockHorizontalMachine pump = null;
 	public static final BlockHorizontalMachine rolling_machine = null;
 	public static final BlockHorizontalMachine scrapboxinator = null;
+	public static final BlockOmnidirectionalMachine low_voltage_su = null;
+	public static final BlockOmnidirectionalMachine medium_voltage_su = null;
+	public static final BlockOmnidirectionalMachine high_voltage_su = null;
+	public static final BlockOmnidirectionalMachine adjustable_su = null;
+	public static final BlockOmnidirectionalMachine interdimensional_su = null;
+	public static final BlockOmnidirectionalMachine lapotronic_su = null;
+	public static final BlockLSUStorage lsu_storage = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -94,10 +102,10 @@ public class TRBlocks {
 				new BlockFusionCoil(),
 				new BlockFusionControlComputer(),
 				new BlockNuke(),
-				new BlockOmnidirectionalMachine("lv_transformer"),
-				new BlockOmnidirectionalMachine("mv_transformer"),
-				new BlockOmnidirectionalMachine("hv_transformer"),
-				new BlockOmnidirectionalMachine("ev_transformer"),
+				new BlockOmnidirectionalMachine("lv_transformer", "machines/energy"),
+				new BlockOmnidirectionalMachine("mv_transformer", "machines/energy"),
+				new BlockOmnidirectionalMachine("hv_transformer", "machines/energy"),
+				new BlockOmnidirectionalMachine("ev_transformer", "machines/energy"),
 				new BlockQuantumTank(),
 				new BlockQuantumChest(),
 				new BlockCreativeQuantumTank(),
@@ -122,6 +130,13 @@ public class TRBlocks {
 				new BlockHorizontalMachine("pump", "machines/tier1"),
 				new BlockHorizontalMachine("rolling_machine", "machines/tier1"),
 				new BlockHorizontalMachine("scrapboxinator", "machines/tier1"),
+				new BlockOmnidirectionalMachine("low_voltage_su", "machines/energy"),
+				new BlockOmnidirectionalMachine("medium_voltage_su", "machines/energy"),
+				new BlockOmnidirectionalMachine("high_voltage_su", "machines/energy"),
+				new BlockOmnidirectionalMachine("adjustable_su", "machines/energy"),
+				new BlockOmnidirectionalMachine("interdimensional_su", "machines/energy"),
+				new BlockOmnidirectionalMachine("lapotronic_su", "machines/energy"),
+				new BlockLSUStorage(),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);

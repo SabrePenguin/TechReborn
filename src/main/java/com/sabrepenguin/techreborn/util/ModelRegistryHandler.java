@@ -80,6 +80,15 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.pump);
 		propertiesRegistration(TRBlocks.rolling_machine);
 		propertiesRegistration(TRBlocks.scrapboxinator);
+
+		propertiesRegistration(TRBlocks.low_voltage_su);
+		propertiesRegistration(TRBlocks.medium_voltage_su);
+		propertiesRegistration(TRBlocks.high_voltage_su);
+		propertiesRegistration(TRBlocks.adjustable_su);
+		propertiesRegistration(TRBlocks.interdimensional_su);
+		propertiesRegistration(TRBlocks.lapotronic_su);
+
+		itemBlockRegistration(TRBlocks.lsu_storage, true);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {
