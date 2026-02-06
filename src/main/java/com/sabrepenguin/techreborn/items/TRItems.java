@@ -280,6 +280,16 @@ public class TRItems {
 		register(registry, TRBlocks.interdimensional_su);
 		register(registry, TRBlocks.lapotronic_su);
 		register(registry, TRBlocks.lsu_storage);
+
+		register(registry, TRBlocks.alloy_smelter);
+		register(registry, TRBlocks.assembling_machine);
+		register(registry, TRBlocks.compressor);
+		register(registry, TRBlocks.extractor);
+		register(registry, TRBlocks.grinder);
+		register(registry, TRBlocks.plate_bending_machine);
+		register(registry, TRBlocks.recycler);
+		register(registry, TRBlocks.solid_canning_machine);
+		register(registry, TRBlocks.wire_mill);
 	}
 
 	@SuppressWarnings("ConstantConditions")

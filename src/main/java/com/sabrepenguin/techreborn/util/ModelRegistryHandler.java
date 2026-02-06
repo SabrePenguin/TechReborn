@@ -87,8 +87,17 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.adjustable_su);
 		propertiesRegistration(TRBlocks.interdimensional_su);
 		propertiesRegistration(TRBlocks.lapotronic_su);
-
 		itemBlockRegistration(TRBlocks.lsu_storage, true);
+
+		propertiesRegistration(TRBlocks.alloy_smelter);
+		propertiesRegistration(TRBlocks.assembling_machine);
+		propertiesRegistration(TRBlocks.compressor);
+		propertiesRegistration(TRBlocks.extractor);
+		propertiesRegistration(TRBlocks.grinder);
+		propertiesRegistration(TRBlocks.plate_bending_machine);
+		propertiesRegistration(TRBlocks.recycler);
+		propertiesRegistration(TRBlocks.solid_canning_machine);
+		propertiesRegistration(TRBlocks.wire_mill);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {

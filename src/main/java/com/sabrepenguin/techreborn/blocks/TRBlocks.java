@@ -75,6 +75,15 @@ public class TRBlocks {
 	public static final BlockOmnidirectionalMachine interdimensional_su = null;
 	public static final BlockOmnidirectionalMachine lapotronic_su = null;
 	public static final BlockLSUStorage lsu_storage = null;
+	public static final BlockHorizontalMachine alloy_smelter = null;
+	public static final BlockHorizontalMachine assembling_machine = null;
+	public static final BlockHorizontalMachine compressor = null;
+	public static final BlockHorizontalMachine extractor = null;
+	public static final BlockHorizontalMachine grinder = null;
+	public static final BlockHorizontalMachine plate_bending_machine = null;
+	public static final BlockHorizontalMachine recycler = null;
+	public static final BlockHorizontalMachine solid_canning_machine = null;
+	public static final BlockHorizontalMachine wire_mill = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -137,6 +146,15 @@ public class TRBlocks {
 				new BlockOmnidirectionalMachine("interdimensional_su", "machines/energy"),
 				new BlockOmnidirectionalMachine("lapotronic_su", "machines/energy"),
 				new BlockLSUStorage(),
+				new BlockHorizontalMachine("alloy_smelter", "machines/tier1"),
+				new BlockHorizontalMachine("assembling_machine", "machines/tier1"),
+				new BlockHorizontalMachine("compressor", "machines/tier1"),
+				new BlockHorizontalMachine("extractor", "machines/tier1"),
+				new BlockHorizontalMachine("grinder", "machines/tier1"),
+				new BlockHorizontalMachine("plate_bending_machine", "machines/tier1"),
+				new BlockHorizontalMachine("recycler", "machines/tier1"),
+				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1"),
+				new BlockHorizontalMachine("wire_mill", "machines/tier1"),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);
