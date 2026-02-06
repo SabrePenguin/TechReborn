@@ -99,6 +99,7 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.solid_canning_machine);
 		propertiesRegistration(TRBlocks.wire_mill);
 		propertiesRegistration(TRBlocks.lamp_incandescent);
+		propertiesRegistration(TRBlocks.lamp_led);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {

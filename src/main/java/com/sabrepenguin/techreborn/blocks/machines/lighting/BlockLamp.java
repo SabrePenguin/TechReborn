@@ -17,24 +17,20 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockIncandescentLamp extends BlockOmnidirectionalMachine {
-	private static final int BRIGHTNESS = 14;
+public class BlockLamp extends BlockOmnidirectionalMachine {
+	private final int brightness;
 
-	private static final AxisAlignedBB[] AXIS_ALIGNED_BB = {
-		new AxisAlignedBB(0.25, 1.0 - 0.625, 0.25, 1.0 - 0.25, 1.0D, 1.0 - 0.25),
-				new AxisAlignedBB(0.25, 0.0D, 0.25, 1.0 - 0.25, 0.625, 1.0 - 0.25),
-				new AxisAlignedBB(0.25, 0.25, 1.0 - 0.625, 1.0 - 0.25, 1.0 - 0.25, 1.0D),
-				new AxisAlignedBB(0.25, 0.25, 0.0D, 1.0 - 0.25, 1.0 - 0.25, 0.625),
-				new AxisAlignedBB(1.0 - 0.625, 0.25, 0.25, 1.0D, 1.0 - 0.25, 1.0 - 0.25),
-				new AxisAlignedBB(0.0D, 0.25, 0.25, 0.625, 1.0 - 0.25, 1.0 - 0.25)};
+	private final AxisAlignedBB[] axisAlignedBB;
 
-	public BlockIncandescentLamp() {
-		super(Material.REDSTONE_LIGHT, "lamp_incandescent", "machines/lighting", 1.0f);
+	public BlockLamp(String name, int brightness, AxisAlignedBB[] boundingBoxes) {
+		super(Material.REDSTONE_LIGHT, name, "machines/lighting", 1.0f);
+		this.axisAlignedBB = boundingBoxes;
+		this.brightness = brightness;
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AXIS_ALIGNED_BB[state.getValue(FACING).getIndex()];
+		return axisAlignedBB[state.getValue(FACING).getIndex()];
 	}
 
 	@Override
@@ -54,7 +50,7 @@ public class BlockIncandescentLamp extends BlockOmnidirectionalMachine {
 
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return state.getValue(ACTIVE) ? BRIGHTNESS : 0;
+		return state.getValue(ACTIVE) ? brightness : 0;
 	}
 
 	@Override
@@ -64,5 +60,16 @@ public class BlockIncandescentLamp extends BlockOmnidirectionalMachine {
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+	}
+
+	public static AxisAlignedBB[] generateBox(double width, double depth) {
+		return new AxisAlignedBB[]{
+				new AxisAlignedBB(width, 1.0 - depth, width, 1.0 - width, 1.0D, 1.0 - width),
+				new AxisAlignedBB(width, 0.0D, width, 1.0 - width, depth, 1.0 - width),
+				new AxisAlignedBB(width, width, 1.0 - depth, 1.0 - width, 1.0 - width, 1.0D),
+				new AxisAlignedBB(width, width, 0.0D, 1.0 - width, 1.0 - width, depth),
+				new AxisAlignedBB(1.0 - depth, width, width, 1.0D, 1.0 - width, 1.0 - width),
+				new AxisAlignedBB(0.0D, width, width, depth, 1.0 - width, 1.0 - width),
+		};
 	}
 }

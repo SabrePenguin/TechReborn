@@ -3,7 +3,7 @@ package com.sabrepenguin.techreborn.blocks;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.machines.*;
 import com.sabrepenguin.techreborn.blocks.machines.energy.BlockLSUStorage;
-import com.sabrepenguin.techreborn.blocks.machines.lighting.BlockIncandescentLamp;
+import com.sabrepenguin.techreborn.blocks.machines.lighting.BlockLamp;
 import com.sabrepenguin.techreborn.blocks.machines.tier1.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
@@ -85,7 +85,8 @@ public class TRBlocks {
 	public static final BlockHorizontalMachine recycler = null;
 	public static final BlockHorizontalMachine solid_canning_machine = null;
 	public static final BlockHorizontalMachine wire_mill = null;
-	public static final BlockIncandescentLamp lamp_incandescent = null;
+	public static final BlockLamp lamp_incandescent = null;
+	public static final BlockLamp lamp_led = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -157,7 +158,8 @@ public class TRBlocks {
 				new BlockHorizontalMachine("recycler", "machines/tier1"),
 				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1"),
 				new BlockHorizontalMachine("wire_mill", "machines/tier1"),
-				new BlockIncandescentLamp(),
+				new BlockLamp("lamp_incandescent", 14, BlockLamp.generateBox(0.25, 0.625)),
+				new BlockLamp("lamp_led", 15, BlockLamp.generateBox(0.125, 0.0625))
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);
