@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.blocks;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.machines.*;
 import com.sabrepenguin.techreborn.blocks.machines.energy.BlockLSUStorage;
+import com.sabrepenguin.techreborn.blocks.machines.lighting.BlockIncandescentLamp;
 import com.sabrepenguin.techreborn.blocks.machines.tier1.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
@@ -40,10 +41,10 @@ public class TRBlocks {
 	public static final BlockFusionCoil fusion_coil = null;
 	public static final BlockFusionControlComputer fusion_control_computer = null;
 	public static final BlockNuke nuke = null;
-	public static final BlockOmnidirectionalMachine lv_transformer = null;
-	public static final BlockOmnidirectionalMachine mv_transformer = null;
-	public static final BlockOmnidirectionalMachine hv_transformer = null;
-	public static final BlockOmnidirectionalMachine ev_transformer = null;
+	public static final BlockOmnidirectionalStatic lv_transformer = null;
+	public static final BlockOmnidirectionalStatic mv_transformer = null;
+	public static final BlockOmnidirectionalStatic hv_transformer = null;
+	public static final BlockOmnidirectionalStatic ev_transformer = null;
 	public static final BlockQuantumTank quantum_tank = null;
 	public static final BlockQuantumChest quantum_chest = null;
 	public static final BlockCreativeQuantumTank creative_quantum_tank = null;
@@ -68,12 +69,12 @@ public class TRBlocks {
 	public static final BlockHorizontalMachine pump = null;
 	public static final BlockHorizontalMachine rolling_machine = null;
 	public static final BlockHorizontalMachine scrapboxinator = null;
-	public static final BlockOmnidirectionalMachine low_voltage_su = null;
-	public static final BlockOmnidirectionalMachine medium_voltage_su = null;
-	public static final BlockOmnidirectionalMachine high_voltage_su = null;
-	public static final BlockOmnidirectionalMachine adjustable_su = null;
-	public static final BlockOmnidirectionalMachine interdimensional_su = null;
-	public static final BlockOmnidirectionalMachine lapotronic_su = null;
+	public static final BlockOmnidirectionalStatic low_voltage_su = null;
+	public static final BlockOmnidirectionalStatic medium_voltage_su = null;
+	public static final BlockOmnidirectionalStatic high_voltage_su = null;
+	public static final BlockOmnidirectionalStatic adjustable_su = null;
+	public static final BlockOmnidirectionalStatic interdimensional_su = null;
+	public static final BlockOmnidirectionalStatic lapotronic_su = null;
 	public static final BlockLSUStorage lsu_storage = null;
 	public static final BlockHorizontalMachine alloy_smelter = null;
 	public static final BlockHorizontalMachine assembling_machine = null;
@@ -111,10 +112,10 @@ public class TRBlocks {
 				new BlockFusionCoil(),
 				new BlockFusionControlComputer(),
 				new BlockNuke(),
-				new BlockOmnidirectionalMachine("lv_transformer", "machines/energy"),
-				new BlockOmnidirectionalMachine("mv_transformer", "machines/energy"),
-				new BlockOmnidirectionalMachine("hv_transformer", "machines/energy"),
-				new BlockOmnidirectionalMachine("ev_transformer", "machines/energy"),
+				new BlockOmnidirectionalStatic("lv_transformer", "machines/energy"),
+				new BlockOmnidirectionalStatic("mv_transformer", "machines/energy"),
+				new BlockOmnidirectionalStatic("hv_transformer", "machines/energy"),
+				new BlockOmnidirectionalStatic("ev_transformer", "machines/energy"),
 				new BlockQuantumTank(),
 				new BlockQuantumChest(),
 				new BlockCreativeQuantumTank(),
@@ -139,12 +140,12 @@ public class TRBlocks {
 				new BlockHorizontalMachine("pump", "machines/tier1"),
 				new BlockHorizontalMachine("rolling_machine", "machines/tier1"),
 				new BlockHorizontalMachine("scrapboxinator", "machines/tier1"),
-				new BlockOmnidirectionalMachine("low_voltage_su", "machines/energy"),
-				new BlockOmnidirectionalMachine("medium_voltage_su", "machines/energy"),
-				new BlockOmnidirectionalMachine("high_voltage_su", "machines/energy"),
-				new BlockOmnidirectionalMachine("adjustable_su", "machines/energy"),
-				new BlockOmnidirectionalMachine("interdimensional_su", "machines/energy"),
-				new BlockOmnidirectionalMachine("lapotronic_su", "machines/energy"),
+				new BlockOmnidirectionalStatic("low_voltage_su", "machines/energy"),
+				new BlockOmnidirectionalStatic("medium_voltage_su", "machines/energy"),
+				new BlockOmnidirectionalStatic("high_voltage_su", "machines/energy"),
+				new BlockOmnidirectionalStatic("adjustable_su", "machines/energy"),
+				new BlockOmnidirectionalStatic("interdimensional_su", "machines/energy"),
+				new BlockOmnidirectionalStatic("lapotronic_su", "machines/energy"),
 				new BlockLSUStorage(),
 				new BlockHorizontalMachine("alloy_smelter", "machines/tier1"),
 				new BlockHorizontalMachine("assembling_machine", "machines/tier1"),

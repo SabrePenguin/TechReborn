@@ -7,7 +7,6 @@ import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -24,26 +23,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BlockOmnidirectionalMachine extends Block implements INonStandardLocation {
+public class BlockOmnidirectionalStatic extends Block implements INonStandardLocation {
 	public final static PropertyDirection FACING = PropertyDirection.create("facing");
-	public final static PropertyBool ACTIVE = PropertyBool.create("active");
 	private final String prefix;
 
-	public BlockOmnidirectionalMachine(Material material, String name, String prefix, float hardness) {
-		super(material);
-		this.setCreativeTab(TechReborn.RESOURCE_TAB);
-		this.setHardness(hardness);
-		this.setRegistryName(Tags.MODID, name);
-		this.setTranslationKey(Tags.MODID + "." + name);
-		this.setDefaultState(this.getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
-		this.prefix = prefix;
-	}
-
-	public BlockOmnidirectionalMachine(String name) {
+	public BlockOmnidirectionalStatic(String name) {
 		this(name, "");
 	}
 
-	public BlockOmnidirectionalMachine(String name, String prefix) {
+	public BlockOmnidirectionalStatic(String name, String prefix) {
 		super(Material.IRON);
 		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setHardness(2.0f);
@@ -68,26 +56,17 @@ public class BlockOmnidirectionalMachine extends Block implements INonStandardLo
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING, ACTIVE);
+		return new BlockStateContainer(this, FACING);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		boolean on = false;
-		if (meta > 8) {
-			meta -= 8;
-			on = true;
-		}
-		return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta)).withProperty(ACTIVE, on);
+		return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int meta = 0;
-		if (state.getValue(ACTIVE)) {
-			meta += 8;
-		}
-		return state.getValue(FACING).getIndex() + meta;
+		return state.getValue(FACING).getIndex();
 	}
 
 
