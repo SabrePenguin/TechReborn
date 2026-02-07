@@ -74,7 +74,7 @@ public class BlockOmnidirectionalMachine extends Block implements INonStandardLo
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		boolean on = false;
-		if (meta > 8) {
+		if (meta >= 8) {
 			meta -= 8;
 			on = true;
 		}
