@@ -103,6 +103,7 @@ public class TRBlocks {
 	public static final BlockHorizontalMachine water_mill = null;
 	public static final BlockHorizontalMachine wind_mill = null;
 	public static final BlockSolarPanel solar_panel = null;
+	public static final BlockCable cable = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -190,6 +191,7 @@ public class TRBlocks {
 				new BlockHorizontalMachine("water_mill", "machines/generators"),
 				new BlockHorizontalMachine("wind_mill", "machines/generators"),
 				new BlockSolarPanel(),
+				new BlockCable(),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);
