@@ -100,6 +100,20 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.wire_mill);
 		propertiesRegistration(TRBlocks.lamp_incandescent);
 		propertiesRegistration(TRBlocks.lamp_led);
+
+		propertiesRegistration(TRBlocks.creative_solar_panel);
+		propertiesRegistration(TRBlocks.diesel_generator);
+		propertiesRegistration(TRBlocks.dragon_egg_syphon);
+		propertiesRegistration(TRBlocks.gas_turbine);
+		propertiesRegistration(TRBlocks.lightning_rod);
+		propertiesRegistration(TRBlocks.magic_energy_absorber);
+		propertiesRegistration(TRBlocks.magic_energy_converter);
+		propertiesRegistration(TRBlocks.plasma_generator);
+		propertiesRegistration(TRBlocks.semi_fluid_generator);
+		propertiesRegistration(TRBlocks.solid_fuel_generator);
+		propertiesRegistration(TRBlocks.thermal_generator);
+		propertiesRegistration(TRBlocks.water_mill);
+		propertiesRegistration(TRBlocks.wind_mill);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {

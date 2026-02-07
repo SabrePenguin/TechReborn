@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.machines.*;
+import com.sabrepenguin.techreborn.blocks.machines.energy.BlockCreativeSolarPanel;
 import com.sabrepenguin.techreborn.blocks.machines.energy.BlockLSUStorage;
 import com.sabrepenguin.techreborn.blocks.machines.lighting.BlockLamp;
 import com.sabrepenguin.techreborn.blocks.machines.tier1.*;
@@ -87,6 +88,19 @@ public class TRBlocks {
 	public static final BlockHorizontalMachine wire_mill = null;
 	public static final BlockLamp lamp_incandescent = null;
 	public static final BlockLamp lamp_led = null;
+	public static final BlockCreativeSolarPanel creative_solar_panel = null;
+	public static final BlockHorizontalMachine diesel_generator = null;
+	public static final BlockHorizontalMachine dragon_egg_syphon = null;
+	public static final BlockHorizontalMachine gas_turbine = null;
+	public static final BlockHorizontalMachine lightning_rod = null;
+	public static final BlockHorizontalMachine magic_energy_absorber = null;
+	public static final BlockHorizontalMachine magic_energy_converter = null;
+	public static final BlockHorizontalMachine plasma_generator = null;
+	public static final BlockHorizontalMachine semi_fluid_generator = null;
+	public static final BlockHorizontalMachine solid_fuel_generator = null;
+	public static final BlockHorizontalMachine thermal_generator = null;
+	public static final BlockHorizontalMachine water_mill = null;
+	public static final BlockHorizontalMachine wind_mill = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -159,7 +173,20 @@ public class TRBlocks {
 				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1"),
 				new BlockHorizontalMachine("wire_mill", "machines/tier1"),
 				new BlockLamp("lamp_incandescent", 14, BlockLamp.generateBox(0.25, 0.625)),
-				new BlockLamp("lamp_led", 15, BlockLamp.generateBox(0.125, 0.0625))
+				new BlockLamp("lamp_led", 15, BlockLamp.generateBox(0.125, 0.0625)),
+				new BlockCreativeSolarPanel(),
+				new BlockHorizontalMachine("diesel_generator", "machines/generators"),
+				new BlockHorizontalMachine("dragon_egg_syphon", "machines/generators"),
+				new BlockHorizontalMachine("gas_turbine", "machines/generators"),
+				new BlockHorizontalMachine("lightning_rod", "machines/generators"),
+				new BlockHorizontalMachine("magic_energy_absorber", "machines/generators"),
+				new BlockHorizontalMachine("magic_energy_converter", "machines/generators"),
+				new BlockHorizontalMachine("plasma_generator", "machines/generators"),
+				new BlockHorizontalMachine("semi_fluid_generator", "machines/generators"),
+				new BlockHorizontalMachine("solid_fuel_generator", "machines/generators"),
+				new BlockHorizontalMachine("thermal_generator", "machines/generators"),
+				new BlockHorizontalMachine("water_mill", "machines/generators"),
+				new BlockHorizontalMachine("wind_mill", "machines/generators"),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);

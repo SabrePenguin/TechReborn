@@ -292,6 +292,20 @@ public class TRItems {
 		register(registry, TRBlocks.wire_mill);
 		register(registry, TRBlocks.lamp_incandescent);
 		register(registry, TRBlocks.lamp_led);
+
+		register(registry, TRBlocks.creative_solar_panel);
+		register(registry, TRBlocks.diesel_generator);
+		register(registry, TRBlocks.dragon_egg_syphon);
+		register(registry, TRBlocks.gas_turbine);
+		register(registry, TRBlocks.lightning_rod);
+		register(registry, TRBlocks.magic_energy_absorber);
+		register(registry, TRBlocks.magic_energy_converter);
+		register(registry, TRBlocks.plasma_generator);
+		register(registry, TRBlocks.semi_fluid_generator);
+		register(registry, TRBlocks.solid_fuel_generator);
+		register(registry, TRBlocks.thermal_generator);
+		register(registry, TRBlocks.water_mill);
+		register(registry, TRBlocks.wind_mill);
 	}
 
 	@SuppressWarnings("ConstantConditions")
