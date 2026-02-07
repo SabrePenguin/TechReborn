@@ -4,6 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.machines.*;
 import com.sabrepenguin.techreborn.blocks.machines.energy.BlockCreativeSolarPanel;
 import com.sabrepenguin.techreborn.blocks.machines.energy.BlockLSUStorage;
+import com.sabrepenguin.techreborn.blocks.machines.energy.BlockSolarPanel;
 import com.sabrepenguin.techreborn.blocks.machines.lighting.BlockLamp;
 import com.sabrepenguin.techreborn.blocks.machines.tier1.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
@@ -101,6 +102,7 @@ public class TRBlocks {
 	public static final BlockHorizontalMachine thermal_generator = null;
 	public static final BlockHorizontalMachine water_mill = null;
 	public static final BlockHorizontalMachine wind_mill = null;
+	public static final BlockSolarPanel solar_panel = null;
 
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -187,6 +189,7 @@ public class TRBlocks {
 				new BlockHorizontalMachine("thermal_generator", "machines/generators"),
 				new BlockHorizontalMachine("water_mill", "machines/generators"),
 				new BlockHorizontalMachine("wind_mill", "machines/generators"),
+				new BlockSolarPanel(),
 		};
 		for (Block block: blocks) {
 			event.getRegistry().register(block);

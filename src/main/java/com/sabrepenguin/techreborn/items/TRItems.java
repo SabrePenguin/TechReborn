@@ -306,6 +306,7 @@ public class TRItems {
 		register(registry, TRBlocks.thermal_generator);
 		register(registry, TRBlocks.water_mill);
 		register(registry, TRBlocks.wind_mill);
+		registerMetaBlock(registry, TRBlocks.solar_panel);
 	}
 
 	@SuppressWarnings("ConstantConditions")
