@@ -1,10 +1,12 @@
 package com.sabrepenguin.techreborn.blocks.machines;
 
+import com.cleanroommc.modularui.factory.GuiFactories;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -15,28 +17,37 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.Supplier;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class BlockHorizontalMachine extends Block implements INonStandardLocation {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");
 	private final String prefix;
 
+	private final Supplier<? extends TileEntity> tileEntity;
+
 	public BlockHorizontalMachine(String registryName) {
 		this(registryName, "");
 	}
 
 	public BlockHorizontalMachine(String registryName, String prefix) {
+		this(registryName, prefix, null);
+	}
+
+	public BlockHorizontalMachine(String registryName, String prefix, Supplier<? extends TileEntity> tileEntity) {
 		super(Material.IRON);
 		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.setRegistryName(Tags.MODID, registryName);
@@ -45,15 +56,26 @@ public class BlockHorizontalMachine extends Block implements INonStandardLocatio
 		this.setSoundType(SoundType.METAL);
 		this.setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
 		this.prefix = prefix;
+		this.tileEntity = tileEntity;
 	}
 
-	public BlockHorizontalMachine() {
-		super(Material.IRON);
-		this.setCreativeTab(TechReborn.RESOURCE_TAB);
-		this.setHardness(2.0f);
-		this.setSoundType(SoundType.METAL);
-		this.setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
-		this.prefix = "";
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return tileEntity != null;
+	}
+
+	@Override
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return tileEntity.get();
+	}
+
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (tileEntity == null) return false;
+		if (!worldIn.isRemote) {
+			GuiFactories.tileEntity().open(playerIn, pos);
+		}
+		return true;
 	}
 
 	@Override
@@ -62,12 +84,12 @@ public class BlockHorizontalMachine extends Block implements INonStandardLocatio
 	}
 
 	@Override
-	protected @NotNull BlockStateContainer createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING, ACTIVE);
 	}
 
 	@Override
-	public void onBlockAdded(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
 		if (!worldIn.isRemote)
 		{
 			IBlockState north = worldIn.getBlockState(pos.north());

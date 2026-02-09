@@ -11,6 +11,7 @@ import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
+import com.sabrepenguin.techreborn.tileentity.processing.TileEntityElectricFurnace;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
@@ -154,7 +155,7 @@ public class TRBlocks {
 				new BlockIndustrialSawmill(),
 				new BlockVacuumFreezer(),
 				new BlockAutoCraftingTable(),
-				new BlockHorizontalMachine("electric_furnace", "machines/tier1"),
+				new BlockHorizontalMachine("electric_furnace", "machines/tier1", TileEntityElectricFurnace::new),
 				new BlockPlayerDetector(),
 				new BlockHorizontalMachine("pump", "machines/tier1"),
 				new BlockHorizontalMachine("rolling_machine", "machines/tier1"),
