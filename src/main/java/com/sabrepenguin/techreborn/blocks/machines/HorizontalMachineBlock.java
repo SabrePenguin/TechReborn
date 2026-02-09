@@ -5,6 +5,7 @@ import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -24,8 +25,11 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public abstract class HorizontalMachineBlock extends Block implements INonStandardLocation {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -41,21 +45,13 @@ public abstract class HorizontalMachineBlock extends Block implements INonStanda
 		this.setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
 	}
 
-	public HorizontalMachineBlock() {
-		super(Material.IRON);
-		this.setCreativeTab(TechReborn.RESOURCE_TAB);
-		this.setHardness(2.0f);
-		this.setSoundType(SoundType.METAL);
-		this.setDefaultState(getDefaultState().withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false));
-	}
-
 	@Override
-	protected @NotNull BlockStateContainer createBlockState() {
+	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING, ACTIVE);
 	}
 
 	@Override
-	public void onBlockAdded(World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
 		if (!worldIn.isRemote)
 		{
 			IBlockState north = worldIn.getBlockState(pos.north());
@@ -96,12 +92,12 @@ public abstract class HorizontalMachineBlock extends Block implements INonStanda
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, @NotNull BlockPos pos, IBlockState state, EntityLivingBase placer, @NotNull ItemStack stack) {
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 		if (stack.hasDisplayName()) {
 			TileEntity te = worldIn.getTileEntity(pos);
@@ -113,19 +109,19 @@ public abstract class HorizontalMachineBlock extends Block implements INonStanda
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull IBlockState withRotation(@NotNull IBlockState state, @NotNull Rotation rot) {
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
 		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull IBlockState getStateFromMeta(int meta)
+	public IBlockState getStateFromMeta(int meta)
 	{
 		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
@@ -145,7 +141,7 @@ public abstract class HorizontalMachineBlock extends Block implements INonStanda
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull EnumBlockRenderType getRenderType(@NotNull IBlockState state) {
+	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
 
