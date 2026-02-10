@@ -1,153 +1,128 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.BitSet;
 
-/**
- * This ItemStackHandler wraps multiple ItemStacks as one. Individual ItemStackHandlers are passed into the builder,
- * which then defaults to adding all slots to the available slots. Internally the handlers are organized as follows:
- * <br>
- * IntArrayList inputSlots: Maps available slots (ie. slot 0 -> actual slot 1, slot 1 -> actual slot 2, ....) <br>
- * IntArrayList inputSlotLength: Individual lengths of each input slot handler. ie. if all slots are available, then
- * the value at an index is equal to the number of slots in the handler. <br>
- * List&ltIItemHandlerModifiable&gt inputHandler: Set of all inputHandlers <br>
- * IntArrayList outputSlots: See inputSlots <br>
- * IItemHandlerModifiable outputHandler: The outputHandler. Only one is available due to the lack of different
- * requirements.<br>
- * Current logical issue: inputsSlots need to be a list of lists
- */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class SideConfigItemStackHandler implements IItemHandlerModifiable {
-	private final IntArrayList inputSlots;
-	private final IntArrayList inputSlotLength;
-	private final List<IItemHandlerModifiable> inputHandler;
-	private final IntArrayList outputSlots;
-	private final IItemHandlerModifiable outputHandler;
 
-	SideConfigItemStackHandler(
-			IntArrayList inputSlots,
-			List<IItemHandlerModifiable> inputHandler,
-			IntArrayList inputSlotLengths,
-			IntArrayList outputSlots,
-			IItemHandlerModifiable outputHandler
-	) {
-		this.inputSlots = inputSlots;
-		this.inputHandler = inputHandler;
-		this.inputSlotLength = inputSlotLengths;
-		this.outputSlots = outputSlots;
-		this.outputHandler = outputHandler;
-	}
+	private final ObjectArrayList<IItemHandlerModifiable> handlers;
+	/** An array that matches the handlers object size. ie. [4, 3, 1] for a handler of size 4, 3, and one of 1 */
+	private final int[] handlerOffsets;
+	/** An integer array containing sets of ints matching the handler's slot, specifically made for fast indexing
+	 * of the handler.
+	 * ie. [0, 0, 0, 0, 1, 1, 1, 2] represents a set of handlers. 1 has 4 slots (0-3),
+	 * 2 has 3 slots (4-6), and handler 3 has 1 slot (7). Accessing the index will return the matching handler.*/
+	private final IntArrayList handlerIndices;
+	/** An integer array containing the slots for the handler it matches. Maps the entire handler for remapping.
+	 * ie. [0, 1, 2, 3, 0, 1, 2, 0]*/
+	private final IntArrayList localHandlerIndices;
+	/** Maps the enabled slots from the localHandlerIndices. Used for tracking and updating the activeSlots*/
+	private final BitSet enabledSlots;
+	/** The actual slot retrieval. Contains the actual length, and each integer maps to the handlerIndices +
+	 * localHandlerIndices arrays*/
+	private final IntArrayList activeSlots;
 
-	public void addSlot(IItemHandlerModifiable handler, int slot) {
+	public SideConfigItemStackHandler(IItemHandlerModifiable... handlers) {
+		this.handlers = new ObjectArrayList<>(handlers);
+		handlerOffsets = new int[this.handlers.size()];
 
-	}
-
-	public void removeSlot(IItemHandlerModifiable handler, int slot) {
-
-	}
-
-	/**
-	 * The actual equation for the slot. I should probably write a proof at some point.
-	 */
-	private int getActualSlot(int slot) {
-		int total = 0;
-		// The current handlers slot. At total 0, slot 7-0 gives slot 7. If slot handler 0 has size 3, this means
-		// that i is 3. The loop resets, but total is now 3. If slot handler 1 has size 5, then slot 7-3 gives actual
-		// slot 4, the last slot in it.
-		// If the slot were instead 8, this would result instead in actual slot 5. The total is thus 8. If all inputs
-		// are emptied, then we return the slot minus the total at 8 - 8 for actual slot 0.
-		for(Integer handlerSize: inputSlotLength) {
-			int actualSlot = slot - total;
-			if (actualSlot < handlerSize)
-				return actualSlot;
-			total += handlerSize;
+		int totalSlots = 0;
+		for (int i = 0; i < this.handlers.size(); i++) {
+			handlerOffsets[i] = totalSlots;
+			totalSlots += this.handlers.get(i).getSlots();
 		}
-		return slot - total;
-	}
+		this.handlerIndices = new IntArrayList(totalSlots);
+		this.localHandlerIndices = new IntArrayList(totalSlots);
+		this.enabledSlots = new BitSet(totalSlots);
 
-	/**
-	 * Gets the handler from the slot
-	 * @param slot Slot in the range of this
-	 * @return The actual IItemHandlerModifiable that contains the slot
-	 */
-	private IItemHandlerModifiable actualHandler(int slot) {
-		int total = 0;
-		for(int i = 0; i < inputSlotLength.size(); i++) {
-			int handlerSize = inputSlotLength.getInt(i);
-			if (slot - total < handlerSize) {
-				return inputHandler.get(i);
+		int index = 0;
+		for (int handlerIndex = 0; handlerIndex < this.handlers.size(); handlerIndex++) {
+			IItemHandlerModifiable handler = this.handlers.get(handlerIndex);
+			int handlerSize = handler.getSlots();
+
+			for (int s = 0; s < handlerSize; s++) {
+				handlerIndices.set(index, handlerIndex);
+				localHandlerIndices.set(index, s);
+				enabledSlots.set(index, true);
+				index++;
 			}
-			total += handlerSize;
 		}
-		return outputHandler;
+
+		activeSlots = new IntArrayList(totalSlots);
+		rebuildActiveSlots();
+	}
+
+	private void rebuildActiveSlots() {
+		activeSlots.clear();
+		for (int i = 0; i < handlerIndices.size(); i++) {
+			if (enabledSlots.get(i)) {
+				activeSlots.add(i);
+			}
+		}
+	}
+
+	public void setSlotEnabled(int handlerIndex, int localSlotIndex, boolean enabled) {
+		if (handlerIndex < 0 || handlerIndex >= handlers.size()) return;
+		int index = handlerOffsets[handlerIndex] + localSlotIndex;
+		int startOfNextHandler = (handlerIndex + 1 < handlerOffsets.length) ?
+				handlerOffsets[handlerIndex + 1] : handlerIndices.size();
+		if (index >= startOfNextHandler) return;
+		if (enabledSlots.get(index) != enabled) {
+			enabledSlots.set(index, enabled);
+			rebuildActiveSlots();
+		}
 	}
 
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {
-		actualHandler(slot).setStackInSlot(getActualSlot(slot), stack);
+		validateSlotIndex(slot);
+		int index = activeSlots.getInt(slot);
+		handlers.get(handlerIndices.getInt(index)).setStackInSlot(localHandlerIndices.getInt(index), stack);
 	}
 
 	@Override
 	public int getSlots() {
-		return inputSlots.size() + outputSlots.size();
+		return activeSlots.size();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return actualHandler(slot).getStackInSlot(getActualSlot(slot));
+		validateSlotIndex(slot);
+		int index = activeSlots.getInt(slot);
+		return handlers.get(handlerIndices.getInt(index)).getStackInSlot(localHandlerIndices.getInt(index));
 	}
 
 	@Override
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-		return actualHandler(slot).insertItem(getActualSlot(slot), stack, simulate);
+		validateSlotIndex(slot);
+		int index = activeSlots.getInt(slot);
+		return handlers.get(handlerIndices.getInt(index)).insertItem(localHandlerIndices.getInt(index), stack, simulate);
 	}
 
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		return actualHandler(slot).extractItem(getActualSlot(slot), amount, simulate);
+		validateSlotIndex(slot);
+		int index = activeSlots.getInt(slot);
+		return handlers.get(handlerIndices.getInt(index)).extractItem(localHandlerIndices.getInt(index), amount, simulate);
 	}
 
 	@Override
 	public int getSlotLimit(int slot) {
-		return actualHandler(slot).getSlotLimit(getActualSlot(slot));
+		validateSlotIndex(slot);
+		int index = activeSlots.getInt(slot);
+		return handlers.get(handlerIndices.getInt(index)).getSlotLimit(localHandlerIndices.getInt(index));
 	}
 
-	public static class Builder {
-		List<IItemHandlerModifiable> inputs;
-		IItemHandlerModifiable output;
-
-		public Builder addItemHandler(IItemHandlerModifiable handler) {
-			this.inputs.add(handler);
-			return this;
-		}
-
-		public Builder addOutput(IItemHandlerModifiable handler) {
-			output = handler;
-			return this;
-		}
-
-		public SideConfigItemStackHandler build() {
-			IntArrayList inputLengths = new IntArrayList(inputs.size());
-			int length = 0;
-			for (IItemHandlerModifiable handler: inputs) {
-				inputLengths.add(handler.getSlots());
-				length += handler.getSlots();
-			}
-			return new SideConfigItemStackHandler(
-					new IntArrayList(IntStream.range(0, length).boxed().collect(Collectors.toList())),
-					inputs,
-					inputLengths,
-					new IntArrayList(IntStream.range(0, output.getSlots()).boxed().collect(Collectors.toList())),
-					output
-			);
-		}
+	private void validateSlotIndex(int slot) {
+		if (slot < 0 || slot >= activeSlots.size())
+			throw new RuntimeException("Slot " + slot + " not in valid range - [0," + activeSlots.size() + ")");
 	}
 }
