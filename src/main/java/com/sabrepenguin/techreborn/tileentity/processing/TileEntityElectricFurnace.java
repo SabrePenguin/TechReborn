@@ -14,21 +14,27 @@ import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
-import com.sabrepenguin.techreborn.capability.stackhandler.LimitedItemStackHandler;
-import com.sabrepenguin.techreborn.capability.stackhandler.RestrictedItemStackHandler;
-import com.sabrepenguin.techreborn.capability.stackhandler.SlotType;
+import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -39,6 +45,11 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	private final RestrictedItemStackHandler input;
 	private final RestrictedItemStackHandler battery;
 	private final LimitedItemStackHandler output;
+	private final IEnergyStorage energyStorage;
+
+	private final SideConfigItemStackHandler top;
+	private final SideConfigItemStackHandler side;
+	private final SideConfigItemStackHandler bottom;
 
 	private String customName;
 
@@ -47,6 +58,13 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		input = new RestrictedItemStackHandler(inventory, 0);
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotType.OUTPUT);
 		battery = new RestrictedItemStackHandler(inventory, 2);
+		energyStorage = new EnergyStorage(1000, 32, 0);
+		SideConfig inputConfig = new SideConfig(input, SideConfig.SlotAction.INPUT);
+		SideConfig outputConfig = new SideConfig(output, SideConfig.SlotAction.OUTPUT);
+		SideConfig batteryConfig = new SideConfig(battery, SideConfig.SlotAction.BIDIRECTIONAL);
+		top = new SideConfigItemStackHandler(inputConfig, outputConfig, batteryConfig);
+		side = new SideConfigItemStackHandler(inputConfig, outputConfig, batteryConfig);
+		bottom = new SideConfigItemStackHandler(inputConfig, outputConfig, batteryConfig);
 	}
 
 	@Override
@@ -54,12 +72,51 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		return oldState.getBlock() != newState.getBlock();
 	}
 
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		if (compound.hasKey("CustomName"))
+			this.customName = compound.getString("CustomName");
+		super.readFromNBT(compound);
+	}
 
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setTag("inventory", inventory.serializeNBT());
+		if (hasCustomName())
+			compound.setString("CustomName", customName);
+		return super.writeToNBT(compound);
+	}
 
 	@Override
 	public void update() {
 		if (this.world.isRemote)
 			return;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		return capability == CapabilityEnergy.ENERGY
+				|| capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
+				|| super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			if (facing == null) {
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+			} else if (facing == EnumFacing.UP) {
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(top);
+			} else if (facing == EnumFacing.DOWN) {
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(bottom);
+			}
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(side);
+		} else if (capability == CapabilityEnergy.ENERGY) {
+
+			return CapabilityEnergy.ENERGY.cast(energyStorage);
+		}
+		return super.getCapability(capability, facing);
 	}
 
 	@Override
@@ -85,19 +142,21 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 				.texture(GuiTextures.PROGRESS_ARROW, 20)
 				.value(new DoubleSyncValue(() -> 0.0, value -> {}))
 		);
-		panel.child(new ItemSlot().pos(56, 35)
+		panel.child(new ItemSlot().pos(55, 45)
 						.slot(new ModularSlot(input, 0)
 								.slotGroup("inputs")
 								.changeListener(this)))
-				.child(new ItemSlot().pos(116, 35)
+				.child(new ItemSlot().pos(101, 45)
 						.slot(new ModularSlot(output, 0)
 								.accessibility(false, true)));
+
 		return panel;
 	}
 
 	@Override
 	public void onChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
-
+		if (world.isRemote || init) return;
+		markDirty();
 	}
 
 	@Override

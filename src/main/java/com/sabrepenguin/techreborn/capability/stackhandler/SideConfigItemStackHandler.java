@@ -1,5 +1,7 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mcp.MethodsReturnNonnullByDefault;
@@ -7,7 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 import java.util.BitSet;
+import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -29,9 +33,16 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	/** The actual slot retrieval. Contains the actual length, and each integer maps to the handlerIndices +
 	 * localHandlerIndices arrays*/
 	private final IntArrayList activeSlots;
+	/** The set of handlers to push and pull. */
+	private SideConfig.SlotAction[] handlerDirection;
 
-	public SideConfigItemStackHandler(IItemHandlerModifiable... handlers) {
-		this.handlers = new ObjectArrayList<>(handlers);
+	public SideConfigItemStackHandler(SideConfig... handlers) {
+		this.handlers = new ObjectArrayList<>(handlers.length);
+		this.handlerDirection = new SideConfig.SlotAction[handlers.length];
+		for (int i = 0; i < handlers.length; i++) {
+			this.handlers.add(handlers[i].handler());
+			handlerDirection[i] = handlers[i].action();
+		}
 		handlerOffsets = new int[this.handlers.size()];
 
 		int totalSlots = 0;
@@ -49,8 +60,10 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 			int handlerSize = handler.getSlots();
 
 			for (int s = 0; s < handlerSize; s++) {
-				handlerIndices.set(index, handlerIndex);
-				localHandlerIndices.set(index, s);
+				//handlerIndices.set(index, handlerIndex);
+				handlerIndices.add(handlerIndex);
+				//localHandlerIndices.set(index, s);
+				localHandlerIndices.add(s);
 				enabledSlots.set(index, true);
 				index++;
 			}
@@ -104,14 +117,22 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 		validateSlotIndex(slot);
 		int index = activeSlots.getInt(slot);
-		return handlers.get(handlerIndices.getInt(index)).insertItem(localHandlerIndices.getInt(index), stack, simulate);
+		int handlerIndex = handlerIndices.getInt(index);
+		if (handlerDirection[handlerIndex] == SideConfig.SlotAction.OUTPUT) {
+			return stack;
+		}
+		return handlers.get(handlerIndex).insertItem(localHandlerIndices.getInt(index), stack, simulate);
 	}
 
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
 		validateSlotIndex(slot);
 		int index = activeSlots.getInt(slot);
-		return handlers.get(handlerIndices.getInt(index)).extractItem(localHandlerIndices.getInt(index), amount, simulate);
+		int handlerIndex = handlerIndices.getInt(index);
+		if (handlerDirection[handlerIndex] == SideConfig.SlotAction.INPUT) {
+			return ItemStack.EMPTY;
+		}
+		return handlers.get(handlerIndex).extractItem(localHandlerIndices.getInt(index), amount, simulate);
 	}
 
 	@Override
@@ -124,5 +145,18 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	private void validateSlotIndex(int slot) {
 		if (slot < 0 || slot >= activeSlots.size())
 			throw new RuntimeException("Slot " + slot + " not in valid range - [0," + activeSlots.size() + ")");
+	}
+
+	@SuppressWarnings("unused")
+	public class Sides {
+		public Int2ObjectMap<SideConfigItemStackHandler> sides;
+
+		public Sides(IItemHandlerModifiable... handlers) {
+			this(6, handlers);
+		}
+
+		public Sides(int sideCount, IItemHandlerModifiable... handlers) {
+			sides = new Int2ObjectOpenHashMap<>(sideCount);
+		}
 	}
 }
