@@ -1,17 +1,16 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 import java.util.BitSet;
-import java.util.stream.Collectors;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -34,7 +33,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	 * localHandlerIndices arrays*/
 	private final IntArrayList activeSlots;
 	/** The set of handlers to push and pull. */
-	private SideConfig.SlotAction[] handlerDirection;
+	private final SideConfig.SlotAction[] handlerDirection;
 
 	public SideConfigItemStackHandler(SideConfig... handlers) {
 		this.handlers = new ObjectArrayList<>(handlers.length);
@@ -147,16 +146,43 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 			throw new RuntimeException("Slot " + slot + " not in valid range - [0," + activeSlots.size() + ")");
 	}
 
-	@SuppressWarnings("unused")
-	public class Sides {
-		public Int2ObjectMap<SideConfigItemStackHandler> sides;
-
-		public Sides(IItemHandlerModifiable... handlers) {
-			this(6, handlers);
+	public static SideConfigItemStackHandler[] createSides(SideConfig... handlers) {
+		SideConfigItemStackHandler[] sides = new SideConfigItemStackHandler[6];
+		for (int i = 0; i < 6; i++) {
+			sides[i] = new SideConfigItemStackHandler(handlers);
 		}
+		return sides;
+	}
 
-		public Sides(int sideCount, IItemHandlerModifiable... handlers) {
-			sides = new Int2ObjectOpenHashMap<>(sideCount);
+	public NBTTagCompound writeToNbt() {
+		NBTTagCompound compound = new NBTTagCompound();
+		NBTTagList list = new NBTTagList();
+		for (int i = 0; i < enabledSlots.length(); i++) {
+			list.appendTag(new NBTTagByte(enabledSlots.get(i) ? (byte)1 : (byte)0));
+		}
+		compound.setTag("slotConfig", list);
+		return compound;
+	}
+
+	public static NBTTagList writeToNbt(SideConfigItemStackHandler[] sides) {
+		NBTTagList list = new NBTTagList();
+		for (SideConfigItemStackHandler side : sides) {
+			list.appendTag(side.writeToNbt());
+		}
+		return list;
+	}
+
+	public void readFromNbt(NBTTagCompound compound) {
+		NBTTagList list = compound.getTagList("slotConfig", 10);
+		for (int i = 0; i < list.tagCount(); i++) {
+			enabledSlots.set(i, list.getIntAt(i));
+		}
+		this.rebuildActiveSlots();
+	}
+
+	public static void readFromNbt(SideConfigItemStackHandler[] sides, NBTTagList list) {
+		for(int i = 0; i < list.tagCount(); i++) {
+			sides[i].readFromNbt(list.getCompoundTagAt(i));
 		}
 	}
 }

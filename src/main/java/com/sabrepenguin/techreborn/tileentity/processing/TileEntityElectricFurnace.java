@@ -47,9 +47,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	private final LimitedItemStackHandler output;
 	private final IEnergyStorage energyStorage;
 
-	private final SideConfigItemStackHandler top;
-	private final SideConfigItemStackHandler side;
-	private final SideConfigItemStackHandler bottom;
+	private final SideConfigItemStackHandler[] sides;
 
 	private String customName;
 
@@ -58,13 +56,12 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		input = new RestrictedItemStackHandler(inventory, 0);
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotType.OUTPUT);
 		battery = new RestrictedItemStackHandler(inventory, 2);
-		energyStorage = new EnergyStorage(1000, 32, 0);
+		upgrades = new RestrictedItemStackHandler(inventory, 3, 7);
+		energyStorage = new NbtEnergyStorage(10000, 32, 0);
 		SideConfig inputConfig = new SideConfig(input, SideConfig.SlotAction.INPUT);
 		SideConfig outputConfig = new SideConfig(output, SideConfig.SlotAction.OUTPUT);
 		SideConfig batteryConfig = new SideConfig(battery, SideConfig.SlotAction.BIDIRECTIONAL);
-		top = new SideConfigItemStackHandler(inputConfig, outputConfig, batteryConfig);
-		side = new SideConfigItemStackHandler(inputConfig, outputConfig, batteryConfig);
-		bottom = new SideConfigItemStackHandler(inputConfig, outputConfig, batteryConfig);
+		sides = SideConfigItemStackHandler.createSides(inputConfig, outputConfig, batteryConfig);
 	}
 
 	@Override
@@ -77,6 +74,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		if (compound.hasKey("CustomName"))
 			this.customName = compound.getString("CustomName");
+		SideConfigItemStackHandler.readFromNbt(this.sides, compound.getTagList("sideConfig", 10));
 		super.readFromNBT(compound);
 	}
 
@@ -85,6 +83,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		compound.setTag("inventory", inventory.serializeNBT());
 		if (hasCustomName())
 			compound.setString("CustomName", customName);
+		compound.setTag("sideConfig", SideConfigItemStackHandler.writeToNbt(this.sides));
 		return super.writeToNBT(compound);
 	}
 
@@ -106,12 +105,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing == null) {
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-			} else if (facing == EnumFacing.UP) {
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(top);
-			} else if (facing == EnumFacing.DOWN) {
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(bottom);
 			}
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(side);
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sides[facing.getIndex()]);
 		} else if (capability == CapabilityEnergy.ENERGY) {
 
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
