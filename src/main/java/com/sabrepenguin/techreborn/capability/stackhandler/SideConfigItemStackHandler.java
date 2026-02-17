@@ -33,11 +33,11 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	 * localHandlerIndices arrays*/
 	private final IntArrayList activeSlots;
 	/** The set of handlers to push and pull. */
-	private final SideConfig.SlotAction[] handlerDirection;
+	private final SlotAction[] handlerDirection;
 
 	public SideConfigItemStackHandler(SideConfig... handlers) {
 		this.handlers = new ObjectArrayList<>(handlers.length);
-		this.handlerDirection = new SideConfig.SlotAction[handlers.length];
+		this.handlerDirection = new SlotAction[handlers.length];
 		for (int i = 0; i < handlers.length; i++) {
 			this.handlers.add(handlers[i].handler());
 			handlerDirection[i] = handlers[i].action();
@@ -117,7 +117,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		validateSlotIndex(slot);
 		int index = activeSlots.getInt(slot);
 		int handlerIndex = handlerIndices.getInt(index);
-		if (handlerDirection[handlerIndex] == SideConfig.SlotAction.OUTPUT) {
+		if (handlerDirection[handlerIndex] == SlotAction.OUTPUT) {
 			return stack;
 		}
 		return handlers.get(handlerIndex).insertItem(localHandlerIndices.getInt(index), stack, simulate);
@@ -128,7 +128,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		validateSlotIndex(slot);
 		int index = activeSlots.getInt(slot);
 		int handlerIndex = handlerIndices.getInt(index);
-		if (handlerDirection[handlerIndex] == SideConfig.SlotAction.INPUT) {
+		if (handlerDirection[handlerIndex] == SlotAction.INPUT) {
 			return ItemStack.EMPTY;
 		}
 		return handlers.get(handlerIndex).extractItem(localHandlerIndices.getInt(index), amount, simulate);

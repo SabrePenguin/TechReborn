@@ -58,9 +58,9 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		battery = new RestrictedItemStackHandler(inventory, 2);
 		upgrades = new RestrictedItemStackHandler(inventory, 3, 7);
 		energyStorage = new NbtEnergyStorage(10000, 32, 0);
-		SideConfig inputConfig = new SideConfig(input, SideConfig.SlotAction.INPUT);
-		SideConfig outputConfig = new SideConfig(output, SideConfig.SlotAction.OUTPUT);
-		SideConfig batteryConfig = new SideConfig(battery, SideConfig.SlotAction.BIDIRECTIONAL);
+		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
+		SideConfig outputConfig = new SideConfig(output, SlotAction.OUTPUT);
+		SideConfig batteryConfig = new SideConfig(battery, SlotAction.BIDIRECTIONAL);
 		sides = SideConfigItemStackHandler.createSides(inputConfig, outputConfig, batteryConfig);
 	}
 
