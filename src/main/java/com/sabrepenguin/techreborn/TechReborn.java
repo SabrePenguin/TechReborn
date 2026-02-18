@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn;
 
 import com.sabrepenguin.techreborn.gui.GuiHandler;
+import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.proxy.IProxy;
 import com.sabrepenguin.techreborn.recipe.TRRecipeLoader;
 import com.sabrepenguin.techreborn.tabs.TRTab;
@@ -40,23 +41,21 @@ public class TechReborn {
     public static final CreativeTabs RESOURCE_TAB = new TRTab();
 
     @EventHandler
-    // preInit "Run before anything else. Read your config, create blocks, items, etc. (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         // register to the event bus so that we can listen to events
         MinecraftForge.EVENT_BUS.register(this);
 		NetworkRegistry.INSTANCE.registerGuiHandler(TechReborn.instance, new GuiHandler());
+		TechRebornPacketHandler.init();
 		proxy.preInit(event);
     }
 
     @SubscribeEvent
-    // Register recipes here (Remove if not needed)
     public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
 		TRRecipeLoader loader = new TRRecipeLoader();
 		loader.loadRecipes();
     }
 
     @EventHandler
-    // load "Do your mod setup. Build whatever data structures you care about." (Remove if not needed)
     public void init(FMLInitializationEvent event) {
 		GameRegistry.registerWorldGenerator(new WorldGenTrees(), 0);
 		proxy.init(event);

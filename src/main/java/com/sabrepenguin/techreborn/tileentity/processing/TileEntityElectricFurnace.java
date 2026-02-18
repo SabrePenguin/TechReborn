@@ -8,6 +8,7 @@ import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
+import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ProgressWidget;
 import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
@@ -15,11 +16,17 @@ import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
+import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
+import com.sabrepenguin.techreborn.gui.SlotPosition;
+import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -37,6 +44,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -88,6 +96,31 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	}
 
 	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public @Nullable SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, 3, this.getUpdateTag());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		this.readFromNBT(pkt.getNbtCompound());
+	}
+
+	@Override
+	public void setSlotEnabled(int sideIndex, int handlerIndex, int localSlotIndex, boolean enabled) {
+		if (sides[sideIndex].setSlotEnabled(handlerIndex, localSlotIndex, enabled)) {
+			markDirty();
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 3);
+		}
+	}
+
+	@Override
 	public void update() {
 		if (this.world.isRemote)
 			return;
@@ -117,7 +150,16 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	@Override
 	public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
 		ModularPanel panel = ModularPanel.defaultPanel("electric_furnace");
-		syncManager.registerSlotGroup(new SlotGroup("inputs", 1));
+		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
+		syncManager.registerSlotGroup(new SlotGroup("inputs", 1, 1, true))
+				.registerSlotGroup(new SlotGroup("upgrades", 4));
+		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
+				(syncManager1, syncHandler) ->
+						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
+								this.sides, getFacing,
+								new SlotPosition(SlotAction.INPUT, 55, 45, 0, 0),
+								new SlotPosition(SlotAction.OUTPUT, 101, 45, 1, 0),
+								new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)));
 		if (hasCustomName()) {
 			panel.child(IKey.str(getName())
 					.asWidget()
@@ -143,8 +185,15 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 								.changeListener(this)))
 				.child(new ItemSlot().pos(101, 45)
 						.slot(new ModularSlot(output, 0)
-								.accessibility(false, true)));
-
+								.accessibility(false, true)))
+				.child(new ItemSlot().pos(7, 59)
+						.slot(new ModularSlot(battery, 0)));
+		panel.child(new PowerDisplayWidget()
+				.pos(9, 6)
+				.energyHandler(this.energyStorage)
+				.value(new IntSyncValue(energyStorage::getEnergyStored)));
+		panel.child(TRGuis.createUpdateTab(upgrades, "upgrades").leftRelOffset(1f, 1));
+		TRGuis.addConfigPanel(panel, panelHandler);
 		return panel;
 	}
 
