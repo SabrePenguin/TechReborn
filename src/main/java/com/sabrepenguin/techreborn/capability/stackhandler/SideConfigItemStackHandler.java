@@ -10,7 +10,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.BitSet;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
@@ -28,7 +27,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	 * ie. [0, 1, 2, 3, 0, 1, 2, 0]*/
 	private final IntArrayList localHandlerIndices;
 	/** Maps the enabled slots from the localHandlerIndices. Used for tracking and updating the activeSlots*/
-	private final BitSet enabledSlots;
+	private final boolean[] enabled;
 	/** The actual slot retrieval. Contains the actual length, and each integer maps to the handlerIndices +
 	 * localHandlerIndices arrays*/
 	private final IntArrayList activeSlots;
@@ -51,7 +50,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		}
 		this.handlerIndices = new IntArrayList(totalSlots);
 		this.localHandlerIndices = new IntArrayList(totalSlots);
-		this.enabledSlots = new BitSet(totalSlots);
+		this.enabled = new boolean[totalSlots];
 
 		int index = 0;
 		for (int handlerIndex = 0; handlerIndex < this.handlers.size(); handlerIndex++) {
@@ -59,11 +58,9 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 			int handlerSize = handler.getSlots();
 
 			for (int s = 0; s < handlerSize; s++) {
-				//handlerIndices.set(index, handlerIndex);
 				handlerIndices.add(handlerIndex);
-				//localHandlerIndices.set(index, s);
 				localHandlerIndices.add(s);
-				enabledSlots.set(index, true);
+				this.enabled[index] = true;
 				index++;
 			}
 		}
@@ -75,22 +72,33 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	private void rebuildActiveSlots() {
 		activeSlots.clear();
 		for (int i = 0; i < handlerIndices.size(); i++) {
-			if (enabledSlots.get(i)) {
+			if (enabled[i]) {
 				activeSlots.add(i);
 			}
 		}
 	}
 
-	public void setSlotEnabled(int handlerIndex, int localSlotIndex, boolean enabled) {
-		if (handlerIndex < 0 || handlerIndex >= handlers.size()) return;
+	public boolean setSlotEnabled(int handlerIndex, int localSlotIndex, boolean enabled) {
+		if (handlerIndex < 0 || handlerIndex >= handlers.size()) return false;
 		int index = handlerOffsets[handlerIndex] + localSlotIndex;
 		int startOfNextHandler = (handlerIndex + 1 < handlerOffsets.length) ?
 				handlerOffsets[handlerIndex + 1] : handlerIndices.size();
-		if (index >= startOfNextHandler) return;
-		if (enabledSlots.get(index) != enabled) {
-			enabledSlots.set(index, enabled);
+		if (index >= startOfNextHandler) return false;
+		if (this.enabled[index] != enabled) {
+			this.enabled[index] = enabled;
 			rebuildActiveSlots();
+			return true;
 		}
+		return false;
+	}
+
+	public boolean getSlotEnabled(int handlerIndex, int localSlotIndex) {
+		if (handlerIndex < 0 || handlerIndex >= handlers.size()) return false;
+		int index = handlerOffsets[handlerIndex] + localSlotIndex;
+		int startOfNextHandler = (handlerIndex + 1 < handlerOffsets.length) ?
+				handlerOffsets[handlerIndex + 1] : handlerIndices.size();
+		if (index >= startOfNextHandler) return false;
+		return enabled[index];
 	}
 
 	@Override
@@ -157,8 +165,8 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	public NBTTagCompound writeToNbt() {
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagList list = new NBTTagList();
-		for (int i = 0; i < enabledSlots.length(); i++) {
-			list.appendTag(new NBTTagByte(enabledSlots.get(i) ? (byte)1 : (byte)0));
+		for (boolean b : enabled) {
+			list.appendTag(new NBTTagByte(b ? (byte) 1 : (byte) 0));
 		}
 		compound.setTag("slotConfig", list);
 		return compound;
@@ -173,9 +181,9 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	}
 
 	public void readFromNbt(NBTTagCompound compound) {
-		NBTTagList list = compound.getTagList("slotConfig", 10);
+		NBTTagList list = compound.getTagList("slotConfig", 1);
 		for (int i = 0; i < list.tagCount(); i++) {
-			enabledSlots.set(i, list.getIntAt(i));
+			enabled[i] = ((NBTTagByte) list.get(i)).getByte() != (byte) 0;
 		}
 		this.rebuildActiveSlots();
 	}
