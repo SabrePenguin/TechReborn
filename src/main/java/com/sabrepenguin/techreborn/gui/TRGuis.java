@@ -17,6 +17,7 @@ import com.cleanroommc.modularui.widgets.SlotGroupWidget;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigItemStackHandler;
+import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.networking.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
@@ -97,7 +98,7 @@ public class TRGuis {
 			IPanelHandler panelHandler = syncManager.syncedPanel("slot config " + i, true,
 					(syncManager1, syncHandler1) ->
 							createSlotConfigPanel(syncManager1, syncHandler1, pos, handlers, position.handlerSlot(), position.slot(), getFacing));
-			panel.child(new ButtonWidget<>()
+			panel.child(new TRButtonWidget<>()
 					.pos(position.x(), position.y())
 					.onMousePressed(mouseButton -> {
 						panelHandler.openPanel();
