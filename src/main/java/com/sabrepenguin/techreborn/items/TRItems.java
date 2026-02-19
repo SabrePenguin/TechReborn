@@ -35,13 +35,13 @@ import java.util.List;
 @GameRegistry.ObjectHolder(Tags.MODID)
 public class TRItems {
 
-    public static final Item ingot = null;
-    public static final Item dust = null;
-    public static final Item smalldust = null;
-    public static final Item nuggets = null;
-    public static final Item gem = null;
-    public static final Item part = null;
-    public static final Item plates = null;
+    public static final MaterialItem ingot = null;
+    public static final MaterialItem dust = null;
+    public static final MaterialItem smalldust = null;
+    public static final MaterialItem nuggets = null;
+    public static final MaterialItem gem = null;
+    public static final MaterialItem part = null;
+    public static final MaterialItem plates = null;
     public static final Item uumatter = null;
 
     public static final TRAxe bronzeaxe = null;
@@ -87,6 +87,7 @@ public class TRItems {
 	public static final ItemCloak cloakingdevice = null;
     public static final ItemWrench wrench = null;
 	public static final TreeTap treetap = null;
+	public static final ItemUpgrade upgrades = null;
 
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
@@ -145,66 +146,9 @@ public class TRItems {
         items.add(new ItemWrench());
 		items.add(new TreeTap());
 
+		items.add(new ItemUpgrade());
+
         return items;
-    }
-
-    public static List<Item> getAllItems() {
-        List<Item> allItems = new ArrayList<>();
-        Collections.addAll(allItems,
-                TRItems.dust,
-                TRItems.gem,
-                TRItems.ingot,
-                TRItems.nuggets,
-                TRItems.part,
-                TRItems.plates,
-                TRItems.smalldust,
-                TRItems.uumatter,
-
-                TRItems.bronzeaxe,
-                TRItems.bronzehoe,
-                TRItems.bronzepickaxe,
-                TRItems.bronzespade,
-                TRItems.bronzesword,
-                TRItems.bronzehelmet,
-				TRItems.bronzechestplate,
-				TRItems.bronzeleggings,
-				TRItems.bronzeboots,
-
-                TRItems.rubyaxe,
-                TRItems.rubyhoe,
-                TRItems.rubypickaxe,
-                TRItems.rubyspade,
-                TRItems.rubysword,
-				TRItems.rubyhelmet,
-				TRItems.rubychestplate,
-				TRItems.rubyleggings,
-				TRItems.rubyboots,
-
-                TRItems.peridotaxe,
-                TRItems.peridothoe,
-                TRItems.peridotpickaxe,
-                TRItems.peridotspade,
-                TRItems.peridotsword,
-				TRItems.peridothelmet,
-				TRItems.peridotchestplate,
-				TRItems.peridotleggings,
-				TRItems.peridotboots,
-
-                TRItems.sapphireaxe,
-                TRItems.sapphirehoe,
-                TRItems.sapphirepickaxe,
-                TRItems.sapphirespade,
-                TRItems.sapphiresword,
-				TRItems.sapphirehelmet,
-				TRItems.sapphirechestplate,
-				TRItems.sapphireleggings,
-				TRItems.sapphireboots,
-
-				TRItems.cloakingdevice,
-                TRItems.wrench,
-				TRItems.treetap
-        );
-        return allItems;
     }
 
     @SubscribeEvent
@@ -307,7 +251,7 @@ public class TRItems {
 		register(registry, TRBlocks.water_mill);
 		register(registry, TRBlocks.wind_mill);
 		registerMetaBlock(registry, TRBlocks.solar_panel);
-		registerMetaBlock(registry, TRBlocks.cable);
+//		registerMetaBlock(registry, TRBlocks.cable);
 	}
 
 	@SuppressWarnings("ConstantConditions")

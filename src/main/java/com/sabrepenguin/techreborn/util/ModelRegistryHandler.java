@@ -27,11 +27,68 @@ public class ModelRegistryHandler {
 
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        for (Item item: TRItems.getAllItems()) {
-			registerItemModels(item);
-        }
+		registerItemModels();
 		registerBlockModels();
     }
+
+	private static void registerItemModels() {
+		materialItemRegistration(TRItems.dust);
+		materialItemRegistration(TRItems.gem);
+		materialItemRegistration(TRItems.ingot);
+		materialItemRegistration(TRItems.nuggets);
+		materialItemRegistration(TRItems.part);
+		materialItemRegistration(TRItems.plates);
+		materialItemRegistration(TRItems.smalldust);
+
+		itemModelRegistration(TRItems.uumatter);
+
+		itemModelRegistration(TRItems.bronzeaxe);
+		itemModelRegistration(TRItems.bronzehoe);
+		itemModelRegistration(TRItems.bronzepickaxe);
+		itemModelRegistration(TRItems.bronzespade);
+		itemModelRegistration(TRItems.bronzesword);
+		itemModelRegistration(TRItems.bronzehelmet);
+		itemModelRegistration(TRItems.bronzechestplate);
+		itemModelRegistration(TRItems.bronzeleggings);
+		itemModelRegistration(TRItems.bronzeboots);
+
+		itemModelRegistration(TRItems.rubyaxe);
+		itemModelRegistration(TRItems.rubyhoe);
+		itemModelRegistration(TRItems.rubypickaxe);
+		itemModelRegistration(TRItems.rubyspade);
+		itemModelRegistration(TRItems.rubysword);
+		itemModelRegistration(TRItems.rubyhelmet);
+		itemModelRegistration(TRItems.rubychestplate);
+		itemModelRegistration(TRItems.rubyleggings);
+		itemModelRegistration(TRItems.rubyboots);
+
+		itemModelRegistration(TRItems.peridotaxe);
+		itemModelRegistration(TRItems.peridothoe);
+		itemModelRegistration(TRItems.peridotpickaxe);
+		itemModelRegistration(TRItems.peridotspade);
+		itemModelRegistration(TRItems.peridotsword);
+		itemModelRegistration(TRItems.peridothelmet);
+		itemModelRegistration(TRItems.peridotchestplate);
+		itemModelRegistration(TRItems.peridotleggings);
+		itemModelRegistration(TRItems.peridotboots);
+
+		itemModelRegistration(TRItems.sapphireaxe);
+		itemModelRegistration(TRItems.sapphirehoe);
+		itemModelRegistration(TRItems.sapphirepickaxe);
+		itemModelRegistration(TRItems.sapphirespade);
+		itemModelRegistration(TRItems.sapphiresword);
+		itemModelRegistration(TRItems.sapphirehelmet);
+		itemModelRegistration(TRItems.sapphirechestplate);
+		itemModelRegistration(TRItems.sapphireleggings);
+		itemModelRegistration(TRItems.sapphireboots);
+
+		itemModelRegistration(TRItems.cloakingdevice);
+
+		itemModelRegistration(TRItems.wrench);
+		itemModelRegistration(TRItems.treetap);
+
+		metaItemRegistration(TRItems.upgrades);
+	}
 
 	private static void registerBlockModels() {
 		propertiesMetaRegistration(TRBlocks.storage);
@@ -217,31 +274,37 @@ public class ModelRegistryHandler {
 		);
 	}
 
-	private static void registerItemModels(Item item) {
-		String prefix = "";
-		String postfix = "";
-		if (item instanceof INonStandardLocation nonStandardLocation) {
-			prefix = nonStandardLocation.getPrefix();
-			postfix = nonStandardLocation.getPostfix();
-		}
-		ResourceLocation location = ModelRegistryUtils.fixLocation(item.getRegistryName(), prefix, postfix);
-
-		if (item.getHasSubtypes()) {
-			if (item instanceof MaterialItem material) {
-				for (Pair<String, Integer> metadata: material.getMeta()) {
-					ModelLoader.setCustomModelResourceLocation(
-							item,
-							metadata.getRight(),
-							new ModelResourceLocation(location, "type=" + metadata.getLeft())
-					);
-				}
-				return;
-			}
-		}
+	private static void itemModelRegistration(Item item) {
+		// Fine to do this, there's no foldering of the item
+		if (!(item instanceof INonStandardLocation)) return;
+		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(item);
 		ModelLoader.setCustomModelResourceLocation(
 				item,
 				0,
-				new ModelResourceLocation(location, "inventory")
+				new ModelResourceLocation(customLocation, "inventory")
 		);
+	}
+
+	private static void metaItemRegistration(Item item) {
+		if (!(item instanceof IMetaInformation meta)) return;
+		for (Pair<String, Integer> metadata: meta.getMeta()) {
+			ResourceLocation location = ModelRegistryUtils.fixLocation(new ResourceLocation(Tags.MODID, metadata.getLeft()), item);
+			ModelLoader.setCustomModelResourceLocation(
+					item,
+					metadata.getRight(),
+					new ModelResourceLocation(location, "inventory")
+			);
+		}
+	}
+
+	private static void materialItemRegistration(MaterialItem item) {
+		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(item);
+		for (Pair<String, Integer> metadata: item.getMeta()) {
+			ModelLoader.setCustomModelResourceLocation(
+					item,
+					metadata.getRight(),
+					new ModelResourceLocation(customLocation, "type=" + metadata.getLeft())
+			);
+		}
 	}
 }

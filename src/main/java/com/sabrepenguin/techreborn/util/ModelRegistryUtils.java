@@ -61,6 +61,13 @@ public class ModelRegistryUtils {
 						location.getPostfix());
 	}
 
+	public static ResourceLocation fixLocation(ResourceLocation original, Item item) {
+		if (item instanceof INonStandardLocation location) {
+			return fixLocation(original, location.getPrefix(), location.getPostfix());
+		}
+		return original;
+	}
+
     public static ResourceLocation fixLocation(ResourceLocation original, String prefix, String postfix) {
 		if (!prefix.isEmpty()) {
 			prefix = prefix.endsWith("/") ? prefix : prefix + "/";
