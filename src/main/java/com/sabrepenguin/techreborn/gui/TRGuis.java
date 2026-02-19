@@ -3,8 +3,10 @@ package com.sabrepenguin.techreborn.gui;
 import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
+import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.drawable.ItemDrawable;
+import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
@@ -16,6 +18,7 @@ import com.cleanroommc.modularui.widgets.Expandable;
 import com.cleanroommc.modularui.widgets.SlotGroupWidget;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigItemStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.items.TRItems;
@@ -30,6 +33,10 @@ import java.util.function.Supplier;
 public class TRGuis {
 
 	public static final int PLAYER_INVENTORY_HEIGHT = 82;
+
+	public static final UITexture OUTPUT = UITexture.builder().location(Tags.MODID, "gui/output_slot").nonOpaque().fullImage().build();
+	public static final UITexture INPUT = UITexture.builder().location(Tags.MODID, "gui/input_slot").nonOpaque().fullImage().build();
+	public static final UITexture DUAL = UITexture.builder().location(Tags.MODID, "gui/dual_slot").nonOpaque().fullImage().build();
 
 	public static Expandable createUpdateTab(IItemHandler handler, String groupName) {
 		return new Expandable()
@@ -97,7 +104,7 @@ public class TRGuis {
 			SlotPosition position = slotPositions[i];
 			IPanelHandler panelHandler = syncManager.syncedPanel("slot config " + i, true,
 					(syncManager1, syncHandler1) ->
-							createSlotConfigPanel(syncManager1, syncHandler1, pos, handlers, position.handlerSlot(), position.slot(), getFacing));
+							createSlotConfigPanel(syncManager1, syncHandler1, pos, handlers, position.handlerSlot(), position.slot(), getFacing, position.action()));
 			panel.child(new TRButtonWidget<>()
 					.pos(position.x(), position.y())
 					.onMousePressed(mouseButton -> {
@@ -111,11 +118,11 @@ public class TRGuis {
 	private static ModularPanel createSlotConfigPanel(
 			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos,
 			SideConfigItemStackHandler[] handlers, int handlerIndex, int slot,
-			Supplier<EnumFacing> getFacing) {
+			Supplier<EnumFacing> getFacing, SlotAction action) {
 		ModularPanel panel = new Dialog<>("dialog_" + handlerIndex + "_" + slot).size(52);
 		panel.child(ButtonWidget.panelCloseButton());
 		for (int i = 0; i < 6; i++) {
-			addEnumFacingButtons(pos, panel, i, handlers, handlerIndex, slot, getFacing);
+			addEnumFacingButtons(pos, panel, i, handlers, handlerIndex, slot, getFacing, action);
 		}
 		return panel;
 	}
@@ -123,7 +130,7 @@ public class TRGuis {
 	private static void addEnumFacingButtons(
 			BlockPos pos, ModularPanel panel, int relativeIndex,
 			SideConfigItemStackHandler[] handlers, int handlerIndex, int slot,
-			Supplier<EnumFacing> getFacing) {
+			Supplier<EnumFacing> getFacing, SlotAction action) {
 		ButtonWidget<?> button = new ButtonWidget<>().size(16);
 		switch (relativeIndex) {
 			case 0: button.alignX(0.5f).bottom(2); break;
@@ -133,9 +140,18 @@ public class TRGuis {
 			case 4: button.alignY(0.5f).left(2); break;
 			case 5: button.alignY(0.5f).right(2); break;
 		}
+		EnumFacing absolute = TRGuis.getAbsoluteFacing(relativeIndex, getFacing.get());
+		button.overlay((context, x, y, width, height, theme) -> {
+			boolean isEnabled = handlers[absolute.getIndex()].getSlotEnabled(handlerIndex, slot);
+			if (isEnabled) {
+				switch (action) {
+					case OUTPUT -> OUTPUT.draw(x, y, width, height);
+					case INPUT -> INPUT.draw(x, y, width, height);
+					case BIDIRECTIONAL -> DUAL.draw(x, y, width, height);
+				}
+			}
+		});
 		button.onMousePressed(mouseButton -> {
-			EnumFacing front = getFacing.get();
-			EnumFacing absolute = TRGuis.getAbsoluteFacing(relativeIndex, front);
 			int sideIndex = absolute.getIndex();
 			SideConfigItemStackHandler h = handlers[sideIndex];
 			boolean enabled = h.getSlotEnabled(handlerIndex, slot);
