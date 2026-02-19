@@ -45,6 +45,7 @@ public class TRGuis {
 	public static final UITexture OUTPUT = UITexture.builder().location(Tags.MODID, "gui/output_slot").nonOpaque().fullImage().build();
 	public static final UITexture INPUT = UITexture.builder().location(Tags.MODID, "gui/input_slot").nonOpaque().fullImage().build();
 	public static final UITexture DUAL = UITexture.builder().location(Tags.MODID, "gui/dual_slot").nonOpaque().fullImage().build();
+	public static final UITexture CONFIG = UITexture.builder().location(Tags.MODID, "gui/config_button").nonOpaque().fullImage().build();
 
 	public static Expandable createUpdateTab(IItemHandler handler, String groupName) {
 		return new Expandable()
@@ -74,7 +75,8 @@ public class TRGuis {
 		mainPanel.child(new ButtonWidget<>()
 				.size(20)
 				.right(5)
-				.bottom(PLAYER_INVENTORY_HEIGHT + 3)
+				.bottom(PLAYER_INVENTORY_HEIGHT + 6)
+				.overlay(CONFIG)
 				.onMousePressed(mouseButton -> {
 					panelHandler.openPanel();
 					return panelHandler.isPanelOpen();
@@ -99,7 +101,8 @@ public class TRGuis {
 		panel.child(buttonWidget
 				.size(20)
 				.right(5)
-				.bottom(3)
+				.bottom(6)
+				.overlay(CONFIG)
 				.onMousePressed(mouseButton -> {
 					if (mouseButton == 0 || mouseButton == 1) {
 						buttonWidget.getPanel().closeIfOpen();
