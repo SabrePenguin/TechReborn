@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.tileentity.processing;
 
 import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.factory.PosGuiData;
@@ -15,6 +16,7 @@ import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
+import com.sabrepenguin.techreborn.capability.NbtEnergyStorage;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
@@ -37,8 +39,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -48,12 +48,13 @@ import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNameable, ITickable, IGuiHolder<PosGuiData>, IOnSlotChanged {
+public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNameable, ITickable, IGuiHolder<PosGuiData>, IOnSlotChanged, ISideConfigTE {
 	private final ItemStackHandler inventory;
 	private final RestrictedItemStackHandler input;
 	private final RestrictedItemStackHandler battery;
 	private final LimitedItemStackHandler output;
-	private final IEnergyStorage energyStorage;
+	private final RestrictedItemStackHandler upgrades;
+	private final NbtEnergyStorage energyStorage;
 
 	private final SideConfigItemStackHandler[] sides;
 
@@ -80,6 +81,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		if (compound.hasKey("energy"))
+			energyStorage.setEnergy(compound.getInteger("energy"));
 		if (compound.hasKey("CustomName"))
 			this.customName = compound.getString("CustomName");
 		SideConfigItemStackHandler.readFromNbt(this.sides, compound.getTagList("sideConfig", 10));
@@ -89,6 +92,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
+		compound.setInteger("energy", energyStorage.getEnergyStored());
 		if (hasCustomName())
 			compound.setString("CustomName", customName);
 		compound.setTag("sideConfig", SideConfigItemStackHandler.writeToNbt(this.sides));
@@ -174,8 +178,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		panel.bindPlayerInventory();
 		panel.child(new ProgressWidget()
 				.size(20)
-				.leftRelOffset(0.5f, 3)
-				.topRelOffset(0.25f, -2)
+				.leftRelOffset(0.5f, -1)
+				.topRelOffset(0.3f, 2)
 				.texture(GuiTextures.PROGRESS_ARROW, 20)
 				.value(new DoubleSyncValue(() -> 0.0, value -> {}))
 		);

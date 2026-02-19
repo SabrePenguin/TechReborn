@@ -5,7 +5,6 @@ import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.drawable.GuiTextures;
-import com.cleanroommc.modularui.drawable.ItemDrawable;
 import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.viewport.GuiContext;
@@ -66,8 +65,9 @@ public class TRGuis {
 						.child(IKey.str("Upgrades").asWidget().scale(1f).pos(25, 8).marginRight(8))
 						.child(SlotGroupWidget.builder()
 								.matrix("II", "II")
-								.key('I', i -> new ItemSlot().slot(new ModularSlot(handler, i).slotGroup(groupName))
-										.addTooltipLine("This slot is empty"))
+								.key('I', i -> new ItemSlot().slot(new ModularSlot(handler, i)
+										.slotGroup(groupName)
+										.filter(stack -> stack.getItem() == TRItems.upgrades)))
 								.build()
 								.margin(5, 5, 25, 15).name("crafting").alignX(0.5f)));
 	}
@@ -114,7 +114,7 @@ public class TRGuis {
 		// Button creation. Creates a button on top of each individual slot
 		for (int i = 0; i < slotPositions.length; i++) {
 			SlotPosition position = slotPositions[i];
-			IPanelHandler panelHandler = syncManager.syncedPanel("slot config " + i, true,
+			IPanelHandler panelHandler = syncManager.syncedPanel("slot_config_" + i, true,
 					(syncManager1, syncHandler1) ->
 							createSlotConfigPanel(syncManager1, syncHandler1, pos, handlers, position.handlerSlot(), position.slot(), getFacing, position.action()));
 			panel.child(new TRButtonWidget<>()
