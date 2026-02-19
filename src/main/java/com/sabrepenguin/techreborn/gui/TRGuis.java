@@ -46,6 +46,7 @@ public class TRGuis {
 	public static final UITexture INPUT = UITexture.builder().location(Tags.MODID, "gui/input_slot").nonOpaque().fullImage().build();
 	public static final UITexture DUAL = UITexture.builder().location(Tags.MODID, "gui/dual_slot").nonOpaque().fullImage().build();
 	public static final UITexture CONFIG = UITexture.builder().location(Tags.MODID, "gui/config_button").nonOpaque().fullImage().build();
+	public static final UITexture UPGRADE = UITexture.builder().location(Tags.MODID, "gui/upgrade_base").fullImage().build();
 
 	public static Expandable createUpdateTab(IItemHandler handler, String groupName) {
 		return new Expandable()
@@ -57,12 +58,12 @@ public class TRGuis {
 					r.height = Math.max(20, r.height - 5);
 				})
 				.animationDuration(500)
-				.collapsedView(new ItemDrawable(TRItems.gem, 1).asIcon().asWidget().size(20).pos(4, 4).margin(4))
+				.collapsedView(UPGRADE.asWidget().size(16).pos(4, 4).margin(4))
 				.expandedView(new ParentWidget<>()
 						.name("expanded upgrade tab")
 						.coverChildren()
-						.child(new ItemDrawable(TRItems.gem, 1).asIcon().asWidget().size(20).pos(4, 4).margin(4))
-						.child(IKey.str("Upgrades").asWidget().scale(1f).pos(27, 10).marginRight(8))
+						.child(UPGRADE.asWidget().size(16).pos(4, 4).margin(4))
+						.child(IKey.str("Upgrades").asWidget().scale(1f).pos(25, 8).marginRight(8))
 						.child(SlotGroupWidget.builder()
 								.matrix("II", "II")
 								.key('I', i -> new ItemSlot().slot(new ModularSlot(handler, i).slotGroup(groupName))
