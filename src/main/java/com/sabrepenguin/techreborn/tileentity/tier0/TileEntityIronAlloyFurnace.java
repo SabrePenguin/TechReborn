@@ -19,7 +19,6 @@ import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
-import com.sabrepenguin.techreborn.tileentity.IChangedTileEntity;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -44,7 +43,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 
 
-public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable, ISetWorldNameable, IChangedTileEntity, IOnSlotChanged, IGuiHolder<PosGuiData> {
+public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable, ISetWorldNameable, IOnSlotChanged, IGuiHolder<PosGuiData> {
 
 	private final ItemStackHandler inventory;
 	private final RestrictedItemStackHandler input;
@@ -63,7 +62,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	private boolean shouldChange = false;
 
 	public TileEntityIronAlloyFurnace() {
-		inventory = new ChangedItemStackHandler(4, this);
+		inventory = new ItemStackHandler(4);
 		input = new RestrictedItemStackHandler(inventory, 0, 2);
 		fuel = new RestrictedItemStackHandler(inventory, 2);
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 3), SlotAction.OUTPUT);
@@ -202,14 +201,6 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 		if (world.isRemote || init) return;
 		shouldChange = true;
 		markDirty();
-	}
-
-	@Override
-	public void onSlotCountChanged(int slot) {
-//		markDirty();
-//		if (slot == 0 || slot == 1) {
-//			shouldChange = true;
-//		}
 	}
 
 	@Override
