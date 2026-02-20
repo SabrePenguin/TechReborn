@@ -66,7 +66,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 		inventory = new ChangedItemStackHandler(4, this);
 		input = new RestrictedItemStackHandler(inventory, 0, 2);
 		fuel = new RestrictedItemStackHandler(inventory, 2);
-		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 3), SlotType.OUTPUT);
+		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 3), SlotAction.OUTPUT);
 	}
 
 	@Override

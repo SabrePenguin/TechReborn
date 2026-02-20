@@ -63,7 +63,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	public TileEntityElectricFurnace() {
 		inventory = new StackLimitedItemStackHandler(7, 64, 64, 64, 1, 1, 1, 1);
 		input = new RestrictedItemStackHandler(inventory, 0);
-		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotType.OUTPUT);
+		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT);
 		battery = new RestrictedItemStackHandler(inventory, 2);
 		upgrades = new RestrictedItemStackHandler(inventory, 3, 7);
 		energyStorage = new NbtEnergyStorage(10000, 32, 0);

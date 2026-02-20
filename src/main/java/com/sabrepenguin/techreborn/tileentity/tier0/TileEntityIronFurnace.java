@@ -34,7 +34,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	private final RestrictedItemStackHandler input = new RestrictedItemStackHandler(inventory, 0);
 	private final RestrictedItemStackHandler fuel = new RestrictedItemStackHandler(inventory, 1);
 	private final LimitedItemStackHandler output =
-			new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 2), SlotType.OUTPUT); // We love decorators :)
+			new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 2), SlotAction.OUTPUT);
 
 	private String customName;
 

@@ -9,10 +9,10 @@ import java.util.List;
 
 public class LimitedItemStackHandler implements IItemHandlerModifiable {
 
-	private final List<SlotType> slots;
+	private final List<SlotAction> slots;
 	private final IItemHandlerModifiable itemHandler;
 
-	public LimitedItemStackHandler(IItemHandlerModifiable itemHandler, SlotType... slots) {
+	public LimitedItemStackHandler(IItemHandlerModifiable itemHandler, SlotAction... slots) {
 		this.itemHandler = itemHandler;
 		this.slots = Arrays.asList(slots);
 	}
@@ -47,7 +47,7 @@ public class LimitedItemStackHandler implements IItemHandlerModifiable {
 	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
 		if (slot < 0 || slot >= slots.size()) return true;
 		return switch (slots.get(slot)) {
-			case ANY -> true;
+			case INPUT, BIDIRECTIONAL -> true;
 			case OUTPUT -> false;
 		};
 	}
