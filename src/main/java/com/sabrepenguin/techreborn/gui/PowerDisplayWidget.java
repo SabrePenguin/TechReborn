@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn.gui;
 
+import com.cleanroommc.modularui.ModularUIConfig;
 import com.cleanroommc.modularui.api.value.IIntValue;
 import com.cleanroommc.modularui.api.value.ISyncOrValue;
 import com.cleanroommc.modularui.api.value.sync.IIntSyncValue;
@@ -58,9 +59,24 @@ public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements In
 			int current = this.value.getIntValue();
 			float clipped = max > 0 ? (float) current / max : 0;
 			clipped = MathHelper.clamp(clipped, 0.0f, 1.0f);
-			int actual = (int) (clipped * h);
-			float uvClipped = (float) actual / h;
-			GuiDraw.drawTexture(POWER, 0, h - actual, w, h, 0.5f, 1 - uvClipped, 1, 1);
+			int maxFillHeight = h - 2;
+			int y1 = h - 1;
+			float v1 = (float) y1 / h;
+			if (ModularUIConfig.smoothProgressBar) {
+				float actual = clipped * maxFillHeight;
+				if (actual > 0) {
+					float y0 = y1 - actual;
+					float v0 = y0 / h;
+					GuiDraw.drawTexture(POWER, 0, y0, w, y1, 0.5f, v0, 1f, v1);
+				}
+			} else {
+				int actual = (int) (clipped * maxFillHeight);
+				if (actual > 0) {
+					int y0 = y1 - actual;
+					float v0 = (float) y0 / h;
+					GuiDraw.drawTexture(POWER, 0, y0, w, y1, 0.5f, v0, 1f, v1);
+				}
+			}
 		}
 	}
 
