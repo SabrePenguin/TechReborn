@@ -56,6 +56,7 @@ def default_block_model(parent: str) -> str:
     result = {"parent": parent}
     return json.dumps(result, indent=4)
 
+
 def create_blocks():
     blocks_model = BLOCK_MODELS.joinpath("storage")
     blocks_textures = BLOCK_TEXTURES.joinpath("storage")
@@ -330,6 +331,7 @@ if __name__ == "__main__":
     create_item_x("armor", registries.ARMOR)
     create_item_x("tool", registries.SINGLE_TOOLS)
     create_block_x("", registries.BLOCKS)
+    create_item_x("upgrades", registries.UPGRADES, "_upgrade")
     generate_furnace(
         "techreborn",
         "dust",

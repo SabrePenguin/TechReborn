@@ -292,6 +292,41 @@ PLATES = {
     "obsidian": 9,
     "lazurite": 10,
     "silicon": 11,
+    # Gems
+    "ruby": 12,
+    "sapphire": 13,
+    "peridot": 14,
+    "red_garnet": 15,
+    "yellow_garnet": 16,
+    # Ingots
+    "aluminum": 17,
+    "brass": 18,
+    "bronze": 19,
+    "chrome": 20,
+    "copper": 21,
+    "electrum": 22,
+    "invar": 23,
+    "iridium": 24,
+    "lead": 25,
+    "nickel": 26,
+    "platinum": 27,
+    "silver": 28,
+    "steel": 29,
+    "tin": 30,
+    "titanium": 31,
+    "tungsten": 32,
+    "tungstensteel": 33,
+    "zinc": 34,
+    "refined_iron": 35,
+    "advanced_alloy": 36,
+    "magnalium": 37,
+    "iridium_alloy": 38,
+}
+UPGRADES = {
+    "overclock": 0,
+    "transformer": 1,
+    "energy_storage": 2,
+    "superconductor": 3,
 }
 
 BLOCKS = [
