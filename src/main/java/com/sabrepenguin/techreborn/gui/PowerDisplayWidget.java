@@ -11,6 +11,7 @@ import com.cleanroommc.modularui.theme.WidgetThemeEntry;
 import com.cleanroommc.modularui.value.IntValue;
 import com.cleanroommc.modularui.widget.Widget;
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.capability.IEnergyInformation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
@@ -18,10 +19,13 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
+import java.text.DecimalFormat;
+
 public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements Interactable {
 	private IIntValue<?> value;
 	private IEnergyStorage storage;
 	private static final ResourceLocation POWER = new ResourceLocation(Tags.MODID, "textures/gui/energy.png");
+	private static final DecimalFormat DECIMAL = new DecimalFormat("#.##");
 
 	public PowerDisplayWidget() {
 		width(14);
@@ -38,14 +42,31 @@ public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements In
 			int current = this.value.getIntValue();
 			int max = storage.getMaxEnergyStored();
 			int percentage = max > 0 ? (int) (((float) current / max) * 100) : 0;
-			tooltip.addLine(current + "/" + max + "FE");
-			tooltip.addLine(percentage + "%");
 			if (Interactable.hasShiftDown()) {
-				tooltip.addLine("Max energy: " + max);
+				tooltip.addLine( TextFormatting.GOLD.toString() + current + "/" + max + " FE");
+				tooltip.addLine(TextFormatting.YELLOW.toString() + percentage + "%" + TextFormatting.WHITE + " charged");
+				if (storage instanceof IEnergyInformation energyInformation) {
+					if (energyInformation.getMaxInput() > 0) {
+						tooltip.addLine("Input Rate: " + TextFormatting.GOLD + energyInformation.getMaxInput() + "FE");
+					}
+					if (energyInformation.getMaxOutput() > 0) {
+						tooltip.addLine("Output Rate: " + TextFormatting.GOLD + energyInformation.getMaxOutput() + "FE");
+					}
+				}
 			} else {
-				tooltip.addLine(TextFormatting.BLUE + "<Shift>" + TextFormatting.WHITE + " for more");
+				tooltip.addLine( TextFormatting.GOLD + intToCompact(current) + "/" + intToCompact(max) + " FE");
+				tooltip.addLine(TextFormatting.YELLOW.toString() + percentage + "%" + TextFormatting.WHITE + " charged");
+				tooltip.addLine(TextFormatting.BLUE + "Shift" + TextFormatting.WHITE + " for more");
 			}
 		});
+	}
+
+	// TODO: Replaced with I18N version
+	private String intToCompact(int in) {
+		if (in < 1_000) return String.valueOf(in);
+		else if (in < 1_000_000) return DECIMAL.format((double) in / 1_000) + "k";
+		else if (in < 1_000_000_000) return DECIMAL.format((double) in / 1_000_000) + "m";
+		return DECIMAL.format((double)in / 1_000_000_000) + "b";
 	}
 
 	@Override

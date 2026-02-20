@@ -3,7 +3,7 @@ package com.sabrepenguin.techreborn.capability;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.energy.EnergyStorage;
 
-public class NbtEnergyStorage extends EnergyStorage {
+public class NbtEnergyStorage extends EnergyStorage implements IEnergyInformation {
 
 	public NbtEnergyStorage(int capacity) {
 		super(capacity);
@@ -24,5 +24,13 @@ public class NbtEnergyStorage extends EnergyStorage {
 	public void setEnergy(int energy) {
 		energy = MathHelper.clamp(energy, 0, capacity);
 		this.energy = energy;
+	}
+
+	public int getMaxInput() {
+		return this.maxReceive;
+	}
+
+	public int getMaxOutput() {
+		return this.maxExtract;
 	}
 }
