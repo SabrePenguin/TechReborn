@@ -1,9 +1,23 @@
 package com.sabrepenguin.techreborn.tileentity.tier0;
 
+import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.drawable.GuiTextures;
+import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.screen.ModularPanel;
+import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.widgets.ProgressWidget;
+import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
+import com.cleanroommc.modularui.widgets.slot.ItemSlot;
+import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
+import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
 import com.sabrepenguin.techreborn.tileentity.IChangedTileEntity;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,13 +38,23 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-//TODO: Extend IronFurnace instead of TE
-public class TileEntityIronFurnace extends TileEntity implements ITickable, IChangedTileEntity, ISetWorldNameable {
+import javax.annotation.ParametersAreNonnullByDefault;
 
-	private final ItemStackHandler inventory = new TRItemStackHandler(3, this);
+//TODO: Extend IronFurnace instead of TE
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class TileEntityIronFurnace extends TileEntity implements ITickable, IChangedTileEntity, ISetWorldNameable, IOnSlotChanged, IGuiHolder<PosGuiData> {
+
+	private final ItemStackHandler inventory = new ItemStackHandler(3) {
+		@Override
+		protected void onContentsChanged(int slot) {
+			if (slot == 0)
+				refreshResult = true;
+			markDirty();
+		}
+	};
 	private final RestrictedItemStackHandler input = new RestrictedItemStackHandler(inventory, 0);
 	private final RestrictedItemStackHandler fuel = new RestrictedItemStackHandler(inventory, 1);
 	private final LimitedItemStackHandler output =
@@ -44,6 +68,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	private int totalCookTime;
 
 	private ItemStack cachedResult = ItemStack.EMPTY;
+	private boolean refreshResult = false;
 
 	public boolean isBurning() {
 		return this.burnTime > 0;
@@ -53,6 +78,32 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	public static boolean isBurning(TileEntityIronFurnace inventory)
 	{
 		return inventory.getBurnTime() > 0;
+	}
+
+	@Override
+	public void onInputChanged(int slot, ItemStack removedStack, ItemStack addedStack) {
+		markDirty();
+		if (slot == 0) {
+			if (ItemStack.areItemsEqual(removedStack, addedStack) && ItemStack.areItemStackTagsEqual(removedStack, addedStack)) return;
+			cookTime = 0;
+			totalCookTime = getDefaultTotalCookTime();
+			if (addedStack.isEmpty()) {
+				cachedResult = ItemStack.EMPTY;
+			}
+			else {
+				cachedResult = FurnaceRecipes.instance().getSmeltingResult(addedStack);
+			}
+		}
+	}
+
+	private void refreshRecipe(ItemStack in) {
+		refreshResult = false;
+		ItemStack output = FurnaceRecipes.instance().getSmeltingResult(in);
+		if (cachedResult.isItemEqual(output))
+			return;
+		cookTime = 0;
+		totalCookTime = getDefaultTotalCookTime();
+		cachedResult = output;
 	}
 
 	private boolean canSmelt() {
@@ -77,7 +128,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	}
 
 	@Override
-	public @NotNull ITextComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		if (hasCustomName()) {
 			return new TextComponentString(customName);
 		}
@@ -90,7 +141,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	}
 
 	@Override
-	public @NotNull String getName() {
+	public String getName() {
 		return customName;
 	}
 
@@ -100,7 +151,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	}
 
 	@Override
-    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setInteger("BurnTime", this.burnTime);
 		compound.setInteger("CookTime", this.cookTime);
 		compound.setInteger("CookTimeTotal", this.totalCookTime);
@@ -125,7 +176,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
     }
 
 	@Override
-	public @NotNull NBTTagCompound getUpdateTag() {
+	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
 	}
 
@@ -157,83 +208,103 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 
     @Override
     public void update() {
+		if (this.world.isRemote)
+			return;
 		boolean isBurning = this.isBurning();
 		if (isBurning) {
 			this.burnTime--;
 		}
 		boolean markDirty = false;
 
-		if (!world.isRemote) {
-			ItemStack input = inventory.getStackInSlot(0);
-			ItemStack result = cachedResult;
-			if (result.isEmpty()) return;
-			ItemStack fuel = inventory.getStackInSlot(1);
-			if (this.isBurning() || (!fuel.isEmpty() && !input.isEmpty())) {
-				if (!this.isBurning() && this.canSmelt()) {
-					this.burnTime = (int)(TileEntityFurnace.getItemBurnTime(fuel)*1.25);
-					this.currentItemBurnTime = this.burnTime;
-					if (this.isBurning()) {
-						markDirty = true;
-						if (!fuel.isEmpty()) {
-							ItemStack realFuel = inventory.extractItem(1, 1, false);
-							Item item = realFuel.getItem();
-							ItemStack container = item.getContainerItem(realFuel);
-							if (!container.isEmpty()) {
-								inventory.insertItem(1, container, false);
-							}
+		ItemStack inputItemstack = input.getStackInSlot(0);
+		if (refreshResult)
+			refreshRecipe(inputItemstack);
+		ItemStack result = cachedResult;
+		if (result.isEmpty()) return;
+		ItemStack fuel = inventory.getStackInSlot(1);
+		if (this.isBurning() || (!fuel.isEmpty() && !inputItemstack.isEmpty())) {
+			if (!this.isBurning() && this.canSmelt()) {
+				this.burnTime = (int)(TileEntityFurnace.getItemBurnTime(fuel)*1.25);
+				this.currentItemBurnTime = this.burnTime;
+				if (this.isBurning()) {
+					markDirty = true;
+					if (!fuel.isEmpty()) {
+						ItemStack realFuel = inventory.extractItem(1, 1, false);
+						Item item = realFuel.getItem();
+						ItemStack container = item.getContainerItem(realFuel);
+						if (!container.isEmpty()) {
+							inventory.insertItem(1, container, false);
 						}
 					}
 				}
-				if (this.isBurning() && this.canSmelt()) {
-					cookTime++;
-					if (cookTime >= totalCookTime) {
-						cookTime = 0;
-						totalCookTime = getDefaultTotalCookTime();
-						smeltItem();
-						markDirty = true;
-					}
-				}
-				else {
+			}
+			if (this.isBurning() && this.canSmelt()) {
+				cookTime++;
+				if (cookTime >= totalCookTime) {
 					cookTime = 0;
+					totalCookTime = getDefaultTotalCookTime();
+					smeltItem();
+					markDirty = true;
 				}
 			}
-			else if (!this.isBurning() && this.cookTime > 0) {
-				cookTime = MathHelper.clamp(cookTime - 2, 0, totalCookTime);
+			else {
+				cookTime = 0;
 			}
-			if (isBurning != this.isBurning()) {
-				markDirty = true;
-				IronFurnace.setState(isBurning(), world, pos);
-			}
+		}
+		else if (!this.isBurning() && this.cookTime > 0) {
+			cookTime = MathHelper.clamp(cookTime - 2, 0, totalCookTime);
+		}
+		if (isBurning != this.isBurning()) {
+			markDirty = true;
+			IronFurnace.setState(isBurning(), world, pos);
 		}
 		if (markDirty) markDirty();
     }
 
+
 	@Override
-	public void onInputChanged(int slot, ItemStack removedStack, ItemStack addedStack) {
-		markDirty();
-		if (slot == 0) {
-			if (ItemStack.areItemsEqual(removedStack, addedStack) && ItemStack.areItemStackTagsEqual(removedStack, addedStack)) return;
-			cookTime = 0;
-			totalCookTime = getDefaultTotalCookTime();
-			if (addedStack.isEmpty()) {
-				cachedResult = ItemStack.EMPTY;
-			}
-			else {
-				cachedResult = FurnaceRecipes.instance().getSmeltingResult(addedStack);
-			}
-		}
+	public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
+		ModularPanel panel = ModularPanel.defaultPanel("iron_furnace");
+		syncManager.registerSlotGroup(new SlotGroup("input", 1))
+				.registerSlotGroup(new SlotGroup("fuel", 1, 120, true));
+		panel.bindPlayerInventory();
+		panel.child(new ProgressWidget()
+				.size(20)
+				.pos(79, 34)
+				.texture(GuiTextures.PROGRESS_ARROW, 20)
+				.value(new DoubleSyncValue(() -> (double) this.cookTime / this.totalCookTime,
+						value -> this.cookTime = (int) (value * totalCookTime))))
+				.child(new FurnaceFuelWidget()
+						.pos(58, 36)
+						.value(new DoubleSyncValue(() -> (double) this.burnTime / this.currentItemBurnTime,
+								value -> this.burnTime = (int) (value * this.currentItemBurnTime))));
+		panel.child(new ItemSlot().pos(56, 17)
+						.slot(new ModularSlot(input, 0)
+								.slotGroup("input")
+								.changeListener(this)))
+				.child(new ItemSlot().pos(56, 53)
+						.slot(new ModularSlot(fuel, 0)
+						.slotGroup("fuel")
+						.filter(item -> TileEntityFurnace.getItemBurnTime(item) != 0)))
+				.child(new ItemSlot().pos(116, 35)
+						.slot(new ModularSlot(output, 0)
+								.accessibility(false, true)));
+		return panel;
 	}
 
-//	@Override
-//	public void onSlotCountChanged(int slot) {
-//		if (world.isRemote) return;
-//		markDirty();
-//	}
+	@Override
+	public void onChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
+		if (world.isRemote || init) return;
+		if (onlyAmountChanged) return;
+		refreshResult = true;
+		markDirty();
+	}
 
 	@Override
-	public boolean shouldRefresh(@NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState oldState, @NotNull IBlockState newState) {
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
 	}
+
 
 	// We love setters and getters
 

@@ -19,6 +19,7 @@ import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,12 +37,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
-
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable, ISetWorldNameable, IOnSlotChanged, IGuiHolder<PosGuiData> {
 
 	private final ItemStackHandler inventory;
@@ -49,7 +51,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	private final RestrictedItemStackHandler fuel;
 	private final LimitedItemStackHandler output;
 
-	private int totalCookTime = 200;
+	private final int totalCookTime = 200;
 
 	private String customName;
 
@@ -61,14 +63,21 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	private boolean shouldChange = false;
 
 	public TileEntityIronAlloyFurnace() {
-		inventory = new ItemStackHandler(4);
+		inventory = new ItemStackHandler(4) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				if (slot == 0 || slot == 1)
+					shouldChange = true;
+				markDirty();
+			}
+		};
 		input = new RestrictedItemStackHandler(inventory, 0, 2);
 		fuel = new RestrictedItemStackHandler(inventory, 2);
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 3), SlotAction.OUTPUT);
 	}
 
 	@Override
-	public @NotNull ITextComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		if (hasCustomName()) {
 			return new TextComponentString(customName);
 		}
@@ -76,7 +85,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	}
 
 	@Override
-	public @NotNull String getName() {
+	public String getName() {
 		return customName;
 	}
 
@@ -132,7 +141,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	}
 
 	@Override
-	public boolean shouldRefresh(@NotNull World world, @NotNull BlockPos pos, @NotNull IBlockState oldState, @NotNull IBlockState newState) {
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
 	}
 
@@ -196,14 +205,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	}
 
 	@Override
-	public void onChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
-		if (world.isRemote || init) return;
-		shouldChange = true;
-		markDirty();
-	}
-
-	@Override
-	public @NotNull NBTTagCompound writeToNBT(@NotNull NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setInteger("BurnTime", this.burnTime);
 		compound.setInteger("TotalBurnTime", this.totalBurnTime);
 		compound.setInteger("CookTime", this.cookTime);
@@ -214,7 +216,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	}
 
 	@Override
-	public void readFromNBT(@NotNull NBTTagCompound compound) {
+	public void readFromNBT(NBTTagCompound compound) {
 		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		this.burnTime = compound.getInteger("BurnTime");
 		this.totalBurnTime = compound.getInteger("TotalBurnTime");
@@ -229,12 +231,12 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	}
 
 	@Override
-	public boolean hasCapability(@NotNull Capability<?> capability, @Nullable EnumFacing facing) {
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY == capability || super.hasCapability(capability, facing);
 	}
 
 	@Override
-	public @Nullable <T> T getCapability(@NotNull Capability<T> capability, @Nullable EnumFacing facing) {
+	public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing == null) {
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
@@ -283,4 +285,12 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 
 		return panel;
 	}
+
+	@Override
+	public void onChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
+		if (world.isRemote || init) return;
+		shouldChange = true;
+		markDirty();
+	}
+
 }
