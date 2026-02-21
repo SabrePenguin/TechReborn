@@ -2,7 +2,6 @@ package com.sabrepenguin.techreborn.tileentity.tier0;
 
 import com.cleanroommc.modularui.api.IGuiHolder;
 import com.cleanroommc.modularui.drawable.GuiTextures;
-import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
@@ -13,9 +12,9 @@ import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
-import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
+import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
 import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
@@ -263,13 +262,9 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 				.texture(GuiTextures.PROGRESS_ARROW, 20)
 				.value(new DoubleSyncValue(() -> (double) this.cookTime / this.totalCookTime, value -> this.cookTime = (int) (value * this.totalCookTime)))
 		);
-		panel.child(new ProgressWidget()
-				.size(14)
+		panel.child(new FurnaceFuelWidget()
 				.pos(58, 37)
-				.direction(ProgressWidget.Direction.UP)
-				.texture(UITexture.builder().location(Tags.MODID, "gui/fire").imageSize(14, 28).canApplyTheme().build(), 14)
-				.value(new DoubleSyncValue(() -> (double) this.burnTime / this.totalBurnTime, value -> this.burnTime = (int) (value * this.totalBurnTime)))
-		);
+				.value(new DoubleSyncValue(() -> (double) this.burnTime / this.totalBurnTime, value -> this.burnTime = (int) (value * this.totalBurnTime))));
 		panel.child(new ItemSlot().pos(47, 17)
 						.slot(new ModularSlot(input, 0)
 								.slotGroup("inputs")
