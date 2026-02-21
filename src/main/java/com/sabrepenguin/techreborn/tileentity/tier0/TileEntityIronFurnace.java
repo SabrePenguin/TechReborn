@@ -1,10 +1,13 @@
 package com.sabrepenguin.techreborn.tileentity.tier0;
 
 import com.cleanroommc.modularui.api.IGuiHolder;
+import com.cleanroommc.modularui.api.IPanelHandler;
+import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
+import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ProgressWidget;
@@ -15,13 +18,18 @@ import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
+import com.sabrepenguin.techreborn.gui.SlotPosition;
+import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
@@ -33,30 +41,22 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityIronFurnace extends TileEntity implements ITickable, ISetWorldNameable, IOnSlotChanged, IGuiHolder<PosGuiData> {
+public class TileEntityIronFurnace extends TileEntity implements ITickable, ISetWorldNameable, IOnSlotChanged, IGuiHolder<PosGuiData>, ISideConfigTE {
 
-	private final ItemStackHandler inventory = new ItemStackHandler(3) {
-		@Override
-		protected void onContentsChanged(int slot) {
-			if (slot == 0)
-				refreshResult = true;
-			markDirty();
-		}
-	};
-	private final RestrictedItemStackHandler input = new RestrictedItemStackHandler(inventory, 0);
-	private final RestrictedItemStackHandler fuel = new RestrictedItemStackHandler(inventory, 1);
-	private final LimitedItemStackHandler output =
-			new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 2), SlotAction.OUTPUT);
+	private final ItemStackHandler inventory;
+	private final RestrictedItemStackHandler input;
+	private final RestrictedItemStackHandler fuel;
+	private final LimitedItemStackHandler output;
+	private final SideConfigItemStackHandler[] sides;
 
 	private String customName;
 
@@ -67,6 +67,24 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 
 	private ItemStack cachedResult = ItemStack.EMPTY;
 	private boolean refreshResult = false;
+
+	public TileEntityIronFurnace() {
+		inventory = new ItemStackHandler(3) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				if (slot == 0)
+					refreshResult = true;
+				markDirty();
+			}
+		};
+		input = new RestrictedItemStackHandler(inventory, 0);
+		fuel = new RestrictedItemStackHandler(inventory, 1);
+		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 2), SlotAction.OUTPUT);
+		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
+		SideConfig fuelConfig = new SideConfig(fuel, SlotAction.INPUT);
+		SideConfig outputConfig = new SideConfig(output, SlotAction.OUTPUT);
+		sides = SideConfigItemStackHandler.createSides(inputConfig, fuelConfig, outputConfig);
+	}
 
 	public boolean isBurning() {
 		return this.burnTime > 0;
@@ -134,6 +152,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 		compound.setTag("inventory", inventory.serializeNBT());
 		if (hasCustomName())
 			compound.setString("CustomName", this.customName);
+		compound.setTag("SideConfig", SideConfigItemStackHandler.writeToNbt(this.sides));
         return super.writeToNBT(compound);
     }
 
@@ -148,8 +167,18 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 			this.currentItemBurnTime = (int)(TileEntityFurnace.getItemBurnTime(fuel.getStackInSlot(0)) * 1.25);
 		if (compound.hasKey("CustomName"))
 			this.customName = compound.getString("CustomName");
+		SideConfigItemStackHandler.readFromNbt(this.sides, compound.getTagList("SideConfig", 10));
         super.readFromNBT(compound);
     }
+
+	@Override
+	public void setSlotEnabled(int sideIndex, int handlerIndex, int localSlotIndex, boolean enabled) {
+		if (sides[sideIndex].setSlotEnabled(handlerIndex, localSlotIndex, enabled)) {
+			markDirty();
+			IBlockState state = world.getBlockState(pos);
+			world.notifyBlockUpdate(pos, state, state, 3);
+		}
+	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
@@ -162,6 +191,17 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 	}
 
 	@Override
+	public @Nullable SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, 3, this.getUpdateTag());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		this.readFromNBT(pkt.getNbtCompound());
+	}
+
+	@Override
     public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
         return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
     }
@@ -171,13 +211,8 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing == null) {
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
-			} else if (facing == EnumFacing.UP) {
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(input);
-			} else if (facing == EnumFacing.DOWN) {
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(output);
-			} else {
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(fuel);
 			}
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sides[facing.getIndex()]);
         }
         return super.getCapability(capability, facing);
     }
@@ -242,7 +277,30 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 	public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
 		ModularPanel panel = ModularPanel.defaultPanel("iron_furnace");
 		syncManager.registerSlotGroup(new SlotGroup("input", 1))
-				.registerSlotGroup(new SlotGroup("fuel", 1, 120, true));
+				.registerSlotGroup(new SlotGroup("fuel", 1, 80, true));
+
+		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
+		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
+				(syncManager1, syncHandler) ->
+						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
+								this.sides, getFacing,
+								new SlotPosition(SlotAction.INPUT, 56, 17, 0, 0),
+								new SlotPosition(SlotAction.INPUT, 56, 53, 1, 0),
+								new SlotPosition(SlotAction.OUTPUT, 116, 35, 2, 0)));
+		TRGuis.addConfigPanel(panel, panelHandler);
+
+		if (hasCustomName()) {
+			panel.child(IKey.str(getName())
+					.asWidget()
+					.align(Alignment.TopCenter)
+					.top(7));
+		} else {
+			panel.child(IKey.lang("tile.techreborn.iron_furnace.name")
+					.asWidget()
+					.align(Alignment.TopCenter)
+					.top(7));
+		}
+
 		panel.bindPlayerInventory();
 		panel.child(new ProgressWidget()
 				.size(24)
@@ -271,7 +329,10 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 	@Override
 	public void onChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
 		if (world.isRemote || init) return;
-		if (onlyAmountChanged) return;
+		if (onlyAmountChanged) {
+			refreshResult = false;
+			return;
+		}
 		refreshResult = true;
 		markDirty();
 	}
