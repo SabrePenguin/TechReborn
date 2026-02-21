@@ -24,7 +24,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
@@ -130,12 +129,12 @@ public class BlockHorizontalMachine extends Block implements INonStandardLocatio
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull IBlockState getStateForPlacement(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, @NotNull BlockPos pos, IBlockState state, EntityLivingBase placer, @NotNull ItemStack stack) {
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 		if (stack.hasDisplayName()) {
 			TileEntity te = worldIn.getTileEntity(pos);
@@ -147,19 +146,19 @@ public class BlockHorizontalMachine extends Block implements INonStandardLocatio
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull IBlockState withRotation(@NotNull IBlockState state, @NotNull Rotation rot) {
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
 		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull IBlockState getStateFromMeta(int meta)
+	public IBlockState getStateFromMeta(int meta)
 	{
 		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
@@ -179,7 +178,7 @@ public class BlockHorizontalMachine extends Block implements INonStandardLocatio
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NotNull EnumBlockRenderType getRenderType(@NotNull IBlockState state) {
+	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
 

@@ -72,12 +72,6 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 		return this.burnTime > 0;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static boolean isBurning(TileEntityIronFurnace inventory)
-	{
-		return inventory.getBurnTime() > 0;
-	}
-
 	private void refreshRecipe(ItemStack in) {
 		refreshResult = false;
 		ItemStack output = FurnaceRecipes.instance().getSmeltingResult(in);
@@ -285,40 +279,5 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
-	}
-
-
-	// We love setters and getters
-
-	public int getBurnTime() {
-		return burnTime;
-	}
-
-	public int getCurrentBurnTime() {
-		return currentItemBurnTime;
-	}
-
-	public int getTotalCookTime() {
-		return totalCookTime;
-	}
-
-	public int getCookTime() {
-		return cookTime;
-	}
-
-	public void setCookTime(int cookTime) {
-		this.cookTime = cookTime;
-	}
-
-	public void setBurnTime(int burnTime) {
-		this.burnTime = burnTime;
-	}
-
-	public void setTotalCookTime(int totalCookTime) {
-		this.totalCookTime = totalCookTime;
-	}
-
-	public void setCurrentBurnTime(int currentBurnTime) {
-		this.currentItemBurnTime = currentBurnTime;
 	}
 }

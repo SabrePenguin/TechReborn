@@ -8,6 +8,7 @@ import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -25,9 +26,12 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class IronFurnace extends Block implements INonStandardLocation {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     public static final PropertyBool BURNING = PropertyBool.create("active");
@@ -86,6 +90,7 @@ public class IronFurnace extends Block implements INonStandardLocation {
         }
     }
 
+	@SuppressWarnings("ConstantConditions")
     public static void setState(boolean active, World worldIn, BlockPos pos)
     {
         IBlockState state = worldIn.getBlockState(pos);
@@ -108,6 +113,7 @@ public class IronFurnace extends Block implements INonStandardLocation {
     }
 
     @Override
+	@SuppressWarnings("deprecation")
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
@@ -124,7 +130,7 @@ public class IronFurnace extends Block implements INonStandardLocation {
     }
 
     @Override
-    public void breakBlock(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state) {
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te != null && te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
             InventoryUtils.spawnDroppedItems(te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null), worldIn, pos);
@@ -133,16 +139,19 @@ public class IronFurnace extends Block implements INonStandardLocation {
     }
 
     @Override
-    public @NotNull EnumBlockRenderType getRenderType(@NotNull IBlockState state) {
+	@SuppressWarnings("deprecation")
+    public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
     @Override
-    public @NotNull IBlockState withRotation(@NotNull IBlockState state, @NotNull Rotation rot) {
+	@SuppressWarnings("deprecation")
+    public IBlockState withRotation(IBlockState state, Rotation rot) {
         return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     @Override
+	@SuppressWarnings("deprecation")
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
         return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
     }
@@ -154,6 +163,7 @@ public class IronFurnace extends Block implements INonStandardLocation {
 
 
     @Override
+	@SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta)
     {
         EnumFacing enumfacing = EnumFacing.byIndex(meta);
