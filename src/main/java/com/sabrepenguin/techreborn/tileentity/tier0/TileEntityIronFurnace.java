@@ -15,7 +15,6 @@ import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.IronFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
-import com.sabrepenguin.techreborn.tileentity.IChangedTileEntity;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
@@ -42,10 +41,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-//TODO: Extend IronFurnace instead of TE
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityIronFurnace extends TileEntity implements ITickable, IChangedTileEntity, ISetWorldNameable, IOnSlotChanged, IGuiHolder<PosGuiData> {
+public class TileEntityIronFurnace extends TileEntity implements ITickable, ISetWorldNameable, IOnSlotChanged, IGuiHolder<PosGuiData> {
 
 	private final ItemStackHandler inventory = new ItemStackHandler(3) {
 		@Override
@@ -78,22 +76,6 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 	public static boolean isBurning(TileEntityIronFurnace inventory)
 	{
 		return inventory.getBurnTime() > 0;
-	}
-
-	@Override
-	public void onInputChanged(int slot, ItemStack removedStack, ItemStack addedStack) {
-		markDirty();
-		if (slot == 0) {
-			if (ItemStack.areItemsEqual(removedStack, addedStack) && ItemStack.areItemStackTagsEqual(removedStack, addedStack)) return;
-			cookTime = 0;
-			totalCookTime = getDefaultTotalCookTime();
-			if (addedStack.isEmpty()) {
-				cachedResult = ItemStack.EMPTY;
-			}
-			else {
-				cachedResult = FurnaceRecipes.instance().getSmeltingResult(addedStack);
-			}
-		}
 	}
 
 	private void refreshRecipe(ItemStack in) {
@@ -269,13 +251,13 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ICha
 				.registerSlotGroup(new SlotGroup("fuel", 1, 120, true));
 		panel.bindPlayerInventory();
 		panel.child(new ProgressWidget()
-				.size(20)
-				.pos(79, 34)
+				.size(24)
+				.pos(80, 34)
 				.texture(GuiTextures.PROGRESS_ARROW, 20)
 				.value(new DoubleSyncValue(() -> (double) this.cookTime / this.totalCookTime,
 						value -> this.cookTime = (int) (value * totalCookTime))))
 				.child(new FurnaceFuelWidget()
-						.pos(58, 36)
+						.pos(58, 37)
 						.value(new DoubleSyncValue(() -> (double) this.burnTime / this.currentItemBurnTime,
 								value -> this.burnTime = (int) (value * this.currentItemBurnTime))));
 		panel.child(new ItemSlot().pos(56, 17)

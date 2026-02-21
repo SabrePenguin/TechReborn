@@ -1,16 +1,15 @@
 package com.sabrepenguin.techreborn.blocks.machines;
 
+import com.cleanroommc.modularui.factory.GuiFactories;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
-import com.sabrepenguin.techreborn.gui.GUI;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -51,7 +50,7 @@ public class IronFurnace extends Block implements INonStandardLocation {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            playerIn.openGui(TechReborn.instance, GUI.IRON_FURNACE.getId(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+			GuiFactories.tileEntity().open(playerIn, pos);
         }
         return true;
     }

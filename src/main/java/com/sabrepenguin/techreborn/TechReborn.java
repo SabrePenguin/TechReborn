@@ -1,6 +1,5 @@
 package com.sabrepenguin.techreborn;
 
-import com.sabrepenguin.techreborn.gui.GuiHandler;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.proxy.IProxy;
 import com.sabrepenguin.techreborn.recipe.TRRecipeLoader;
@@ -18,7 +17,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -44,7 +42,6 @@ public class TechReborn {
     public void preInit(FMLPreInitializationEvent event) {
         // register to the event bus so that we can listen to events
         MinecraftForge.EVENT_BUS.register(this);
-		NetworkRegistry.INSTANCE.registerGuiHandler(TechReborn.instance, new GuiHandler());
 		TechRebornPacketHandler.init();
 		proxy.preInit(event);
     }

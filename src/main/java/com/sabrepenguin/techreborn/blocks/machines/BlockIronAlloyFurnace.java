@@ -3,7 +3,6 @@ package com.sabrepenguin.techreborn.blocks.machines;
 import com.cleanroommc.modularui.factory.GuiFactories;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
-import com.sabrepenguin.techreborn.gui.GUI;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronAlloyFurnace;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import net.minecraft.block.ITileEntityProvider;
