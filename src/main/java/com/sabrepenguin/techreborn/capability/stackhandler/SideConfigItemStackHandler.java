@@ -26,15 +26,16 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	/** An integer array containing the slots for the handler it matches. Maps the entire handler for remapping.
 	 * ie. [0, 1, 2, 3, 0, 1, 2, 0]*/
 	private final IntArrayList localHandlerIndices;
-	/** Maps the enabled slots from the localHandlerIndices. Used for tracking and updating the activeSlots*/
-	private final boolean[] enabled;
 	/** The actual slot retrieval. Contains the actual length, and each integer maps to the handlerIndices +
 	 * localHandlerIndices arrays*/
 	private final IntArrayList activeSlots;
-	/** The set of handlers to push and pull. */
+	/** The set of handlers to push and pull. Used as the reference to determine cycle */
 	private final SlotAction[] handlerDirection;
+	/** The actual slot state. Created for individually addressable slots and rotating between push and pull*/
+	private final SlotAction[] slotDirection;
 
 	public SideConfigItemStackHandler(SideConfig... handlers) {
+		// Handler array initialization.
 		this.handlers = new ObjectArrayList<>(handlers.length);
 		this.handlerDirection = new SlotAction[handlers.length];
 		for (int i = 0; i < handlers.length; i++) {
@@ -43,6 +44,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		}
 		handlerOffsets = new int[this.handlers.size()];
 
+		// All slots initialization
 		int totalSlots = 0;
 		for (int i = 0; i < this.handlers.size(); i++) {
 			handlerOffsets[i] = totalSlots;
@@ -50,7 +52,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		}
 		this.handlerIndices = new IntArrayList(totalSlots);
 		this.localHandlerIndices = new IntArrayList(totalSlots);
-		this.enabled = new boolean[totalSlots];
+		this.slotDirection = new SlotAction[totalSlots];
 
 		int index = 0;
 		for (int handlerIndex = 0; handlerIndex < this.handlers.size(); handlerIndex++) {
@@ -60,7 +62,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 			for (int s = 0; s < handlerSize; s++) {
 				handlerIndices.add(handlerIndex);
 				localHandlerIndices.add(s);
-				this.enabled[index] = true;
+				slotDirection[index] = SlotAction.DISABLED;
 				index++;
 			}
 		}
@@ -72,33 +74,28 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	private void rebuildActiveSlots() {
 		activeSlots.clear();
 		for (int i = 0; i < handlerIndices.size(); i++) {
-			if (enabled[i]) {
+			if (slotDirection[i] != SlotAction.DISABLED)
 				activeSlots.add(i);
-			}
 		}
 	}
 
-	public boolean setSlotEnabled(int handlerIndex, int localSlotIndex, boolean enabled) {
+	public boolean rotateSlot(int handlerIndex, int localSlotIndex) {
 		if (handlerIndex < 0 || handlerIndex >= handlers.size()) return false;
 		int index = handlerOffsets[handlerIndex] + localSlotIndex;
 		int startOfNextHandler = (handlerIndex + 1 < handlerOffsets.length) ?
 				handlerOffsets[handlerIndex + 1] : handlerIndices.size();
 		if (index >= startOfNextHandler) return false;
-		if (this.enabled[index] != enabled) {
-			this.enabled[index] = enabled;
-			rebuildActiveSlots();
-			return true;
-		}
-		return false;
+		this.slotDirection[index] = this.handlerDirection[handlerIndex].rotate(this.slotDirection[index]);
+		return true;
 	}
 
-	public boolean getSlotEnabled(int handlerIndex, int localSlotIndex) {
-		if (handlerIndex < 0 || handlerIndex >= handlers.size()) return false;
+	public SlotAction getSlotAction(int handlerIndex, int localSlotIndex) {
+		if (handlerIndex < 0 || handlerIndex >= handlers.size()) return SlotAction.DISABLED;
 		int index = handlerOffsets[handlerIndex] + localSlotIndex;
 		int startOfNextHandler = (handlerIndex + 1 < handlerOffsets.length) ?
 				handlerOffsets[handlerIndex + 1] : handlerIndices.size();
-		if (index >= startOfNextHandler) return false;
-		return enabled[index];
+		if (index >= startOfNextHandler) return SlotAction.DISABLED;
+		return this.slotDirection[index];
 	}
 
 	@Override
@@ -165,10 +162,10 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	public NBTTagCompound writeToNbt() {
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagList list = new NBTTagList();
-		for (boolean b : enabled) {
-			list.appendTag(new NBTTagByte(b ? (byte) 1 : (byte) 0));
+		for (SlotAction action: this.slotDirection) {
+			list.appendTag(new NBTTagByte(action.getByte()));
 		}
-		compound.setTag("slotConfig", list);
+		compound.setTag("SlotConfig", list);
 		return compound;
 	}
 
@@ -181,9 +178,9 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	}
 
 	public void readFromNbt(NBTTagCompound compound) {
-		NBTTagList list = compound.getTagList("slotConfig", 1);
-		for (int i = 0; i < list.tagCount(); i++) {
-			enabled[i] = ((NBTTagByte) list.get(i)).getByte() != (byte) 0;
+		NBTTagList list = compound.getTagList("SlotConfig", 1);
+		for (int i = 0; i < list.tagCount(); i++){
+			slotDirection[i] = SlotAction.getByIndex(((NBTTagByte) list.get(i)).getByte());
 		}
 		this.rebuildActiveSlots();
 	}

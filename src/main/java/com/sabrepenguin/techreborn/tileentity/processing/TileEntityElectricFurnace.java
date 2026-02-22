@@ -119,8 +119,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	}
 
 	@Override
-	public void setSlotEnabled(int sideIndex, int handlerIndex, int localSlotIndex, boolean enabled) {
-		if (sides[sideIndex].setSlotEnabled(handlerIndex, localSlotIndex, enabled)) {
+	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
+		if (sides[sideIndex].rotateSlot(handlerIndex, localSlotIndex)) {
 			markDirty();
 			IBlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 3);
@@ -157,9 +157,10 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	@Override
 	public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
 		ModularPanel panel = ModularPanel.defaultPanel("electric_furnace");
-		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		syncManager.registerSlotGroup(new SlotGroup("inputs", 1, 1, true))
 				.registerSlotGroup(new SlotGroup("upgrades", 4));
+
+		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
 				(syncManager1, syncHandler) ->
 						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
@@ -167,6 +168,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 								new SlotPosition(SlotAction.INPUT, 55, 45, 0, 0),
 								new SlotPosition(SlotAction.OUTPUT, 101, 45, 1, 0),
 								new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)));
+		TRGuis.addConfigPanel(panel, panelHandler);
+
 		if (hasCustomName()) {
 			panel.child(IKey.str(getName())
 					.asWidget()
@@ -200,7 +203,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 				.energyHandler(this.energyStorage)
 				.value(new IntSyncValue(energyStorage::getEnergyStored)));
 		panel.child(TRGuis.createUpdateTab(upgrades, "upgrades").leftRelOffset(1f, 1));
-		TRGuis.addConfigPanel(panel, panelHandler);
 		return panel;
 	}
 

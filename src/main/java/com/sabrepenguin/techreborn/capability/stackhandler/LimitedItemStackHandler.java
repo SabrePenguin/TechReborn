@@ -56,7 +56,7 @@ public class LimitedItemStackHandler implements IItemHandlerModifiable {
 		if (!this.filter.test(stack)) return false;
 		return switch (slots.get(slot)) {
 			case INPUT, BIDIRECTIONAL -> true;
-			case OUTPUT -> false;
+			case OUTPUT, DISABLED -> false;
 		};
 	}
 

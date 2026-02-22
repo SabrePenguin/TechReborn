@@ -157,21 +157,17 @@ public class TRGuis {
 		button.background(face);
 		button.hoverBackground(face);
 		button.overlay((context, x, y, width, height, theme) -> {
-			boolean isEnabled = handlers[absoluteFacing.get().getIndex()].getSlotEnabled(handlerIndex, slot);
-			if (isEnabled) {
-				switch (action) {
-					case OUTPUT -> OUTPUT.draw(x, y, width, height);
-					case INPUT -> INPUT.draw(x, y, width, height);
-					case BIDIRECTIONAL -> DUAL.draw(x, y, width, height);
-				}
+			SlotAction currentAction = handlers[absoluteFacing.get().getIndex()].getSlotAction(handlerIndex, slot);
+			switch (currentAction) {
+				case OUTPUT -> OUTPUT.draw(x, y, width, height);
+				case INPUT -> INPUT.draw(x, y, width, height);
 			}
 		});
 		button.onMousePressed(mouseButton -> {
 			int sideIndex = absoluteFacing.get().getIndex();
 			SideConfigItemStackHandler h = handlers[sideIndex];
-			boolean enabled = h.getSlotEnabled(handlerIndex, slot);
 			TechRebornPacketHandler.INSTANCE.sendToServer(new PacketSideConfig(
-					pos, sideIndex, handlerIndex, slot, !enabled
+					pos, sideIndex, handlerIndex, slot
 			));
 			return true;
 		});

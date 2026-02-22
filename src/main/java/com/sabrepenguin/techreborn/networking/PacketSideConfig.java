@@ -18,14 +18,12 @@ public class PacketSideConfig implements IMessage {
 	private int side;
 	private int handlerIndex;
 	private int handlerSlot;
-	private boolean enabled;
 
-	public PacketSideConfig(BlockPos pos, int side, int handlerIndex, int handlerSlot, boolean enabled) {
+	public PacketSideConfig(BlockPos pos, int side, int handlerIndex, int handlerSlot) {
 		this.pos = pos;
 		this.side = side;
 		this.handlerIndex = handlerIndex;
 		this.handlerSlot = handlerSlot;
-		this.enabled = enabled;
 	}
 
 	@Override
@@ -34,7 +32,6 @@ public class PacketSideConfig implements IMessage {
 		this.side = buf.readInt();
 		this.handlerIndex = buf.readInt();
 		this.handlerSlot = buf.readInt();
-		this.enabled = buf.readBoolean();
 	}
 
 	@Override
@@ -43,7 +40,6 @@ public class PacketSideConfig implements IMessage {
 		buf.writeInt(this.side);
 		buf.writeInt(this.handlerIndex);
 		buf.writeInt(this.handlerSlot);
-		buf.writeBoolean(this.enabled);
 	}
 
 	public static class PacketSideConfigMessageHandler implements IMessageHandler<PacketSideConfig, IMessage> {
@@ -56,7 +52,7 @@ public class PacketSideConfig implements IMessage {
 				if (world.isBlockLoaded(message.pos)) {
 					TileEntity te = world.getTileEntity(message.pos);
 					if (te instanceof ISideConfigTE sidedConfig) {
-						sidedConfig.setSlotEnabled(message.side, message.handlerIndex, message.handlerSlot, message.enabled);
+						sidedConfig.rotateSlot(message.side, message.handlerIndex, message.handlerSlot);
 					}
 				}
 			});
