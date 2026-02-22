@@ -23,6 +23,7 @@ import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
+import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
@@ -59,7 +60,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	private final RestrictedItemStackHandler upgrades;
 	private final NbtEnergyStorage energyStorage;
 
-	private final SideConfigItemStackHandler[] sides;
+	private final MachineIOManager ioManager;
 
 	private String customName;
 
@@ -73,7 +74,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
 		SideConfig outputConfig = new SideConfig(output, SlotAction.OUTPUT);
 		SideConfig batteryConfig = new SideConfig(battery, SlotAction.BIDIRECTIONAL);
-		sides = SideConfigItemStackHandler.createSides(inputConfig, outputConfig, batteryConfig);
+		ioManager = new MachineIOManager(inputConfig, outputConfig, batteryConfig);
 	}
 
 	@Override
@@ -88,7 +89,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 			energyStorage.setEnergy(compound.getInteger("energy"));
 		if (compound.hasKey("CustomName"))
 			this.customName = compound.getString("CustomName");
-		SideConfigItemStackHandler.readFromNbt(this.sides, compound.getTagList("sideConfig", 10));
+
+		ioManager.readFromNBT(compound.getTagList("IOManager", 10));
 		super.readFromNBT(compound);
 	}
 
@@ -98,7 +100,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		compound.setInteger("energy", energyStorage.getEnergyStored());
 		if (hasCustomName())
 			compound.setString("CustomName", customName);
-		compound.setTag("sideConfig", SideConfigItemStackHandler.writeToNbt(this.sides));
+		compound.setTag("IOManager", ioManager.writeToNBT());
 		return super.writeToNBT(compound);
 	}
 
@@ -120,7 +122,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 
 	@Override
 	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (sides[sideIndex].rotateSlot(handlerIndex, localSlotIndex)) {
+		if (ioManager.getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
 			markDirty();
 			IBlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 3);
@@ -146,7 +148,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 			if (facing == null) {
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 			}
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sides[facing.getIndex()]);
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ioManager.getSide(facing));
 		} else if (capability == CapabilityEnergy.ENERGY) {
 
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
@@ -164,7 +166,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
 				(syncManager1, syncHandler) ->
 						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
-								this.sides, getFacing,
+								this.ioManager,
+								getFacing,
 								new SlotPosition(SlotAction.INPUT, 55, 45, 0, 0),
 								new SlotPosition(SlotAction.OUTPUT, 101, 45, 1, 0),
 								new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)));

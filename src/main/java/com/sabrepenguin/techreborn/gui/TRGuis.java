@@ -20,11 +20,11 @@ import com.cleanroommc.modularui.widgets.SlotGroupWidget;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigItemStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.networking.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
+import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -86,7 +86,8 @@ public class TRGuis {
 
 	public static ModularPanel createConfigPanel(
 			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos, Area area,
-			SideConfigItemStackHandler[] handlers, Supplier<EnumFacing> getFacing,
+			MachineIOManager manager,
+			Supplier<EnumFacing> getFacing,
 			SlotPosition... slotPositions) {
 		ModularPanel panel = new ModularPanel("config_panel") {
 			@Override
@@ -116,7 +117,7 @@ public class TRGuis {
 			SlotPosition position = slotPositions[i];
 			IPanelHandler panelHandler = syncManager.syncedPanel("slot_config_" + i, true,
 					(syncManager1, syncHandler1) ->
-							createSlotConfigPanel(syncManager1, syncHandler1, pos, handlers, position.handlerSlot(), position.slot(), getFacing, position.action()));
+							createSlotConfigPanel(syncManager1, syncHandler1, pos, manager, position.handlerSlot(), position.slot(), getFacing, position.action()));
 			panel.child(new TRButtonWidget<>()
 					.pos(position.x(), position.y())
 					.onMousePressed(mouseButton -> {
@@ -129,19 +130,21 @@ public class TRGuis {
 
 	private static ModularPanel createSlotConfigPanel(
 			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos,
-			SideConfigItemStackHandler[] handlers, int handlerIndex, int slot,
+			MachineIOManager manager,
+			int handlerIndex, int slot,
 			Supplier<EnumFacing> getFacing, SlotAction action) {
 		ModularPanel panel = new Dialog<>("dialog_" + handlerIndex + "_" + slot).size(104);
 		panel.child(ButtonWidget.panelCloseButton());
 		for (int i = 0; i < 6; i++) {
-			addEnumFacingButtons(pos, panel, i, handlers, handlerIndex, slot, getFacing, action);
+			addEnumFacingButtons(pos, panel, i, manager, handlerIndex, slot, getFacing, action);
 		}
 		return panel;
 	}
 
 	private static void addEnumFacingButtons(
 			BlockPos pos, ModularPanel panel, int relativeIndex,
-			SideConfigItemStackHandler[] handlers, int handlerIndex, int slot,
+			MachineIOManager manager,
+			int handlerIndex, int slot,
 			Supplier<EnumFacing> getFacing, SlotAction action) {
 		ButtonWidget<?> button = new ButtonWidget<>().size(32);
 		switch (relativeIndex) {
@@ -157,7 +160,7 @@ public class TRGuis {
 		button.background(face);
 		button.hoverBackground(face);
 		button.overlay((context, x, y, width, height, theme) -> {
-			SlotAction currentAction = handlers[absoluteFacing.get().getIndex()].getSlotAction(handlerIndex, slot);
+			SlotAction currentAction = manager.getSide(absoluteFacing.get()).getSlotAction(handlerIndex, slot);
 			switch (currentAction) {
 				case OUTPUT -> OUTPUT.draw(x, y, width, height);
 				case INPUT -> INPUT.draw(x, y, width, height);
@@ -165,7 +168,6 @@ public class TRGuis {
 		});
 		button.onMousePressed(mouseButton -> {
 			int sideIndex = absoluteFacing.get().getIndex();
-			SideConfigItemStackHandler h = handlers[sideIndex];
 			TechRebornPacketHandler.INSTANCE.sendToServer(new PacketSideConfig(
 					pos, sideIndex, handlerIndex, slot
 			));

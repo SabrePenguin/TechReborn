@@ -26,8 +26,8 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 	/** An integer array containing the slots for the handler it matches. Maps the entire handler for remapping.
 	 * ie. [0, 1, 2, 3, 0, 1, 2, 0]*/
 	private final IntArrayList localHandlerIndices;
-	/** The actual slot retrieval. Contains the actual length, and each integer maps to the handlerIndices +
-	 * localHandlerIndices arrays*/
+	/** The actual slot retrieval. Contains the actual length (ie slot 1, 2, and 5 has a size of 3),
+	 * and each integer maps to the handlerIndices + localHandlerIndices arrays*/
 	private final IntArrayList activeSlots;
 	/** The set of handlers to push and pull. Used as the reference to determine cycle */
 	private final SlotAction[] handlerDirection;
