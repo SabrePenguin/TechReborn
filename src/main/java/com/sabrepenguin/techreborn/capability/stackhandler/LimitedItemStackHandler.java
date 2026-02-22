@@ -1,16 +1,22 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class LimitedItemStackHandler implements IItemHandlerModifiable {
 
 	private final List<SlotAction> slots;
 	private final IItemHandlerModifiable itemHandler;
+	private Predicate<ItemStack> filter;
 
 	public LimitedItemStackHandler(IItemHandlerModifiable itemHandler, SlotAction... slots) {
 		this.itemHandler = itemHandler;
@@ -23,18 +29,18 @@ public class LimitedItemStackHandler implements IItemHandlerModifiable {
 	}
 
 	@Override
-	public @NotNull ItemStack getStackInSlot(int slot) {
+	public ItemStack getStackInSlot(int slot) {
 		return itemHandler.getStackInSlot(slot);
 	}
 
 	@Override
-	public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 		if (!isItemValid(slot, stack)) return stack;
 		return itemHandler.insertItem(slot, stack, simulate);
 	}
 
 	@Override
-	public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+	public ItemStack extractItem(int slot, int amount, boolean simulate) {
 		return itemHandler.extractItem(slot, amount, simulate);
 	}
 
@@ -44,8 +50,10 @@ public class LimitedItemStackHandler implements IItemHandlerModifiable {
 	}
 
 	@Override
-	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+	public boolean isItemValid(int slot, ItemStack stack) {
 		if (slot < 0 || slot >= slots.size()) return true;
+		if (stack.isEmpty()) return true;
+		if (!this.filter.test(stack)) return false;
 		return switch (slots.get(slot)) {
 			case INPUT, BIDIRECTIONAL -> true;
 			case OUTPUT -> false;
@@ -53,7 +61,12 @@ public class LimitedItemStackHandler implements IItemHandlerModifiable {
 	}
 
 	@Override
-	public void setStackInSlot(int slot, @NotNull ItemStack stack) {
+	public void setStackInSlot(int slot, ItemStack stack) {
 		itemHandler.setStackInSlot(slot, stack);
+	}
+
+	public LimitedItemStackHandler setFilter(@Nullable Predicate<ItemStack> filter) {
+		this.filter = filter != null ? filter : stack -> true;
+		return this;
 	}
 }

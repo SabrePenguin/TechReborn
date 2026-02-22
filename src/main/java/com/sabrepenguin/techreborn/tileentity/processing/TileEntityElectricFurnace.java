@@ -21,6 +21,7 @@ import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
+import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
@@ -65,7 +66,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	public TileEntityElectricFurnace() {
 		inventory = new StackLimitedItemStackHandler(7, Arrays.asList(Pair.of(3, 64), Pair.of(4, 1)));
 		input = new RestrictedItemStackHandler(inventory, 0);
-		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT);
+		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT).setFilter(stack -> stack.getItem() == TRItems.upgrades);
 		battery = new RestrictedItemStackHandler(inventory, 2);
 		upgrades = new RestrictedItemStackHandler(inventory, 3, 7);
 		energyStorage = new NbtEnergyStorage(10000, 32, 0);

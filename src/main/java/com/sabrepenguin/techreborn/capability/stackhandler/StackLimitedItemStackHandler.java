@@ -27,7 +27,7 @@ public class StackLimitedItemStackHandler extends ItemStackHandler {
 		int index = 0;
 		for (Pair<Integer, Integer> s: slotLimits) {
 			for(int i = 0; i < s.getLeft(); i++) {
-				this.slotLimits[index] = s.getRight();
+				this.slotLimits[index] = s.getRight() != 0 ? s.getRight() : 64;
 				index++;
 			}
 		}
