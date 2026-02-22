@@ -86,6 +86,7 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 				handlerOffsets[handlerIndex + 1] : handlerIndices.size();
 		if (index >= startOfNextHandler) return false;
 		this.slotDirection[index] = this.handlerDirection[handlerIndex].rotate(this.slotDirection[index]);
+		rebuildActiveSlots();
 		return true;
 	}
 
@@ -122,9 +123,8 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		validateSlotIndex(slot);
 		int index = activeSlots.getInt(slot);
 		int handlerIndex = handlerIndices.getInt(index);
-		if (handlerDirection[handlerIndex] == SlotAction.OUTPUT) {
+		if (slotDirection[index] != SlotAction.INPUT)
 			return stack;
-		}
 		return handlers.get(handlerIndex).insertItem(localHandlerIndices.getInt(index), stack, simulate);
 	}
 
@@ -133,9 +133,8 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		validateSlotIndex(slot);
 		int index = activeSlots.getInt(slot);
 		int handlerIndex = handlerIndices.getInt(index);
-		if (handlerDirection[handlerIndex] == SlotAction.INPUT) {
+		if (slotDirection[index] != SlotAction.OUTPUT)
 			return ItemStack.EMPTY;
-		}
 		return handlers.get(handlerIndex).extractItem(localHandlerIndices.getInt(index), amount, simulate);
 	}
 
