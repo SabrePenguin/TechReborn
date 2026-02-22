@@ -41,9 +41,11 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
@@ -61,7 +63,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	private String customName;
 
 	public TileEntityElectricFurnace() {
-		inventory = new StackLimitedItemStackHandler(7, 64, 64, 64, 1, 1, 1, 1);
+		inventory = new StackLimitedItemStackHandler(7, Arrays.asList(Pair.of(3, 64), Pair.of(4, 1)));
 		input = new RestrictedItemStackHandler(inventory, 0);
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT);
 		battery = new RestrictedItemStackHandler(inventory, 2);
