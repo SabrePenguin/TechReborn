@@ -21,6 +21,7 @@ import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
+import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
@@ -56,7 +57,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 	private final RestrictedItemStackHandler input;
 	private final RestrictedItemStackHandler fuel;
 	private final LimitedItemStackHandler output;
-	private final SideConfigItemStackHandler[] sides;
+	private final MachineIOManager ioManager;
 
 	private String customName;
 
@@ -83,7 +84,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
 		SideConfig fuelConfig = new SideConfig(fuel, SlotAction.INPUT);
 		SideConfig outputConfig = new SideConfig(output, SlotAction.OUTPUT);
-		sides = SideConfigItemStackHandler.createSides(inputConfig, fuelConfig, outputConfig);
+		ioManager = new MachineIOManager(inputConfig, fuelConfig, outputConfig);
 	}
 
 	public boolean isBurning() {
@@ -152,7 +153,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 		compound.setTag("inventory", inventory.serializeNBT());
 		if (hasCustomName())
 			compound.setString("CustomName", this.customName);
-		compound.setTag("SideConfig", SideConfigItemStackHandler.writeToNbt(this.sides));
+		compound.setTag("IOManager", ioManager.writeToNBT());
         return super.writeToNBT(compound);
     }
 
@@ -167,13 +168,13 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 			this.currentItemBurnTime = (int)(TileEntityFurnace.getItemBurnTime(fuel.getStackInSlot(0)) * 1.25);
 		if (compound.hasKey("CustomName"))
 			this.customName = compound.getString("CustomName");
-		SideConfigItemStackHandler.readFromNbt(this.sides, compound.getTagList("SideConfig", 10));
+		ioManager.readFromNBT(compound.getCompoundTag("IOManager"));
         super.readFromNBT(compound);
     }
 
 	@Override
 	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (sides[sideIndex].rotateSlot(handlerIndex, localSlotIndex)) {
+		if (ioManager.getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
 			markDirty();
 			IBlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 3);
@@ -182,7 +183,10 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 
 	@Override
 	public void swapSlot(int index, boolean input) {
-
+		ioManager.swapIndex(index, input);
+		markDirty();
+		IBlockState state = world.getBlockState(pos);
+		world.notifyBlockUpdate(pos, state, state, 3);
 	}
 
 	@Override
@@ -217,7 +221,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 			if (facing == null) {
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 			}
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(sides[facing.getIndex()]);
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ioManager.getSide(facing));
         }
         return super.getCapability(capability, facing);
     }
@@ -227,10 +231,13 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 		if (this.world.isRemote)
 			return;
 		boolean isBurning = this.isBurning();
+		boolean markDirty = false;
 		if (isBurning) {
 			this.burnTime--;
 		}
-		boolean markDirty = false;
+		if (ioManager.performTransfer(world, pos)) {
+			markDirty = true;
+		}
 
 		ItemStack inputItemstack = input.getStackInSlot(0);
 		if (refreshResult)
@@ -284,15 +291,16 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 		syncManager.registerSlotGroup(new SlotGroup("input", 1))
 				.registerSlotGroup(new SlotGroup("fuel", 1, 80, true));
 
-//		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
-//		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
-//				(syncManager1, syncHandler) ->
-//						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
-//								this.sides, getFacing,
-//								new SlotPosition(SlotAction.INPUT, 56, 17, 0, 0),
-//								new SlotPosition(SlotAction.INPUT, 56, 53, 1, 0),
-//								new SlotPosition(SlotAction.OUTPUT, 116, 35, 2, 0)));
-//		TRGuis.addConfigPanel(panel, panelHandler);
+		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
+		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
+				(syncManager1, syncHandler) ->
+						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
+								ioManager,
+								getFacing,
+								new SlotPosition(SlotAction.INPUT, 56, 17, 0, 0),
+								new SlotPosition(SlotAction.INPUT, 56, 53, 1, 0),
+								new SlotPosition(SlotAction.OUTPUT, 116, 35, 2, 0)));
+		TRGuis.addConfigPanel(panel, panelHandler);
 
 		if (hasCustomName()) {
 			panel.child(IKey.str(getName())
