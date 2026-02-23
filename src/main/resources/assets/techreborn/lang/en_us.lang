@@ -673,3 +673,7 @@ advancements.techreborn.treetap=TreeTap
 advancements.techreborn.treetap.desc=Now that you have crafted a tree tap you will want to use it on a sap spot on a rubber tree.
 advancements.techreborn.sap=Rubber Sap
 advancements.techreborn.sap.desc=Well done, you now have rubber sap. You will want to smelt it in a furnace to create rubber next.
+
+#GUI
+techreborn.auto_output.gui=Auto Output
+techreborn.auto_input.gui=Auto Input

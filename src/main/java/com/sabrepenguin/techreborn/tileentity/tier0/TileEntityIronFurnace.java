@@ -181,6 +181,11 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 	}
 
 	@Override
+	public void swapSlot(int index, boolean input) {
+
+	}
+
+	@Override
 	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
 	}
@@ -279,15 +284,15 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 		syncManager.registerSlotGroup(new SlotGroup("input", 1))
 				.registerSlotGroup(new SlotGroup("fuel", 1, 80, true));
 
-		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
-		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
-				(syncManager1, syncHandler) ->
-						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
-								this.sides, getFacing,
-								new SlotPosition(SlotAction.INPUT, 56, 17, 0, 0),
-								new SlotPosition(SlotAction.INPUT, 56, 53, 1, 0),
-								new SlotPosition(SlotAction.OUTPUT, 116, 35, 2, 0)));
-		TRGuis.addConfigPanel(panel, panelHandler);
+//		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
+//		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
+//				(syncManager1, syncHandler) ->
+//						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
+//								this.sides, getFacing,
+//								new SlotPosition(SlotAction.INPUT, 56, 17, 0, 0),
+//								new SlotPosition(SlotAction.INPUT, 56, 53, 1, 0),
+//								new SlotPosition(SlotAction.OUTPUT, 116, 35, 2, 0)));
+//		TRGuis.addConfigPanel(panel, panelHandler);
 
 		if (hasCustomName()) {
 			panel.child(IKey.str(getName())

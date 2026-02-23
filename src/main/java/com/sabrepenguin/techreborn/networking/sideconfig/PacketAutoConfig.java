@@ -1,4 +1,4 @@
-package com.sabrepenguin.techreborn.networking;
+package com.sabrepenguin.techreborn.networking.sideconfig;
 
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
 import io.netty.buffer.ByteBuf;
@@ -10,49 +10,45 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketSideConfig implements IMessage {
+public class PacketAutoConfig implements IMessage {
 
-	public PacketSideConfig() {}
+	public PacketAutoConfig() {}
 
 	private BlockPos pos;
-	private int side;
-	private int handlerIndex;
-	private int handlerSlot;
+	private int index;
+	private boolean input;
 
-	public PacketSideConfig(BlockPos pos, int side, int handlerIndex, int handlerSlot) {
+	public PacketAutoConfig(BlockPos pos, int index, boolean input) {
 		this.pos = pos;
-		this.side = side;
-		this.handlerIndex = handlerIndex;
-		this.handlerSlot = handlerSlot;
+		this.index = index;
+		this.input = input;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.pos = BlockPos.fromLong(buf.readLong());
-		this.side = buf.readInt();
-		this.handlerIndex = buf.readInt();
-		this.handlerSlot = buf.readInt();
+		this.index = buf.readInt();
+		this.input = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeLong(this.pos.toLong());
-		buf.writeInt(this.side);
-		buf.writeInt(this.handlerIndex);
-		buf.writeInt(this.handlerSlot);
+		buf.writeInt(this.index);
+		buf.writeBoolean(this.input);
 	}
 
-	public static class PacketSideConfigMessageHandler implements IMessageHandler<PacketSideConfig, IMessage> {
+	public static class PacketAutoConfigMessageHandler implements IMessageHandler<PacketAutoConfig, IMessage> {
 
 		@Override
-		public IMessage onMessage(PacketSideConfig message, MessageContext ctx) {
+		public IMessage onMessage(PacketAutoConfig message, MessageContext ctx) {
 			EntityPlayerMP player = ctx.getServerHandler().player;
 			WorldServer world = player.getServerWorld();
 			world.addScheduledTask(() -> {
 				if (world.isBlockLoaded(message.pos)) {
 					TileEntity te = world.getTileEntity(message.pos);
 					if (te instanceof ISideConfigTE sidedConfig) {
-						sidedConfig.rotateSlot(message.side, message.handlerIndex, message.handlerSlot);
+						sidedConfig.swapSlot(message.index, message.input);
 					}
 				}
 			});

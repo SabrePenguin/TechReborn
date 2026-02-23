@@ -89,8 +89,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 			energyStorage.setEnergy(compound.getInteger("energy"));
 		if (compound.hasKey("CustomName"))
 			this.customName = compound.getString("CustomName");
-
-		ioManager.readFromNBT(compound.getTagList("IOManager", 10));
+		ioManager.readFromNBT(compound.getCompoundTag("IOManager"));
 		super.readFromNBT(compound);
 	}
 
@@ -130,9 +129,20 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	}
 
 	@Override
+	public void swapSlot(int index, boolean input) {
+		ioManager.swapIndex(index, input);
+		markDirty();
+		IBlockState state = world.getBlockState(pos);
+		world.notifyBlockUpdate(pos, state, state, 3);
+	}
+
+	@Override
 	public void update() {
 		if (this.world.isRemote)
 			return;
+		if (ioManager.performTransfer(world, pos)) {
+			markDirty();
+		}
 	}
 
 	@Override

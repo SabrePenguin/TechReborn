@@ -7,7 +7,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemHandlerHelper;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -99,6 +106,22 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		return this.slotDirection[index];
 	}
 
+	public SlotAction getHandlerAction(int handlerIndex) {
+		if (handlerIndex < 0 || handlerIndex >= handlers.size()) return SlotAction.DISABLED;
+		return this.handlerDirection[handlerIndex];
+	}
+
+	public int getRealSlot(int handlerIndex, int localSlotIndex) {
+		if (handlerIndex < 0 || handlerIndex >= handlers.size())
+			throw new RuntimeException("handlerIndex out of range [0,"+ handlers.size() + ")");
+		int index = handlerOffsets[handlerIndex] + localSlotIndex;
+		int startOfNextHandler = (handlerIndex + 1 < handlerOffsets.length) ?
+				handlerOffsets[handlerIndex + 1] : handlerIndices.size();
+		if (index >= startOfNextHandler)
+			throw new RuntimeException("Index outside of range. Index " + handlerIndex + ":" + localSlotIndex + " was not in range");
+		return index;
+	}
+
 	@Override
 	public void setStackInSlot(int slot, ItemStack stack) {
 		validateSlotIndex(slot);
@@ -188,5 +211,54 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		for(int i = 0; i < list.tagCount(); i++) {
 			sides[i].readFromNbt(list.getCompoundTagAt(i));
 		}
+	}
+
+	public boolean runTransfer(World world, BlockPos pos, EnumFacing facing, boolean[] autoInput, boolean[] autoOutput) {
+		TileEntity adjacentTE = world.getTileEntity(pos.offset(facing));
+		if (adjacentTE == null || !adjacentTE.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite()))
+			return false;
+		IItemHandler adjacentInventory = adjacentTE.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
+		if (adjacentInventory == null) // Theoretically never null
+			return false;
+		boolean changedInventory = false;
+		for (int activeSlotId = 0; activeSlotId < activeSlots.size(); activeSlotId++) {
+			int index = activeSlots.getInt(activeSlotId);
+			boolean autoIn = autoInput[index];
+			boolean autoOut = autoOutput[index];
+			SlotAction action = slotDirection[index];
+			if (autoIn && action == SlotAction.INPUT) {
+				for (int adjSlot = 0; adjSlot < adjacentInventory.getSlots(); adjSlot++) {
+					ItemStack adjStack = adjacentInventory.getStackInSlot(adjSlot);
+					if (!adjStack.isEmpty()) {
+						ItemStack extractedStack = adjacentInventory.extractItem(adjSlot, adjStack.getMaxStackSize(), true);
+						if (!extractedStack.isEmpty()) {
+							ItemStack remainder = this.insertItem(activeSlotId, extractedStack, true);
+							int amountPulled = extractedStack.getCount() - remainder.getCount();
+							if (amountPulled > 0) {
+								adjacentInventory.extractItem(adjSlot, amountPulled, false);
+								this.insertItem(activeSlotId, extractedStack.copy().splitStack(amountPulled), false);
+								changedInventory = true;
+								break;
+							}
+						}
+					}
+				}
+			}
+			if (autoOut && action == SlotAction.OUTPUT) {
+				ItemStack stackInSlot = this.getStackInSlot(activeSlotId);
+				if (!stackInSlot.isEmpty()) {
+					ItemStack extracted = this.extractItem(activeSlotId, stackInSlot.getMaxStackSize(), true);
+					if (!extracted.isEmpty()) {
+						ItemStack remainder = ItemHandlerHelper.insertItemStacked(adjacentInventory, extracted, false);
+						int amountPushed = extracted.getCount() - remainder.getCount();
+						if (amountPushed > 0) {
+							this.extractItem(activeSlotId, amountPushed, false);
+							changedInventory = true;
+						}
+					}
+				}
+			}
+		}
+		return changedInventory;
 	}
 }

@@ -13,16 +13,14 @@ import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widget.ParentWidget;
 import com.cleanroommc.modularui.widget.sizer.Area;
-import com.cleanroommc.modularui.widgets.ButtonWidget;
-import com.cleanroommc.modularui.widgets.Dialog;
-import com.cleanroommc.modularui.widgets.Expandable;
-import com.cleanroommc.modularui.widgets.SlotGroupWidget;
+import com.cleanroommc.modularui.widgets.*;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.items.TRItems;
-import com.sabrepenguin.techreborn.networking.PacketSideConfig;
+import com.sabrepenguin.techreborn.networking.sideconfig.PacketAutoConfig;
+import com.sabrepenguin.techreborn.networking.sideconfig.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import net.minecraft.block.state.IBlockState;
@@ -43,7 +41,7 @@ public class TRGuis {
 
 	public static final UITexture OUTPUT = UITexture.builder().location(Tags.MODID, "gui/output_slot").nonOpaque().fullImage().build();
 	public static final UITexture INPUT = UITexture.builder().location(Tags.MODID, "gui/input_slot").nonOpaque().fullImage().build();
-	public static final UITexture DUAL = UITexture.builder().location(Tags.MODID, "gui/dual_slot").nonOpaque().fullImage().build();
+	public static final UITexture CHECK = UITexture.builder().location(Tags.MODID, "gui/check").nonOpaque().fullImage().build();
 	public static final UITexture CONFIG = UITexture.builder().location(Tags.MODID, "gui/config_button").nonOpaque().fullImage().build();
 	public static final UITexture UPGRADE = UITexture.builder().location(Tags.MODID, "gui/upgrade_base").fullImage().build();
 
@@ -133,27 +131,63 @@ public class TRGuis {
 			MachineIOManager manager,
 			int handlerIndex, int slot,
 			Supplier<EnumFacing> getFacing, SlotAction action) {
-		ModularPanel panel = new Dialog<>("dialog_" + handlerIndex + "_" + slot).size(104);
+		SlotAction slotAction = manager.getHandlerActionType(handlerIndex);
+		int increaseBy = slotAction == SlotAction.BIDIRECTIONAL ? 30 : 15;
+		ModularPanel panel = new Dialog<>("dialog_" + handlerIndex + "_" + slot).size(104, 104 + increaseBy);
 		panel.child(ButtonWidget.panelCloseButton());
 		for (int i = 0; i < 6; i++) {
-			addEnumFacingButtons(pos, panel, i, manager, handlerIndex, slot, getFacing, action);
+			addEnumFacingButtons(pos, panel, i, manager, handlerIndex, slot, getFacing, increaseBy);
+		}
+		int index = manager.getRealIndex(handlerIndex, slot);
+		switch (slotAction) {
+			case INPUT:
+				panel.child(createButton(pos, manager, index, true, 6));
+				panel.child(IKey.lang("techreborn.auto_input.gui").asWidget().left(18).bottom(7));
+				break;
+			case OUTPUT:
+				panel.child(createButton(pos, manager, index, false, 6));
+				panel.child(IKey.lang("techreborn.auto_output.gui").asWidget().left(18).bottom(7));
+				break;
+			case BIDIRECTIONAL:
+				panel.child(createButton(pos, manager, index, true, 20))
+						.child(IKey.lang("techreborn.auto_input.gui").asWidget().left(18).bottom(21));
+				panel.child(createButton(pos, manager, index, false, 6))
+						.child(IKey.lang("techreborn.auto_output.gui").asWidget().left(18).bottom(7));
+				break;
+			default: break;
 		}
 		return panel;
+	}
+
+	private static ButtonWidget<?> createButton(BlockPos pos, MachineIOManager manager, int index, boolean input, int bottom) {
+		return new ButtonWidget<>()
+				.left(5)
+				.bottom(bottom)
+				.size(11)
+				.onMousePressed(mouseButton -> {
+					TechRebornPacketHandler.INSTANCE.sendToServer(new PacketAutoConfig(pos, index, input));
+					return true;
+				}).overlay((context, x, y, width, height, theme) -> {
+			if (manager.getCurrentValue(index, input)) {
+				CHECK.draw(x, y, width, height);
+			}
+		});
 	}
 
 	private static void addEnumFacingButtons(
 			BlockPos pos, ModularPanel panel, int relativeIndex,
 			MachineIOManager manager,
 			int handlerIndex, int slot,
-			Supplier<EnumFacing> getFacing, SlotAction action) {
+			Supplier<EnumFacing> getFacing,
+			int bottomOffset) {
 		ButtonWidget<?> button = new ButtonWidget<>().size(32);
 		switch (relativeIndex) {
-			case 0: button.alignX(0.5f).bottom(4); break;
+			case 0: button.alignX(0.5f).bottom(bottomOffset + 4); break;
 			case 1: button.alignX(0.5f).top(4); break;
-			case 2: button.align(Alignment.CENTER); break;
-			case 3: button.right(4).bottom(4); break;
-			case 4: button.alignY(0.5f).left(4); break;
-			case 5: button.alignY(0.5f).right(4); break;
+			case 2: button.alignX(0.5f).topRel(0.5f, -bottomOffset/2, 0.5f); break;
+			case 3: button.right(4).bottom(4 + bottomOffset); break;
+			case 4: button.topRel(0.5f, -bottomOffset/2, 0.5f).left(4); break;
+			case 5: button.topRel(0.5f, -bottomOffset/2, 0.5f).right(4); break;
 		}
 		Supplier<EnumFacing> absoluteFacing = () -> TRGuis.getAbsoluteFacing(relativeIndex, getFacing.get());
 		DrawableBlockFace face = new DrawableBlockFace(pos, absoluteFacing);
