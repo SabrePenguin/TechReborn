@@ -173,14 +173,6 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 			throw new RuntimeException("Slot " + slot + " not in valid range - [0," + activeSlots.size() + ")");
 	}
 
-	public static SideConfigItemStackHandler[] createSides(SideConfig... handlers) {
-		SideConfigItemStackHandler[] sides = new SideConfigItemStackHandler[6];
-		for (int i = 0; i < 6; i++) {
-			sides[i] = new SideConfigItemStackHandler(handlers);
-		}
-		return sides;
-	}
-
 	public NBTTagCompound writeToNbt() {
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagList list = new NBTTagList();
@@ -191,26 +183,12 @@ public class SideConfigItemStackHandler implements IItemHandlerModifiable {
 		return compound;
 	}
 
-	public static NBTTagList writeToNbt(SideConfigItemStackHandler[] sides) {
-		NBTTagList list = new NBTTagList();
-		for (SideConfigItemStackHandler side : sides) {
-			list.appendTag(side.writeToNbt());
-		}
-		return list;
-	}
-
 	public void readFromNbt(NBTTagCompound compound) {
 		NBTTagList list = compound.getTagList("SlotConfig", 1);
 		for (int i = 0; i < list.tagCount(); i++){
 			slotDirection[i] = SlotAction.getByIndex(((NBTTagByte) list.get(i)).getByte());
 		}
 		this.rebuildActiveSlots();
-	}
-
-	public static void readFromNbt(SideConfigItemStackHandler[] sides, NBTTagList list) {
-		for(int i = 0; i < list.tagCount(); i++) {
-			sides[i].readFromNbt(list.getCompoundTagAt(i));
-		}
 	}
 
 	public boolean runTransfer(World world, BlockPos pos, EnumFacing facing, boolean[] autoInput, boolean[] autoOutput) {

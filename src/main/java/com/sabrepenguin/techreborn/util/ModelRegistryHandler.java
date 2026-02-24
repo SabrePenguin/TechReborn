@@ -86,6 +86,7 @@ public class ModelRegistryHandler {
 
 		itemModelRegistration(TRItems.wrench);
 		itemModelRegistration(TRItems.treetap);
+		itemModelRegistration(TRItems.configurinator);
 
 		metaItemRegistration(TRItems.upgrades);
 	}
@@ -178,7 +179,7 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.water_mill);
 		propertiesRegistration(TRBlocks.wind_mill);
 		dangerousPropertiesMetaRegistration(TRBlocks.solar_panel, false);
-		propertiesMetaRegistration(TRBlocks.cable);
+//		propertiesMetaRegistration(TRBlocks.cable);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {
