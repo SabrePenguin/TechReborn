@@ -175,18 +175,26 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, ISet
 	@Override
 	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
 		if (ioManager.getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
-			markDirty();
-			IBlockState state = world.getBlockState(pos);
-			world.notifyBlockUpdate(pos, state, state, 3);
+			updateTE();
 		}
 	}
 
 	@Override
 	public void swapSlot(int index, boolean input) {
 		ioManager.swapIndex(index, input);
+		updateTE();
+	}
+
+	@Override
+	public void updateTE() {
 		markDirty();
 		IBlockState state = world.getBlockState(pos);
 		world.notifyBlockUpdate(pos, state, state, 3);
+	}
+
+	@Override
+	public MachineIOManager getManager() {
+		return this.ioManager;
 	}
 
 	@Override
