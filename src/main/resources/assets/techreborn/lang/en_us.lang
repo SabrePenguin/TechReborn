@@ -542,6 +542,7 @@ item.techreborn.ironDrill.name=Steel Drill
 item.techreborn.steelJackhammer.name=Steel Jackhammer
 item.techreborn.treetap.name=Treetap
 item.techreborn.wrench.name=Wrench
+item.techreborn.configurinator.name=Configurinator
 
 # Items-Reactor
 item.techreborn.single_thorium_fuel_rod.name=Thorium Fuel Rod (Single)
