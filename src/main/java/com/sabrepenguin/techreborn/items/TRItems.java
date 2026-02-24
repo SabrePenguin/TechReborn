@@ -89,6 +89,8 @@ public class TRItems {
 	public static final TreeTap treetap = null;
 	public static final ItemUpgrade upgrades = null;
 
+	public static final ItemConfigurinator configurinator = null;
+
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
             Arrays.asList(
@@ -148,6 +150,7 @@ public class TRItems {
 
 		items.add(new ItemUpgrade());
 
+		items.add(new ItemConfigurinator());
         return items;
     }
 
