@@ -16,6 +16,7 @@ import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
+import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.NbtEnergyStorage;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
@@ -28,6 +29,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -64,8 +66,21 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 
 	private String customName;
 
+	private ItemStack cachedResult = ItemStack.EMPTY;
+	private boolean refreshResult = false;
+	private int processTime = 0;
+	private int totalProcessTime = 200;
+	private boolean isActive = false;
+
 	public TileEntityElectricFurnace() {
-		inventory = new StackLimitedItemStackHandler(7, Arrays.asList(Pair.of(3, 64), Pair.of(4, 1)));
+		inventory = new StackLimitedItemStackHandler(7, Arrays.asList(Pair.of(3, 64), Pair.of(4, 1))) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				if (slot == 0) {
+					refreshResult = true;
+				}
+			}
+		};
 		input = new RestrictedItemStackHandler(inventory, 0);
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT).setFilter(stack -> stack.getItem() == TRItems.upgrades);
 		battery = new RestrictedItemStackHandler(inventory, 2);
@@ -90,6 +105,9 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		if (compound.hasKey("CustomName"))
 			this.customName = compound.getString("CustomName");
 		ioManager.readFromNBT(compound.getCompoundTag("IOManager"));
+		processTime = compound.getInteger("processed");
+		isActive = compound.getBoolean("active");
+		cachedResult = FurnaceRecipes.instance().getSmeltingResult(input.getStackInSlot(0));
 		super.readFromNBT(compound);
 	}
 
@@ -97,6 +115,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
 		compound.setInteger("energy", energyStorage.getEnergyStored());
+		compound.setInteger("processed", processTime);
+		compound.setBoolean("isActive", isActive);
 		if (hasCustomName())
 			compound.setString("CustomName", customName);
 		compound.setTag("IOManager", ioManager.writeToNBT());
@@ -115,8 +135,12 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		boolean previousState = isActive;
 		super.onDataPacket(net, pkt);
 		this.readFromNBT(pkt.getNbtCompound());
+		if (world != null && this.world.isRemote && previousState != isActive) {
+			world.markBlockRangeForRenderUpdate(pos, pos);
+		}
 	}
 
 	@Override
@@ -144,13 +168,68 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		return this.ioManager;
 	}
 
+	private void refreshCachedRecipe(ItemStack in) {
+		refreshResult = false;
+		ItemStack output = FurnaceRecipes.instance().getSmeltingResult(in);
+		if (ItemStack.areItemStacksEqual(output, cachedResult))
+			return;
+		processTime = 0;
+		cachedResult = output;
+	}
+
+	private boolean canProcess() {
+		ItemStack out = output.getStackInSlot(0);
+		if (out.isEmpty()) return true;
+		if (!out.isItemEqual(cachedResult)) return false;
+		int res = out.getCount() + cachedResult.getCount();
+		return res <= output.getSlotLimit(0) && res <= out.getMaxStackSize();
+	}
+
+	private void processItem() {
+		ItemStack currentOutput = output.getStackInSlot(0);
+		if (currentOutput.isEmpty()) inventory.setStackInSlot(1, cachedResult.copy()); // Unfortunate, but output will not let us set the stack
+		else if (currentOutput.isItemEqual(cachedResult)) inventory.insertItem(1, cachedResult.copy(), false);
+		input.extractItem(0, 1, false);
+	}
+
 	@Override
 	public void update() {
 		if (this.world.isRemote)
 			return;
+		boolean isDirty = false;
 		if (ioManager.performTransfer(world, pos)) {
-			markDirty();
+			isDirty = true;
 		}
+		ItemStack ingredient = input.getStackInSlot(0);
+		if (refreshResult) {
+			refreshCachedRecipe(ingredient);
+		}
+		boolean active = false;
+		if (!cachedResult.isEmpty() && this.canProcess()) {
+			processTime++;
+			active = true;
+			if (processTime >= totalProcessTime) {
+				processItem();
+				processTime = 0;
+				isDirty = true;
+			}
+		} else if (processTime > 0) {
+			processTime = 0;
+			isDirty = true;
+		}
+
+		if (active != isActive) {
+			isActive = active;
+			updateState(active);
+			isDirty = true;
+		}
+		if (isDirty)
+			markDirty();
+	}
+
+	private void updateState(boolean state) {
+		IBlockState currentState = world.getBlockState(pos);
+		world.setBlockState(pos, currentState.withProperty(BlockHorizontalMachine.ACTIVE, state), 3);
 	}
 
 	@Override
@@ -208,8 +287,10 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 				.leftRelOffset(0.5f, -1)
 				.topRelOffset(0.3f, 2)
 				.texture(GuiTextures.PROGRESS_ARROW, 20)
-				.value(new DoubleSyncValue(() -> 0.0, value -> {}))
+				.value(new DoubleSyncValue(() -> (double) processTime / totalProcessTime,
+						value -> processTime = (int) (value * totalProcessTime)))
 		);
+
 		panel.child(new ItemSlot().pos(55, 45)
 						.slot(new ModularSlot(input, 0)
 								.slotGroup("inputs")
@@ -230,6 +311,11 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	@Override
 	public void onChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
 		if (world.isRemote || init) return;
+		if (onlyAmountChanged) {
+			refreshResult = false;
+			return;
+		}
+		refreshResult = true;
 		markDirty();
 	}
 
