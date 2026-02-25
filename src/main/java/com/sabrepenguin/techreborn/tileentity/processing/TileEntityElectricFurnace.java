@@ -19,7 +19,7 @@ import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
-import com.sabrepenguin.techreborn.capability.NbtEnergyStorage;
+import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
@@ -63,7 +63,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	private final RestrictedItemStackHandler battery;
 	private final LimitedItemStackHandler output;
 	private final RestrictedItemStackHandler upgrades;
-	private final NbtEnergyStorage energyStorage;
+	private final TEEnergyStorage energyStorage;
 
 	private final MachineIOManager ioManager;
 
@@ -74,6 +74,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	private int processTime = 0;
 	private int totalProcessTime = 200;
 	private boolean isActive = false;
+	private int energyCost = 24;
 
 	public TileEntityElectricFurnace() {
 		inventory = new StackLimitedItemStackHandler(7, Arrays.asList(Pair.of(3, 64), Pair.of(4, 1))) {
@@ -88,7 +89,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT).setFilter(stack -> stack.getItem() == TRItems.upgrades);
 		battery = new RestrictedItemStackHandler(inventory, 2);
 		upgrades = new RestrictedItemStackHandler(inventory, 3, 7);
-		energyStorage = new NbtEnergyStorage(10000, 32, 0);
+		energyStorage = new TEEnergyStorage(4000, 128, energyCost);
+		energyStorage.setCanExtract(false);
 		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
 		SideConfig outputConfig = new SideConfig(output, SlotAction.OUTPUT);
 		SideConfig batteryConfig = new SideConfig(battery, SlotAction.BIDIRECTIONAL);
@@ -209,12 +211,15 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		}
 		boolean active = false;
 		if (!cachedResult.isEmpty() && this.canProcess()) {
-			processTime++;
-			active = true;
-			if (processTime >= totalProcessTime) {
-				processItem();
-				processTime = 0;
-				isDirty = true;
+			if (energyStorage.internalExtract(energyCost, true) == energyCost) {
+				energyStorage.internalExtract(energyCost, false);
+				processTime++;
+				active = true;
+				if (processTime >= totalProcessTime) {
+					processItem();
+					processTime = 0;
+					isDirty = true;
+				}
 			}
 		} else if (processTime > 0) {
 			processTime = 0;
