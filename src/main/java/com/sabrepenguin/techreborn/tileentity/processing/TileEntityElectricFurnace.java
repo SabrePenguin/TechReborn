@@ -5,12 +5,14 @@ import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.factory.PosGuiData;
+import com.cleanroommc.modularui.integration.jei.ModularUIJeiPlugin;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
 import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
+import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.ProgressWidget;
 import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
@@ -50,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
@@ -290,7 +293,20 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 				.value(new DoubleSyncValue(() -> (double) processTime / totalProcessTime,
 						value -> processTime = (int) (value * totalProcessTime)))
 		);
-
+		panel.child(new ButtonWidget<>()
+				.size(20, 15)
+				.pos(77, 47)
+				.tooltip(tooltip -> {
+					tooltip.addLine(IKey.str("Open JEI"));
+				})
+				.invisible()
+				.onMousePressed(mouseButton -> {
+					if (ModularUIJeiPlugin.getRuntime() != null) {
+						ModularUIJeiPlugin.getRuntime().getRecipesGui().showCategories(Collections.singletonList("minecraft.smelting"));
+						return true;
+					}
+					return false;
+				}));
 		panel.child(new ItemSlot().pos(55, 45)
 						.slot(new ModularSlot(input, 0)
 								.slotGroup("inputs")
