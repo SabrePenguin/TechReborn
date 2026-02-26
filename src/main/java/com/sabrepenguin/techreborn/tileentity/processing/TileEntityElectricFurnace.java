@@ -44,11 +44,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.Supplier;
 
@@ -92,12 +90,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		input = new RestrictedItemStackHandler(inventory, 0);
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT).setFilter(stack -> stack.getItem() == TRItems.upgrades);
 		battery = new RestrictedItemStackHandler(inventory, 2);
-		upgrades = new StackLimitedItemStackHandler(4, 1) {
-			@Override
-			protected void onContentsChanged(int slot) {
-				shouldRecalculate = true;
-			}
-		};
+		upgrades = new StackLimitedItemStackHandler(4, 1, () -> shouldRecalculate = true);
 		energyStorage = new TEEnergyStorage(baseCapacity, maxReceive, energyCost);
 		energyStorage.setCanExtract(false);
 		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
