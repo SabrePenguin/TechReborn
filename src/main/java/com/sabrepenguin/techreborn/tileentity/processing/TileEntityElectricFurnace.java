@@ -59,7 +59,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	private final RestrictedItemStackHandler input;
 	private final RestrictedItemStackHandler battery;
 	private final LimitedItemStackHandler output;
-	private final RestrictedItemStackHandler upgrades;
+	private final ItemStackHandler upgrades;
 	private final TEEnergyStorage energyStorage;
 
 	private final MachineIOManager ioManager;
@@ -81,20 +81,23 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	private boolean shouldRecalculate = false;
 
 	public TileEntityElectricFurnace() {
-		inventory = new StackLimitedItemStackHandler(7, Arrays.asList(Pair.of(3, 64), Pair.of(4, 1))) {
+		inventory = new ItemStackHandler(3) {
 			@Override
 			protected void onContentsChanged(int slot) {
 				if (slot == 0) {
 					refreshResult = true;
-				} else if (slot > 3) {
-					shouldRecalculate = true;
 				}
 			}
 		};
 		input = new RestrictedItemStackHandler(inventory, 0);
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT).setFilter(stack -> stack.getItem() == TRItems.upgrades);
 		battery = new RestrictedItemStackHandler(inventory, 2);
-		upgrades = new RestrictedItemStackHandler(inventory, 3, 7);
+		upgrades = new StackLimitedItemStackHandler(4, 1) {
+			@Override
+			protected void onContentsChanged(int slot) {
+				shouldRecalculate = true;
+			}
+		};
 		energyStorage = new TEEnergyStorage(baseCapacity, maxReceive, energyCost);
 		energyStorage.setCanExtract(false);
 		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
@@ -125,6 +128,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		upgrades.deserializeNBT(compound.getCompoundTag("upgrades"));
 		if (compound.hasKey("maxEnergy"))
 			energyStorage.setMaxEnergy(compound.getInteger("maxEnergy"));
 		if (compound.hasKey("energy"))
@@ -139,6 +143,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
+		compound.setTag("upgrades", upgrades.serializeNBT());
 		compound.setInteger("energy", energyStorage.getEnergyStored());
 		if (energyStorage.getMaxEnergyStored() != baseCapacity) {
 			compound.setInteger("maxEnergy", energyStorage.getMaxEnergyStored());
