@@ -65,9 +65,13 @@ public class ItemUpgrade extends Item implements IMetaInformation, INonStandardL
 	}
 
 	public enum UpgradeEnum implements IStringSerializable {
+		/** 1.75x FE usage, 0.75x processing time */
 		OVERCLOCK(0),
+		/** 4x FE input/output */
 		TRANSFORMER(1),
+		/** +160k FE */
 		ENERGY_STORAGE(2),
+		/** ? */
 		SUPERCONDUCTOR(3);
 
 		final int metadata;

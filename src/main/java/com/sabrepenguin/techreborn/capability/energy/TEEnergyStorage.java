@@ -72,4 +72,16 @@ public class TEEnergyStorage extends EnergyStorage implements IEnergyInformation
 			energy += energyReceived;
 		return energyReceived;
 	}
+
+	public void setMaxEnergy(int newEnergy) {
+		capacity = Math.max(0, newEnergy);
+	}
+
+	public void setMaxExtract(int extract) {
+		maxExtract = Math.max(0, extract);
+	}
+
+	public void setMaxReceive(int receive) {
+		maxReceive = Math.max(0, receive);
+	}
 }
