@@ -27,6 +27,7 @@ import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
+import com.sabrepenguin.techreborn.util.UpgradeUtils;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
@@ -72,9 +73,18 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	private ItemStack cachedResult = ItemStack.EMPTY;
 	private boolean refreshResult = false;
 	private int processTime = 0;
-	private int totalProcessTime = 200;
 	private boolean isActive = false;
+
+	//TODO: config
+	private int totalProcessTime = 200;
 	private int energyCost = 24;
+	private int maxReceive = 128;
+	private int baseCapacity = 4000;
+
+	private int cachedProcessTime;
+	private int cachedEnergyCost;
+	private int cachedRevision = -1;
+	private boolean shouldRecalculate = false;
 
 	public TileEntityElectricFurnace() {
 		inventory = new StackLimitedItemStackHandler(7, Arrays.asList(Pair.of(3, 64), Pair.of(4, 1))) {
@@ -82,6 +92,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 			protected void onContentsChanged(int slot) {
 				if (slot == 0) {
 					refreshResult = true;
+				} else if (slot > 3) {
+					shouldRecalculate = true;
 				}
 			}
 		};
@@ -89,12 +101,26 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, 1), SlotAction.OUTPUT).setFilter(stack -> stack.getItem() == TRItems.upgrades);
 		battery = new RestrictedItemStackHandler(inventory, 2);
 		upgrades = new RestrictedItemStackHandler(inventory, 3, 7);
-		energyStorage = new TEEnergyStorage(4000, 128, energyCost);
+		energyStorage = new TEEnergyStorage(baseCapacity, maxReceive, energyCost);
 		energyStorage.setCanExtract(false);
 		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
 		SideConfig outputConfig = new SideConfig(output, SlotAction.OUTPUT);
 		SideConfig batteryConfig = new SideConfig(battery, SlotAction.BIDIRECTIONAL);
 		ioManager = new MachineIOManager(inputConfig, outputConfig, batteryConfig);
+		cachedProcessTime = processTime;
+		cachedEnergyCost = energyCost;
+	}
+
+	public void recalculateCosts() {
+		// Processing
+		this.cachedProcessTime = UpgradeUtils.getProcessingTimeMultiplier(upgrades, totalProcessTime);
+		this.cachedEnergyCost = UpgradeUtils.getTotalCostMultiplier(upgrades, energyCost);
+
+		// Input, Output, Capacity
+		this.energyStorage.setMaxEnergy(UpgradeUtils.getTotalEnergyStorageIncrease(upgrades, baseCapacity));
+
+		float newTransfer = UpgradeUtils.getEnergyTransferMultiplier(upgrades);
+		this.energyStorage.setMaxReceive((int) (maxReceive * newTransfer));
 	}
 
 	@Override
@@ -105,6 +131,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		if (compound.hasKey("maxEnergy"))
+			energyStorage.setMaxEnergy(compound.getInteger("maxEnergy"));
 		if (compound.hasKey("energy"))
 			energyStorage.setEnergy(compound.getInteger("energy"));
 		if (compound.hasKey("CustomName"))
@@ -120,6 +148,9 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
 		compound.setInteger("energy", energyStorage.getEnergyStored());
+		if (energyStorage.getMaxEnergyStored() != baseCapacity) {
+			compound.setInteger("maxEnergy", energyStorage.getMaxEnergyStored());
+		}
 		compound.setInteger("processed", processTime);
 		compound.setBoolean("isActive", isActive);
 		if (hasCustomName())
@@ -201,6 +232,14 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	public void update() {
 		if (this.world.isRemote)
 			return;
+		if (this.cachedRevision != UpgradeUtils.config_revision) {
+			shouldRecalculate = true;
+			this.cachedRevision = UpgradeUtils.config_revision;
+		}
+		if (shouldRecalculate) {
+			shouldRecalculate = false;
+			recalculateCosts();
+		}
 		boolean isDirty = false;
 		if (ioManager.performTransfer(world, pos)) {
 			isDirty = true;
@@ -211,11 +250,11 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		}
 		boolean active = false;
 		if (!cachedResult.isEmpty() && this.canProcess()) {
-			if (energyStorage.internalExtract(energyCost, true) == energyCost) {
-				energyStorage.internalExtract(energyCost, false);
+			if (energyStorage.internalExtract(cachedEnergyCost, true) == cachedEnergyCost) {
+				energyStorage.internalExtract(cachedEnergyCost, false);
 				processTime++;
 				active = true;
-				if (processTime >= totalProcessTime) {
+				if (processTime >= cachedProcessTime) {
 					processItem();
 					processTime = 0;
 					isDirty = true;
@@ -266,6 +305,12 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		ModularPanel panel = ModularPanel.defaultPanel("electric_furnace");
 		syncManager.registerSlotGroup(new SlotGroup("inputs", 1, 1, true))
 				.registerSlotGroup(new SlotGroup("upgrades", 4));
+		IntSyncValue capacity = new IntSyncValue(energyStorage::getMaxEnergyStored, val -> {});
+		IntSyncValue maxReceive = new IntSyncValue(energyStorage::getMaxInput, val -> {});
+		IntSyncValue energyStored = new IntSyncValue(energyStorage::getEnergyStored, val -> {});
+		syncManager.syncValue("capacity", capacity)
+				.syncValue("maxReceive", maxReceive)
+				.syncValue("energyStored", energyStored);
 
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
@@ -295,8 +340,8 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 				.leftRelOffset(0.5f, -1)
 				.topRelOffset(0.3f, 2)
 				.texture(GuiTextures.PROGRESS_ARROW, 20)
-				.value(new DoubleSyncValue(() -> (double) processTime / totalProcessTime,
-						value -> processTime = (int) (value * totalProcessTime)))
+				.value(new DoubleSyncValue(() -> (double) processTime / cachedProcessTime,
+						value -> processTime = (int) (value * cachedProcessTime)))
 		);
 		panel.child(new ButtonWidget<>()
 				.size(20, 15)
@@ -323,9 +368,10 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 						.slot(new ModularSlot(battery, 0)));
 		panel.child(new PowerDisplayWidget()
 				.pos(9, 6)
-				.energyHandler(this.energyStorage)
-				.value(new IntSyncValue(energyStorage::getEnergyStored)));
-		panel.child(TRGuis.createUpdateTab(upgrades, "upgrades").leftRelOffset(1f, 1));
+				.capacity(capacity)
+				.maxReceive(maxReceive)
+				.energy(energyStored));
+		panel.child(TRGuis.createUpdateTab(upgrades, "upgrades", this::onUpgradeChange).leftRelOffset(1f, 1));
 		return panel;
 	}
 
@@ -337,6 +383,15 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 			return;
 		}
 		refreshResult = true;
+		markDirty();
+	}
+
+	public void onUpgradeChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
+		if (world.isRemote || init || onlyAmountChanged) {
+			shouldRecalculate = false;
+			return;
+		}
+		shouldRecalculate = true;
 		markDirty();
 	}
 

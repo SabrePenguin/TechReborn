@@ -9,11 +9,11 @@ import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.viewport.GuiContext;
 import com.cleanroommc.modularui.theme.WidgetTheme;
-import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widget.ParentWidget;
 import com.cleanroommc.modularui.widget.sizer.Area;
 import com.cleanroommc.modularui.widgets.*;
+import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.sabrepenguin.techreborn.Tags;
@@ -45,7 +45,7 @@ public class TRGuis {
 	public static final UITexture CONFIG = UITexture.builder().location(Tags.MODID, "gui/config_button").nonOpaque().fullImage().build();
 	public static final UITexture UPGRADE = UITexture.builder().location(Tags.MODID, "gui/upgrade_base").fullImage().build();
 
-	public static Expandable createUpdateTab(IItemHandler handler, String groupName) {
+	public static Expandable createUpdateTab(IItemHandler handler, String groupName, IOnSlotChanged listener) {
 		return new Expandable()
 				.name("upgrade tab")
 				.background(GuiTextures.MC_BACKGROUND)
@@ -65,7 +65,8 @@ public class TRGuis {
 								.matrix("II", "II")
 								.key('I', i -> new ItemSlot().slot(new ModularSlot(handler, i)
 										.slotGroup(groupName)
-										.filter(stack -> stack.getItem() == TRItems.upgrades)))
+										.filter(stack -> stack.getItem() == TRItems.upgrades)
+										.changeListener(listener)))
 								.build()
 								.margin(5, 5, 25, 15).name("crafting").alignX(0.5f)));
 	}

@@ -22,8 +22,10 @@ import org.lwjgl.input.Keyboard;
 import java.text.DecimalFormat;
 
 public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements Interactable {
-	private IIntValue<?> value;
-	private IEnergyStorage storage;
+	private IIntValue<?> energy;
+	private IIntValue<?> capacity;
+	private IIntValue<?> maxReceive;
+	private IIntValue<?> maxExtract;
 	private static final ResourceLocation POWER = new ResourceLocation(Tags.MODID, "textures/gui/energy.png");
 	private static final DecimalFormat DECIMAL = new DecimalFormat("#.##");
 
@@ -34,24 +36,25 @@ public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements In
 
 	@Override
 	public void onInit() {
-		if (value == null) {
-			value = new IntValue(0);
-		}
+		if (energy == null) energy = new IntValue(0);
+		if (capacity == null) capacity = new IntValue(0);
+		if (maxReceive == null) maxReceive = new IntValue(0);
+		if (maxExtract == null) maxExtract = new IntValue(0);
 		super.onInit();
 		this.tooltipDynamic(tooltip -> {
-			int current = this.value.getIntValue();
-			int max = storage.getMaxEnergyStored();
+			int current = this.energy.getIntValue();
+			int max = capacity.getIntValue();
 			int percentage = max > 0 ? (int) (((float) current / max) * 100) : 0;
 			if (Interactable.hasShiftDown()) {
 				tooltip.addLine( TextFormatting.GOLD.toString() + current + "/" + max + " FE");
 				tooltip.addLine(TextFormatting.YELLOW.toString() + percentage + "%" + TextFormatting.WHITE + " charged");
-				if (storage instanceof IEnergyInformation energyInformation) {
-					if (energyInformation.getMaxInput() > 0) {
-						tooltip.addLine("Input Rate: " + TextFormatting.GOLD + energyInformation.getMaxInput() + "FE");
-					}
-					if (energyInformation.getMaxOutput() > 0) {
-						tooltip.addLine("Output Rate: " + TextFormatting.GOLD + energyInformation.getMaxOutput() + "FE");
-					}
+				int maxInput = maxReceive.getIntValue();
+				int maxOuput = maxExtract.getIntValue();
+				if (maxInput > 0) {
+					tooltip.addLine("Input Rate: " + TextFormatting.GOLD + maxInput + "FE");
+				}
+				if (maxOuput > 0) {
+					tooltip.addLine("Output Rate: " + TextFormatting.GOLD + maxOuput + "FE");
 				}
 			} else {
 				tooltip.addLine( TextFormatting.GOLD + intToCompact(current) + "/" + intToCompact(max) + " FE");
@@ -75,9 +78,9 @@ public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements In
 		int w = getArea().width;
 		int h = getArea().height;
 		GuiDraw.drawTexture(POWER, 0, 0, w, h, 0, 0, 0.5f, 1);
-		if (storage != null) {
-			int max = storage.getMaxEnergyStored();
-			int current = this.value.getIntValue();
+		{
+			int max = capacity.getIntValue();
+			int current = energy.getIntValue();
 			float clipped = max > 0 ? (float) current / max : 0;
 			clipped = MathHelper.clamp(clipped, 0.0f, 1.0f);
 			int maxFillHeight = h - 2;
@@ -101,25 +104,24 @@ public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements In
 		}
 	}
 
-	public PowerDisplayWidget value(IIntSyncValue<?> value) {
-		setSyncOrValue(ISyncOrValue.orEmpty(value));
+	public PowerDisplayWidget capacity(IIntValue<?> capacity) {
+		this.capacity = capacity;
 		return this;
 	}
 
-	public PowerDisplayWidget energyHandler(IEnergyStorage energyStorage) {
-		this.storage = energyStorage;
+	public PowerDisplayWidget maxReceive(IIntValue<?> maxReceive) {
+		this.maxReceive = maxReceive;
 		return this;
 	}
 
-	@Override
-	protected void setSyncOrValue(@NotNull ISyncOrValue syncOrValue) {
-		super.setSyncOrValue(syncOrValue);
-		this.value = syncOrValue.castNullable(IIntValue.class);
+	public PowerDisplayWidget energy(IIntValue<?> energy) {
+		this.energy = energy;
+		return this;
 	}
 
-	@Override
-	public boolean isValidSyncOrValue(@NotNull ISyncOrValue syncOrValue) {
-		return syncOrValue.isTypeOrEmpty(IIntValue.class);
+	public PowerDisplayWidget maxExtract(IIntValue<?> maxExtract) {
+		this.maxExtract = maxExtract;
+		return this;
 	}
 
 	@Override
