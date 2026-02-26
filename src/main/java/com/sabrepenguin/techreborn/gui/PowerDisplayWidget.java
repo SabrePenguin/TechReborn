@@ -2,8 +2,6 @@ package com.sabrepenguin.techreborn.gui;
 
 import com.cleanroommc.modularui.ModularUIConfig;
 import com.cleanroommc.modularui.api.value.IIntValue;
-import com.cleanroommc.modularui.api.value.ISyncOrValue;
-import com.cleanroommc.modularui.api.value.sync.IIntSyncValue;
 import com.cleanroommc.modularui.api.widget.Interactable;
 import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.screen.viewport.ModularGuiContext;
@@ -11,11 +9,9 @@ import com.cleanroommc.modularui.theme.WidgetThemeEntry;
 import com.cleanroommc.modularui.value.IntValue;
 import com.cleanroommc.modularui.widget.Widget;
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.capability.IEnergyInformation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
@@ -26,6 +22,12 @@ public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements In
 	private IIntValue<?> capacity;
 	private IIntValue<?> maxReceive;
 	private IIntValue<?> maxExtract;
+
+	private int lastEnergy = -1;
+	private int lastCapacity = -1;
+	private int lastMaxReceive = -1;
+	private int lastMaxExtract = -1;
+
 	private static final ResourceLocation POWER = new ResourceLocation(Tags.MODID, "textures/gui/energy.png");
 	private static final DecimalFormat DECIMAL = new DecimalFormat("#.##");
 
@@ -75,13 +77,26 @@ public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements In
 	@Override
 	public void draw(ModularGuiContext context, WidgetThemeEntry<?> widgetTheme) {
 		super.draw(context, widgetTheme);
+
+		int currentEnergy = energy.getIntValue();
+		int currentCapacity = capacity.getIntValue();
+		int currentMaxReceive = maxReceive.getIntValue();
+		int currentMaxExtract = maxExtract.getIntValue();
+
+		if (currentEnergy != lastEnergy || currentCapacity != lastCapacity
+				|| currentMaxReceive != lastMaxReceive || currentMaxExtract != lastMaxExtract) {
+			markTooltipDirty();
+			lastEnergy = currentEnergy;
+			lastCapacity = currentCapacity;
+			lastMaxReceive = currentMaxReceive;
+			lastMaxExtract = currentMaxExtract;
+		}
+
 		int w = getArea().width;
 		int h = getArea().height;
 		GuiDraw.drawTexture(POWER, 0, 0, w, h, 0, 0, 0.5f, 1);
 		{
-			int max = capacity.getIntValue();
-			int current = energy.getIntValue();
-			float clipped = max > 0 ? (float) current / max : 0;
+			float clipped = currentCapacity > 0 ? (float) currentEnergy / currentCapacity : 0;
 			clipped = MathHelper.clamp(clipped, 0.0f, 1.0f);
 			int maxFillHeight = h - 2;
 			int y1 = h - 1;
