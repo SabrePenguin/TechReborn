@@ -25,7 +25,6 @@ import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.items.TRItems;
-import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import com.sabrepenguin.techreborn.util.UpgradeUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -40,9 +39,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
@@ -58,7 +54,7 @@ import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNameable, ITickable, IGuiHolder<PosGuiData>, IOnSlotChanged, ISideConfigTE {
+public class TileEntityElectricFurnace extends TileEntity implements ITickable, IGuiHolder<PosGuiData>, IOnSlotChanged, ISideConfigTE {
 	private final ItemStackHandler inventory;
 	private final RestrictedItemStackHandler input;
 	private final RestrictedItemStackHandler battery;
@@ -67,8 +63,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 	private final TEEnergyStorage energyStorage;
 
 	private final MachineIOManager ioManager;
-
-	private String customName;
 
 	private ItemStack cachedResult = ItemStack.EMPTY;
 	private boolean refreshResult = false;
@@ -135,8 +129,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 			energyStorage.setMaxEnergy(compound.getInteger("maxEnergy"));
 		if (compound.hasKey("energy"))
 			energyStorage.setEnergy(compound.getInteger("energy"));
-		if (compound.hasKey("CustomName"))
-			this.customName = compound.getString("CustomName");
 		ioManager.readFromNBT(compound.getCompoundTag("IOManager"));
 		processTime = compound.getInteger("processed");
 		isActive = compound.getBoolean("active");
@@ -153,8 +145,6 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		}
 		compound.setInteger("processed", processTime);
 		compound.setBoolean("isActive", isActive);
-		if (hasCustomName())
-			compound.setString("CustomName", customName);
 		compound.setTag("IOManager", ioManager.writeToNBT());
 		return super.writeToNBT(compound);
 	}
@@ -322,18 +312,10 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 								new SlotPosition(SlotAction.OUTPUT, 101, 45, 1, 0),
 								new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)));
 		TRGuis.addConfigPanel(panel, panelHandler);
-
-		if (hasCustomName()) {
-			panel.child(IKey.str(getName())
-					.asWidget()
-					.align(Alignment.TopCenter)
-					.top(7));
-		} else {
-			panel.child(IKey.lang("tile.techreborn.electric_furnace.name")
-					.asWidget()
-					.align(Alignment.TopCenter)
-					.top(7));
-		}
+		panel.child(IKey.lang("tile.techreborn.electric_furnace.name")
+				.asWidget()
+				.align(Alignment.TopCenter)
+				.top(7));
 		panel.bindPlayerInventory();
 		panel.child(new ProgressWidget()
 				.size(20)
@@ -395,26 +377,4 @@ public class TileEntityElectricFurnace extends TileEntity implements ISetWorldNa
 		markDirty();
 	}
 
-	@Override
-	public ITextComponent getDisplayName() {
-		if (hasCustomName()) {
-			return new TextComponentString(customName);
-		}
-		return new TextComponentTranslation("tile.techreborn.electric_furnace.name");
-	}
-
-	@Override
-	public void setCustomName(String name) {
-		this.customName = name;
-	}
-
-	@Override
-	public String getName() {
-		return customName;
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return customName != null && !customName.isEmpty();
-	}
 }
