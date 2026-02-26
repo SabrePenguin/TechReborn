@@ -160,14 +160,14 @@ public class BlockHorizontalMachine extends Block implements INonStandardLocatio
 	@Override
 	public IBlockState getStateFromMeta(int meta)
 	{
-		EnumFacing enumfacing = EnumFacing.byIndex(meta & 3);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta & 7);
 
 		if (enumfacing.getAxis() == EnumFacing.Axis.Y)
 		{
 			enumfacing = EnumFacing.NORTH;
 		}
 
-		boolean active = (meta & 4) != 0;
+		boolean active = (meta & 8) != 0;
 
 		return this.getDefaultState().withProperty(FACING, enumfacing).withProperty(ACTIVE, active);
 	}
@@ -176,7 +176,7 @@ public class BlockHorizontalMachine extends Block implements INonStandardLocatio
 	public int getMetaFromState(IBlockState state)
 	{
 		int facingIndex = state.getValue(FACING).getIndex();
-		int active = state.getValue(ACTIVE) ? (1 << 2) : 0;
+		int active = state.getValue(ACTIVE) ? 8 : 0;
 		return facingIndex + active;
 	}
 
