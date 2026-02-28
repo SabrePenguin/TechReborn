@@ -42,6 +42,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
@@ -231,6 +232,22 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		boolean isDirty = false;
 		if (ioManager.performTransfer(world, pos)) {
 			isDirty = true;
+		}
+		{
+			ItemStack energyItem = battery.extractItem(0, 1, true);
+			if (!energyItem.isEmpty() && energyItem.hasCapability(CapabilityEnergy.ENERGY, null)) {
+				IEnergyStorage itemStorage = energyItem.getCapability(CapabilityEnergy.ENERGY, null);
+				int simExtract = itemStorage.extractEnergy(energyStorage.getMaxInput(), true);
+				int simInsert = energyStorage.receiveEnergy(simExtract, true);
+				if (simInsert > 0) {
+					ItemStack realEnergyItem = battery.extractItem(0, 1, false);
+					IEnergyStorage realStorage = realEnergyItem.getCapability(CapabilityEnergy.ENERGY, null);
+					int actualExtract = realStorage.extractEnergy(simInsert, false);
+					energyStorage.receiveEnergy(actualExtract, false);
+					battery.insertItem(0, realEnergyItem, false);
+					isDirty = true;
+				}
+			}
 		}
 		ItemStack ingredient = input.getStackInSlot(0);
 		if (refreshResult) {

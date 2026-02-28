@@ -75,6 +75,7 @@ public class TEEnergyStorage extends EnergyStorage implements IEnergyInformation
 
 	public void setMaxEnergy(int newEnergy) {
 		capacity = Math.max(0, newEnergy);
+		energy = Math.min(energy, capacity);
 	}
 
 	public void setMaxExtract(int extract) {
