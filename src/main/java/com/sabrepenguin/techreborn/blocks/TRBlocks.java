@@ -11,6 +11,7 @@ import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
+import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAlloySmelter;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityElectricFurnace;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -167,7 +168,7 @@ public class TRBlocks {
 				new BlockOmnidirectionalStatic("interdimensional_su", "machines/energy"),
 				new BlockOmnidirectionalStatic("lapotronic_su", "machines/energy"),
 				new BlockLSUStorage(),
-				new BlockHorizontalMachine("alloy_smelter", "machines/tier1"),
+				new BlockHorizontalMachine("alloy_smelter", "machines/tier1", TileEntityAlloySmelter::new),
 				new BlockHorizontalMachine("assembling_machine", "machines/tier1"),
 				new BlockHorizontalMachine("compressor", "machines/tier1"),
 				new BlockHorizontalMachine("extractor", "machines/tier1"),
