@@ -94,10 +94,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 		upgrades = new StackLimitedItemStackHandler(4, 1, () -> shouldRecalculate = true);
 		energyStorage = new TEEnergyStorage(baseCapacity, maxReceive, energyCost);
 		energyStorage.setCanExtract(false);
-		SideConfig inputConfig = new SideConfig(input, SlotAction.INPUT);
-		SideConfig outputConfig = new SideConfig(output, SlotAction.OUTPUT);
-		SideConfig batteryConfig = new SideConfig(battery, SlotAction.BIDIRECTIONAL);
-		ioManager = new MachineIOManager(inputConfig, outputConfig, batteryConfig);
+		ioManager = new MachineIOManager(SideConfig.input(input), SideConfig.output(output), SideConfig.bidirectional(battery));
 		cachedProcessTime = processTime;
 		cachedEnergyCost = energyCost;
 	}
