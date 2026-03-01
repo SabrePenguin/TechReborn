@@ -19,9 +19,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
-import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
-import com.sabrepenguin.techreborn.gui.SlotPosition;
-import com.sabrepenguin.techreborn.gui.TRGuis;
+import com.sabrepenguin.techreborn.gui.*;
 import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
@@ -226,6 +224,9 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 								new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)));
 		TRGuis.addConfigPanel(panel, panelHandler);
 
+		DoubleSyncValue progress = new DoubleSyncValue(() -> (double) processTime / cachedProcessTime,
+				value -> processTime = (int) (value * cachedProcessTime));
+
 		panel.bindPlayerInventory()
 				.child(IKey.lang("tile.techreborn.alloy_smelter.name")
 						.asWidget()
@@ -233,18 +234,31 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 						.top(7))
 				.child(new ProgressWidget()
 						.size(20)
-						.pos(89, 39)
+						.pos(54, 39)
 						.texture(GuiTextures.PROGRESS_ARROW, 20)
-						.value(new DoubleSyncValue(() -> (double) processTime / cachedProcessTime,
-								value -> processTime = (int) (value * cachedProcessTime))))
+						.value(progress))
 				.child(new ButtonWidget<>()
-						.size(20, 15)
-						.pos(89, 41)
+						.size(20, 15).pos(54, 41)
 						.tooltip(tooltip -> {
 							tooltip.addLine(IKey.str("Open JEI"));
-						})
-						.invisible()
-						.onMousePressed(mouseButton -> {
+						}).invisible().onMousePressed(mouseButton -> {
+							if (ModularUIJeiPlugin.getRuntime() != null) {
+								ModularUIJeiPlugin.getRuntime().getRecipesGui().showCategories(Collections.singletonList(TRRecipePlugin.ALLOY_UID));
+								return true;
+							}
+							return false;
+						}))
+				.child(new ProgressWidget()
+						.size(20)
+						.pos(104, 39)
+						.texture(TRGuiTextures.LEFT_PROGRESS_ARROW, 20)
+						.direction(ProgressWidget.Direction.LEFT)
+						.value(progress))
+				.child(new ButtonWidget<>()
+						.size(20, 15).pos(54, 41)
+						.tooltip(tooltip -> {
+							tooltip.addLine(IKey.str("Open JEI"));
+						}).invisible().onMousePressed(mouseButton -> {
 							if (ModularUIJeiPlugin.getRuntime() != null) {
 								ModularUIJeiPlugin.getRuntime().getRecipesGui().showCategories(Collections.singletonList(TRRecipePlugin.ALLOY_UID));
 								return true;
@@ -257,17 +271,18 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 						.maxReceive(maxReceive)
 						.energy(energyStored));
 
-		panel.child(new ItemSlot().pos(47, 39)
+		panel.child(new ItemSlot().pos(34, 39)
 						.slot(new ModularSlot(inputs, 0)
 								.slotGroup("inputs")
 								.changeListener(this::onInputChange)))
-				.child(new ItemSlot().pos(65, 39)
+				.child(new ItemSlot().pos(126, 39)
 						.slot(new ModularSlot(inputs, 1)
 								.slotGroup("inputs")
 								.changeListener(this::onInputChange)))
-				.child(new ItemSlot().pos(116, 39)
+				.child(new LargeItemSlot().pos(80, 39)
 						.slot(new ModularSlot(output, 0)
-								.accessibility(false, true)))
+								.accessibility(false, true))
+						.size(24))
 				.child(new ItemSlot().pos(7, 59)
 						.slot(new ModularSlot(battery, 0)));
 
