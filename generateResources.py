@@ -151,6 +151,12 @@ def fix_directory(directory: str) -> str:
         return ""
     return directory + "/"
 
+def generate_crafts():
+    generated = RECIPES.joinpath("generated")
+    if not os.path.exists(generated):
+        os.makedirs(generated, exist_ok=True)
+    for fname, item in recipes.recipes.items():
+        write_to_file(generated.joinpath(f"{fname}.json"), item)
 
 def dust_craft_creation():
     dust_crafts = RECIPES.joinpath("dust")
@@ -317,7 +323,6 @@ def generate_furnace(
         output = recipes.create_item(modid, output_name, mdata, 1)
         write_to_file(fname, recipes.furnace_recipe([input_name], output, 1.0))
 
-
 if __name__ == "__main__":
     create_item_x("ingot", registries.INGOTS, "_ingot")
     create_item_x("nugget", registries.NUGGETS, "_nugget")
@@ -355,3 +360,4 @@ if __name__ == "__main__":
     ingot_craft_creation()
     gem_craft_creation()
     block_craft_creation()
+    generate_crafts()
