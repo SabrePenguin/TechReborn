@@ -1,3 +1,29 @@
+def get_name_for_registry(registry: dict | list) -> str | None:
+    if registry == INGOTS:
+        return "ingot"
+    elif registry == ORES:
+        return "ore"
+    elif registry == NUGGETS:
+        return "nuggets"
+    elif registry == DUSTS:
+        return "dust"
+    elif registry == SMALL_DUSTS:
+        return "smalldust"
+    elif registry == BLOCK_STORAGE:
+        return "storage"
+    elif registry == BLOCK_STORAGE2:
+        return "storage2"
+    elif registry == GEM:
+        return "gem"
+    elif registry == PARTS:
+        return "part"
+    elif registry == PLATES:
+        return "plates"
+    elif registry == UPGRADES:
+        return "upgrades"
+    return None
+
+
 INGOTS = {
     "aluminum": 0,
     "brass": 1,
@@ -41,7 +67,7 @@ ORES = {
     "peridot": 10,
     "sodalite": 11,
     "lead": 12,
-    "silver": 13
+    "silver": 13,
 }
 NUGGETS = {
     "aluminum": 0,
@@ -329,14 +355,9 @@ UPGRADES = {
     "superconductor": 3,
 }
 
-BLOCKS = [
-    "rubber_leaves",
-    "rubber_planks"
-]
+BLOCKS = ["rubber_leaves", "rubber_planks"]
 
-FLAT_BLOCKS = [
-    "rubber_sapling"
-]
+FLAT_BLOCKS = ["rubber_sapling"]
 
 MISC = ["uu_matter"]
 
@@ -347,7 +368,7 @@ TOOLS = [
     "sapphire",
 ]
 
-SINGLE_TOOLS = ["wrench", "treetap"]
+SINGLE_TOOLS = ["wrench", "treetap", "configurinator"]
 
 ARMOR = ["cloaking_device", "lapotronic_orbpack", "lithium_batpack"]
 
