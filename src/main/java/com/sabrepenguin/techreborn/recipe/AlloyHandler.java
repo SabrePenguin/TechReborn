@@ -18,11 +18,13 @@ public class AlloyHandler implements ITRRecipeFactory {
 		List<CountedIngredient> inputs = Arrays.asList(RecipeUtils.getCountedIngredients(ingredients));
 		int recipeTime = JsonUtils.hasField(json, "recipe_time") ?
 				JsonUtils.getInt(json, "recipe_time") : 200;
+		int energyCost = JsonUtils.hasField(json, "fe_cost") ?
+				JsonUtils.getInt(json, "fe_cost") : 24;
 		ItemStack output = RecipeUtils.getResult(json, context);
 		if (!inputs.isEmpty()) {
 			RegistryHandler.instance()
 					.getAlloyRegistry()
-					.addRecipe(new AlloyRecipe(inputs, output, recipeTime));
+					.addRecipe(new AlloyRecipe(inputs, output, recipeTime, energyCost));
 		}
 	}
 }

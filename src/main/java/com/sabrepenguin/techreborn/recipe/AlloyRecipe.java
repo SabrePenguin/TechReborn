@@ -16,11 +16,13 @@ public class AlloyRecipe {
 	private final ItemStack output;
 
 	private final int recipeTime;
+	private final int energyCost;
 
-	public AlloyRecipe(@Nonnull List<CountedIngredient> inputs, @Nonnull ItemStack output, int recipeTime) {
+	public AlloyRecipe(@Nonnull List<CountedIngredient> inputs, @Nonnull ItemStack output, int recipeTime,int energyCost) {
 		this.inputs = inputs;
 		this.output = output;
 		this.recipeTime = recipeTime;
+		this.energyCost = energyCost;
 	}
 
 	@Nonnull
@@ -35,6 +37,10 @@ public class AlloyRecipe {
 
 	public int getRecipeTime() {
 		return recipeTime;
+	}
+
+	public int getEnergyCost() {
+		return energyCost;
 	}
 
 	@Override
