@@ -31,6 +31,27 @@ public class UpgradeUtils {
 	public static int storage_increase = 160_000;
 	private final static boolean exponential = false;
 
+	public static float getProcessingTimeMultiplier(IItemHandler handler) {
+		float base = 1;
+		for (int i = 0; i < handler.getSlots(); i++) {
+			ItemStack upgrade = handler.getStackInSlot(i);
+			Item item = upgrade.getItem();
+			int meta = upgrade.getMetadata();
+			if (item == TRItems.upgrades) {
+				if (meta == ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()) {
+					if (exponential) {
+						base *= (1f - overclock_processing);
+					} else {
+						base -= overclock_processing;
+					}
+					if (base < 0.01)
+						base = 0.01f;
+				}
+			}
+		}
+		return base;
+	}
+
 	public static int getProcessingTimeMultiplier(IItemHandler handler, int baseAmount) {
 		float base = 1;
 		for (int i = 0; i < handler.getSlots(); i++) {
