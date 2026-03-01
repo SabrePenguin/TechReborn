@@ -7,6 +7,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -26,6 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public abstract class TileEntityIOManager extends TileEntity implements ISideConfigTE, ITickable {
 	protected final ItemStackHandler inventory;
 	protected final RestrictedItemStackHandler inputs;
+	protected final RestrictedItemStackHandler _internalOutput;
 	protected final LimitedItemStackHandler output;
 	protected final RestrictedItemStackHandler battery;
 	protected final MachineIOManager ioManager;
@@ -51,7 +53,8 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 			}
 		};
 		inputs = new RestrictedItemStackHandler(inventory, 0, inputSize);
-		output = new LimitedItemStackHandler(new RestrictedItemStackHandler(inventory, inputSize, inputSize + outputSize), SlotAction.OUTPUT);
+		_internalOutput = new RestrictedItemStackHandler(inventory, inputSize, inputSize + outputSize);
+		output = new LimitedItemStackHandler(_internalOutput, SlotAction.OUTPUT);
 		battery = new RestrictedItemStackHandler(inventory, inputSize + outputSize);
 		ioManager = new MachineIOManager(SideConfig.input(inputs), SideConfig.output(output), SideConfig.bidirectional(battery));
 
@@ -59,6 +62,7 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 
 		baseCapacity = capacity;
 		energyStorage = new TEEnergyStorage(baseCapacity, maxReceive, maxOutput);
+		energyStorage.setCanExtract(false);
 	}
 
 	protected abstract void recalculateCosts();
@@ -83,7 +87,6 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 			}
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ioManager.getSide(facing));
 		} else if (capability == CapabilityEnergy.ENERGY) {
-
 			return CapabilityEnergy.ENERGY.cast(energyStorage);
 		}
 		return super.getCapability(capability, facing);
@@ -111,6 +114,16 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 		}
 		compound.setTag("IOManager", ioManager.writeToNBT());
 		return super.writeToNBT(compound);
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public @Nullable SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, 3, this.getUpdateTag());
 	}
 
 	// ITickable
