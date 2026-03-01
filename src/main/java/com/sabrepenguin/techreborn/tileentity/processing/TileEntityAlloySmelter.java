@@ -33,7 +33,7 @@ public class TileEntityAlloySmelter extends TileEntityIOManager {
 	private int cachedEnergyCost;
 
 	public TileEntityAlloySmelter() {
-		super(2, 1, baseCapacity, maxReceive, 0);
+		super(2, 1, baseCapacity, maxReceive, energyCost);
 		cachedProcessTime = totalProcessTime;
 		cachedEnergyCost = energyCost;
 	}
@@ -49,6 +49,7 @@ public class TileEntityAlloySmelter extends TileEntityIOManager {
 
 		float newTransfer = UpgradeUtils.getEnergyTransferMultiplier(upgrades);
 		this.energyStorage.setMaxReceive((int) (maxReceive * newTransfer));
+		this.energyStorage.setMaxExtract((int) (energyCost * newTransfer));
 	}
 
 	private void updateState(boolean state) {

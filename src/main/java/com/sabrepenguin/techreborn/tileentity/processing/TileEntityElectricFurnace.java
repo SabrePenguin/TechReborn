@@ -109,6 +109,7 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 
 		float newTransfer = UpgradeUtils.getEnergyTransferMultiplier(upgrades);
 		this.energyStorage.setMaxReceive((int) (maxReceive * newTransfer));
+		this.energyStorage.setMaxExtract((int) (energyCost * newTransfer));
 	}
 
 	@Override
