@@ -4,6 +4,9 @@ import com.sabrepenguin.techreborn.util.ItemStackWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class CountedIngredient {
@@ -14,7 +17,8 @@ public class CountedIngredient {
 
 	public CountedIngredient(int count, ItemStack stack) {
 		this.count = count;
-		this.itemStack = stack;
+		this.itemStack = stack.copy();
+		this.itemStack.setCount(count);
 	}
 
 	public CountedIngredient(int count, String oreDict) {
@@ -23,6 +27,18 @@ public class CountedIngredient {
 		if (!OreDictionary.doesOreNameExist(oreDict)) {
 			throw new RuntimeException("Could not create ore dictionary counted ingredient");
 		}
+	}
+
+	public List<ItemStack> resolveIngredients() {
+		return itemStack == null ? oreToCount(OreDictionary.getOres(oreDict)) : Arrays.asList(itemStack);
+	}
+
+	private List<ItemStack> oreToCount(List<ItemStack> input) {
+		List<ItemStack> output = new ArrayList<>();
+		for (ItemStack item: input) {
+			output.add(new ItemStack(item.getItem(), count, item.getMetadata()));
+		}
+		return output;
 	}
 
 	public int getCount() {
