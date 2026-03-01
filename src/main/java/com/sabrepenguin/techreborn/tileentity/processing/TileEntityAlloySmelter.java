@@ -47,19 +47,22 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 	private boolean isActive = false;
 
 	// TODO: Config
-	private static int energyCost = 24;
 	private static int maxReceive = 128;
 	private static int baseCapacity = 4000;
 
 	private int totalProcessTime;
 	private float cachedProcessMultiplier;
+	private int energyCost;
+	private float cachedEnergyMultiplier;
 	private int cachedProcessTime;
 	private int cachedEnergyCost;
 
 	public TileEntityAlloySmelter() {
-		super(2, 1, baseCapacity, maxReceive, energyCost);
+		super(2, 1, baseCapacity, maxReceive, 0);
 		totalProcessTime = 0;
-		cachedProcessMultiplier = 0;
+		cachedProcessMultiplier = 1.0f;
+		energyCost = 24;
+		cachedEnergyMultiplier = 1.0f;
 		cachedProcessTime = totalProcessTime;
 		cachedEnergyCost = energyCost;
 	}
@@ -69,14 +72,15 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 		// Processing
 		this.cachedProcessMultiplier = UpgradeUtils.getProcessingTimeMultiplier(upgrades);
 		this.cachedProcessTime = (int) (cachedProcessMultiplier * totalProcessTime);
-		this.cachedEnergyCost = UpgradeUtils.getTotalCostMultiplier(upgrades, energyCost);
+		this.cachedEnergyMultiplier = UpgradeUtils.getTotalCostMultiplier(upgrades);
+		this.cachedEnergyCost = (int) (cachedEnergyMultiplier * energyCost);
 
 		// Input, Output, Capacity
 		this.energyStorage.setMaxEnergy(UpgradeUtils.getTotalEnergyStorageIncrease(upgrades, baseCapacity));
 
 		float newTransfer = UpgradeUtils.getEnergyTransferMultiplier(upgrades);
 		this.energyStorage.setMaxReceive((int) (maxReceive * newTransfer));
-		this.energyStorage.setMaxExtract((int) (energyCost * newTransfer));
+		this.energyStorage.setMaxExtract(cachedEnergyCost);
 	}
 
 	private void updateState(boolean state) {
@@ -96,6 +100,8 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 			if (cachedRecipe != null) {
 				totalProcessTime = cachedRecipe.getRecipeTime();
 				cachedProcessTime = (int) (totalProcessTime * cachedProcessMultiplier);
+				energyCost = cachedRecipe.getEnergyCost();
+				cachedEnergyCost = (int) (energyCost * cachedEnergyMultiplier);
 			}
 			processTime = 0;
 		}
@@ -146,6 +152,7 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 		));
 		if (cachedRecipe != null) {
 			totalProcessTime = cachedRecipe.getRecipeTime();
+			energyCost = cachedRecipe.getEnergyCost();
 		}
 	}
 

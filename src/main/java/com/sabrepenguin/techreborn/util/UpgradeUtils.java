@@ -88,6 +88,21 @@ public class UpgradeUtils {
 		return (int) (base * energyCost);
 	}
 
+	public static float getTotalCostMultiplier(IItemHandler handler) {
+		float base = 1;
+		for (int i = 0; i < handler.getSlots(); i++) {
+			ItemStack upgrade = handler.getStackInSlot(i);
+			Item item = upgrade.getItem();
+			int meta = upgrade.getMetadata();
+			if (item == TRItems.upgrades) {
+				if (meta == ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()) {
+					base += overclock_energy_multiplier;
+				}
+			}
+		}
+		return base;
+	}
+
 	/**
 	 * Gets the total multiplier based on the upgrades in the passed-in inventory
 	 * @param handler The inventory containing upgrades
