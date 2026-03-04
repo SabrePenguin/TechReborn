@@ -1,9 +1,8 @@
 package com.sabrepenguin.techreborn.jei.wrappers;
 
-import com.ibm.icu.text.CompactDecimalFormat;
-import com.ibm.icu.util.ULocale;
 import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
+import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -19,7 +18,6 @@ import java.util.List;
 @MethodsReturnNonnullByDefault
 public class AlloyWrapper implements IRecipeWrapper {
 	private final AlloyRecipe recipe;
-	private static final CompactDecimalFormat FORMAT = CompactDecimalFormat.getInstance(ULocale.getDefault(), CompactDecimalFormat.CompactStyle.SHORT);
 
 	public AlloyWrapper(AlloyRecipe recipe) {
 		this.recipe = recipe;
@@ -28,7 +26,7 @@ public class AlloyWrapper implements IRecipeWrapper {
 	@Override
 	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
 		int energyCost = recipe.getEnergyCost();
-		String energy = FORMAT.format(energyCost) + " FE";
+		String energy = ExtraStringUtils.numberToCompactNumber(energyCost) + " FE";
 		minecraft.fontRenderer.drawString(energy,
 				(recipeWidth / 2) - (minecraft.fontRenderer.getStringWidth(energy) / 2),
 				30, 0x444444);
