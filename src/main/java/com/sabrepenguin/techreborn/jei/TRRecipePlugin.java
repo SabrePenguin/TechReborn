@@ -4,11 +4,8 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.jei.categories.AlloyCategory;
 import com.sabrepenguin.techreborn.jei.wrappers.AlloyWrapper;
-import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
-import mezz.jei.api.IModPlugin;
-import mezz.jei.api.IModRegistry;
-import mezz.jei.api.JEIPlugin;
+import mezz.jei.api.*;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
@@ -23,7 +20,9 @@ public class TRRecipePlugin implements IModPlugin {
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
-		registry.addRecipeCategories(new AlloyCategory(registry.getJeiHelpers().getGuiHelper(), ALLOY_UID));
+		IGuiHelper helper = registry.getJeiHelpers().getGuiHelper();
+		JEITextures.init(helper);
+		registry.addRecipeCategories(new AlloyCategory(helper, ALLOY_UID));
 	}
 
 	@Override

@@ -44,4 +44,5 @@ dependencies {
     api ("zone.rong:mixinbooter:10.7") {
         transitive = false
     }
+    shadowImplementation("com.ibm.icu:icu4j:63.1")
 }
