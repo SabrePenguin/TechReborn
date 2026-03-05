@@ -122,7 +122,11 @@ def shapeless_recipe(ingredients: list, output: dict) -> str | None:
 
 
 def special_recipe(
-    recipe_type: str, ingredients: list, output: dict, recipe_time: int = 0
+    recipe_type: str,
+    ingredients: list,
+    output: dict,
+    recipe_time: int = 0,
+    energy_cost: int = 0,
 ) -> str | None:
     if not (isinstance(ingredients, list)):
         return None
@@ -136,6 +140,8 @@ def special_recipe(
     }
     if recipe_time > 0:
         result["recipe_time"] = recipe_time
+    if energy_cost > 0:
+        result["fe_cost"] = energy_cost
     return json.dumps(result, indent=4)
 
 
@@ -170,7 +176,7 @@ def meta_string_to_item(string_in: str, registry: dict) -> dict:
 
 
 def string_to_oredict(string_in: str) -> dict:
-    split_words = string_in.split("#", 1)
+    split_words: list[str] = string_in.split("#", 1)
     count = 0
     if len(split_words) == 2:
         count = int(split_words.pop(0))
@@ -252,72 +258,7 @@ if __name__ == "__main__":
     test()
     print(string_to_item("dirt"))
     print(string_to_oredict("ingotIron"))
+    print(string_to_oredict("2#ingotIron"))
 
 
 # The fun of making recipes by hand
-
-recipes = {
-    "energy_flow_circuit": shaped_recipe(
-        ["CTC", " P ", "CTC"],
-        {
-            "C": string_to_oredict("circuitAdvanced"),
-            "T": string_to_oredict("ingotTungsten"),
-            "P": string_to_oredict("plateIridiumAlloy"),
-        },
-        meta_string_to_item("4#techreborn:energy_flow_circuit", registries.PARTS),
-    ),  # TODO: Add crystals
-    "data_control_circuit": shaped_recipe(
-        ["CTC", "TPT", "CTC"],
-        {
-            "C": string_to_oredict("circuitAdvanced"),
-            "T": string_to_oredict("ingotTungsten"),
-            "P": string_to_oredict("plateIridiumAlloy"),
-        },
-        meta_string_to_item("techreborn:data_control_circuit", registries.PARTS),
-    ),
-    "data_storage_circuit": shaped_recipe(
-        ["RGR", "LCL", "PPP"],
-        {
-            "R": string_to_item("minecraft:redstone"),
-            "G": string_to_item("minecraft:glowstone_dust"),
-            "L": string_to_item("minecraft:dye@4"),
-            "C": string_to_oredict("circuitBasic"),
-            "P": string_to_oredict("plateEmerald"),
-        },
-        meta_string_to_item("techreborn:data_storage_circuit", registries.PARTS),
-    ),
-    "data_orb": shaped_recipe(
-        ["XXX", "XOX", "XXX"],
-        {
-            "X": string_to_oredict("circuitStorage"),
-            "O": string_to_oredict("circuitElite")
-        },
-        meta_string_to_item("techreborn:data_orb", registries.PARTS),
-    ),
-    "diamond_grinding_head": shaped_recipe(
-        ["DSD", "SCS", "DSD"],
-        {
-            "D": string_to_oredict("dustDiamond"),
-            "S": string_to_oredict("ingotSteel"),
-            "C": string_to_item("diamond"),
-        },
-        meta_string_to_item("2#techreborn:diamond_grinding_head", registries.PARTS),
-    ),
-    "diamond_saw_blade": shaped_recipe(
-        ["DSD", "S S", "DSD"],
-        {
-            "D": string_to_oredict("dustDiamond"),
-            "S": string_to_oredict("ingotSteel"),
-        },
-        meta_string_to_item("4#techreborn:diamond_saw_blade", registries.PARTS),
-    ),
-    "tungsten_grinding_head": shaped_recipe(
-        ["TST", "SCS", "TST"],
-        {
-            "T": string_to_oredict("ingotTungsten"),
-            "S": string_to_oredict("ingotSteel"),
-            "C": string_to_oredict("blockSteel"),
-        },
-        meta_string_to_item("2#techreborn:tungsten_grinding_head", registries.PARTS),
-    ),
-}
