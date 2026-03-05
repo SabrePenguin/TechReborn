@@ -12,7 +12,6 @@
         }
     },
     "result": {
-        "item": "minecraft:glowstone_dust",
-        "count": 1
+        "item": "minecraft:glowstone_dust"
     }
 }

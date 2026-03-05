@@ -13,7 +13,6 @@
         }
     },
     "result": {
-        "item": "minecraft:iron_ingot",
-        "count": 1
+        "item": "minecraft:iron_ingot"
     }
 }
