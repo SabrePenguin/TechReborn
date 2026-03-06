@@ -350,12 +350,14 @@ def parts_recipes():
             .with_input("X", registry=PARTS, meta_item="carbon_fiber")
             .with_output(registry=PARTS, meta_item="carbon_mesh")
         ),
-        # "coolant_simple": (  # TODO: Finish water
-        #     ShapedRecipeBuilder()
-        #     .with_pattern([" T ", "TWT", " T "])
-        #     .with_input("T", ore_dict="ingotTin")
-        #     .with_output(registry=PARTS, meta_item="coolant_simple", count=2)
-        # ),
+        "coolant_simple": (  # TODO: Finish water
+            ShapedRecipeBuilder()
+            .with_type("techreborn:shaped_fluid")
+            .with_pattern([" T ", "TWT", " T "])
+            .with_input("T", ore_dict="ingotTin")
+            .with_input("W", fluid="water", count=1000)
+            .with_output(registry=PARTS, meta_item="coolant_simple", count=2)
+        ),
         "coolant_triple": (
             ShapedRecipeBuilder()
             .with_pattern(["TTT", "NNN", "TTT"])
