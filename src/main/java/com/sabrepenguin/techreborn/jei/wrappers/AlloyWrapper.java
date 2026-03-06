@@ -25,12 +25,12 @@ public class AlloyWrapper implements IRecipeWrapper {
 
 	@Override
 	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-		int energyCost = recipe.getEnergyCost();
+		int time = recipe.getRecipeTime();
+		int energyCost = recipe.getEnergyCost() * time;
 		String energy = ExtraStringUtils.numberToCompactNumber(energyCost) + " FE";
 		minecraft.fontRenderer.drawString(energy,
 				(recipeWidth / 2) - (minecraft.fontRenderer.getStringWidth(energy) / 2),
 				30, 0x444444);
-		int time = recipe.getRecipeTime();
 		String timeString = (time/20) + " sec";
 		minecraft.fontRenderer.drawString(timeString,
 				(recipeWidth / 2) - (minecraft.fontRenderer.getStringWidth(timeString) / 2),
