@@ -21,7 +21,7 @@ public class AlloyHandler implements ITRRecipeFactory {
 		int energyCost = JsonUtils.hasField(json, "fe_cost") ?
 				JsonUtils.getInt(json, "fe_cost") : 24;
 		ItemStack output = RecipeUtils.getResult(json, context);
-		if (!inputs.isEmpty()) {
+		if (inputs.size() == 2) {
 			RegistryHandler.instance()
 					.getAlloyRegistry()
 					.addRecipe(new BasicOutputRecipe(inputs, output, recipeTime, energyCost));
