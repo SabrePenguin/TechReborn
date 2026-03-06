@@ -7,20 +7,25 @@ import net.minecraftforge.items.IItemHandler;
 
 import java.util.*;
 
-public class AlloyRegistry {
-	private final Set<AlloyRecipe> recipes = new HashSet<>();
+public class BasicOutputRegistry {
+	private final Set<BasicOutputRecipe> recipes = new HashSet<>();
+	private final List<BasicOutputRecipe> sorted_recipes = new ArrayList<>();
 
-	public Collection<AlloyRecipe> getRecipes() {
-		return Collections.unmodifiableCollection(recipes);
+	public Collection<BasicOutputRecipe> getRecipes() {
+		return Collections.unmodifiableCollection(sorted_recipes);
 	}
 
-	public boolean addRecipe(AlloyRecipe recipe) {
+	public boolean addRecipe(BasicOutputRecipe recipe) {
 		Preconditions.checkNotNull(recipe);
-		return this.recipes.add(recipe);
+		boolean result = this.recipes.add(recipe);
+		if (result) {
+			sorted_recipes.add(recipe);
+		}
+		return result;
 	}
 
-	public AlloyRecipe getRecipe(List<ItemStack> ingredientList) {
-		for (AlloyRecipe recipe: recipes) {
+	public BasicOutputRecipe getRecipe(List<ItemStack> ingredientList) {
+		for (BasicOutputRecipe recipe: recipes) {
 			if (ingredientList.size() != recipe.getInputs().size()) continue;
 			List<CountedIngredient> copy = new ArrayList<>(recipe.getInputs());
 			for (ItemStack i: ingredientList) {
@@ -34,8 +39,8 @@ public class AlloyRegistry {
 		return null;
 	}
 
-	public AlloyRecipe getRecipe(IItemHandler handler) {
-		for (AlloyRecipe recipe: recipes) {
+	public BasicOutputRecipe getRecipe(IItemHandler handler) {
+		for (BasicOutputRecipe recipe: recipes) {
 			if (handler.getSlots() != recipe.getInputs().size()) continue;
 			List<CountedIngredient> copy = new ArrayList<>(recipe.getInputs());
 			for (int i = 0; i < handler.getSlots(); i++) {

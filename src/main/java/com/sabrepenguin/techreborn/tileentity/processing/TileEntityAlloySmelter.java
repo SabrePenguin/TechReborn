@@ -21,7 +21,7 @@ import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.*;
 import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
-import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
+import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.tileentity.TileEntityIOManager;
@@ -42,7 +42,7 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiHolder<PosGuiData> {
 
-	private AlloyRecipe cachedRecipe = null;
+	private BasicOutputRecipe cachedRecipe = null;
 	private int processTime = 0;
 	private boolean isActive = false;
 
@@ -94,7 +94,7 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 			if (RecipeUtils.checkRecipeValid(inputs, cachedRecipe.getInputs()))
 				return;
 		}
-		AlloyRecipe newRecipe = RegistryHandler.instance().getAlloyRegistry().getRecipe(inputs);
+		BasicOutputRecipe newRecipe = RegistryHandler.instance().getAlloyRegistry().getRecipe(inputs);
 		if (cachedRecipe != newRecipe) {
 			cachedRecipe = newRecipe;
 			if (cachedRecipe != null) {

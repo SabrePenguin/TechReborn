@@ -24,7 +24,7 @@ public class AlloyHandler implements ITRRecipeFactory {
 		if (!inputs.isEmpty()) {
 			RegistryHandler.instance()
 					.getAlloyRegistry()
-					.addRecipe(new AlloyRecipe(inputs, output, recipeTime, energyCost));
+					.addRecipe(new BasicOutputRecipe(inputs, output, recipeTime, energyCost));
 		}
 	}
 }

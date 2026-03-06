@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.jei.wrappers;
 
-import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
+import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -17,9 +17,9 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class AlloyWrapper implements IRecipeWrapper {
-	private final AlloyRecipe recipe;
+	private final BasicOutputRecipe recipe;
 
-	public AlloyWrapper(AlloyRecipe recipe) {
+	public AlloyWrapper(BasicOutputRecipe recipe) {
 		this.recipe = recipe;
 	}
 

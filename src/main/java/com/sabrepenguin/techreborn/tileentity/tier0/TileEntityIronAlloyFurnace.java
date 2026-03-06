@@ -15,7 +15,7 @@ import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
-import com.sabrepenguin.techreborn.recipe.AlloyRecipe;
+import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;
@@ -59,7 +59,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	private int burnTime;
 	private int totalBurnTime;
 
-	private AlloyRecipe cachedRecipe = null;
+	private BasicOutputRecipe cachedRecipe = null;
 	private boolean shouldChange = false;
 
 	public TileEntityIronAlloyFurnace() {
@@ -114,7 +114,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 			if (RecipeUtils.checkRecipeValid(input, cachedRecipe.getInputs()))
 				return;
 		}
-		AlloyRecipe newRecipe = RegistryHandler.instance().getAlloyRegistry().getRecipe(input);
+		BasicOutputRecipe newRecipe = RegistryHandler.instance().getAlloyRegistry().getRecipe(input);
 		if (cachedRecipe != newRecipe) {
 			cachedRecipe = newRecipe;
 			cookTime = 0;
