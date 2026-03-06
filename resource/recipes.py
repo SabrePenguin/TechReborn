@@ -2,7 +2,11 @@ from pathlib import Path
 
 from registries import *
 from resource.file import write_to_file
-from resource.recipe_builders import ShapedRecipeBuilder, ShapelessRecipeBuilder
+from resource.recipe_builders import (
+    ShapedRecipeBuilder,
+    ShapelessRecipeBuilder,
+    CustomRecipeBuilder, Ingredient,
+)
 
 MODID = "techreborn"
 BASE = Path("src/main/resources/assets/techreborn")
@@ -25,20 +29,19 @@ def dust_craft_creation():
         recipe = (
             ShapedRecipeBuilder()
             .with_pattern(["XX", "XX"])
-            .with_input(
+            .with_ingredient("X", Ingredient.oredict(input_name, "dustSmall"))
+            .with_old_input(
                 "X",
                 registry=SMALL_DUSTS,
                 ore_dict="dustSmall" + _capitalize_oredict(input_name),
             )
         )
         if input_name != "glowstone" and input_name != "redstone":
-            recipe = recipe.with_output(
-                registry=DUSTS, meta_item=MODID + ":" + input_name
-            )
+            recipe = recipe.with_output(Ingredient.meta(DUSTS, input_name))
         else:
             if input_name == "glowstone":
                 input_name = "glowstone_dust"
-            recipe = recipe.with_output(item="minecraft:" + input_name)
+            recipe = recipe.with_output(Ingredient.item(input_name))
         write_to_file(fname, recipe.build())
 
 
@@ -96,8 +99,8 @@ def ingotn_craft_creation():
     recipe = (
         ShapedRecipeBuilder()
         .with_pattern(pattern)
-        .with_input("X", ore_dict="nuggetIron")
-        .with_output(item="minecraft:iron_ingot")
+        .with_ingredient("X", Ingredient.oredict("nuggetIron"))
+        .with_output(Ingredient.item("iron_ingot"))
     )
     write_to_file(fname, recipe.build())
 
@@ -141,10 +144,8 @@ def generic_3x3_craft_creation(
         recipe = (
             ShapedRecipeBuilder()
             .with_pattern(["XXX", "XXX", "XXX"])
-            .with_input("X", ore_dict=ore_dict + _capitalize_oredict(name))
-            .with_output(
-                registry=target_registry, meta_item=MODID + ":" + name, count=count
-            )
+            .with_ingredient("X", Ingredient.oredict(name, oretype=ore_dict))
+            .with_output(Ingredient.meta(target_registry, name, count=count))
         )
         write_to_file(fname, recipe.build())
 
@@ -155,8 +156,8 @@ def gem_craft_creation():
     recipe = (
         ShapedRecipeBuilder()
         .with_pattern(["XXX", "XXX", "XXX"])
-        .with_input("X", ore_dict="nuggetDiamond")
-        .with_output(item="minecraft:diamond")
+        .with_ingredient("X", Ingredient.oredict("nuggetDiamond"))
+        .with_output(Ingredient.item("diamond"))
     )
     write_to_file(fname, recipe.build())
 
@@ -187,159 +188,153 @@ def parts_recipes():
         "energy_flow_circuit": (
             ShapedRecipeBuilder()
             .with_pattern(["CTC", " P ", "CTC"])  # TODO: Add crystals
-            .with_input("C", ore_dict="circuitAdvanced")
-            .with_input("T", ore_dict="ingotTungsten")
-            .with_input("P", ore_dict="plateIridiumAlloy")
-            .with_output(
-                registry=PARTS, meta_item=MODID + ":energy_flow_circuit", count=4
-            )
+            .with_ingredient("C", Ingredient.oredict("circuitAdvanced"))
+            .with_ingredient("T", Ingredient.oredict("ingotTungsten"))
+            .with_ingredient("P", Ingredient.oredict("plateIridiumAlloy"))
+            .with_output(Ingredient.meta(PARTS, "energy_flow_circuit", count=4))
         ),
         "data_control_circuit": (
             ShapedRecipeBuilder()
             .with_pattern(["CTC", "TPT", "CTC"])
-            .with_input("C", ore_dict="circuitAdvanced")
-            .with_input("T", ore_dict="ingotTungsten")
-            .with_input("P", ore_dict="plateIridiumAlloy")
-            .with_output(registry=PARTS, meta_item=MODID + ":data_control_circuit")
+            .with_ingredient("C", Ingredient.oredict("circuitAdvanced"))
+            .with_ingredient("T", Ingredient.oredict("ingotTungsten"))
+            .with_ingredient("P", Ingredient.oredict("plateIridiumAlloy"))
+            .with_output(Ingredient.meta(PARTS, "data_control_circuit"))
         ),
         "data_storage_circuit": (
             ShapedRecipeBuilder()
             .with_pattern(["RGR", "LCL", "PPP"])
-            .with_input("R", item="redstone")
-            .with_input("G", item="glowstone_dust")
-            .with_input("L", item="dye@4")
-            .with_input("C", ore_dict="circuitBasic")
-            .with_input("P", ore_dict="plateEmerald")
-            .with_output(registry=PARTS, meta_item=MODID + ":data_storage_circuit")
+            .with_ingredient("R", Ingredient.item("redstone"))
+            .with_ingredient("G", Ingredient.item("glowstone_dust"))
+            .with_ingredient("L", Ingredient.item("dye", metadata=4))
+            .with_ingredient("C", Ingredient.oredict("circuitBasic"))
+            .with_ingredient("P", Ingredient.oredict("plateEmerald"))
+            .with_output(Ingredient.meta(PARTS, "data_storage_circuit"))
         ),
         "data_orb": (
             ShapedRecipeBuilder()
             .with_pattern(["XXX", "XOX", "XXX"])
-            .with_input("X", ore_dict="circuitStorage")
-            .with_input("O", ore_dict="circuitElite")
-            .with_output(registry=PARTS, meta_item=MODID + ":data_orb")
+            .with_ingredient("X", Ingredient.oredict("circuitStorage"))
+            .with_ingredient("O", Ingredient.oredict("circuitElite"))
+            .with_output(Ingredient.meta(PARTS, "data_orb"))
         ),
         "diamond_grinding_head": (
             ShapedRecipeBuilder()
             .with_pattern(["DSD", "SCS", "DSD"])
-            .with_input("D", ore_dict="dustDiamond")
-            .with_input("S", ore_dict="ingotSteel")
-            .with_input("C", item="diamond")
-            .with_output(
-                registry=PARTS, meta_item=MODID + ":diamond_grinding_head", count=2
-            )
+            .with_ingredient("D", Ingredient.oredict("dustDiamond"))
+            .with_ingredient("S", Ingredient.oredict("ingotSteel"))
+            .with_ingredient("C", Ingredient.item("diamond"))
+            .with_output(Ingredient.meta(PARTS, "diamond_grinding_head", count=2))
         ),
         "diamond_saw_blade": (
             ShapedRecipeBuilder()
             .with_pattern(["DSD", "S S", "DSD"])
-            .with_input("D", ore_dict="dustDiamond")
-            .with_input("S", ore_dict="ingotSteel")
-            .with_output(registry=PARTS, meta_item="4#techreborn:diamond_saw_blade")
+            .with_ingredient("D", Ingredient.oredict("dustDiamond"))
+            .with_ingredient("S", Ingredient.oredict("ingotSteel"))
+            .with_output(Ingredient.meta(PARTS, "diamond_saw_blade", count=4))
         ),
         "tungsten_grinding_head": (
             ShapedRecipeBuilder()
             .with_pattern(["TST", "SCS", "TST"])
-            .with_input("T", ore_dict="ingotTungsten")
-            .with_input("S", ore_dict="ingotSteel")
-            .with_input("C", ore_dict="blockSteel")
-            .with_output(
-                registry=PARTS, meta_item=MODID + ":tungsten_grinding_head", count=2
-            )
+            .with_ingredient("T", Ingredient.oredict("ingotTungsten"))
+            .with_ingredient("S", Ingredient.oredict("ingotSteel"))
+            .with_ingredient("C", Ingredient.oredict("blockSteel"))
+            .with_output(Ingredient.meta(PARTS, "tungsten_grinding_head", count=2))
         ),
         "helium_coolant_simple": (
             ShapedRecipeBuilder()
             .with_pattern([" T ", "T T", " T "])  # TODO: Add helium cell
-            .with_input("T", ore_dict="ingotTin")
-            .with_output(registry=PARTS, meta_item=MODID + ":helium_coolant_simple")
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_output(Ingredient.meta(PARTS, "helium_coolant_simple"))
         ),
         "helium_coolant_triple": (
             ShapedRecipeBuilder()
             .with_pattern(["TTT", "HHH", "TTT"])
-            .with_input("T", ore_dict="ingotTin")
-            .with_input("H", registry=PARTS, meta_item="helium_coolant_simple")
-            .with_output(registry=PARTS, meta_item="helium_coolant_triple")
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("H", Ingredient.meta(PARTS, "helium_coolant_simple"))
+            .with_output(Ingredient.meta(PARTS, "helium_coolant_triple"))
         ),
         "helium_coolant_six": (
             ShapedRecipeBuilder()
             .with_pattern(["THT", "TCT", "THT"])
-            .with_input("T", ore_dict="ingotTin")
-            .with_input("H", registry=PARTS, meta_item="helium_coolant_triple")
-            .with_input("C", ore_dict="ingotCopper")
-            .with_output(registry=PARTS, meta_item="helium_coolant_six")
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("H", Ingredient.meta(PARTS, "helium_coolant_triple"))
+            .with_ingredient("C", Ingredient.oredict("ingotCopper"))
+            .with_output(Ingredient.meta(PARTS, "helium_coolant_six"))
         ),
         "nak_coolant_simple_v": (  # TODO: Add fluid cells + rotate
             ShapedRecipeBuilder()
             .with_pattern(["T T", "   ", "T T"])
-            .with_input("T", ore_dict="ingotTin")
-            .with_output(registry=PARTS, meta_item="nak_coolant_simple")
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_output(Ingredient.meta(PARTS, "nak_coolant_simple"))
         ),
         "nak_coolant_triple": (
             ShapedRecipeBuilder()
             .with_pattern(["TTT", "NNN", "TTT"])
-            .with_input("T", ore_dict="ingotTin")
-            .with_input("N", registry=PARTS, meta_item="nak_coolant_simple")
-            .with_output(registry=PARTS, meta_item="nak_coolant_triple")
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("N", Ingredient.meta(PARTS, "nak_coolant_simple"))
+            .with_output(Ingredient.meta(PARTS, "nak_coolant_triple"))
         ),
         "nak_coolant_six": (
             ShapedRecipeBuilder()
             .with_pattern(["TNT", "TCT", "TNT"])
-            .with_input("T", ore_dict="ingotTin")
-            .with_input("N", registry=PARTS, meta_item="nak_coolant_triple")
-            .with_input("C", ore_dict="ingotCopper")
-            .with_output(registry=PARTS, meta_item="nak_coolant_six")
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("N", Ingredient.meta(PARTS, "nak_coolant_triple"))
+            .with_ingredient("C", Ingredient.oredict("ingotCopper"))
+            .with_output(Ingredient.meta(PARTS, "nak_coolant_six"))
         ),
         "superconductor": (
             ShapedRecipeBuilder()
             .with_pattern(["HHH", "TIT", "EEE"])
-            .with_input("H", registry=PARTS, meta_item="helium_coolant_simple")
-            .with_input("T", ore_dict="ingotTungsten")
-            .with_input("I", ore_dict="plateIridiumAlloy")
-            .with_input("E", registry=PARTS, meta_item="energy_flow_circuit")
-            .with_output(registry=PARTS, meta_item="super_conductor", count=4)
+            .with_ingredient("H", Ingredient.meta(PARTS, "helium_coolant_simple"))
+            .with_ingredient("T", Ingredient.oredict("ingotTungsten"))
+            .with_ingredient("I", Ingredient.oredict("plateIridiumAlloy"))
+            .with_ingredient("E", Ingredient.meta(PARTS, "energy_flow_circuit"))
+            .with_output(Ingredient.meta(PARTS, "super_conductor", count=4))
         ),
         "computer_monitor": (
             ShapedRecipeBuilder()
             .with_pattern(["ADA", "DGD", "ADA"])
-            .with_input("A", ore_dict="ingotAluminum")
-            .with_input("D", ore_dict="dye")
-            .with_input("G", ore_dict="paneGlass")
-            .with_output(registry=PARTS, meta_item="computer_monitor")
+            .with_ingredient("A", Ingredient.oredict("ingotAluminum"))
+            .with_ingredient("D", Ingredient.oredict("dye"))
+            .with_ingredient("G", Ingredient.oredict("paneGlass"))
+            .with_output(Ingredient.meta(PARTS, "computer_monitor"))
         ),
         "neutron_reflector": (  # TODO: IC2
             ShapedRecipeBuilder()
             .with_pattern(["TCT", "CPC", "TCT"])
-            .with_input("T", ore_dict="dustTin")
-            .with_input("C", ore_dict="dustCoal")
-            .with_input("P", ore_dict="plateCopper")
-            .with_output(registry=PARTS, meta_item="neutron_reflector")
+            .with_ingredient("T", Ingredient.oredict("dustTin"))
+            .with_ingredient("C", Ingredient.oredict("dustCoal"))
+            .with_ingredient("P", Ingredient.oredict("plateCopper"))
+            .with_output(Ingredient.meta(PARTS, "neutron_reflector"))
         ),
         "thick_neutron_reflector": (  # TODO: IC2
             ShapedRecipeBuilder()
             .with_pattern([" N ", "N N", " N "])  # TODO: Add beryllium
-            .with_input("N", ore_dict="reflectorBasic")
-            .with_output(registry=PARTS, meta_item="thick_neutron_reflector")
+            .with_ingredient("N", Ingredient.oredict("reflectorBasic"))
+            .with_output(Ingredient.meta(PARTS, "thick_neutron_reflector"))
         ),
         "basic_circuit": (  # TODO: IC2
             ShapedRecipeBuilder()
             .with_pattern(["   ", "RIR", "   "])  # TODO: Add cables
-            .with_input("R", item="redstone")
-            .with_input("I", ore_dict="ingotRefinedIron")
-            .with_output(registry=PARTS, meta_item="electronic_circuit")
+            .with_ingredient("R", Ingredient.item("redstone"))
+            .with_ingredient("I", Ingredient.oredict("ingotRefinedIron"))
+            .with_output(Ingredient.meta(PARTS, "electronic_circuit"))
         ),
         "advanced_circuit": (  # TODO: IC2
             ShapedRecipeBuilder()
             .with_pattern(["RGR", "LCL", "RGR"])
-            .with_input("R", item="redstone")
-            .with_input("G", item="glowstone_dust")
-            .with_input("L", item="dye@4")
-            .with_input("C", ore_dict="circuitBasic")
-            .with_output(registry=PARTS, meta_item="advanced_circuit")
+            .with_ingredient("R", Ingredient.item("redstone"))
+            .with_ingredient("G", Ingredient.item("glowstone_dust"))
+            .with_ingredient("L", Ingredient.item("dye", metadata=4))
+            .with_ingredient("C", Ingredient.oredict("circuitBasic"))
+            .with_output(Ingredient.meta(PARTS, "advanced_circuit"))
         ),
-        "carbon_fiber_dust": ( # TODO: IC2
+        "carbon_fiber_dust": (  # TODO: IC2
             ShapedRecipeBuilder()
             .with_pattern([" C ", "C C", " C "])
-            .with_input("C", ore_dict="dustCoal")
-            .with_output(registry=PARTS, meta_item="carbon_fiber")
+            .with_ingredient("C", Ingredient.oredict("dustCoal"))
+            .with_output(Ingredient.meta(PARTS, "carbon_fiber"))
         ),
         # "carbon_fiber_cell": ( # TODO: IC2
         #     ShapedRecipeBuilder()
@@ -347,31 +342,31 @@ def parts_recipes():
         "carbon_mesh": (
             ShapedRecipeBuilder()
             .with_pattern(["XX"])
-            .with_input("X", registry=PARTS, meta_item="carbon_fiber")
-            .with_output(registry=PARTS, meta_item="carbon_mesh")
+            .with_ingredient("X", Ingredient.meta(PARTS, "carbon_fiber"))
+            .with_output(Ingredient.meta(PARTS, "carbon_mesh"))
         ),
         "coolant_simple": (  # TODO: Finish water
             ShapedRecipeBuilder()
             .with_type("techreborn:shaped_fluid")
             .with_pattern([" T ", "TWT", " T "])
-            .with_input("T", ore_dict="ingotTin")
-            .with_input("W", fluid="water", count=1000)
-            .with_output(registry=PARTS, meta_item="coolant_simple", count=2)
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("W", Ingredient.fluid("water"))
+            .with_output(Ingredient.meta(PARTS, "coolant_simple", count=2))
         ),
         "coolant_triple": (
             ShapedRecipeBuilder()
             .with_pattern(["TTT", "NNN", "TTT"])
-            .with_input("T", ore_dict="ingotTin")
-            .with_input("N", registry=PARTS, meta_item="coolant_simple")
-            .with_output(registry=PARTS, meta_item="coolant_triple")
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("N", Ingredient.meta(PARTS, "coolant_simple"))
+            .with_output(Ingredient.meta(PARTS, "coolant_triple"))
         ),
         "coolant_six": (
             ShapedRecipeBuilder()
             .with_pattern(["TNT", "TCT", "TNT"])
-            .with_input("T", ore_dict="ingotTin")
-            .with_input("N", registry=PARTS, meta_item="coolant_triple")
-            .with_input("C", ore_dict="plateCopper")
-            .with_output(registry=PARTS, meta_item="coolant_six")
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("N", Ingredient.meta(PARTS, "coolant_triple"))
+            .with_ingredient("C", Ingredient.oredict("plateCopper"))
+            .with_output(Ingredient.meta(PARTS, "coolant_six"))
         ),
     }
 
@@ -380,3 +375,19 @@ def parts_recipes():
     for recipe_name, recipe in standard.items():
         fname = base_name.joinpath(f"{recipe_name}.json")
         write_to_file(fname, recipe.build())
+
+
+def alloys_recipes():
+    standard = {
+        "techreborn": {
+            "invar_ii": (
+                CustomRecipeBuilder()
+                .with_type("techreborn:alloy")
+                .with_input(ore_dict="ingotNickel")
+                .with_input(ore_dict="ingotIron", count=2)
+                .with_output(registry=INGOTS, meta_item="invar", count=3)
+                .with_energy(64)
+                .recipe_time(140)
+            ),
+        }
+    }
