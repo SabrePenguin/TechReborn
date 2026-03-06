@@ -4,7 +4,9 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.jei.categories.AlloyCategory;
 import com.sabrepenguin.techreborn.jei.wrappers.AlloyWrapper;
+import com.sabrepenguin.techreborn.jei.wrappers.FluidRecipeJEIWrapper;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
+import com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeWrapper;
 import mezz.jei.api.*;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
@@ -27,6 +29,12 @@ public class TRRecipePlugin implements IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
+		registry.handleRecipes(
+				FluidRecipeWrapper.class,
+				FluidRecipeJEIWrapper::new,
+				VanillaRecipeCategoryUid.CRAFTING
+		);
+
 		Collection<AlloyWrapper> alloyWrappers = RegistryHandler.instance().getAlloyRegistry().getRecipes().stream()
 						.map(AlloyWrapper::new).collect(Collectors.toList());
 		registry.addRecipes(alloyWrappers, ALLOY_UID);
