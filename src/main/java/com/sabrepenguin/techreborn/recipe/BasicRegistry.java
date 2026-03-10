@@ -7,7 +7,7 @@ import net.minecraftforge.items.IItemHandler;
 
 import java.util.*;
 
-public class BasicOutputRegistry {
+public class BasicRegistry {
 	private final Set<BasicOutputRecipe> recipes = new HashSet<>();
 	private final List<BasicOutputRecipe> sorted_recipes = new ArrayList<>();
 

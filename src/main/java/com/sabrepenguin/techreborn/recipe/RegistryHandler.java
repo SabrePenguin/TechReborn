@@ -2,9 +2,9 @@ package com.sabrepenguin.techreborn.recipe;
 
 public class RegistryHandler {
 	private static final RegistryHandler INSTANCE = new RegistryHandler();
-	private final BasicOutputRegistry alloyRegistry = new BasicOutputRegistry();
+	private final BasicRegistry alloyRegistry = new BasicRegistry();
 
-	public BasicOutputRegistry getAlloyRegistry() {
+	public BasicRegistry getAlloyRegistry() {
 		return alloyRegistry;
 	}
 

@@ -7,11 +7,12 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Collections;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class BasicOutputRecipe {
+public class BasicOutputRecipe implements ITRRecipe {
 	private final List<CountedIngredient> inputs;
 
 	private final ItemStack output;
@@ -30,8 +31,8 @@ public class BasicOutputRecipe {
 		return inputs;
 	}
 
-	public ItemStack getOutput() {
-		return output;
+	public List<ItemStack> getOutput() {
+		return Collections.singletonList(output);
 	}
 
 	public int getRecipeTime() {

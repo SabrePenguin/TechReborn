@@ -111,7 +111,7 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 		if (cachedRecipe == null)
 			return false;
 		ItemStack output = this.output.getStackInSlot(0);
-		ItemStack recipeOutput = cachedRecipe.getOutput();
+		ItemStack recipeOutput = cachedRecipe.getOutput().get(0);
 		if (output.isEmpty()) return true;
 		if (!output.isItemEqual(recipeOutput)) return false;
 		if (!RecipeUtils.checkRecipeValid(inputs, cachedRecipe.getInputs())) return false;
@@ -121,7 +121,7 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 
 	private void processItem() {
 		ItemStack outputItem = output.getStackInSlot(0);
-		ItemStack cachedOutput = cachedRecipe.getOutput();
+		ItemStack cachedOutput = cachedRecipe.getOutput().get(0);
 		if (outputItem.isEmpty()) {
 			_internalOutput.insertItem(0, cachedOutput.copy(), false);
 		}

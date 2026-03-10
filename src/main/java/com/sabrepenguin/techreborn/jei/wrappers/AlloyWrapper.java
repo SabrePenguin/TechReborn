@@ -45,6 +45,6 @@ public class AlloyWrapper implements IRecipeWrapper {
 			inputs.add(countedIngredient.resolveIngredients());
 		}
 		ingredients.setInputLists(VanillaTypes.ITEM, inputs);
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getOutput());
+		ingredients.setOutput(VanillaTypes.ITEM, recipe.getOutput().get(0));
 	}
 }
