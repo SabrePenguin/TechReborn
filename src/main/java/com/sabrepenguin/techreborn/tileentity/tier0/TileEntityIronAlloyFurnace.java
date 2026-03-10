@@ -125,7 +125,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 		if (cachedRecipe == null)
 			return false;
 		ItemStack output = this.output.getStackInSlot(0);
-		ItemStack recipeOutput = cachedRecipe.getOutput();
+		ItemStack recipeOutput = cachedRecipe.getOutput().get(0);
 		if (output.isEmpty()) return true;
 		if (!output.isItemEqual(recipeOutput)) return false;
 		if (!RecipeUtils.checkRecipeValid(input, cachedRecipe.getInputs())) return false;
@@ -135,8 +135,9 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 
 	private void processItem() {
 		ItemStack output = this.output.getStackInSlot(0);
-		if (output.isEmpty() || output.isItemEqual(cachedRecipe.getOutput().copy()))
-			this.inventory.insertItem(3, cachedRecipe.getOutput().copy(), false);
+		ItemStack result = cachedRecipe.getOutput().get(0);
+		if (output.isEmpty() || output.isItemEqual(result.copy()))
+			this.inventory.insertItem(3, result.copy(), false);
 		RecipeUtils.applyRecipeToHandler(input, cachedRecipe.getInputs());
 	}
 
