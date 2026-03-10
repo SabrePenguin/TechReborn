@@ -27,6 +27,8 @@ import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -156,6 +158,16 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 		compound.setInteger("Processed", processTime);
 		compound.setBoolean("IsActive", isActive);
 		return super.writeToNBT(compound);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		boolean previousState = isActive;
+		super.onDataPacket(net, pkt);
+		this.readFromNBT(pkt.getNbtCompound());
+		if (world != null && this.world.isRemote && previousState != isActive) {
+			world.markBlockRangeForRenderUpdate(pos, pos);
+		}
 	}
 
 	// ITickable
