@@ -43,7 +43,14 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 
 	protected final int baseCapacity;
 
+	private final boolean singleInput;
+
 	public TileEntityIOManager(int inputSize, int outputSize, int capacity, int maxReceive, int maxOutput) {
+		this(inputSize, outputSize, capacity, maxReceive, maxOutput, false);
+	}
+
+	public TileEntityIOManager(int inputSize, int outputSize, int capacity, int maxReceive, int maxOutput, boolean singleInput) {
+		this.singleInput = singleInput;
 		inventory = new ItemStackHandler(inputSize + outputSize + 1) {
 			@Override
 			protected void onContentsChanged(int slot) {
@@ -198,7 +205,7 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 	// IOnSlotChanged
 	public void onInputChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
 		if (world.isRemote || init) return;
-		if (onlyAmountChanged) {
+		if (this.singleInput && onlyAmountChanged) {
 			refreshRecipe = false;
 			return;
 		}
