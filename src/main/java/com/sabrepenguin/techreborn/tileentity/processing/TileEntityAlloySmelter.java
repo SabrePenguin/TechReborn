@@ -1,18 +1,14 @@
 package com.sabrepenguin.techreborn.tileentity.processing;
 
 import com.cleanroommc.modularui.api.IGuiHolder;
-import com.cleanroommc.modularui.api.IPanelHandler;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.factory.PosGuiData;
-import com.cleanroommc.modularui.integration.jei.ModularUIJeiPlugin;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
-import com.cleanroommc.modularui.value.sync.IntSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
-import com.cleanroommc.modularui.widgets.ButtonWidget;
 import com.cleanroommc.modularui.widgets.ProgressWidget;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
@@ -35,7 +31,6 @@ import net.minecraft.util.EnumFacing;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
@@ -214,17 +209,12 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 				.registerSlotGroup(new SlotGroup("upgrades", 4, 50, true));
 
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
-		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
-				(syncManager1, syncHandler) ->
-						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
-								this.ioManager,
-								getFacing,
-								new SlotPosition(SlotAction.INPUT, 34, 39, 0, 0),
-								new SlotPosition(SlotAction.INPUT, 126, 39, 0, 1),
-								SlotPosition.BigSlot(SlotAction.OUTPUT, 80, 39, 1, 0),
-								new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)));
-		TRGuis.addConfigPanel(panel, panelHandler);
-
+		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioManager, getFacing,
+				new SlotPosition(SlotAction.INPUT, 34, 39, 0, 0),
+				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 1),
+				SlotPosition.BigSlot(SlotAction.OUTPUT, 80, 39, 1, 0),
+				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)
+				);
 		DoubleSyncValue progress = new DoubleSyncValue(() -> (double) processTime / cachedProcessTime,
 				value -> processTime = (int) (value * cachedProcessTime));
 

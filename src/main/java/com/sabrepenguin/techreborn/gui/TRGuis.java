@@ -86,6 +86,15 @@ public class TRGuis {
 								.margin(5, 5, 25, 15).name("crafting").alignX(0.5f)));
 	}
 
+	public static void setupConfigPanel(
+			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, MachineIOManager ioManager,
+			Supplier<EnumFacing> facingSupplier, SlotPosition... slotPositions) {
+		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
+				(manager, handler) ->
+						TRGuis.createConfigPanel(manager, handler, pos, panel.getArea(), ioManager, facingSupplier, slotPositions));
+		addConfigPanel(panel, panelHandler);
+	}
+
 	public static void addConfigPanel(ModularPanel mainPanel, IPanelHandler panelHandler) {
 		mainPanel.child(new ButtonWidget<>()
 				.size(20)
