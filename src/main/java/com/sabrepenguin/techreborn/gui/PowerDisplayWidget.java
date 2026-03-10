@@ -7,8 +7,11 @@ import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.screen.viewport.ModularGuiContext;
 import com.cleanroommc.modularui.theme.WidgetThemeEntry;
 import com.cleanroommc.modularui.value.IntValue;
+import com.cleanroommc.modularui.value.sync.IntSyncValue;
+import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widget.Widget;
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
@@ -153,5 +156,18 @@ public class PowerDisplayWidget extends Widget<PowerDisplayWidget> implements In
 			markTooltipDirty();
 		}
 		return Interactable.super.onKeyRelease(typedChar, keyCode);
+	}
+
+	public static PowerDisplayWidget fromEnergyStorage(PanelSyncManager syncManager, TEEnergyStorage energyStorage) {
+		IntSyncValue capacity = new IntSyncValue(energyStorage::getMaxEnergyStored, val -> {});
+		IntSyncValue maxReceive = new IntSyncValue(energyStorage::getMaxInput, val -> {});
+		IntSyncValue energyStored = new IntSyncValue(energyStorage::getEnergyStored, val -> {});
+		syncManager.syncValue("capacity", capacity)
+				.syncValue("maxReceive", maxReceive)
+				.syncValue("energyStored", energyStored);
+		return new PowerDisplayWidget()
+				.capacity(capacity)
+				.maxReceive(maxReceive)
+				.energy(energyStored);
 	}
 }

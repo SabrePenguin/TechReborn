@@ -212,12 +212,6 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 		ModularPanel panel = ModularPanel.defaultPanel("alloy_smelter");
 		syncManager.registerSlotGroup(new SlotGroup("inputs", 2, 100, true))
 				.registerSlotGroup(new SlotGroup("upgrades", 4, 50, true));
-		IntSyncValue capacity = new IntSyncValue(energyStorage::getMaxEnergyStored, val -> {});
-		IntSyncValue maxReceive = new IntSyncValue(energyStorage::getMaxInput, val -> {});
-		IntSyncValue energyStored = new IntSyncValue(energyStorage::getEnergyStored, val -> {});
-		syncManager.syncValue("capacity", capacity)
-				.syncValue("maxReceive", maxReceive)
-				.syncValue("energyStored", energyStored);
 
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
@@ -225,9 +219,9 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
 								this.ioManager,
 								getFacing,
-								new SlotPosition(SlotAction.INPUT, 47, 39, 0, 0),
-								new SlotPosition(SlotAction.INPUT, 65, 39, 0, 1),
-								new SlotPosition(SlotAction.OUTPUT, 116, 39, 1, 0),
+								new SlotPosition(SlotAction.INPUT, 34, 39, 0, 0),
+								new SlotPosition(SlotAction.INPUT, 126, 39, 0, 1),
+								SlotPosition.BigSlot(SlotAction.OUTPUT, 80, 39, 1, 0),
 								new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)));
 		TRGuis.addConfigPanel(panel, panelHandler);
 
@@ -244,39 +238,18 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 						.pos(54, 39)
 						.texture(GuiTextures.PROGRESS_ARROW, 20)
 						.value(progress))
-				.child(new ButtonWidget<>()
-						.size(20, 15).pos(54, 41)
-						.tooltip(tooltip -> {
-							tooltip.addLine(IKey.str("Open JEI"));
-						}).invisible().onMousePressed(mouseButton -> {
-							if (ModularUIJeiPlugin.getRuntime() != null) {
-								ModularUIJeiPlugin.getRuntime().getRecipesGui().showCategories(Collections.singletonList(TRRecipePlugin.ALLOY_UID));
-								return true;
-							}
-							return false;
-						}))
+				.child(TRGuis.createJeiButton(TRRecipePlugin.ALLOY_UID)
+						.pos(54, 41).size(20, 15))
 				.child(new ProgressWidget()
 						.size(20)
 						.pos(104, 39)
 						.texture(TRGuiTextures.LEFT_PROGRESS_ARROW, 20)
 						.direction(ProgressWidget.Direction.LEFT)
 						.value(progress))
-				.child(new ButtonWidget<>()
-						.size(20, 15).pos(54, 41)
-						.tooltip(tooltip -> {
-							tooltip.addLine(IKey.str("Open JEI"));
-						}).invisible().onMousePressed(mouseButton -> {
-							if (ModularUIJeiPlugin.getRuntime() != null) {
-								ModularUIJeiPlugin.getRuntime().getRecipesGui().showCategories(Collections.singletonList(TRRecipePlugin.ALLOY_UID));
-								return true;
-							}
-							return false;
-						}))
-				.child(new PowerDisplayWidget()
-						.pos(9, 6)
-						.capacity(capacity)
-						.maxReceive(maxReceive)
-						.energy(energyStored));
+				.child(TRGuis.createJeiButton(TRRecipePlugin.ALLOY_UID)
+						.pos(104, 41).size(20, 15))
+				.child(PowerDisplayWidget.fromEnergyStorage(syncManager, energyStorage)
+						.pos(9, 6));
 
 		panel.child(new ItemSlot().pos(34, 39)
 						.slot(new ModularSlot(inputs, 0)

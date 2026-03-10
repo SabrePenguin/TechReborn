@@ -6,6 +6,7 @@ import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.drawable.GuiTextures;
 import com.cleanroommc.modularui.drawable.UITexture;
+import com.cleanroommc.modularui.integration.jei.ModularUIJeiPlugin;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.viewport.GuiContext;
 import com.cleanroommc.modularui.theme.WidgetTheme;
@@ -32,6 +33,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandler;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -44,6 +46,19 @@ public class TRGuis {
 	public static final UITexture CHECK = UITexture.builder().location(Tags.MODID, "gui/check").nonOpaque().fullImage().build();
 	public static final UITexture CONFIG = UITexture.builder().location(Tags.MODID, "gui/config_button").nonOpaque().fullImage().build();
 	public static final UITexture UPGRADE = UITexture.builder().location(Tags.MODID, "gui/upgrade_base").fullImage().build();
+
+	public static ButtonWidget<?> createJeiButton(String recipeUID) {
+		return new ButtonWidget<>()
+				.tooltip(tooltip -> tooltip.addLine(IKey.str("Open JEI")))
+				.invisible()
+				.onMousePressed(mouseButton -> {
+					if (ModularUIJeiPlugin.getRuntime() != null) {
+						ModularUIJeiPlugin.getRuntime().getRecipesGui().showCategories(Collections.singletonList(recipeUID));
+						return true;
+					}
+					return false;
+				});
+	}
 
 	public static Expandable createUpdateTab(IItemHandler handler, String groupName, IOnSlotChanged listener) {
 		return new Expandable()
@@ -118,7 +133,8 @@ public class TRGuis {
 					(syncManager1, syncHandler1) ->
 							createSlotConfigPanel(syncManager1, syncHandler1, pos, manager, position.handlerSlot(), position.slot(), getFacing, position.action()));
 			panel.child(new TRButtonWidget<>()
-					.pos(position.x(), position.y())
+					.pos(position.x() - ((position.size() - 18) / 2), position.y() - ((position.size() - 18) / 2))
+					.size(position.size())
 					.onMousePressed(mouseButton -> {
 						panelHandler.openPanel();
 						return panelHandler.isPanelOpen();
