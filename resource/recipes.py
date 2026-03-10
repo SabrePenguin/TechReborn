@@ -5,7 +5,9 @@ from resource.file import write_to_file
 from resource.recipe_builders import (
     ShapedRecipeBuilder,
     ShapelessRecipeBuilder,
-    CustomRecipeBuilder, Ingredient,
+    CustomRecipeBuilder,
+    Ingredient,
+    RecipeMultiplier,
 )
 
 MODID = "techreborn"
@@ -172,6 +174,8 @@ def standard_recipes():
     generic_3x3_craft_creation("block", INGOTS, BLOCK_STORAGE, "block", "ingot")
 
     parts_recipes()
+
+    alloys_recipes()
 
 
 def parts_recipes():
@@ -371,14 +375,96 @@ def parts_recipes():
 def alloys_recipes():
     standard = {
         "techreborn": {
-            "invar_ii": (
-                CustomRecipeBuilder()
-                .with_type("techreborn:alloy")
-                .with_input(ore_dict="ingotNickel")
-                .with_input(ore_dict="ingotIron", count=2)
-                .with_output(registry=INGOTS, meta_item="invar", count=3)
-                .with_energy(64)
-                .recipe_time(140)
-            ),
+            "alloy": {
+                **RecipeMultiplier(
+                    "invar",
+                    CustomRecipeBuilder()
+                    .with_type("techreborn:alloy")
+                    .with_output(Ingredient.meta(INGOTS, "invar", count=3))
+                    .with_time(140)
+                    .with_energy(64),
+                )
+                .add_inputs(
+                    [
+                        Ingredient.oredict("dustIron", count=2),
+                        Ingredient.oredict("ingotIron", count=2),
+                    ]
+                )
+                .add_inputs(
+                    [
+                        Ingredient.oredict("dustNickel"),
+                        Ingredient.oredict("ingotNickel"),
+                    ]
+                )
+                .run_build(),
+                **RecipeMultiplier(
+                    "electrum",
+                    CustomRecipeBuilder()
+                    .with_type("techreborn:alloy")
+                    .with_output(Ingredient.meta(INGOTS, "electrum", count=2))
+                    .with_time(100)
+                    .with_energy(64),
+                )
+                .add_inputs(
+                    [Ingredient.oredict("dustGold"), Ingredient.oredict("ingotGold")]
+                )
+                .add_inputs(
+                    [
+                        Ingredient.oredict("dustSilver"),
+                        Ingredient.oredict("ingotSilver"),
+                    ]
+                )
+                .run_build(),
+                **RecipeMultiplier(
+                    "bronze",
+                    CustomRecipeBuilder()
+                    .with_type("techreborn:alloy")
+                    .with_output(Ingredient.meta(INGOTS, "bronze", count=4))
+                    .with_time(100)
+                    .with_energy(64),
+                )
+                .add_inputs(
+                    [
+                        Ingredient.oredict("dustCopper", count=3),
+                        Ingredient.oredict("ingotCopper", count=3),
+                    ]
+                )
+                .add_inputs(
+                    [
+                        Ingredient.oredict("dustTin"),
+                        Ingredient.oredict("ingotTin"),
+                    ]
+                )
+                .run_build(),
+                **RecipeMultiplier(
+                    "brass",
+                    CustomRecipeBuilder()
+                    .with_type("techreborn:alloy")
+                    .with_output(Ingredient.meta(INGOTS, "brass", count=4))
+                    .with_time(200)
+                    .with_energy(64),
+                )
+                .add_inputs(
+                    [
+                        Ingredient.oredict("dustCopper", count=3),
+                        Ingredient.oredict("ingotCopper", count=3),
+                    ]
+                )
+                .add_inputs(
+                    [
+                        Ingredient.oredict("dustZinc"),
+                        Ingredient.oredict("ingotZinc"),
+                    ]
+                )
+                .run_build(),
+            }
         }
     }
+
+    for mod_name, recipe_data in standard.items():
+        base_name = CUSTOM_RECIPES.joinpath(mod_name)
+        for recipe_type, recipes in recipe_data.items():
+            recipe_folder = base_name.joinpath(recipe_type)
+            for recipe_name, recipe in recipes.items():
+                recipe_file = recipe_folder.joinpath(f"{recipe_name}.json")
+                write_to_file(recipe_file, recipe)

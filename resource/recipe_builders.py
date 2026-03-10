@@ -1,3 +1,4 @@
+import itertools
 import json
 
 from resource.utils import *
@@ -158,6 +159,9 @@ class Ingredient:
         self.modid = modid
         self.validate()
 
+    def get_name(self):
+        return self.name
+
     @staticmethod
     def meta(registry: dict, item: str, count: int = 0, modid: str="techreborn") -> Ingredient:
         registry_item_base_name = registries.get_name_for_registry(registry)
@@ -228,3 +232,33 @@ def _capitalize_oredict(ore_in: str) -> str:
     for word in words:
         out = out + word.capitalize()
     return out
+
+class RecipeMultiplier:
+    def __init__(self, name, recipe_builder):
+        self.inputs: list[list[Ingredient]] = []
+        self.name = name
+        if isinstance(recipe_builder, ShapedRecipeBuilder):
+            raise RuntimeError("Ore Dict Multiplier does not implement ShapedRecipeBuilder helper")
+        if isinstance(recipe_builder, BaseRecipeBuilder):
+            self.recipe = recipe_builder
+        else:
+            raise RuntimeError("Recipe builder does not inherit BaseRecipeBuilder!")
+
+    def add_inputs(self, ingredient: list[Ingredient]):
+        self.inputs.append(ingredient)
+        return self
+
+    def run_build(self) -> dict:
+        output = {}
+        for combination in itertools.product(*self.inputs):
+            if isinstance(self.recipe, CustomRecipeBuilder):
+                self.recipe.inputs = []
+                new_name = self.name + "_"
+                ingredient: Ingredient
+                for ingredient in combination:
+                    self.recipe.with_input(ingredient)
+                    new_name += ingredient.get_name()[0]
+                output[new_name] = self.recipe.build()
+            else:
+                raise RuntimeError("Not yet implemented on this object")
+        return output
