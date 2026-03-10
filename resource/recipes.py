@@ -30,11 +30,6 @@ def dust_craft_creation():
             ShapedRecipeBuilder()
             .with_pattern(["XX", "XX"])
             .with_ingredient("X", Ingredient.oredict(input_name, "dustSmall"))
-            .with_old_input(
-                "X",
-                registry=SMALL_DUSTS,
-                ore_dict="dustSmall" + _capitalize_oredict(input_name),
-            )
         )
         if input_name != "glowstone" and input_name != "redstone":
             recipe = recipe.with_output(Ingredient.meta(DUSTS, input_name))
@@ -51,24 +46,22 @@ def smalldust_craft_creation():
         fname = smalldust_crafts.joinpath(f"{input_name}_smalldust.json")
         recipe = (
             ShapelessRecipeBuilder()
-            .with_input(ore_dict="dust" + _capitalize_oredict(input_name))
-            .with_output(
-                registry=SMALL_DUSTS, meta_item=MODID + ":" + input_name, count=4
-            )
+            .with_input(Ingredient.oredict(input_name, "dust"))
+            .with_output(Ingredient.meta(SMALL_DUSTS, input_name, count=4))
         )
         write_to_file(fname, recipe.build())
     write_to_file(
         smalldust_crafts.joinpath("glowstone_smalldust.json"),
         ShapelessRecipeBuilder()
-        .with_input(ore_dict="dustGlowstone")
-        .with_output(registry=SMALL_DUSTS, meta_item=MODID + ":" + "glowstone", count=4)
+        .with_input(Ingredient.oredict("dustGlowstone"))
+        .with_output(Ingredient.meta(SMALL_DUSTS, "glowstone", count=4))
         .build(),
     )
     write_to_file(
         smalldust_crafts.joinpath("redstone_smalldust.json"),
         ShapelessRecipeBuilder()
-        .with_input(ore_dict="dustRedstone")
-        .with_output(registry=SMALL_DUSTS, meta_item=MODID + ":" + "redstone", count=4)
+        .with_input(Ingredient.oredict("dustRedstone"))
+        .with_output(Ingredient.meta(SMALL_DUSTS, "redstone", count=4))
         .build(),
     )
 
@@ -78,16 +71,16 @@ def nugget_craft_creation():
     fname = nugget_crafts.joinpath(f"iron_nugget.json")
     recipe = (
         ShapelessRecipeBuilder()
-        .with_input(ore_dict="ingotIron")
-        .with_output(registry=NUGGETS, meta_item=MODID + ":iron", count=9)
+        .with_input(Ingredient.oredict("ingotIron"))
+        .with_output(Ingredient.meta(NUGGETS, "iron", count=9))
     )
     write_to_file(fname, recipe.build())
 
     fname = nugget_crafts.joinpath(f"diamond_nugget.json")
     recipe = (
         ShapelessRecipeBuilder()
-        .with_input(ore_dict="gemDiamond")
-        .with_output(registry=NUGGETS, meta_item=MODID + ":diamond", count=9)
+        .with_input(Ingredient.oredict("gemDiamond"))
+        .with_output(Ingredient.meta(NUGGETS, "diamond", count=9))
     )
     write_to_file(fname, recipe.build())
 
@@ -120,10 +113,8 @@ def generic_single_craft_creation(
         fname = base_crafts.joinpath(f"{name}_{post_fix}.json")
         recipe = (
             ShapelessRecipeBuilder()
-            .with_input(ore_dict=ore_dict + _capitalize_oredict(name))
-            .with_output(
-                registry=target_registry, meta_item=MODID + ":" + name, count=count
-            )
+            .with_input(Ingredient.oredict(name, ore_dict))
+            .with_output(Ingredient.meta(target_registry, name, count=count))
         )
         write_to_file(fname, recipe.build())
 
