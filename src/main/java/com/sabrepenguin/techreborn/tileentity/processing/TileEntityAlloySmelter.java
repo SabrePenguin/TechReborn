@@ -21,6 +21,7 @@ import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.tileentity.TileEntityIOManager;
+import com.sabrepenguin.techreborn.util.InventoryUtils;
 import com.sabrepenguin.techreborn.util.UpgradeUtils;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
@@ -218,7 +219,8 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 	public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
 		ModularPanel panel = ModularPanel.defaultPanel("alloy_smelter");
 		syncManager.registerSlotGroup(new SlotGroup("inputs", 2, 100, true))
-				.registerSlotGroup(new SlotGroup("upgrades", 4, 50, true));
+				.registerSlotGroup(new SlotGroup("upgrades", 4, 50, true))
+				.registerSlotGroup(new SlotGroup("power", 1, 50, true));
 
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioManager, getFacing,
@@ -256,17 +258,21 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 		panel.child(new ItemSlot().pos(34, 39)
 						.slot(new ModularSlot(inputs, 0)
 								.slotGroup("inputs")
-								.changeListener(this::onInputChange)))
+								.changeListener(this::onInputChange)
+								.filter(InventoryUtils.IS_UPGRADE.negate())))
 				.child(new ItemSlot().pos(126, 39)
 						.slot(new ModularSlot(inputs, 1)
 								.slotGroup("inputs")
-								.changeListener(this::onInputChange)))
+								.changeListener(this::onInputChange)
+								.filter(InventoryUtils.IS_UPGRADE.negate())))
 				.child(new LargeItemSlot().pos(80, 39)
 						.slot(new ModularSlot(output, 0)
 								.accessibility(false, true))
 						.size(24))
 				.child(new ItemSlot().pos(7, 59)
-						.slot(new ModularSlot(battery, 0)));
+						.slot(new ModularSlot(battery, 0)
+								.slotGroup("power")
+								.filter(InventoryUtils.IS_POWER_ITEM)));
 
 		panel.child(TRGuis.createUpdateTab(upgrades, "upgrades", this::onUpgradeChange).leftRelOffset(1f, 1));
 		return panel;

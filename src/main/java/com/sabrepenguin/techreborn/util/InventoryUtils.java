@@ -1,15 +1,23 @@
 package com.sabrepenguin.techreborn.util;
 
+import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class InventoryUtils {
+
+	@SuppressWarnings("ConstantConditions")
+	public static Predicate<ItemStack> IS_UPGRADE = itemStack -> itemStack.getItem() == TRItems.upgrades;
+
+	public static Predicate<ItemStack> IS_POWER_ITEM = itemStack -> itemStack.hasCapability(CapabilityEnergy.ENERGY, null);
 
     public static List<ItemStack> dropItemHandlerInventory(IItemHandler itemHandler) {
         final List<ItemStack> items = new ArrayList<>();

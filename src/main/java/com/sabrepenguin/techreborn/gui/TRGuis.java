@@ -19,11 +19,11 @@ import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
-import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketAutoConfig;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
+import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -80,7 +80,7 @@ public class TRGuis {
 								.matrix("II", "II")
 								.key('I', i -> new ItemSlot().slot(new ModularSlot(handler, i)
 										.slotGroup(groupName)
-										.filter(stack -> stack.getItem() == TRItems.upgrades)
+										.filter(InventoryUtils.IS_UPGRADE)
 										.changeListener(listener)))
 								.build()
 								.margin(5, 5, 25, 15).name("crafting").alignX(0.5f)));
