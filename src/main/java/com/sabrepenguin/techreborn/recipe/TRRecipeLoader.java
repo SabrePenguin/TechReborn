@@ -25,16 +25,21 @@ public class TRRecipeLoader {
 	private final JsonContext context;
 	private static final Gson GSON = new Gson();
 	private static final Map<ResourceLocation, ITRRecipeFactory> recipeHandlers = new HashMap<>();
+	private static final Map<ResourceLocation, BasicRegistry> registries = new HashMap<>();
 
 	static {
+		final RegistryHandler registry = RegistryHandler.instance();
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "smelt"), new SmeltingHandler());
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "alloy"), new AlloyHandler());
+		registries.put(new ResourceLocation(Tags.MODID, "alloy"), registry.getAlloyRegistry());
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "grinder"), new OneToOneHandler());
+		registries.put(new ResourceLocation(Tags.MODID, "grinder"), registry.getGrinderRegistry());
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "extractor"), new OneToOneHandler());
-		recipeHandlers.put(new ResourceLocation(Tags.MODID, "plate_bending"), new OneToOneHandler());
+		registries.put(new ResourceLocation(Tags.MODID, "extractor"), registry.getExtractorRegistry());
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "recycler"), new OneToOneHandler());
-		recipeHandlers.put(new ResourceLocation(Tags.MODID, "wire_mill"), new OneToOneHandler());
+		registries.put(new ResourceLocation(Tags.MODID, "recycler"), registry.getRecyclerRegistry());
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "compressor"), new OneToOneHandler());
+		registries.put(new ResourceLocation(Tags.MODID, "compressor"), registry.getCompressorRegistry());
 	}
 
 	public TRRecipeLoader() {
@@ -78,9 +83,11 @@ public class TRRecipeLoader {
 		String type = JsonUtils.getString(json, "type");
 		if (type.isEmpty())
 			throw new JsonSyntaxException("Recipe type must be set");
-		ITRRecipeFactory factory = recipeHandlers.get(new ResourceLocation(type));
+		ResourceLocation loc = new ResourceLocation(type);
+		ITRRecipeFactory factory = recipeHandlers.get(loc);
+		BasicRegistry registry = registries.get(loc);
 		if (factory != null) {
-			factory.registerRecipe(json, context);
+			factory.registerRecipe(json, context, registry);
 		}
 	}
 }

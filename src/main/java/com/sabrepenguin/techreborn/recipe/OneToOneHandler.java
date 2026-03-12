@@ -13,7 +13,7 @@ import java.util.List;
 
 public class OneToOneHandler implements ITRRecipeFactory {
 	@Override
-	public void registerRecipe(JsonObject json, JsonContext context) throws RecipeLoadingException {
+	public void registerRecipe(JsonObject json, JsonContext context, final BasicRegistry registry) throws RecipeLoadingException {
 		JsonArray ingredients = JsonUtils.getJsonArray(json, "ingredients");
 		List<CountedIngredient> inputs = Arrays.asList(RecipeUtils.getCountedIngredients(ingredients));
 		if (inputs.size() != 1) {
@@ -24,8 +24,6 @@ public class OneToOneHandler implements ITRRecipeFactory {
 		int energyCost = JsonUtils.hasField(json, "fe_cost") ?
 				JsonUtils.getInt(json, "fe_cost") : 2;
 		ItemStack output = RecipeUtils.getResult(json, context);
-		RegistryHandler.instance()
-				.getGrinderRegistry()
-				.addRecipe(new BasicOutputRecipe(inputs, output, recipeTime, energyCost));
+		registry.addRecipe(new BasicOutputRecipe(inputs, output, recipeTime, energyCost));
 	}
 }
