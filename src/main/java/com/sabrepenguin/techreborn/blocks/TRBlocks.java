@@ -11,6 +11,7 @@ import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
+import com.sabrepenguin.techreborn.tileentity.processing.TEProcessing;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAlloySmelter;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityElectricFurnace;
 import net.minecraft.block.Block;
@@ -170,13 +171,13 @@ public class TRBlocks {
 				new BlockLSUStorage(),
 				new BlockHorizontalMachine("alloy_smelter", "machines/tier1", TileEntityAlloySmelter::new),
 				new BlockHorizontalMachine("assembling_machine", "machines/tier1"),
-				new BlockHorizontalMachine("compressor", "machines/tier1"),
-				new BlockHorizontalMachine("extractor", "machines/tier1"),
-				new BlockHorizontalMachine("grinder", "machines/tier1"),
-				new BlockHorizontalMachine("plate_bending_machine", "machines/tier1"),
-				new BlockHorizontalMachine("recycler", "machines/tier1"),
+				new BlockHorizontalMachine("compressor", "machines/tier1", TEProcessing.TileEntityCompressor::new),
+				new BlockHorizontalMachine("extractor", "machines/tier1", TEProcessing.TileEntityExtractor::new),
+				new BlockHorizontalMachine("grinder", "machines/tier1", TEProcessing.TileEntityGrinder::new),
+				new BlockHorizontalMachine("plate_bending_machine", "machines/tier1", TEProcessing.TileEntityPlateBendingMachine::new),
+				new BlockHorizontalMachine("recycler", "machines/tier1", TEProcessing.TileEntityRecycler::new),
 				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1"),
-				new BlockHorizontalMachine("wire_mill", "machines/tier1"),
+				new BlockHorizontalMachine("wire_mill", "machines/tier1", TEProcessing.TileEntityWireMill::new),
 				new BlockLamp("lamp_incandescent", 14, BlockLamp.generateBox(0.25, 0.625)),
 				new BlockLamp("lamp_led", 15, BlockLamp.generateBox(0.125, 0.0625)),
 				new BlockCreativeSolarPanel(),
