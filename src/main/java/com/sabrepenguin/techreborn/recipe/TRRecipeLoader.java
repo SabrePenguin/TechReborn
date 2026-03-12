@@ -28,8 +28,13 @@ public class TRRecipeLoader {
 
 	static {
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "smelt"), new SmeltingHandler());
-		recipeHandlers.put(new ResourceLocation(Tags.MODID, "crusher"), new CrusherHandler());
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "alloy"), new AlloyHandler());
+		recipeHandlers.put(new ResourceLocation(Tags.MODID, "grinder"), new OneToOneHandler());
+		recipeHandlers.put(new ResourceLocation(Tags.MODID, "extractor"), new OneToOneHandler());
+		recipeHandlers.put(new ResourceLocation(Tags.MODID, "plate_bending"), new OneToOneHandler());
+		recipeHandlers.put(new ResourceLocation(Tags.MODID, "recycler"), new OneToOneHandler());
+		recipeHandlers.put(new ResourceLocation(Tags.MODID, "wire_mill"), new OneToOneHandler());
+		recipeHandlers.put(new ResourceLocation(Tags.MODID, "compressor"), new OneToOneHandler());
 	}
 
 	public TRRecipeLoader() {
@@ -56,13 +61,15 @@ public class TRRecipeLoader {
 		try (BufferedReader reader = Files.newBufferedReader(file)) {
 			JsonObject json = JsonUtils.fromJson(GSON, reader, JsonObject.class);
 			if (json == null) return false;
-			TechReborn.LOGGER.info(json);
 			parseJson(json);
 		} catch (IOException exception) {
 			TechReborn.LOGGER.error("Could not read recipe {} from {}", fileKey, relativeFile);
 			return false;
 		} catch (JsonSyntaxException exception) {
 			TechReborn.LOGGER.error(exception.getMessage());
+		} catch (RecipeLoadingException recipeException) {
+			TechReborn.LOGGER.error("{}: {}", fileKey, recipeException.getMessage());
+			return false;
 		}
 		return true;
 	}

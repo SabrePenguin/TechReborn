@@ -8,4 +8,6 @@ import java.util.List;
 public interface ITRRecipe {
 	List<CountedIngredient> getInputs();
 	List<ItemStack> getOutput();
+	int getRecipeTime();
+	int getEnergyCost();
 }
