@@ -174,9 +174,38 @@ def standard_recipes():
     generic_3x3_craft_creation("block", INGOTS, BLOCK_STORAGE, "block", "ingot")
 
     parts_recipes()
+    misc_recipes()
+    machine_recipes()
 
-    alloys_recipes()
+    custom_recipes()
 
+def misc_recipes():
+    recipes = {
+        "rubber_stairs_r": (
+            ShapedRecipeBuilder()
+            .with_pattern(["X  ","XX ","XXX"])
+            .with_ingredient("X", Ingredient.item("rubber_planks", modid="techreborn"))
+            .with_output(Ingredient.item("rubber_plank_stair", modid="techreborn", count=4))
+        ),
+        "rubber_stairs_l": (
+            ShapedRecipeBuilder()
+            .with_pattern(["  X"," XX","XXX"])
+            .with_ingredient("X", Ingredient.item("rubber_planks", modid="techreborn"))
+            .with_output(Ingredient.item("rubber_plank_stair", modid="techreborn", count=4))
+        ),
+        "rubber_slab": (
+            ShapedRecipeBuilder()
+            .with_pattern(["XXX"])
+            .with_ingredient("X", Ingredient.item("rubber_planks", modid="techreborn"))
+            .with_output(Ingredient.item("rubber_plank_double_slab", modid="techreborn", count=6))
+        )
+    }
+
+    base_name = RECIPES.joinpath("misc")
+
+    for recipe_name, recipe in recipes.items():
+        fname = base_name.joinpath(f"{recipe_name}.json")
+        write_to_file(fname, recipe.build())
 
 def parts_recipes():
     standard = {
@@ -371,8 +400,66 @@ def parts_recipes():
         fname = base_name.joinpath(f"{recipe_name}.json")
         write_to_file(fname, recipe.build())
 
+def machine_recipes():
+    recipes = {
+        "simple": {
+            "iron_furnace": (
+                ShapedRecipeBuilder()
+                .with_pattern(["XXX","X X","XXX"])
+                .with_ingredient("X", Ingredient.oredict("ingotIron"))
+                .with_output(Ingredient.item("iron_furnace", modid="techreborn"))
+            ),
+            "iron_furnace_upgrade": (
+                ShapedRecipeBuilder()
+                .with_pattern([" I ","I I", "IFI"])
+                .with_ingredient("I", Ingredient.oredict("ingotIron"))
+                .with_ingredient("F", Ingredient.item("furnace"))
+                .with_output(Ingredient.item("iron_furnace", modid="techreborn"))
+            ),
+            "iron_alloy_smelter": (
+                ShapedRecipeBuilder()
+                .with_pattern(["RRR","F F","RRR"])
+                .with_ingredient("R", Ingredient.oredict("ingotRefinedIron"))
+                .with_ingredient("F", Ingredient.item("iron_furnace", modid="techreborn"))
+                .with_output(Ingredient.item("iron_alloy_furnace", modid="techreborn"))
+            )
+        },
+        "processing": {
+            "electric_furnace": (
+                ShapedRecipeBuilder()
+                .with_pattern([" C ", "RFR"])
+                .with_ingredient("C", Ingredient.oredict("circuitBasic"))
+                .with_ingredient("R", Ingredient.item("redstone"))
+                .with_ingredient("F", Ingredient.item("iron_furnace", modid="techreborn"))
+                .with_output(Ingredient.item("electric_furnace", modid="techreborn"))
+            ),
+            "alloy_smelter": (
+                ShapedRecipeBuilder()
+                .with_pattern([" C ", "FMF"])
+                .with_ingredient("C", Ingredient.oredict("circuitBasic"))
+                .with_ingredient("F", Ingredient.item("iron_furnace", modid="techreborn"))
+                .with_ingredient("M", Ingredient.meta(MACHINE_FRAME, "basic"))
+                .with_output(Ingredient.item("alloy_smelter", modid="techreborn"))
+            ),
+            "grinder": (
+                ShapedRecipeBuilder()
+                .with_pattern(["FFF", "CMC", " B "])
+                .with_ingredient("B", Ingredient.oredict("circuitBasic"))
+                .with_ingredient("M", Ingredient.meta(MACHINE_FRAME, "basic"))
+                .with_ingredient("F", Ingredient.item("flint"))
+                .with_ingredient("C", Ingredient.item("cobblestone"))
+                .with_output(Ingredient.item("grinder", modid="techreborn"))
+            )
+        }
+    }
+    base_name = RECIPES.joinpath("machines")
+    for subfolder, recipe_data in recipes.items():
+        folder_name = base_name.joinpath(subfolder)
+        for recipe_name, recipe in recipe_data.items():
+            fname = folder_name.joinpath(f"{recipe_name}.json")
+            write_to_file(fname, recipe.build())
 
-def alloys_recipes():
+def custom_recipes():
     standard = {
         "techreborn": {
             "alloy": {

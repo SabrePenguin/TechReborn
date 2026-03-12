@@ -21,6 +21,8 @@ def get_name_for_registry(registry: dict | list) -> str | None:
         return "plates"
     elif registry == UPGRADES:
         return "upgrades"
+    elif registry == MACHINE_FRAME:
+        return "machine_frame"
     return None
 
 
@@ -353,6 +355,11 @@ UPGRADES = {
     "transformer": 1,
     "energy_storage": 2,
     "superconductor": 3,
+}
+MACHINE_FRAME = {
+    "basic": 0,
+    "advanced": 1,
+    "highly_advanced": 2
 }
 
 BLOCKS = ["rubber_leaves", "rubber_planks"]
