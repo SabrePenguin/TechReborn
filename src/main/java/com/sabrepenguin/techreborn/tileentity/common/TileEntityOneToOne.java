@@ -15,7 +15,6 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.gui.*;
-import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.recipe.BasicRegistry;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityProcessing;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
@@ -26,10 +25,12 @@ import java.util.function.Supplier;
 
 public class TileEntityOneToOne extends TileEntityProcessing implements IGuiHolder<PosGuiData> {
 	private final String lang;
+	private final String jeiKey;
 
-	public TileEntityOneToOne(String lang, int feCapacity, int maxInput, BasicRegistry registry) {
+	public TileEntityOneToOne(String lang, int feCapacity, int maxInput, BasicRegistry registry, String jeiKey) {
 		super(1, 1, feCapacity, maxInput, registry);
 		this.lang = lang;
+		this.jeiKey = jeiKey;
 	}
 
 	// IGuiHolder
@@ -59,7 +60,7 @@ public class TileEntityOneToOne extends TileEntityProcessing implements IGuiHold
 						.pos(75, 39)
 						.texture(GuiTextures.PROGRESS_ARROW, 20)
 						.value(progress))
-				.child(TRGuis.createJeiButton(TRRecipePlugin.GRINDER_UID)
+				.child(TRGuis.createJeiButton(jeiKey)
 						.pos(75, 41).size(20, 15))
 				.child(PowerDisplayWidget.fromEnergyStorage(syncManager, energyStorage)
 						.pos(9, 6));
