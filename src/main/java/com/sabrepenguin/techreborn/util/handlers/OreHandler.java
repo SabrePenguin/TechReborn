@@ -1,6 +1,8 @@
 package com.sabrepenguin.techreborn.util.handlers;
 
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreHandler {
@@ -15,5 +17,8 @@ public class OreHandler {
 		OreDictionary.registerOre("stairWood", TRBlocks.rubber_plank_stair);
 		OreDictionary.registerOre("treeLeaves", TRBlocks.rubber_leaves);
 		OreDictionary.registerOre("leavesRubber", TRBlocks.rubber_leaves);
+
+		OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL));
+		OreDictionary.registerOre("gemCharcoal", new ItemStack(Items.COAL, 1, 1));
 	}
 }
