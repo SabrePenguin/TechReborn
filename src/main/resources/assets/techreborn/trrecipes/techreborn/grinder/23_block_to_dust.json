@@ -1,0 +1,8 @@
+{
+  "type": "techreborn:grinder_template",
+  "input_type": "block",
+  "output_type": "dust",
+  "output_count": 9,
+  "recipe_time": 300,
+  "fe_cost": 8
+}
