@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import javax.annotation.Nullable;
 
 public class SmeltingHandler implements ITRRecipeFactory {
-	public void registerRecipe(JsonObject json, JsonContext context, @Nullable final BasicRegistry registry) {
+	public void registerRecipe(String recipeName, JsonObject json, JsonContext context, @Nullable final BasicRegistry registry) {
 		ItemStack result = RecipeUtils.getResult(json, context);
 		ItemStack[] ingredients = CraftingHelper.getIngredient(json.get("inputs"), context).getMatchingStacks();
 		float experience = json.has("experience") ? JsonUtils.getFloat(json, "experience") : 0.0f;

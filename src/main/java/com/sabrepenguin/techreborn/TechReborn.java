@@ -49,7 +49,9 @@ public class TechReborn {
     @SubscribeEvent
     public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
 		TRRecipeLoader loader = new TRRecipeLoader();
-		loader.loadRecipes();
+		if (!loader.loadRecipes()) {
+			LOGGER.warn("Could not load recipes properly!");
+		}
     }
 
     @EventHandler

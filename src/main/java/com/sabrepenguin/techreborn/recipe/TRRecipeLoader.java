@@ -17,8 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TRRecipeLoader {
 	private final ModContainer mod;
@@ -33,6 +32,7 @@ public class TRRecipeLoader {
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "alloy"), new AlloyHandler());
 		registries.put(new ResourceLocation(Tags.MODID, "alloy"), registry.getAlloyRegistry());
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "grinder"), new OneToOneHandler());
+		recipeHandlers.put(new ResourceLocation(Tags.MODID, "grinder_template"), new OneToOneTemplateHandler());
 		registries.put(new ResourceLocation(Tags.MODID, "grinder"), registry.getGrinderRegistry());
 		recipeHandlers.put(new ResourceLocation(Tags.MODID, "extractor"), new OneToOneHandler());
 		registries.put(new ResourceLocation(Tags.MODID, "extractor"), registry.getExtractorRegistry());
@@ -48,7 +48,11 @@ public class TRRecipeLoader {
 	}
 
 	public boolean loadRecipes() {
-		return CraftingHelper.findFiles(mod, "assets/" + Tags.MODID + "/trrecipes", this::preProcess, this::process, true, true);
+		boolean result = CraftingHelper.findFiles(mod, "assets/" + Tags.MODID + "/trrecipes/techreborn", this::preProcess, this::process, true, true);
+		for (BasicRegistry registry: registries.values()) {
+			registry.sortRecipes();
+		}
+		return result;
 	}
 
 	private boolean preProcess(Path root) {
@@ -66,7 +70,7 @@ public class TRRecipeLoader {
 		try (BufferedReader reader = Files.newBufferedReader(file)) {
 			JsonObject json = JsonUtils.fromJson(GSON, reader, JsonObject.class);
 			if (json == null) return false;
-			parseJson(json);
+			parseJson(json, name);
 		} catch (IOException exception) {
 			TechReborn.LOGGER.error("Could not read recipe {} from {}", fileKey, relativeFile);
 			return false;
@@ -79,15 +83,22 @@ public class TRRecipeLoader {
 		return true;
 	}
 
-	private void parseJson(JsonObject json) {
+	private void parseJson(JsonObject json, String recipeName) {
 		String type = JsonUtils.getString(json, "type");
 		if (type.isEmpty())
 			throw new JsonSyntaxException("Recipe type must be set");
-		ResourceLocation loc = new ResourceLocation(type);
-		ITRRecipeFactory factory = recipeHandlers.get(loc);
-		BasicRegistry registry = registries.get(loc);
+		ITRRecipeFactory factory;
+		BasicRegistry registry;
+		if (type.endsWith("_template")) {
+			factory = recipeHandlers.get(new ResourceLocation(type));
+			registry = registries.get(new ResourceLocation(type.substring(0, type.lastIndexOf('_'))));
+		} else {
+			ResourceLocation loc = new ResourceLocation(type);
+			factory = recipeHandlers.get(loc);
+			registry = registries.get(loc);
+		}
 		if (factory != null) {
-			factory.registerRecipe(json, context, registry);
+			factory.registerRecipe(recipeName, json, context, registry);
 		}
 	}
 }

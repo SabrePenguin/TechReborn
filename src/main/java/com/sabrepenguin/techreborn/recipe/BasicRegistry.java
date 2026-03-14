@@ -9,17 +9,18 @@ import java.util.*;
 
 public class BasicRegistry {
 	private final Set<BasicOutputRecipe> recipes = new HashSet<>();
-	private final List<BasicOutputRecipe> sorted_recipes = new ArrayList<>();
+	private List<BasicOutputRecipe> sorted_recipes = new ArrayList<>();
+	private final Map<String, BasicOutputRecipe> unsorted_recipes = new TreeMap<>();
 
 	public Collection<BasicOutputRecipe> getRecipes() {
 		return Collections.unmodifiableCollection(sorted_recipes);
 	}
 
-	public boolean addRecipe(BasicOutputRecipe recipe) {
+	public boolean addRecipe(String recipeName, BasicOutputRecipe recipe) {
 		Preconditions.checkNotNull(recipe);
 		boolean result = this.recipes.add(recipe);
 		if (result) {
-			sorted_recipes.add(recipe);
+			unsorted_recipes.put(recipeName, recipe);
 		}
 		return result;
 	}
@@ -53,5 +54,10 @@ public class BasicRegistry {
 			if (copy.isEmpty()) return recipe;
 		}
 		return null;
+	}
+
+	public void sortRecipes() {
+		sorted_recipes = new ArrayList<>(unsorted_recipes.values());
+		unsorted_recipes.clear();
 	}
 }

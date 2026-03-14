@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AlloyHandler implements ITRRecipeFactory {
 	@Override
-	public void registerRecipe(JsonObject json, JsonContext context, final BasicRegistry registry) {
+	public void registerRecipe(String recipeName, JsonObject json, JsonContext context, final BasicRegistry registry) {
 		JsonArray ingredients = JsonUtils.getJsonArray(json, "ingredients");
 		List<CountedIngredient> inputs = Arrays.asList(RecipeUtils.getCountedIngredients(ingredients));
 		int recipeTime = JsonUtils.hasField(json, "recipe_time") ?
@@ -22,7 +22,7 @@ public class AlloyHandler implements ITRRecipeFactory {
 				JsonUtils.getInt(json, "fe_cost") : 24;
 		ItemStack output = RecipeUtils.getResult(json, context);
 		if (inputs.size() == 2) {
-			registry.addRecipe(new BasicOutputRecipe(inputs, output, recipeTime, energyCost));
+			registry.addRecipe(recipeName, new BasicOutputRecipe(inputs, output, recipeTime, energyCost));
 		}
 	}
 }
