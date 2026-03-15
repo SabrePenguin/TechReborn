@@ -91,6 +91,8 @@ public class TRItems {
 
 	public static final ItemConfigurinator configurinator = null;
 
+	public static final ItemCell cell = null;
+
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
             Arrays.asList(
@@ -151,6 +153,8 @@ public class TRItems {
 		items.add(new ItemUpgrade());
 
 		items.add(new ItemConfigurinator());
+
+		items.add(new ItemCell());
         return items;
     }
 

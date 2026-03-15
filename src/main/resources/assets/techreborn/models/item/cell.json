@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "techreborn:items/cell_base",
+    "layer1": "techreborn:items/cell_fluid"
+  }
+}
