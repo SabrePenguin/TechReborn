@@ -3,7 +3,7 @@
     "type": "techreborn:grinder",
     "ingredients": [
         {
-            "item": "minecraft:endstone"
+            "item": "minecraft:end_stone"
         }
     ],
     "result": {

@@ -160,7 +160,7 @@ custom_recipe_data = {
             "30_endstone": CustomRecipeBuilder(recipe_type="techreborn:grinder")
             .with_time(300)
             .with_energy(8)
-            .with_input(Ingredient.item("endstone"))
+            .with_input(Ingredient.item("end_stone"))
             .with_output(Ingredient.meta(DUSTS, "endstone"))
             .build(),
             "30_glowstone": CustomRecipeBuilder(recipe_type="techreborn:grinder")
