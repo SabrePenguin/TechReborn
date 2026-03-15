@@ -1,10 +1,12 @@
-package com.sabrepenguin.techreborn.util;
+package com.sabrepenguin.techreborn.util.handlers;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.items.materials.MaterialItem;
+import com.sabrepenguin.techreborn.util.INonStandardLocation;
+import com.sabrepenguin.techreborn.util.ModelRegistryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -18,7 +20,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,8 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.configurinator);
 
 		metaItemRegistration(TRItems.upgrades);
+
+		itemModelRegistration(TRItems.cell);
 	}
 
 	private static void registerBlockModels() {
@@ -277,7 +280,6 @@ public class ModelRegistryHandler {
 
 	private static void itemModelRegistration(Item item) {
 		// Fine to do this, there's no foldering of the item
-		if (!(item instanceof INonStandardLocation)) return;
 		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(item);
 		ModelLoader.setCustomModelResourceLocation(
 				item,
