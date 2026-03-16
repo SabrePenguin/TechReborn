@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.items;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,12 +11,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.Nullable;
@@ -26,10 +28,34 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @MethodsReturnNonnullByDefault
 public class ItemCell extends Item {
 
+	private final ItemStack EMPTY_CELL = new ItemStack(this);
+
 	public ItemCell() {
 		setRegistryName(Tags.MODID, "cell");
 		setTranslationKey(Tags.MODID + ".cell");
 		setCreativeTab(TechReborn.RESOURCE_TAB);
+	}
+
+	@Override
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (tab != TechReborn.RESOURCE_TAB) return;
+		items.add(EMPTY_CELL);
+		FluidRegistry.getBucketFluids().forEach(fluid -> {
+			ItemStack ret = new ItemStack(this);
+			IFluidHandler handler = new FluidHandlerItemStack(ret, 1000);
+			handler.fill(new FluidStack(fluid, 1000), true);
+			items.add(ret);
+		});
+	}
+
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		FluidStack fluidStack = FluidUtil.getFluidContained(stack);
+		if (fluidStack == null) {
+			return super.getItemStackDisplayName(stack);
+		}
+		String fluidName = fluidStack.getLocalizedName();
+		return new TextComponentTranslation("item.techreborn.cell.fluid.name").getFormattedText().replaceAll("\\$fluid\\$", fluidName);
 	}
 
 	@Override
