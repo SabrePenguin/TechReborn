@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn.recipe.fluids;
 
+import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -70,6 +71,9 @@ public class FluidRecipeWrapper extends IForgeRegistryEntry.Impl<IRecipe> implem
 				Ingredient ingredient = ingredients.get(ingredientIndex);
 				if(!ingredientsUsed[ingredientIndex] && ingredient instanceof FluidIngredient fluidIngredient && ingredient.apply(targetStack)) {
 					ItemStack copy = targetStack.copy();
+					if (copy.getItem() == TRItems.cell) {
+						continue;
+					}
 					copy.setCount(1);
 					IFluidHandlerItem handler = FluidUtil.getFluidHandler(copy);
 					if (handler != null) {
