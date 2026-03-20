@@ -40,7 +40,7 @@ public class ItemCell extends Item {
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (tab != TechReborn.RESOURCE_TAB) return;
 		items.add(EMPTY_CELL);
-		FluidRegistry.getBucketFluids().forEach(fluid -> {
+		FluidRegistry.getRegisteredFluids().forEach((name, fluid) -> {
 			ItemStack ret = new ItemStack(this);
 			IFluidHandler handler = new FluidHandlerItemStack(ret, 1000);
 			handler.fill(new FluidStack(fluid, 1000), true);
