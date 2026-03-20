@@ -102,4 +102,13 @@ public class ItemCell extends Item {
 
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}
+
+	@SuppressWarnings("ConstantConditions")
+	public static boolean isItemEqual(@Nullable ItemStack stack1, @Nullable ItemStack stack2) {
+		if (stack1 == null || stack2 == null || stack1.isEmpty() || stack2.isEmpty())
+			return false;
+		if (!stack1.hasTagCompound() || !stack2.hasTagCompound())
+			return false;
+		return stack1.getTagCompound().equals(stack2.getTagCompound());
+	}
 }
