@@ -1,6 +1,7 @@
 {
   "ingredients": {
-    "fluid_container": "com.sabrepenguin.techreborn.recipe.fluids.FluidIngredientFactory"
+    "fluid_container": "com.sabrepenguin.techreborn.recipe.fluids.FluidIngredientFactory",
+    "cell": "com.sabrepenguin.techreborn.recipe.fluids.CellIngredientFactory"
   },
   "recipes": {
     "shaped_fluid": "com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeFactory"

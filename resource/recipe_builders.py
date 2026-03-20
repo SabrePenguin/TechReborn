@@ -152,12 +152,16 @@ def validate_items(keys: dict | list) -> bool:
 
 
 class Ingredient:
-    def __init__(self, name: str, metadata: int = -1, recipe_type: str = "", count: int = 0, modid: str = ""):
-        self.recipe_type: str = recipe_type
+    def __init__(self, name: str, metadata: int = -1, item_type: str = "", count: int = 0, modid: str = "", nbt: dict = None, output: bool = False):
+        if nbt is None:
+            nbt = {}
+        self.item_type: str = item_type
         self.count: int = count
         self.name = name
         self.metadata = metadata
         self.modid = modid
+        self.output = output
+        self.nbt = nbt
         self.validate()
 
     def get_name(self):
@@ -174,22 +178,37 @@ class Ingredient:
         return Ingredient(normal_item, metadata=metadata, count=count, modid=modid)
 
     @staticmethod
+    def mod_item(item: str, metadata: int = -1, count: int = 0, modid: str="techreborn") -> Ingredient:
+        return Ingredient(item, metadata=metadata, count=count, modid=modid)
+
+    @staticmethod
+    def nbt_item(item: str, nbt: str, output: bool, metadata: int = -1, count: int = 0, modid: str="techreborn",) -> Ingredient:
+        return Ingredient(item, nbt=nbt, metadata=metadata, count=count, modid=modid, item_type="minecraft:item_nbt", output=output)
+
+    @staticmethod
+    def cell(fluid: str, modid: str = "", count: int = 0):
+        return Ingredient(fluid, item_type="techreborn:cell", count=count, modid=modid)
+
+    @staticmethod
     def oredict(ore: str, oretype: str = "", count: int = 0):
         if oretype == "":
-            return Ingredient(ore, recipe_type="forge:ore_dict", count=count)
-        return Ingredient(oretype + _capitalize_oredict(ore), recipe_type="forge:ore_dict", count=count)
+            return Ingredient(ore, item_type="forge:ore_dict", count=count)
+        return Ingredient(oretype + _capitalize_oredict(ore), item_type="forge:ore_dict", count=count)
 
     @staticmethod
     def fluid(fluid: str, count: int = 1000, modid: str = ""):
-        return Ingredient(fluid, recipe_type="techreborn:fluid_container", count=count, modid=modid)
+        return Ingredient(fluid, item_type="techreborn:fluid_container", count=count, modid=modid)
 
     def validate(self):
-        if self.recipe_type == "forge:ore_dict":
+        if self.item_type == "forge:ore_dict":
             if self.name == "":
                 raise RuntimeError("Ore name is empty")
-        elif self.recipe_type == "techreborn:fluid_container":
+        elif self.item_type == "techreborn:fluid_container":
             if self.name == "":
                 raise RuntimeError("Fluid ingredient name is empty")
+        elif self.item_type == "techreborn:cell":
+            if self.name == "":
+                raise RuntimeError("No fluid in cell, did you mean to make an empty cell instead (Ingredient.mod_item)?")
         else:
             if self.name == "":
                 raise RuntimeError("Ingredient name is empty")
@@ -197,31 +216,42 @@ class Ingredient:
                 raise RuntimeError("Ingredient " + self.name + " must have a modid")
 
     def to_dict(self) -> dict:
-        if self.recipe_type == "forge:ore_dict":
+        if self.item_type == "forge:ore_dict":
             result: dict[str, str|int] = {
-                "type": self.recipe_type,
+                "type": self.item_type,
                 "ore": self.name
             }
             if self.count > 0:
                 result["count"] = self.count
             return result
-        elif self.recipe_type == "techreborn:fluid_container":
+        elif self.item_type == "techreborn:fluid_container":
             fluid = self.name
             if self.modid != "":
                 fluid = self.modid + ":" + self.name
             return {
-                "type": self.recipe_type,
+                "type": self.item_type,
                 "fluid":  fluid,
                 "amount": self.count
             }
-        else:
-            result: dict[str, str|int] = {
-                "item": self.modid + ":" + self.name
+        elif self.item_type == "techreborn:cell":
+            fluid = self.name
+            if self.modid != "":
+                fluid = self.modid + ":" + self.name
+            return {
+                "type": self.item_type,
+                "fluid": fluid,
             }
+        else:
+            result: dict[str, str|int] = {}
+            if self.item_type == "minecraft:item_nbt" and not self.output:
+                result["type"] = self.item_type
+            result["item"] = self.modid + ":" + self.name
             if self.metadata >= 0:
                 result["data"] = self.metadata
             if self.count > 0:
                 result["count"] = self.count
+            if self.item_type == "minecraft:item_nbt" and isinstance(self.nbt, dict):
+                result["nbt"] = self.nbt
             return result
 
     def to_json(self) -> str:

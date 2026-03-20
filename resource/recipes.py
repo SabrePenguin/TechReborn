@@ -368,12 +368,20 @@ def parts_recipes():
             .with_ingredient("X", Ingredient.meta(PARTS, "carbon_fiber"))
             .with_output(Ingredient.meta(PARTS, "carbon_mesh"))
         ),
-        "coolant_simple": (  # TODO: Finish water
+        "coolant_simple": (
             ShapedRecipeBuilder()
             .with_type("techreborn:shaped_fluid")
             .with_pattern([" T ", "TWT", " T "])
             .with_ingredient("T", Ingredient.oredict("ingotTin"))
             .with_ingredient("W", Ingredient.fluid("water"))
+            .with_output(Ingredient.meta(PARTS, "coolant_simple", count=2))
+        ),
+        "coolant_simple_cell": (
+            ShapedRecipeBuilder()
+            .with_type("techreborn:shaped_fluid")
+            .with_pattern([" T ", "TWT", " T "])
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("W", Ingredient.cell("water"))
             .with_output(Ingredient.meta(PARTS, "coolant_simple", count=2))
         ),
         "coolant_triple": (
@@ -391,6 +399,13 @@ def parts_recipes():
             .with_ingredient("C", Ingredient.oredict("plateCopper"))
             .with_output(Ingredient.meta(PARTS, "coolant_six"))
         ),
+        "cell": (
+            ShapedRecipeBuilder()
+            .with_pattern([" T ","TPT", " T "])
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("P", Ingredient.oredict("paneGlass"))
+            .with_output(Ingredient.mod_item("cell", count=16))
+        )
     }
 
     base_name = RECIPES.joinpath("generated")
