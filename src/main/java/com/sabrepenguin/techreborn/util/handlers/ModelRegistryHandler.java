@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.util.handlers;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.client.render.ModelDynCell;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.items.materials.MaterialItem;
@@ -14,7 +15,9 @@ import net.minecraft.item.*;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,8 +29,19 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Tags.MODID)
 public class ModelRegistryHandler {
 
+	@SubscribeEvent
+	public static void onTextureStitch(TextureStitchEvent.Pre event) {
+		event.getMap().registerSprite(new ResourceLocation("techreborn:items/cell_fluid"));
+		event.getMap().registerSprite(new ResourceLocation("techreborn:items/cell_base"));
+		event.getMap().registerSprite(new ResourceLocation("techreborn:items/cell_cover"));
+	}
+
+
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
+		ModelLoader.setCustomMeshDefinition(TRItems.cell, stack -> ModelDynCell.LOCATION);
+		ModelLoader.registerItemVariants(TRItems.cell, ModelDynCell.LOCATION);
+		ModelLoaderRegistry.registerLoader(ModelDynCell.LoaderDynCell.INSTANCE);
 		registerItemModels();
 		registerBlockModels();
     }
@@ -90,8 +104,6 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.configurinator);
 
 		metaItemRegistration(TRItems.upgrades);
-
-		itemModelRegistration(TRItems.cell);
 	}
 
 	private static void registerBlockModels() {
