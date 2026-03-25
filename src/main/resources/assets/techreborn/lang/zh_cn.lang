@@ -2,7 +2,7 @@
 itemGroup.techreborn=科技复兴
 
 #Machines
-tile.techreborn.solid_canning_machine.name=固体灌装机
+tile.techreborn.solid_canning_machine.name=固体装罐机
 tile.techreborn.plate_bending_machine.name=卷板机
 tile.techreborn.pump.name=泵
 tile.techreborn.gas_turbine.name=燃气轮机
@@ -27,7 +27,7 @@ tile.techreborn.magic_energy_converter.name=魔法能源转化器
 tile.techreborn.diesel_generator.name=柴油发电机
 tile.techreborn.industrial_electrolyzer.name=工业电解器
 tile.techreborn.magic_energy_absorber.name=魔法能源吸收器
-tile.techreborn.assembling_machine.name=控制电路加工厂
+tile.techreborn.assembling_machine.name=装配机
 tile.techreborn.semi_fluid_generator.name=半流质发电机
 tile.techreborn.iron_alloy_furnace.name=铁质合金炉
 tile.techreborn.chemical_reactor.name=化学反应器
@@ -64,7 +64,7 @@ tile.techreborn.solar_panel.quantum.name=极限压太阳能阵列
 tile.techreborn.creative_solar_panel.name=创造太阳能阵列
 tile.techreborn.water_mill.name=水力发电机
 tile.techreborn.wind_mill.name=风力发电机
-tile.techreborn.wire_mill.name=线缆加工厂
+tile.techreborn.wire_mill.name=线材轧机
 tile.techreborn.iron_furnace.name=铁炉
 tile.techreborn.recycler.name=回收机
 tile.techreborn.scrapboxinator.name=废料盒拆包机
@@ -187,7 +187,7 @@ tile.techreborn.sulfur.name=硫
 tile.techreborn.sulfuricacid.name=硫酸
 tile.techreborn.tritium.name=氚
 tile.techreborn.wolframium.name=钨
-tile.techreborn.biofuel.name=生物半流质燃料
+tile.techreborn.biofuel.name=生物燃料
 
 #Fluids
 fluid.fluidberylium=铍
@@ -224,7 +224,7 @@ fluid.fluidSulfur=硫
 fluid.fluidsulfuricacid=硫酸
 fluid.fluidtritium=氚
 fluid.fluidwolframium=钨
-fluid.fluidbiofuel=生物半流质燃料
+fluid.fluidbiofuel=生物燃料
 
 #Dusts
 item.techreborn.dust.almandine.name=铁铝榴石粉
@@ -491,8 +491,8 @@ item.techreborn.part.thorium_cell.name=燃料棒（钍）
 item.techreborn.part.double_thorium_cell.name=双联燃料棒（钍）
 item.techreborn.part.quad_thorium_cell.name=四联燃料棒（钍）
 item.techreborn.part.plutonium_cell.name=燃料棒（钚）
-item.techreborn.part.double_plutonium_cell.name=双联燃料棒（钍）
-item.techreborn.part.quad_plutonium_cell.name=四联燃料棒（钍）
+item.techreborn.part.double_plutonium_cell.name=双联燃料棒（钚）
+item.techreborn.part.quad_plutonium_cell.name=四联燃料棒（钚）
 item.techreborn.part.computer_monitor.name=电脑显示器
 item.techreborn.part.machine_parts.name=机械零件
 item.techreborn.part.neutron_reflector.name=中子反射板
@@ -505,12 +505,12 @@ item.techreborn.part.advanced_circuit.name=高级电路板
 item.techreborn.part.coolant_simple.name=10k冷却单元
 item.techreborn.part.coolant_triple.name=30k冷却单元
 item.techreborn.part.coolant_six.name=60k冷却单元
-item.techreborn.part.carbon_mesh.name=网状碳纤维
+item.techreborn.part.carbon_mesh.name=碳网
 item.techreborn.part.carbon_fiber.name=碳纤维
 item.techreborn.part.uuMatter.name=UU-物质
 item.techreborn.part.enhanced_super_conductor.name=强化超导体
-item.techreborn.part.plantball.name=植物纤维球
-item.techreborn.part.compressed_plantball.name=压缩植物纤维球
+item.techreborn.part.plantball.name=植物球
+item.techreborn.part.compressed_plantball.name=压缩植物球
 item.techreborn.part.bio_cell.name=生物质单元
 
 #Items-Armor
@@ -529,7 +529,7 @@ item.techreborn.rebattery.name=充电电池
 item.techreborn.advancedChainsaw.name=高级电锯
 item.techreborn.advancedDrill.name=高级电钻
 item.techreborn.advancedJackhammer.name=高级凿岩锤
-item.techreborn.debug.name=Debug工具
+item.techreborn.debug.name=调试工具
 item.techreborn.diamondChainsaw.name=钻石电锯
 item.techreborn.diamondDrill.name=钻石电钻
 item.techreborn.diamondJackhammer.name=钻石凿岩锤
@@ -557,7 +557,7 @@ item.techreborn.iridium_neutron_reflector.name=铱中子反射板
 item.techreborn.cell.name=空单元
 item.techreborn.cell.fluid.name=$fluid$单元
 item.techreborn.frequencyTransmitter.name=频率转换器
-item.techreborn.manual.name=科技重生手册
+item.techreborn.manual.name=科技复兴手册
 item.techreborn.missingRecipe.name=未知物品
 item.techreborn.scrapbox.name=废料盒
 item.techreborn.upgrade.overclock.name=超频升级
