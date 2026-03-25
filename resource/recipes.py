@@ -266,8 +266,9 @@ def parts_recipes():
         ),
         "helium_coolant_simple": (
             ShapedRecipeBuilder()
-            .with_pattern([" T ", "T T", " T "])  # TODO: Add helium cell
+            .with_pattern([" T ", "THT", " T "])
             .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("H", Ingredient.cell("helium"))
             .with_output(Ingredient.meta(PARTS, "helium_coolant_simple"))
         ),
         "helium_coolant_triple": (
@@ -285,10 +286,22 @@ def parts_recipes():
             .with_ingredient("C", Ingredient.oredict("ingotCopper"))
             .with_output(Ingredient.meta(PARTS, "helium_coolant_six"))
         ),
-        "nak_coolant_simple_v": (  # TODO: Add fluid cells + rotate
+        "nak_coolant_simple_v": (
             ShapedRecipeBuilder()
-            .with_pattern(["T T", "   ", "T T"])
+            .with_pattern(["TST", "PCP", "TST"])
             .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("C", Ingredient.meta(PARTS, "coolant_simple"))
+            .with_ingredient("S", Ingredient.cell("sodium"))
+            .with_ingredient("P", Ingredient.cell("potassium"))
+            .with_output(Ingredient.meta(PARTS, "nak_coolant_simple"))
+        ),
+        "nak_coolant_simple_h": (
+            ShapedRecipeBuilder()
+            .with_pattern(["TPT", "SCS", "TPT"])
+            .with_ingredient("T", Ingredient.oredict("ingotTin"))
+            .with_ingredient("C", Ingredient.meta(PARTS, "coolant_simple"))
+            .with_ingredient("S", Ingredient.cell("sodium"))
+            .with_ingredient("P", Ingredient.cell("potassium"))
             .with_output(Ingredient.meta(PARTS, "nak_coolant_simple"))
         ),
         "nak_coolant_triple": (
@@ -333,8 +346,9 @@ def parts_recipes():
         ),
         "thick_neutron_reflector": (  # TODO: IC2
             ShapedRecipeBuilder()
-            .with_pattern([" N ", "N N", " N "])  # TODO: Add beryllium
+            .with_pattern([" N ", "NBN", " N "])
             .with_ingredient("N", Ingredient.oredict("reflectorBasic"))
+            .with_ingredient("B", Ingredient.cell("beryllium"))
             .with_output(Ingredient.meta(PARTS, "thick_neutron_reflector"))
         ),
         "basic_circuit": (  # TODO: IC2

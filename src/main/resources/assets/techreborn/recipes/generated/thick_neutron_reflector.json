@@ -3,13 +3,17 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         " N ",
-        "N N",
+        "NBN",
         " N "
     ],
     "key": {
         "N": {
             "type": "forge:ore_dict",
             "ore": "reflectorBasic"
+        },
+        "B": {
+            "type": "techreborn:cell",
+            "fluid": "beryllium"
         }
     },
     "result": {
