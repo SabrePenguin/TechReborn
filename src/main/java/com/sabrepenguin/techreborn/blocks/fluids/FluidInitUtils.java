@@ -7,8 +7,8 @@ import net.minecraftforge.fluids.*;
 
 public class FluidInitUtils {
 
-	public static Fluid createFluid(String name, String resourceLocation) {
-		ResourceLocation location = new ResourceLocation(Tags.MODID, "blocks/fluids/" + resourceLocation + "_flowing");
+	public static Fluid createFluid(String name) {
+		ResourceLocation location = new ResourceLocation(Tags.MODID, "blocks/fluids/" + name + "_flowing");
 		Fluid fluid = new Fluid(name, location, location);
 		FluidRegistry.registerFluid(fluid);
 		FluidRegistry.addBucketForFluid(fluid);

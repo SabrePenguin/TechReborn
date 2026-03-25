@@ -203,13 +203,39 @@ public class ModelRegistryHandler {
 
 		registerCustomFluidStates(TRFluidBlocks.BERYLLIUM);
 		registerCustomFluidStates(TRFluidBlocks.CALCIUM);
-		registerCustomFluidStates(TRFluidBlocks.CALCIUMCARBONATE);
+		registerCustomFluidStates(TRFluidBlocks.CALCIUM_CARBONATE);
 		registerCustomFluidStates(TRFluidBlocks.CHLORITE);
 		registerCustomFluidStates(TRFluidBlocks.DEUTERIUM);
 		registerCustomFluidStates(TRFluidBlocks.GLYCERYL);
 		registerCustomFluidStates(TRFluidBlocks.HELIUM);
 		registerCustomFluidStates(TRFluidBlocks.HELIUM3);
-		registerCustomFluidStates(TRFluidBlocks.HELIUMPLASMA);
+		registerCustomFluidStates(TRFluidBlocks.HELIUM_PLASMA);
+		registerCustomFluidStates(TRFluidBlocks.HYDROGEN);
+		registerCustomFluidStates(TRFluidBlocks.LITHIUM);
+		registerCustomFluidStates(TRFluidBlocks.MERCURY);
+		registerCustomFluidStates(TRFluidBlocks.METHANE);
+		registerCustomFluidStates(TRFluidBlocks.NITROCOAL_FUEL);
+		registerCustomFluidStates(TRFluidBlocks.NITROFUEL);
+		registerCustomFluidStates(TRFluidBlocks.NITROGEN);
+		registerCustomFluidStates(TRFluidBlocks.NITROGEN_DIOXIDE);
+		registerCustomFluidStates(TRFluidBlocks.POTASSIUM);
+		registerCustomFluidStates(TRFluidBlocks.SILICON);
+		registerCustomFluidStates(TRFluidBlocks.SODIUM);
+		registerCustomFluidStates(TRFluidBlocks.SODIUM_PERSULFATE);
+		registerCustomFluidStates(TRFluidBlocks.TRITIUM);
+		registerCustomFluidStates(TRFluidBlocks.WOLFRAMIUM);
+		registerCustomFluidStates(TRFluidBlocks.CARBON);
+		registerCustomFluidStates(TRFluidBlocks.CARBON_FIBER);
+		registerCustomFluidStates(TRFluidBlocks.NITROCARBON);
+		registerCustomFluidStates(TRFluidBlocks.SULFUR);
+		registerCustomFluidStates(TRFluidBlocks.SODIUM_SULFIDE);
+		registerCustomFluidStates(TRFluidBlocks.DIESEL);
+		registerCustomFluidStates(TRFluidBlocks.NITRO_DIESEL);
+		registerCustomFluidStates(TRFluidBlocks.OIL);
+		registerCustomFluidStates(TRFluidBlocks.SULFURIC_ACID);
+		registerCustomFluidStates(TRFluidBlocks.COMPRESSED_AIR);
+		registerCustomFluidStates(TRFluidBlocks.ELECTROLYZED_WATER);
+		registerCustomFluidStates(TRFluidBlocks.BIOFUEL);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {
