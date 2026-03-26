@@ -1,7 +1,12 @@
-package com.sabrepenguin.techreborn.recipe;
+package com.sabrepenguin.techreborn.recipe.handlers;
 
 import com.google.gson.JsonObject;
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.ITRRecipeFactory;
+import com.sabrepenguin.techreborn.recipe.RecipeLoadingException;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
@@ -15,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class OneToOneTemplateHandler implements ITRRecipeFactory {
 	@Override
-	public void registerRecipe(final String recipeName, JsonObject json, JsonContext context, final BasicRegistry registry) throws RecipeLoadingException {
+	public void registerRecipe(final String recipeName, JsonObject json, JsonContext context, final ITRRegistry registry) throws RecipeLoadingException {
 		String ore_input_type = JsonUtils.getString(json, "input_type");
 		int input_count = JsonUtils.hasField(json, "input_count") ? JsonUtils.getInt(json, "input_count") : 1;
 		String ore_output_type = JsonUtils.getString(json, "output_type");

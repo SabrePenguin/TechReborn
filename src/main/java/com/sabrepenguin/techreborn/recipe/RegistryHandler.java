@@ -1,5 +1,7 @@
 package com.sabrepenguin.techreborn.recipe;
 
+import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+
 public class RegistryHandler {
 	private static final RegistryHandler INSTANCE = new RegistryHandler();
 	private final BasicRegistry alloyRegistry = new BasicRegistry();

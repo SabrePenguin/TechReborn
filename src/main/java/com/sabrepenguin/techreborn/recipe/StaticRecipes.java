@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.recipe;
 
 import com.sabrepenguin.techreborn.items.TRItems;
+import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;

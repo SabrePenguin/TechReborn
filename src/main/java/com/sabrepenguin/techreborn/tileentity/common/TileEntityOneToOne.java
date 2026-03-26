@@ -15,7 +15,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.gui.*;
-import com.sabrepenguin.techreborn.recipe.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityProcessing;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.BlockHorizontal;
