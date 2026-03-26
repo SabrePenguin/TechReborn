@@ -20,11 +20,6 @@ public class TEProcessing {
 			super("tile.techreborn.plate_bending_machine.name", 40000, 128, RegistryHandler.instance().getPlateBenderRegistry(), TRRecipePlugin.PLATE_BENDING_UID);
 		}
 	}
-	public static class TileEntityRecycler extends TileEntityOneToOne {
-		public TileEntityRecycler() {
-			super("tile.techreborn.recycler.name", 4000, 128, RegistryHandler.instance().getRecyclerRegistry(), TRRecipePlugin.RECYCLER_UID);
-		}
-	}
 	public static class TileEntityWireMill extends TileEntityOneToOne {
 		public TileEntityWireMill() {
 			super("tile.techreborn.wire_mill.name", 40000, 128, RegistryHandler.instance().getWireMillRegistry(), TRRecipePlugin.WIRE_MILL_UID);
