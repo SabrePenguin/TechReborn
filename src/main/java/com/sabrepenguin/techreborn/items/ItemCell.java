@@ -48,6 +48,13 @@ public class ItemCell extends Item {
 		});
 	}
 
+	public ItemStack getCellWithFluid(Fluid fluid) {
+		ItemStack ret = new ItemStack(this);
+		IFluidHandler handler = new FluidHandlerItemStack(ret, 1000);
+		handler.fill(new FluidStack(fluid, 1000), true);
+		return ret;
+	}
+
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		FluidStack fluidStack = FluidUtil.getFluidContained(stack);

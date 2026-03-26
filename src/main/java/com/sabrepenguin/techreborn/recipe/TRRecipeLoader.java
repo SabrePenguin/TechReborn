@@ -49,6 +49,7 @@ public class TRRecipeLoader {
 
 	public boolean loadRecipes() {
 		boolean result = CraftingHelper.findFiles(mod, "assets/" + Tags.MODID + "/trrecipes/techreborn", this::preProcess, this::process, true, true);
+		StaticRecipes.addExtractorRecipes();
 		for (BasicRegistry registry: registries.values()) {
 			registry.sortRecipes();
 		}
