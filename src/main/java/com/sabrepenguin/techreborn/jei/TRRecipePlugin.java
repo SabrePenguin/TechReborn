@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @JEIPlugin
 public class TRRecipePlugin implements IModPlugin {
 
-	public static final String ALLOY_UID = Tags.MODID + ".alloy.furnace";
+	public static final String ALLOY_UID = "tile." + Tags.MODID + ".alloy_smelter.furnace";
 	public static final String GRINDER_UID = "tile." + Tags.MODID + ".grinder.name";
 	public static final String EXTRACTOR_UID = "tile." + Tags.MODID + ".extractor.name";
 	public static final String PLATE_BENDING_UID = "tile." + Tags.MODID + ".plate_bending_machine.name";
