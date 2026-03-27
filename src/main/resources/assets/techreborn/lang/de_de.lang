@@ -29,7 +29,7 @@ tile.techreborn.distillation_tower.name=Destillationsturm
 tile.techreborn.vacuum_freezer.name=Vakuumgefrierkammer
 tile.techreborn.plasma_generator.name=Plasmagenerator
 tile.techreborn.fusion_control_computer.name=Fusionskontrollcomputer
-tile.techreborn.computer_cube.name=Tech Reborn-Würfelcomputer
+tile.techreborn.computercube.name=Tech Reborn-Würfelcomputer
 tile.techreborn.fusion_coil.name=Fusionsreaktormagnetspule
 tile.techreborn.industrial_sawmill.name=Sägemühle
 tile.techreborn.charge_o_mat.name=Ladungsmessungsdingsbums
@@ -117,9 +117,9 @@ tile.techreborn.cable.insulatedgold.name=Isoliertes Goldkabel
 tile.techreborn.cable.insulatedhv.name=Isoliertes Hochspannungskabel
 
 #Fluid blocks
-tile.techreborn.berylium.name=Beryllium
+tile.techreborn.beryllium.name=Beryllium
 tile.techreborn.calcium.name=Kalzium
-tile.techreborn.calciumcarbonate.name=Kalziumkarbonat
+tile.techreborn.calcium_carbonate.name=Kalziumkarbonat
 tile.techreborn.carbon.name=Kohlenstoff
 tile.techreborn.diesel.name=Diesel
 tile.techreborn.oil.name=Öl
@@ -127,25 +127,25 @@ tile.techreborn.silicon.name=Silizium
 tile.techreborn.sulfur.name=Schwefel
 
 #Fluids
-fluid.fluidberylium=Beryllium
-fluid.fluidcalcium=Kalzium
-fluid.fluidcalciumcarbonate=Kalziumkarbonat
-fluid.fluidcarbon=Kohlenstoff
-fluid.fluiddiesel=Diesel
-fluid.fluidnitrodiesel=Bölkstoff
-fluid.fluidnitrofuel=Nitrotreibstoff
-fluid.fluidnitrogen=Stickstoff
-fluid.fluidnitrogendioxide=Stickstoffdioxid
-fluid.fluidoil=Öl
-fluid.fluidpotassium=Kalium
-fluid.fluidsilicon=Silizium
-fluid.fluidsodium=Natrium
-fluid.fluidsodiumpersulfate=Natriumpersulfat
-fluid.fluidsodiumSulfide=Natriumsulfat
-fluid.fluidSulfur=Schwefel
-fluid.fluidsulfuricacid=Schwefelsäure
-fluid.fluidtritium=Tritium
-fluid.fluidwolframium=Wolfram
+fluid.beryllium=Beryllium
+fluid.calcium=Kalzium
+fluid.calcium_carbonate=Kalziumkarbonat
+fluid.carbon=Kohlenstoff
+fluid.diesel=Diesel
+fluid.nitro_diesel=Bölkstoff
+fluid.nitrofuel=Nitrotreibstoff
+fluid.nitrogen=Stickstoff
+fluid.nitrogen_dioxide=Stickstoffdioxid
+fluid.oil=Öl
+fluid.potassium=Kalium
+fluid.silicon=Silizium
+fluid.sodium=Natrium
+fluid.sodium_persulfate=Natriumpersulfat
+fluid.sodium_sulfide=Natriumsulfat
+fluid.sulfur=Schwefel
+fluid.sulfuric_acid=Schwefelsäure
+fluid.tritium=Tritium
+fluid.wolframium=Wolfram
 
 #Dusts
 item.techreborn.dust.almandine.name=Almandinstaub

@@ -4,9 +4,11 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.jei.categories.AlloyCategory;
 import com.sabrepenguin.techreborn.jei.categories.OneToOneCategory;
+import com.sabrepenguin.techreborn.jei.categories.SingleItemCategory;
 import com.sabrepenguin.techreborn.jei.wrappers.AlloyWrapper;
 import com.sabrepenguin.techreborn.jei.wrappers.OneToOneRecipeWrapper;
 import com.sabrepenguin.techreborn.jei.wrappers.FluidRecipeJEIWrapper;
+import com.sabrepenguin.techreborn.jei.wrappers.SingleItemRecipeWrapper;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeWrapper;
 import mezz.jei.api.*;
@@ -14,6 +16,7 @@ import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import net.minecraft.item.ItemStack;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -36,7 +39,7 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCategories(new OneToOneCategory(helper, GRINDER_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, EXTRACTOR_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, PLATE_BENDING_UID));
-		registry.addRecipeCategories(new OneToOneCategory(helper, RECYCLER_UID));
+		registry.addRecipeCategories(new SingleItemCategory(helper, RECYCLER_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, WIRE_MILL_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, COMPRESSOR_UID));
 	}
@@ -64,9 +67,7 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipes(
 				handler.getPlateBenderRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),
 				PLATE_BENDING_UID);
-		registry.addRecipes(
-				handler.getRecyclerRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),
-				RECYCLER_UID);
+		registry.addRecipes(Arrays.asList(new SingleItemRecipeWrapper(SingleItemRecipeWrapper.SCRAP_INPUT, SingleItemRecipeWrapper.SCRAP, 45, 8)), RECYCLER_UID);
 		registry.addRecipes(
 				handler.getWireMillRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),
 				WIRE_MILL_UID);

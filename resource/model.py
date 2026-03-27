@@ -1,5 +1,11 @@
 import json
+from pathlib import Path
+from os import listdir
+from os.path import isfile, join
 
+from resource.file import write_to_file
+
+BASE = Path("src/main/resources/assets/techreborn")
 
 def basic_generated(image) -> str:
     result = {
@@ -12,3 +18,29 @@ def basic_generated(image) -> str:
 def block_all_model(image: str) -> str:
     result = {"parent": "block/cube_all", "textures": {"all": f"techreborn:{image}"}}
     return json.dumps(result, indent=4)
+
+def fluid_model(fluid: str) -> str:
+    result = {
+        "forge_marker": 1,
+        "defaults": {
+            "model": "forge:fluid"
+        },
+        "variants": {
+            "normal": [
+                {
+                    "custom": {
+                        "fluid": fluid
+                    }
+                }
+            ]
+        }
+    }
+    return json.dumps(result, indent=4)
+
+def generate_fluids():
+    texture_path = BASE.joinpath("textures/blocks/fluids")
+    files = [f.split(".")[0].rsplit("_", 1)[0] for f in listdir(texture_path) if isfile(join(texture_path, f)) and f.endswith(".png")]
+    model_path = BASE.joinpath("blockstates/fluids")
+    for name in files:
+        new_path = model_path.joinpath(f"{name}.json")
+        write_to_file(new_path, fluid_model(name))

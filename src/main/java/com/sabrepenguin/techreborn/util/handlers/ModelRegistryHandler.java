@@ -2,6 +2,8 @@ package com.sabrepenguin.techreborn.util.handlers;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.blocks.fluids.TRFluidBlocks;
+import com.sabrepenguin.techreborn.client.render.ModelDynCell;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.items.materials.MaterialItem;
@@ -9,12 +11,17 @@ import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.ModelRegistryUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.*;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.fluids.BlockFluidBase;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,8 +33,19 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = Tags.MODID)
 public class ModelRegistryHandler {
 
+	@SubscribeEvent
+	public static void onTextureStitch(TextureStitchEvent.Pre event) {
+		event.getMap().registerSprite(new ResourceLocation("techreborn:items/cell_fluid"));
+		event.getMap().registerSprite(new ResourceLocation("techreborn:items/cell_base"));
+		event.getMap().registerSprite(new ResourceLocation("techreborn:items/cell_cover"));
+	}
+
+
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
+		ModelLoader.setCustomMeshDefinition(TRItems.cell, stack -> ModelDynCell.LOCATION);
+		ModelLoader.registerItemVariants(TRItems.cell, ModelDynCell.LOCATION);
+		ModelLoaderRegistry.registerLoader(ModelDynCell.LoaderDynCell.INSTANCE);
 		registerItemModels();
 		registerBlockModels();
     }
@@ -90,10 +108,9 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.configurinator);
 
 		metaItemRegistration(TRItems.upgrades);
-
-		itemModelRegistration(TRItems.cell);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	private static void registerBlockModels() {
 		propertiesMetaRegistration(TRBlocks.storage);
 		propertiesMetaRegistration(TRBlocks.storage2);
@@ -183,6 +200,42 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.wind_mill);
 		dangerousPropertiesMetaRegistration(TRBlocks.solar_panel, false);
 //		propertiesMetaRegistration(TRBlocks.cable);
+
+		registerCustomFluidStates(TRFluidBlocks.BERYLLIUM);
+		registerCustomFluidStates(TRFluidBlocks.CALCIUM);
+		registerCustomFluidStates(TRFluidBlocks.CALCIUM_CARBONATE);
+		registerCustomFluidStates(TRFluidBlocks.CHLORITE);
+		registerCustomFluidStates(TRFluidBlocks.DEUTERIUM);
+		registerCustomFluidStates(TRFluidBlocks.GLYCERYL);
+		registerCustomFluidStates(TRFluidBlocks.HELIUM);
+		registerCustomFluidStates(TRFluidBlocks.HELIUM3);
+		registerCustomFluidStates(TRFluidBlocks.HELIUM_PLASMA);
+		registerCustomFluidStates(TRFluidBlocks.HYDROGEN);
+		registerCustomFluidStates(TRFluidBlocks.LITHIUM);
+		registerCustomFluidStates(TRFluidBlocks.MERCURY);
+		registerCustomFluidStates(TRFluidBlocks.METHANE);
+		registerCustomFluidStates(TRFluidBlocks.NITROCOAL_FUEL);
+		registerCustomFluidStates(TRFluidBlocks.NITROFUEL);
+		registerCustomFluidStates(TRFluidBlocks.NITROGEN);
+		registerCustomFluidStates(TRFluidBlocks.NITROGEN_DIOXIDE);
+		registerCustomFluidStates(TRFluidBlocks.POTASSIUM);
+		registerCustomFluidStates(TRFluidBlocks.SILICON);
+		registerCustomFluidStates(TRFluidBlocks.SODIUM);
+		registerCustomFluidStates(TRFluidBlocks.SODIUM_PERSULFATE);
+		registerCustomFluidStates(TRFluidBlocks.TRITIUM);
+		registerCustomFluidStates(TRFluidBlocks.WOLFRAMIUM);
+		registerCustomFluidStates(TRFluidBlocks.CARBON);
+		registerCustomFluidStates(TRFluidBlocks.CARBON_FIBER);
+		registerCustomFluidStates(TRFluidBlocks.NITROCARBON);
+		registerCustomFluidStates(TRFluidBlocks.SULFUR);
+		registerCustomFluidStates(TRFluidBlocks.SODIUM_SULFIDE);
+		registerCustomFluidStates(TRFluidBlocks.DIESEL);
+		registerCustomFluidStates(TRFluidBlocks.NITRO_DIESEL);
+		registerCustomFluidStates(TRFluidBlocks.OIL);
+		registerCustomFluidStates(TRFluidBlocks.SULFURIC_ACID);
+		registerCustomFluidStates(TRFluidBlocks.COMPRESSED_AIR);
+		registerCustomFluidStates(TRFluidBlocks.ELECTROLYZED_WATER);
+		registerCustomFluidStates(TRFluidBlocks.BIOFUEL);
 	}
 
 	private static void propertiesMetaRegistration(Block block) {
@@ -309,5 +362,16 @@ public class ModelRegistryHandler {
 					new ModelResourceLocation(customLocation, "type=" + metadata.getLeft())
 			);
 		}
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	private static void registerCustomFluidStates(BlockFluidBase fluidBase) {
+		ResourceLocation location = new ResourceLocation(fluidBase.getRegistryName().getNamespace(), "fluids/" + fluidBase.getRegistryName().getPath());
+		ModelLoader.setCustomStateMapper(fluidBase, new StateMapperBase() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				return new ModelResourceLocation(location, "normal");
+			}
+		});
 	}
 }

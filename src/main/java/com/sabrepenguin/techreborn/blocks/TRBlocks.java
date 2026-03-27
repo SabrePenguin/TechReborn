@@ -14,6 +14,7 @@ import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import com.sabrepenguin.techreborn.tileentity.processing.TEProcessing;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAlloySmelter;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityElectricFurnace;
+import com.sabrepenguin.techreborn.tileentity.processing.TileEntityRecycler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
@@ -175,7 +176,7 @@ public class TRBlocks {
 				new BlockHorizontalMachine("extractor", "machines/tier1", TEProcessing.TileEntityExtractor::new),
 				new BlockHorizontalMachine("grinder", "machines/tier1", TEProcessing.TileEntityGrinder::new),
 				new BlockHorizontalMachine("plate_bending_machine", "machines/tier1", TEProcessing.TileEntityPlateBendingMachine::new),
-				new BlockHorizontalMachine("recycler", "machines/tier1", TEProcessing.TileEntityRecycler::new),
+				new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityRecycler::new),
 				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1"),
 				new BlockHorizontalMachine("wire_mill", "machines/tier1", TEProcessing.TileEntityWireMill::new),
 				new BlockLamp("lamp_incandescent", 14, BlockLamp.generateBox(0.25, 0.625)),

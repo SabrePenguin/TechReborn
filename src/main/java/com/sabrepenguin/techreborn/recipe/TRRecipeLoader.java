@@ -5,6 +5,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
+import com.sabrepenguin.techreborn.recipe.handlers.AlloyHandler;
+import com.sabrepenguin.techreborn.recipe.handlers.OneToOneHandler;
+import com.sabrepenguin.techreborn.recipe.handlers.OneToOneTemplateHandler;
+import com.sabrepenguin.techreborn.recipe.handlers.SmeltingHandler;
+import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -24,7 +30,7 @@ public class TRRecipeLoader {
 	private final JsonContext context;
 	private static final Gson GSON = new Gson();
 	private static final Map<ResourceLocation, ITRRecipeFactory> recipeHandlers = new HashMap<>();
-	private static final Map<ResourceLocation, BasicRegistry> registries = new HashMap<>();
+	private static final Map<ResourceLocation, ITRRegistry> registries = new HashMap<>();
 
 	static {
 		final RegistryHandler registry = RegistryHandler.instance();
@@ -49,7 +55,8 @@ public class TRRecipeLoader {
 
 	public boolean loadRecipes() {
 		boolean result = CraftingHelper.findFiles(mod, "assets/" + Tags.MODID + "/trrecipes/techreborn", this::preProcess, this::process, true, true);
-		for (BasicRegistry registry: registries.values()) {
+		StaticRecipes.addExtractorRecipes();
+		for (ITRRegistry registry: registries.values()) {
 			registry.sortRecipes();
 		}
 		return result;
@@ -88,7 +95,7 @@ public class TRRecipeLoader {
 		if (type.isEmpty())
 			throw new JsonSyntaxException("Recipe type must be set");
 		ITRRecipeFactory factory;
-		BasicRegistry registry;
+		ITRRegistry registry;
 		if (type.endsWith("_template")) {
 			factory = recipeHandlers.get(new ResourceLocation(type));
 			registry = registries.get(new ResourceLocation(type.substring(0, type.lastIndexOf('_'))));

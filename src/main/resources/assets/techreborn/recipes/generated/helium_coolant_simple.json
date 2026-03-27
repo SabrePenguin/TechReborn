@@ -3,13 +3,17 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         " T ",
-        "T T",
+        "THT",
         " T "
     ],
     "key": {
         "T": {
             "type": "forge:ore_dict",
             "ore": "ingotTin"
+        },
+        "H": {
+            "type": "techreborn:cell",
+            "fluid": "helium"
         }
     },
     "result": {
