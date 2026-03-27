@@ -24,7 +24,7 @@ public class SingleItemCategory implements IRecipeCategory<SingleItemRecipeWrapp
 	protected final IDrawableAnimated right_arrow;
 
 	public SingleItemCategory(IGuiHelper helper, String uid) {
-		background = helper.createBlankDrawable(74, 47);
+		background = helper.createBlankDrawable(70, 47);
 		this.uid = uid;
 
 		slot = helper.getSlotDrawable();

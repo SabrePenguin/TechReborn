@@ -28,7 +28,7 @@ public class OneToOneCategory implements IRecipeCategory<OneToOneRecipeWrapper> 
 	protected final IDrawableAnimated right_arrow;
 
 	public OneToOneCategory(IGuiHelper helper, String uid) {
-		background = helper.createBlankDrawable(74, 47);
+		background = helper.createBlankDrawable(70, 47);
 		this.uid = uid;
 
 		slot = helper.getSlotDrawable();

@@ -42,7 +42,8 @@ public class SingleItemRecipeWrapper implements IRecipeWrapper {
 
 	@Override
 	public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-		String energy = ExtraStringUtils.numberToCompactNumber(energyCost) + " FE";
+		int cost = energyCost*time;
+		String energy = ExtraStringUtils.numberToCompactNumber(cost) + " FE";
 		minecraft.fontRenderer.drawString(energy,
 				(recipeWidth / 2) - (minecraft.fontRenderer.getStringWidth(energy) / 2),
 				30, 0x444444);
