@@ -2,7 +2,6 @@ import os
 import json
 from pathlib import Path
 
-import recipes
 import registries
 
 OVERWRITE = True
@@ -151,28 +150,6 @@ def fix_directory(directory: str) -> str:
         return ""
     return directory + "/"
 
-def generate_furnace(
-    subpath: str,
-    item: str,
-    modid: str,
-    registry: list,
-    input_registry: dict,
-    output_name: str,
-    target_registry: dict,
-):
-    target_dir = CUSTOM_RECIPES.joinpath(subpath)
-    if not os.path.exists(target_dir):
-        os.makedirs(target_dir, exist_ok=True)
-    for name in registry:
-        input_mdata = input_registry.get(name)
-        mdata = target_registry.get(name)
-        if mdata is None:
-            continue
-        input_name = recipes.create_item(modid, item, input_mdata)
-        fname = target_dir.joinpath(f"{name}_{item}.json")
-        output = recipes.create_item(modid, output_name, mdata, 1)
-        write_to_file(fname, recipes.furnace_recipe([input_name], output, 1.0))
-
 if __name__ == "__main__":
     create_item_x("ingot", registries.INGOTS, "_ingot")
     create_item_x("nugget", registries.NUGGETS, "_nugget")
@@ -187,21 +164,3 @@ if __name__ == "__main__":
     create_item_x("tool", registries.SINGLE_TOOLS)
     create_block_x("", registries.BLOCKS)
     create_item_x("upgrades", registries.UPGRADES, "_upgrade")
-    generate_furnace(
-        "techreborn",
-        "dust",
-        "techreborn",
-        registries.SMELTABLE_DUSTS,
-        registries.DUSTS,
-        "ingot",
-        registries.INGOTS,
-    )
-    generate_furnace(
-        "techreborn",
-        "ore",
-        "techreborn",
-        registries.SMELTABLE_ORES,
-        registries.ORES,
-        "ingot",
-        registries.INGOTS,
-    )
