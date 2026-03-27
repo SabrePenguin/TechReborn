@@ -9,7 +9,6 @@ import com.sabrepenguin.techreborn.recipe.handlers.AlloyHandler;
 import com.sabrepenguin.techreborn.recipe.handlers.OneToOneHandler;
 import com.sabrepenguin.techreborn.recipe.handlers.OneToOneTemplateHandler;
 import com.sabrepenguin.techreborn.recipe.handlers.SmeltingHandler;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;

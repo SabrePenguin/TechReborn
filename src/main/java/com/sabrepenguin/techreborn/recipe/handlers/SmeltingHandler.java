@@ -16,7 +16,7 @@ import javax.annotation.Nullable;
 public class SmeltingHandler implements ITRRecipeFactory {
 	public void registerRecipe(String recipeName, JsonObject json, JsonContext context, @Nullable final ITRRegistry registry) {
 		ItemStack result = RecipeUtils.getResult(json, context);
-		ItemStack[] ingredients = CraftingHelper.getIngredient(json.get("inputs"), context).getMatchingStacks();
+		ItemStack[] ingredients = CraftingHelper.getIngredient(json.get("ingredients"), context).getMatchingStacks();
 		float experience = json.has("experience") ? JsonUtils.getFloat(json, "experience") : 0.0f;
 		for (ItemStack item: ingredients) {
 			GameRegistry.addSmelting(item, result, experience);
