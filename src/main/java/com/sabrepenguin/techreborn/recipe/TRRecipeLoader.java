@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
+import com.sabrepenguin.techreborn.recipe.data.AlloyBuilder;
 import com.sabrepenguin.techreborn.recipe.handlers.AlloyHandler;
 import com.sabrepenguin.techreborn.recipe.handlers.OneToOneHandler;
 import com.sabrepenguin.techreborn.recipe.handlers.OneToOneTemplateHandler;
@@ -53,6 +54,7 @@ public class TRRecipeLoader {
 	}
 
 	public boolean loadRecipes() {
+		AlloyBuilder.init();
 		boolean result = CraftingHelper.findFiles(mod, "assets/" + Tags.MODID + "/trrecipes/techreborn", this::preProcess, this::process, true, true);
 		StaticRecipes.addExtractorRecipes();
 		for (ITRRegistry registry: registries.values()) {
