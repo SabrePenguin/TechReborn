@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.recipe.builders;
 
 import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -52,6 +53,14 @@ public class BasicBuilder<T extends BasicBuilder<T>> {
 
 	public T setOutput(Item item, int count, int metadata) {
 		return setOutput(new ItemStack(item, count, metadata));
+	}
+
+	public T setOutput(Block block, int count) {
+		return setOutput(new ItemStack(block, count));
+	}
+
+	public T setOutput(Block block, int count, int metadata) {
+		return setOutput(new ItemStack(block, count, metadata));
 	}
 
 	public T setEnergyCost(int cost) {
