@@ -1,7 +1,0 @@
-{
-  "type": "techreborn:grinder_template",
-  "input_type": "stone",
-  "output_type": "dust",
-  "recipe_time": 300,
-  "fe_cost": 8
-}

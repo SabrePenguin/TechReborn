@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.recipe.utils;
 
 import com.sabrepenguin.techreborn.util.ItemStackWrapper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -14,6 +15,11 @@ public class CountedIngredient {
 	private final int count;
 	private String oreDict;
 	private ItemStack itemStack;
+
+	public CountedIngredient(Item item, int count, int metadata) {
+		this.count = count;
+		this.itemStack = new ItemStack(item, count, metadata);
+	}
 
 	public CountedIngredient(int count, ItemStack stack) {
 		this.count = count;

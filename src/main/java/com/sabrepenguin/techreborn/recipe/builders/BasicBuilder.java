@@ -36,6 +36,11 @@ public class BasicBuilder<T extends BasicBuilder<T>> {
 		return self();
 	}
 
+	public T addInput(Item item, int count, int metadata) {
+		this.ingredients.add(new CountedIngredient(item, count, metadata));
+		return self();
+	}
+
 	public T setOutput(ItemStack stack) {
 		output = stack;
 		return self();
