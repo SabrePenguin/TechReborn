@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ITRRegistry {
 	Collection<BasicOutputRecipe> getRecipes();
-	boolean addRecipe(String recipeName, BasicOutputRecipe recipe);
+	boolean addRecipe(BasicOutputRecipe recipe);
 	BasicOutputRecipe getRecipe(List<ItemStack> ingredientList);
 	BasicOutputRecipe getRecipe(IItemHandler handler);
 	void sortRecipes();

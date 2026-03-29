@@ -32,7 +32,7 @@ public class CartesianBuilder extends BasicBuilder<CartesianBuilder> {
 				String oreName = items.get(index) + ExtraStringUtils.capitalizeByUnderscore(ore.getLeft());
 				newIngredients.add(new CountedIngredient(ore.getRight(), oreName));
 			}
-			registry.addRecipe("", new BasicOutputRecipe(newIngredients, this.output, recipeTime, energyCost));
+			registry.addRecipe(new BasicOutputRecipe(newIngredients, this.output, recipeTime, energyCost));
 		}
 	}
 }

@@ -3,7 +3,6 @@ package com.sabrepenguin.techreborn.recipe.handlers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import com.sabrepenguin.techreborn.recipe.ITRRecipeFactory;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
@@ -26,7 +25,7 @@ public class AlloyHandler implements ITRRecipeFactory {
 				JsonUtils.getInt(json, "fe_cost") : 24;
 		ItemStack output = RecipeUtils.getResult(json, context);
 		if (inputs.size() == 2) {
-			registry.addRecipe(recipeName, new BasicOutputRecipe(inputs, output, recipeTime, energyCost));
+			registry.addRecipe(new BasicOutputRecipe(inputs, output, recipeTime, energyCost));
 		}
 	}
 }

@@ -3,7 +3,6 @@ package com.sabrepenguin.techreborn.recipe.handlers;
 import com.google.gson.JsonObject;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import com.sabrepenguin.techreborn.recipe.ITRRecipeFactory;
 import com.sabrepenguin.techreborn.recipe.RecipeLoadingException;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
@@ -49,7 +48,7 @@ public class OneToOneTemplateHandler implements ITRRecipeFactory {
 							.ifPresent(stack -> {
 								ItemStack out = stack.copy();
 								out.setCount(output_count);
-								registry.addRecipe(recipeName + entry, new BasicOutputRecipe(Arrays.asList(new CountedIngredient(input_count, entry)), out, recipeTime, energyCost));
+								registry.addRecipe(new BasicOutputRecipe(Arrays.asList(new CountedIngredient(input_count, entry)), out, recipeTime, energyCost));
 							});
 				}
 			}

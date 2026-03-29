@@ -15,7 +15,7 @@ public class StaticRecipes {
 		BasicRegistry extractor = RegistryHandler.instance().getExtractorRegistry();
 		FluidRegistry.getRegisteredFluids().forEach(
 				(name, fluid) -> {
-					extractor.addRecipe("10_" + name, new BasicOutputRecipe(
+					extractor.addRecipe(new BasicOutputRecipe(
 							Arrays.asList(new CountedIngredient(1, TRItems.cell.getCellWithFluid(fluid))),
 							new ItemStack(TRItems.cell),
 							40,
@@ -24,7 +24,7 @@ public class StaticRecipes {
 				}
 		);
 		for(int i = 1; i < 16; i++) { //TODO: Fix this up to not be java, or find an oredict way
-			extractor.addRecipe("wool_" + i, new BasicOutputRecipe(
+			extractor.addRecipe(new BasicOutputRecipe(
 					Arrays.asList(new CountedIngredient(1, new ItemStack(Blocks.WOOL, 1, i))), new ItemStack(Blocks.WOOL), 400, 8
 			));
 		}
