@@ -1,0 +1,58 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "techreborn:cable/cable_thick",
+    "textures": {
+      "particle": "#cable"
+    }
+  },
+  "variants": {
+    "south": {
+      "true": {},
+      "false": {}
+    },
+    "north": {
+      "true": {},
+      "false": {}
+    },
+    "east": {
+      "true": {},
+      "false": {}
+    },
+    "west": {
+      "true": {},
+      "false": {}
+    },
+    "down": {
+      "true": {},
+      "false": {}
+    },
+    "up": {
+      "true": {},
+      "false": {}
+    },
+    "type": {
+      "insulatedcopper": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/copper_insulated_cable"
+        }
+      },
+      "insulatedgold": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/gold_insulated_cable"
+        }
+      },
+      "insulatedhv": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/hv_insulated_cable"
+        }
+      },
+      "superconductor": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/superconductor_cable"
+        }
+      }
+    }
+  }
+}

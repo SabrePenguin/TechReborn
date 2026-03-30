@@ -1,6 +1,8 @@
 package com.sabrepenguin.techreborn.util.handlers;
 
+import com.google.common.collect.Maps;
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.blocks.BlockCable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.blocks.fluids.TRFluidBlocks;
 import com.sabrepenguin.techreborn.client.render.ModelDynCell;
@@ -13,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.DefaultStateMapper;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.item.*;
 import net.minecraft.util.IStringSerializable;
@@ -261,6 +264,24 @@ public class ModelRegistryHandler {
 					item, pair.getRight(), new ModelResourceLocation(customLocation, "type=" + pair.getLeft())
 			);
 		}
+
+		ModelLoader.setCustomStateMapper(TRBlocks.cable, new DefaultStateMapper() {
+			@Override
+			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+				Map<IProperty<?>, Comparable<?>> map = Maps.newLinkedHashMap(state.getProperties());
+				BlockCable.CableEnum value = state.getValue(BlockCable.TYPE);
+				if (value == BlockCable.CableEnum.COPPER || value == BlockCable.CableEnum.TIN || value == BlockCable.CableEnum.HV || value == BlockCable.CableEnum.GOLD || value == BlockCable.CableEnum.GLASSFIBER) {
+					return new ModelResourceLocation(
+							new ResourceLocation(Tags.MODID, "cable_thin"),
+							this.getPropertyString(map)
+					);
+				}
+				return new ModelResourceLocation(
+						new ResourceLocation(Tags.MODID, "cable_thick"),
+						this.getPropertyString(map)
+				);
+			}
+		});
 	}
 
 	/**

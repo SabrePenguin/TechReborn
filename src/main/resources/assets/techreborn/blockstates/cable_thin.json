@@ -1,0 +1,63 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "transform": "forge:default-block",
+    "model": "techreborn:cable/cable_thin",
+    "textures": {
+      "particle": "#cable"
+    }
+  },
+  "variants": {
+    "south": {
+      "true": {},
+      "false": {}
+    },
+    "north": {
+      "true": {},
+      "false": {}
+    },
+    "east": {
+      "true": {},
+      "false": {}
+    },
+    "west": {
+      "true": {},
+      "false": {}
+    },
+    "down": {
+      "true": {},
+      "false": {}
+    },
+    "up": {
+      "true": {},
+      "false": {}
+    },
+    "type": {
+      "copper": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/copper_cable"
+        }
+      },
+      "tin": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/tin_cable"
+        }
+      },
+      "gold": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/gold_cable"
+        }
+      },
+      "hv": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/hv_cable"
+        }
+      },
+      "glassfiber": {
+        "textures": {
+          "cable": "techreborn:blocks/cables/glass_fiber_cable"
+        }
+      }
+    }
+  }
+}
