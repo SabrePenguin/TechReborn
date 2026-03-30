@@ -199,7 +199,7 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.water_mill);
 		propertiesRegistration(TRBlocks.wind_mill);
 		dangerousPropertiesMetaRegistration(TRBlocks.solar_panel, false);
-		propertiesMetaRegistration(TRBlocks.cable);
+		cableRegistration();
 
 		registerCustomFluidStates(TRFluidBlocks.BERYLLIUM);
 		registerCustomFluidStates(TRFluidBlocks.CALCIUM);
@@ -246,6 +246,17 @@ public class ModelRegistryHandler {
 				block, ModelRegistryUtils.createMapper(customLocation, property.getIgnoredProperties())
 		);
 		for (Pair<String, Integer> pair: metaMaterial.getMeta()) {
+			ModelLoader.setCustomModelResourceLocation(
+					item, pair.getRight(), new ModelResourceLocation(customLocation, "type=" + pair.getLeft())
+			);
+		}
+	}
+
+	private static void cableRegistration() {
+		Item item = Item.getItemFromBlock(TRBlocks.cable);
+		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(TRBlocks.cable);
+
+		for (Pair<String, Integer> pair: TRBlocks.cable.getMeta()) {
 			ModelLoader.setCustomModelResourceLocation(
 					item, pair.getRight(), new ModelResourceLocation(customLocation, "type=" + pair.getLeft())
 			);

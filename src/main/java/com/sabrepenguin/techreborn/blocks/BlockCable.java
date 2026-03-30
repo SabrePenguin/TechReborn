@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -122,6 +123,18 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	}
 
 	@Override
+
+	@Override
+	public boolean hasResourceLocation() {
+		return true;
+	}
+
+	@Override
+	public ResourceLocation getResourceLocation() {
+		return new ResourceLocation(Tags.MODID, "cable_inv");
+	}
+
+	@Override
 	public String getName(ItemStack stack) {
 		return CableEnum.META_MAP.get(stack.getMetadata()).getName();
 	}
@@ -132,9 +145,9 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 		GOLD(2),
 		HV(3),
 		GLASSFIBER(4),
-		ICOPPER(5),
-		IGOLD(6),
-		IHV(7),
+		INSULATEDCOPPER(5),
+		INSULATEDGOLD(6),
+		INSULATEDHV(7),
 		SUPERCONDUCTOR(8);
 
 		final int metadata;
