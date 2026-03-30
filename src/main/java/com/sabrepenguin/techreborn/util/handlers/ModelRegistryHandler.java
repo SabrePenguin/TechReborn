@@ -199,7 +199,7 @@ public class ModelRegistryHandler {
 		propertiesRegistration(TRBlocks.water_mill);
 		propertiesRegistration(TRBlocks.wind_mill);
 		dangerousPropertiesMetaRegistration(TRBlocks.solar_panel, false);
-//		propertiesMetaRegistration(TRBlocks.cable);
+		propertiesMetaRegistration(TRBlocks.cable);
 
 		registerCustomFluidStates(TRFluidBlocks.BERYLLIUM);
 		registerCustomFluidStates(TRFluidBlocks.CALCIUM);

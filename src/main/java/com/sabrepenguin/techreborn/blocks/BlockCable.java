@@ -8,16 +8,20 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -30,6 +34,14 @@ import java.util.stream.Collectors;
 @MethodsReturnNonnullByDefault
 public class BlockCable extends Block implements INonStandardLocation, IMetaInformation {
 	public static final PropertyEnum<CableEnum> TYPE = PropertyEnum.create("type", CableEnum.class);
+	private static final PropertyBool SOUTH = PropertyBool.create("south");
+	private static final PropertyBool NORTH = PropertyBool.create("north");
+	private static final PropertyBool EAST = PropertyBool.create("east");
+	private static final PropertyBool WEST = PropertyBool.create("west");
+	private static final PropertyBool DOWN = PropertyBool.create("down");
+	private static final PropertyBool UP = PropertyBool.create("up");
+
+	private static final AxisAlignedBB[] BOUNDING_BOXES = {};
 
 	public BlockCable() {
 		super(Material.ROCK);
@@ -37,7 +49,10 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 		this.setResistance(8f);
 		this.setRegistryName(Tags.MODID, "cable");
 		this.setTranslationKey(Tags.MODID + ".cable");
-		this.setDefaultState(this.getDefaultState().withProperty(TYPE, CableEnum.COPPER));
+		this.setDefaultState(this.getDefaultState().withProperty(TYPE, CableEnum.COPPER)
+				.withProperty(SOUTH, false).withProperty(NORTH, false)
+				.withProperty(EAST, false).withProperty(WEST, false)
+				.withProperty(UP, false).withProperty(DOWN, false));
 	}
 
 	@Override
@@ -62,7 +77,7 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, TYPE);
+		return new BlockStateContainer(this, TYPE, NORTH, SOUTH, EAST, WEST, UP, DOWN);
 	}
 
 	@Override
@@ -90,6 +105,20 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	@Override
 	public List<Pair<String, Integer>> getMeta() {
 		return Arrays.stream(CableEnum.values()).map(cable -> Pair.of(cable.getName(), cable.metadata)).collect(Collectors.toList());
+	}
+
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return state.withProperty(UP, canConnect(worldIn, pos, EnumFacing.UP))
+				.withProperty(DOWN, canConnect(worldIn, pos, EnumFacing.DOWN))
+				.withProperty(SOUTH, canConnect(worldIn, pos, EnumFacing.SOUTH))
+				.withProperty(NORTH, canConnect(worldIn, pos, EnumFacing.NORTH))
+				.withProperty(EAST, canConnect(worldIn, pos, EnumFacing.EAST))
+				.withProperty(WEST, canConnect(worldIn, pos, EnumFacing.WEST));
+	}
+
+	private boolean canConnect(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+		return world.getBlockState(pos.offset(facing)).getBlock() == this;
 	}
 
 	@Override
