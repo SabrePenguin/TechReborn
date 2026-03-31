@@ -9,27 +9,44 @@
   },
   "variants": {
     "south": {
-      "true": {},
+      "true": {
+        "submodel": "techreborn:cable/cable_connection_thick",
+        "y": 180
+      },
       "false": {}
     },
     "north": {
-      "true": {},
+      "true": {
+        "submodel": "techreborn:cable/cable_connection_thick"
+      },
       "false": {}
     },
     "east": {
-      "true": {},
+      "true": {
+        "submodel": "techreborn:cable/cable_connection_thick",
+        "y": 90
+      },
       "false": {}
     },
     "west": {
-      "true": {},
+      "true": {
+        "submodel": "techreborn:cable/cable_connection_thick",
+        "y": 270
+      },
       "false": {}
     },
     "down": {
-      "true": {},
+      "true": {
+        "submodel": "techreborn:cable/cable_connection_thick",
+        "x": 90
+      },
       "false": {}
     },
     "up": {
-      "true": {},
+      "true": {
+        "submodel": "techreborn:cable/cable_connection_thick",
+        "x": 270
+      },
       "false": {}
     },
     "type": {
