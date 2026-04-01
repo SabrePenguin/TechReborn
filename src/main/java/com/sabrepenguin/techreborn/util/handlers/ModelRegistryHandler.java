@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -255,6 +256,7 @@ public class ModelRegistryHandler {
 		}
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	private static void cableRegistration() {
 		Item item = Item.getItemFromBlock(TRBlocks.cable);
 		ResourceLocation customLocation = ModelRegistryUtils.getResourceLocation(TRBlocks.cable);
@@ -267,10 +269,10 @@ public class ModelRegistryHandler {
 
 		ModelLoader.setCustomStateMapper(TRBlocks.cable, new DefaultStateMapper() {
 			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+			protected @NotNull ModelResourceLocation getModelResourceLocation(@NotNull IBlockState state) {
 				Map<IProperty<?>, Comparable<?>> map = Maps.newLinkedHashMap(state.getProperties());
 				BlockCable.CableEnum value = state.getValue(BlockCable.TYPE);
-				if (value == BlockCable.CableEnum.COPPER || value == BlockCable.CableEnum.TIN || value == BlockCable.CableEnum.HV || value == BlockCable.CableEnum.GOLD || value == BlockCable.CableEnum.GLASSFIBER) {
+				if (BlockCable.CableEnum.isThin(value)) {
 					return new ModelResourceLocation(
 							new ResourceLocation(Tags.MODID, "cable_thin"),
 							this.getPropertyString(map)
@@ -401,7 +403,7 @@ public class ModelRegistryHandler {
 		ResourceLocation location = new ResourceLocation(fluidBase.getRegistryName().getNamespace(), "fluids/" + fluidBase.getRegistryName().getPath());
 		ModelLoader.setCustomStateMapper(fluidBase, new StateMapperBase() {
 			@Override
-			protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+			protected @NotNull ModelResourceLocation getModelResourceLocation(@NotNull IBlockState state) {
 				return new ModelResourceLocation(location, "normal");
 			}
 		});

@@ -13,18 +13,21 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.energy.CapabilityEnergy;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
@@ -42,7 +45,8 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	private static final PropertyBool DOWN = PropertyBool.create("down");
 	private static final PropertyBool UP = PropertyBool.create("up");
 
-	private static final AxisAlignedBB[] BOUNDING_BOXES = {};
+	private static final AxisAlignedBB[] THICK_BOUNDING_BOXES = generateBoundingBoxes(false);
+	private static final AxisAlignedBB[] THIN_BOUNDING_BOXES = generateBoundingBoxes(true);
 
 	public BlockCable() {
 		super(Material.ROCK);
@@ -89,6 +93,7 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 		return new BlockStateContainer(this, TYPE, NORTH, SOUTH, EAST, WEST, UP, DOWN);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(TYPE, CableEnum.META_MAP.get(meta));
@@ -116,6 +121,7 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 		return Arrays.stream(CableEnum.values()).map(cable -> Pair.of(cable.getName(), cable.metadata)).collect(Collectors.toList());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		return state.withProperty(UP, canConnect(worldIn, pos, EnumFacing.UP))
@@ -127,10 +133,113 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	}
 
 	private boolean canConnect(IBlockAccess world, BlockPos pos, EnumFacing facing) {
-		return world.getBlockState(pos.offset(facing)).getBlock() == this;
+		BlockPos offset = pos.offset(facing);
+		if (world.getBlockState(offset).getBlock() == this)
+			return true;
+		TileEntity te = world instanceof ChunkCache chunkCache ? chunkCache.getTileEntity(offset, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(offset);
+		return te != null && te.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		state = state.getActualState(source, pos);
+		if (CableEnum.isThin(state.getValue(TYPE))) {
+			return THIN_BOUNDING_BOXES[getCollisionBox(state)];
+		}
+		return THICK_BOUNDING_BOXES[getCollisionBox(state)];
+	}
+
+	private static int getCollisionBox(IBlockState state) {
+		int i = 0;
+		i |= state.getValue(DOWN) ? 1 : 0;
+		i |= state.getValue(UP) ? 2 : 0;
+		i |= state.getValue(NORTH) ? 4 : 0;
+		i |= state.getValue(SOUTH) ? 8 : 0;
+		i |= state.getValue(EAST) ? 16 : 0;
+		i |= state.getValue(WEST) ? 32 : 0;
+		return i;
+	}
+
+	private static int nonCombinedCollisionBox(EnumFacing facing) {
+		return switch (facing) {
+			case DOWN -> 1;
+			case UP -> 2;
+			case NORTH -> 4;
+			case SOUTH -> 8;
+			case EAST -> 16;
+			case WEST -> 32;
+		};
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+		if (!isActualState) {
+			state = state.getActualState(worldIn, pos);
+		}
+		AxisAlignedBB[] target = CableEnum.isThin(state.getValue(TYPE)) ? THIN_BOUNDING_BOXES : THICK_BOUNDING_BOXES;
+		addIntersectingBox(pos, entityBox, collidingBoxes, target[0]);
+		if (state.getValue(DOWN))
+			addIntersectingBox(pos, entityBox, collidingBoxes, target[nonCombinedCollisionBox(EnumFacing.DOWN)]);
+		if (state.getValue(UP))
+			addIntersectingBox(pos, entityBox, collidingBoxes, target[nonCombinedCollisionBox(EnumFacing.UP)]);
+		if (state.getValue(NORTH))
+			addIntersectingBox(pos, entityBox, collidingBoxes, target[nonCombinedCollisionBox(EnumFacing.NORTH)]);
+		if (state.getValue(SOUTH))
+			addIntersectingBox(pos, entityBox, collidingBoxes, target[nonCombinedCollisionBox(EnumFacing.SOUTH)]);
+		if (state.getValue(EAST))
+			addIntersectingBox(pos, entityBox, collidingBoxes, target[nonCombinedCollisionBox(EnumFacing.EAST)]);
+		if (state.getValue(WEST))
+			addIntersectingBox(pos, entityBox, collidingBoxes, target[nonCombinedCollisionBox(EnumFacing.WEST)]);
+	}
+
+	private void addIntersectingBox(BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, AxisAlignedBB block) {
+		AxisAlignedBB offsetBox = block.offset(pos);
+		if (offsetBox.intersects(entityBox)) {
+			collidingBoxes.add(offsetBox);
+		}
+	}
+
+	private static AxisAlignedBB[] generateBoundingBoxes(boolean thin) {
+		AxisAlignedBB[] boxes = new AxisAlignedBB[64];
+		double min = 0.375;
+		double max = 0.625;
+		if (!thin) {
+			min = (1/16D)*5;
+			max = (1/16D)*11;
+		}
+		AxisAlignedBB core = new AxisAlignedBB(min, min, min, max, max, max);
+		boxes[0] = core;
+		for (int i = 1; i < 64; i++) {
+			AxisAlignedBB box = core;
+			if ((i & 1) != 0) box = box.union(createAABB(EnumFacing.DOWN, thin));
+			if ((i & 2) != 0) box = box.union(createAABB(EnumFacing.UP, thin));
+			if ((i & 4) != 0) box = box.union(createAABB(EnumFacing.NORTH, thin));
+			if ((i & 8) != 0) box = box.union(createAABB(EnumFacing.SOUTH, thin));
+			if ((i & 16) != 0) box = box.union(createAABB(EnumFacing.EAST, thin));
+			if ((i & 32) != 0) box = box.union(createAABB(EnumFacing.WEST, thin));
+			boxes[i] = box;
+		}
+		return boxes;
+	}
+
+	private static AxisAlignedBB createAABB(EnumFacing facing, boolean isThin) {
+		double min = 0.375;
+		double max = 0.625;
+		if (!isThin) {
+			min = (1/16D)*5;
+			max = (1/16D)*11;
+		}
+		return switch (facing) {
+			case DOWN -> new AxisAlignedBB(min, 0.0, min, max, max, max);
+			case UP -> new AxisAlignedBB(min, min, min, max, 1.0, max);
+			case NORTH -> new AxisAlignedBB(min, min, 0.0, max, max, max);
+			case SOUTH -> new AxisAlignedBB(min, min, min, max, max, 1.0);
+			case EAST -> new AxisAlignedBB(min, min, min, 1.0, max, max);
+			case WEST -> new AxisAlignedBB(0.0, min, min, max, max, max);
+		};
+	}
 
 	@Override
 	public boolean hasResourceLocation() {
@@ -178,6 +287,10 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 		@Override
 		public String getName() {
 			return name().toLowerCase();
+		}
+
+		public static boolean isThin(CableEnum cable) {
+			return cable == COPPER || cable == TIN || cable == GOLD || cable == HV || cable == GLASSFIBER;
 		}
 	}
 }
