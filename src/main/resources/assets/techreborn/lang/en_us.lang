@@ -678,3 +678,9 @@ advancements.techreborn.sap.desc=Well done, you now have rubber sap. You will wa
 #GUI
 techreborn.auto_output.gui=Auto Output
 techreborn.auto_input.gui=Auto Input
+
+#Config
+config.cable=Cable Settings
+config.cable.uninsulatedElectrocutionDamage=Uninsulated Cable Damage
+config.cable.uninsulatedElectrocutionSound=Uninsulated Cable Sound
+config.cable.uninsulatedElectrocutionParticles=Uninsulated Cable Particles
