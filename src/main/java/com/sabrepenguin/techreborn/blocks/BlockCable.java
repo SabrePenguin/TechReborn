@@ -1,8 +1,11 @@
 package com.sabrepenguin.techreborn.blocks;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
+import com.sabrepenguin.techreborn.tileentity.cable.TileEntityCable;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
+import com.sabrepenguin.techreborn.util.handlers.ModSounds;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import mcp.MethodsReturnNonnullByDefault;
@@ -14,6 +17,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -58,6 +62,16 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 				.withProperty(SOUTH, false).withProperty(NORTH, false)
 				.withProperty(EAST, false).withProperty(WEST, false)
 				.withProperty(UP, false).withProperty(DOWN, false));
+	}
+
+	@Override
+	public boolean hasTileEntity(IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public @Nullable TileEntity createTileEntity(World world, IBlockState state) {
+		return new TileEntityCable();
 	}
 
 	@Override
@@ -242,6 +256,30 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	}
 
 	@Override
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		super.onEntityCollision(worldIn, pos, state, entityIn);
+		if (state.getValue(TYPE).damage && entityIn instanceof EntityLivingBase) {
+			TileEntity te = worldIn.getTileEntity(pos);
+			if (te instanceof TileEntityCable cable) {
+				if (cable.isPowered()) {
+					if (TechRebornConfig.misc.cable.electrocutionDamage) {
+						if (state.getValue(TYPE) == CableEnum.HV) {
+							entityIn.setFire(1);
+						}
+						entityIn.attackEntityFrom(new DamageSource("shock"), 1f);
+					}
+					if (TechRebornConfig.misc.cable.electrocutionSound) {
+						worldIn.playSound(null, entityIn.posX, entityIn.posY, entityIn.posZ, ModSounds.CABLE_SHOCK, SoundCategory.BLOCKS, 0.6f, 1f);
+					}
+					if (TechRebornConfig.misc.cable.electrocutionParticles) {
+						worldIn.spawnParticle(EnumParticleTypes.CRIT, entityIn.posX, entityIn.posY, entityIn.posZ, 0, 0, 0);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
 	public boolean hasResourceLocation() {
 		return true;
 	}
@@ -257,10 +295,10 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	}
 
 	public enum CableEnum implements IStringSerializable {
-		COPPER(0),
-		TIN(1),
-		GOLD(2),
-		HV(3),
+		COPPER(0, true),
+		TIN(1, true),
+		GOLD(2, true),
+		HV(3, true),
 		GLASSFIBER(4),
 		INSULATEDCOPPER(5),
 		INSULATEDGOLD(6),
@@ -268,6 +306,7 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 		SUPERCONDUCTOR(8);
 
 		final int metadata;
+		final boolean damage;
 
 		static final Int2ObjectMap<CableEnum> META_MAP = new Int2ObjectOpenHashMap<>();
 
@@ -277,7 +316,12 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 		}
 
 		CableEnum(int metadata) {
+			this(metadata, false);
+		}
+
+		CableEnum(int metadata, boolean damage) {
 			this.metadata = metadata;
+			this.damage = damage;
 		}
 
 		public int metadata() {
