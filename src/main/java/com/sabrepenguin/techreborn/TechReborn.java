@@ -66,8 +66,8 @@ public class TechReborn {
     }
 
     @EventHandler
-    // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
+		proxy.postInit(event);
     }
 
     @EventHandler

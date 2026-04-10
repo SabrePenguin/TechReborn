@@ -1,6 +1,8 @@
 package com.sabrepenguin.techreborn.config;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.tileentity.cable.HandlerCable;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -30,20 +32,32 @@ public class TechRebornConfig {
 		public boolean electrocutionSound;
 		@Config.LangKey("config.cable.uninsulatedElectrocutionParticles")
 		public boolean electrocutionParticles;
+		@Config.LangKey("config.cable.debugNetwork")
+		public boolean debugNetwork;
 
 		public Cable(boolean electrocutionDamage, boolean electrocutionSound, boolean electrocutionParticles) {
 			this.electrocutionDamage = electrocutionDamage;
 			this.electrocutionSound = electrocutionSound;
 			this.electrocutionParticles = electrocutionParticles;
+			debugNetwork = false;
 		}
 	}
 
 	@Mod.EventBusSubscriber(value = Side.CLIENT, modid = Tags.MODID)
-	private static class EventHandler {
+	public static class EventHandler {
 		@SubscribeEvent
 		public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event) {
 			if (event.getModID().equals(Tags.MODID)) {
 				ConfigManager.sync(Tags.MODID, Config.Type.INSTANCE);
+				cableDebugHandler();
+			}
+		}
+
+		public static void cableDebugHandler() {
+			if (misc.cable.debugNetwork) {
+				MinecraftForge.EVENT_BUS.register(HandlerCable.class);
+			} else {
+				MinecraftForge.EVENT_BUS.unregister(HandlerCable.class);
 			}
 		}
 	}
