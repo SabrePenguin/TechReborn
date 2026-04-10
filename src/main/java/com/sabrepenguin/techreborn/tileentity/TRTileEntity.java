@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.tileentity;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.tileentity.cable.TileEntityCable;
 import com.sabrepenguin.techreborn.tileentity.processing.TEProcessing;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAlloySmelter;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityElectricFurnace;
@@ -22,5 +23,7 @@ public class TRTileEntity {
 		GameRegistry.registerTileEntity(TileEntityRecycler.class, new ResourceLocation(Tags.MODID, "recycler"));
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityWireMill.class, new ResourceLocation(Tags.MODID, "wire_mill"));
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityCompressor.class, new ResourceLocation(Tags.MODID, "compressor"));
+
+		GameRegistry.registerTileEntity(TileEntityCable.class, new ResourceLocation(Tags.MODID, "cable"));
 	}
 }
