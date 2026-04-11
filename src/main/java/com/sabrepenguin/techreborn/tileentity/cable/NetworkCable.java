@@ -83,8 +83,8 @@ public class NetworkCable {
 	public void mergeNetwork(World world, NetworkCable network) {
 		for (BlockPos pos: network.tileEntities) {
 			addToNetwork(pos);
-			TileEntity entity = world.getTileEntity(pos);
-			if (entity instanceof TileEntityCable cable) {
+			TileEntity te = world.getTileEntity(pos);
+			if (te instanceof TileEntityCable cable && !te.isInvalid()) {
 				cable.setNetworkSilent(this);
 			}
 		}
@@ -153,7 +153,7 @@ public class NetworkCable {
 				for (BlockPos pos: severed) {
 					networkCable.addToNetwork(pos);
 					TileEntity te = world.getTileEntity(pos);
-					if (te instanceof TileEntityCable cable) {
+					if (te instanceof TileEntityCable cable && !te.isInvalid()) {
 						cable.setNetworkSilent(networkCable);
 					}
 				}
