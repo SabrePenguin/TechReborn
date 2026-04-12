@@ -256,6 +256,17 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	}
 
 	@Override
+	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+		super.onNeighborChange(world, pos, neighbor);
+		if (world instanceof World realWorld && !realWorld.isRemote) {
+			TileEntity te = world.getTileEntity(pos);
+			if (te instanceof TileEntityCable cable) {
+				cable.scanEndpoints();
+			}
+		}
+	}
+
+	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		super.onEntityCollision(worldIn, pos, state, entityIn);
 		if (state.getValue(TYPE).damage && entityIn instanceof EntityLivingBase) {

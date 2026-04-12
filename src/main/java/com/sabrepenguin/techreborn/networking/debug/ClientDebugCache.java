@@ -6,9 +6,11 @@ import java.util.Set;
 
 public class ClientDebugCache {
 	private static Set<BlockPos> cachedPositions;
+	private static Set<BlockPos> endpoints;
 
-	public static void update(Set<BlockPos> pos) {
+	public static void update(Set<BlockPos> pos, Set<BlockPos> endpointPositions) {
 		cachedPositions = pos;
+		endpoints = endpointPositions;
 	}
 
 	public static boolean isLoaded(BlockPos pos) {
@@ -17,5 +19,9 @@ public class ClientDebugCache {
 
 	public static Set<BlockPos> getCachedPositions() {
 		return cachedPositions;
+	}
+
+	public static Set<BlockPos> getEndpoints() {
+		return endpoints;
 	}
 }

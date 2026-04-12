@@ -14,26 +14,39 @@ public class PacketHighlightDebug implements IMessage {
 	public PacketHighlightDebug() {}
 
 	private Set<BlockPos> positions;
-	private int len;
+	private int positionLen;
+	private Set<BlockPos> endpoints;
+	private int endpointLen;
 
-	public PacketHighlightDebug(Set<BlockPos> positions) {
+	public PacketHighlightDebug(Set<BlockPos> positions, Set<BlockPos> endpoints) {
 		this.positions = positions;
-		this.len = positions.size();
+		this.positionLen = positions.size();
+		this.endpoints = endpoints;
+		this.endpointLen = endpoints.size();
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.len = buf.readInt();
+		this.positionLen = buf.readInt();
 		this.positions = new HashSet<>();
-		for (int i = 0; i < len; i++) {
+		for (int i = 0; i < positionLen; i++) {
 			positions.add(BlockPos.fromLong(buf.readLong()));
+		}
+		this.endpointLen = buf.readInt();
+		this.endpoints = new HashSet<>();
+		for (int i = 0; i < endpointLen; i++) {
+			endpoints.add(BlockPos.fromLong(buf.readLong()));
 		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.len);
+		buf.writeInt(this.positionLen);
 		for (BlockPos pos: this.positions) {
+			buf.writeLong(pos.toLong());
+		}
+		buf.writeInt(this.endpointLen);
+		for (BlockPos pos: this.endpoints) {
 			buf.writeLong(pos.toLong());
 		}
 	}
@@ -42,7 +55,7 @@ public class PacketHighlightDebug implements IMessage {
 
 		@Override
 		public IMessage onMessage(PacketHighlightDebug message, MessageContext ctx) {
-			ClientDebugCache.update(message.positions);
+			ClientDebugCache.update(message.positions, message.endpoints);
 			return null;
 		}
 	}
