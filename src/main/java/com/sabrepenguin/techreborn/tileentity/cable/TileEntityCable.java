@@ -5,6 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -48,6 +49,7 @@ public class TileEntityCable extends TileEntity {
 		if (this.network == null) {
 			this.network = new NetworkCable(world, this.pos);
 		}
+		scanEndpoints();
 		super.onLoad();
 	}
 
@@ -78,6 +80,21 @@ public class TileEntityCable extends TileEntity {
 	public void setNetworkSilent(NetworkCable network) {
 		this.network = network;
 		this.network.addToNetwork(pos);
+	}
+
+	public void scanEndpoints() {
+		if (world.isRemote || network == null) return;
+		for (EnumFacing facing: EnumFacing.values()) {
+			BlockPos offset = pos.offset(facing);
+			if (world.isBlockLoaded(offset)) {
+				TileEntity te = world.getTileEntity(offset);
+				if (te != null && !(te instanceof TileEntityCable) && !te.isInvalid() && te.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
+					network.addPointToNetwork(offset, facing);
+				} else {
+					network.removePointFromNetwork(offset, facing);
+				}
+			}
+		}
 	}
 
 	public boolean isNeighborInNetwork(BlockPos pos) {

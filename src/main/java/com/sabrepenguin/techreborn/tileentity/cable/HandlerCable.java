@@ -17,7 +17,6 @@ import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 public class HandlerCable {
@@ -32,8 +31,8 @@ public class HandlerCable {
 			TileEntity te = world.getTileEntity(target);
 			if (!(te instanceof TileEntityCable))
 				return;
-			Set<BlockPos> positions = new HashSet<>();
-			positions.add(target);
+			Set<BlockPos> positions = null;
+			Set<BlockPos> endpoints = null;
 			for (EnumFacing facing: EnumFacing.values()) {
 				BlockPos offset = target.offset(facing);
 				if (!world.isBlockLoaded(offset))
@@ -43,13 +42,14 @@ public class HandlerCable {
 					TechRebornPacketHandler.INSTANCE.sendToServer(new PacketServerHighlightDebug(target));
 				} else {
 					positions = ClientDebugCache.getCachedPositions();
+					endpoints = ClientDebugCache.getEndpoints();
 				}
 			}
-			renderLinkedHighlights(positions);
+			renderLinkedHighlights(positions, endpoints);
 		}
 	}
 
-	private static void renderLinkedHighlights(Collection<BlockPos> positions) {
+	private static void renderLinkedHighlights(Collection<BlockPos> positions, Collection<BlockPos> endpoints) {
 		RenderManager rm = Minecraft.getMinecraft().getRenderManager();
 
 		double x = rm.viewerPosX;
@@ -60,12 +60,18 @@ public class HandlerCable {
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.disableTexture2D();
 		GlStateManager.glLineWidth(6.0f);
-
-		for (BlockPos pos: positions) {
-			AxisAlignedBB box = new AxisAlignedBB(pos).offset(-x, -y, -z);
-			RenderGlobal.drawSelectionBoundingBox(box, 1.0f, 0.0f, 0.0f, 0.4f);
+		if (positions != null) {
+			for (BlockPos pos : positions) {
+				AxisAlignedBB box = new AxisAlignedBB(pos).offset(-x, -y, -z);
+				RenderGlobal.drawSelectionBoundingBox(box, 1.0f, 0.0f, 0.0f, 0.4f);
+			}
 		}
-
+		if (endpoints != null) {
+			for (BlockPos pos : endpoints) {
+				AxisAlignedBB box = new AxisAlignedBB(pos).grow(0.002d).offset(-x, -y, -z);
+				RenderGlobal.drawSelectionBoundingBox(box, 1.0f, 0.0f, 1.0f, 0.4f);
+			}
+		}
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableBlend();
 	}

@@ -43,7 +43,8 @@ public class PacketServerHighlightDebug implements IMessage {
 					TileEntity te = world.getTileEntity(message.origin);
 					if (te instanceof TileEntityCable cable) {
 						Set<BlockPos> cables = cable.getNetwork().getCables();
-						TechRebornPacketHandler.INSTANCE.sendTo(new PacketHighlightDebug(cables), player);
+						Set<BlockPos> endpoints = cable.getNetwork().getEndpoints().keySet();
+						TechRebornPacketHandler.INSTANCE.sendTo(new PacketHighlightDebug(cables, endpoints), player);
 					}
 				}
 			});
