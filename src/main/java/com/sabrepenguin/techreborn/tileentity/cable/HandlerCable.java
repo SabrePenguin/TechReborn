@@ -38,11 +38,11 @@ public class HandlerCable {
 				BlockPos offset = target.offset(facing);
 				if (!world.isBlockLoaded(offset))
 					continue;
-				Boolean linked = ClientDebugCache.isLinked(target, facing);
-				if (linked == null) {
-					TechRebornPacketHandler.INSTANCE.sendToServer(new PacketServerHighlightDebug(target, facing));
-				} else if (linked) {
-					positions.add(offset);
+				boolean loaded = ClientDebugCache.isLoaded(target);
+				if (!loaded) {
+					TechRebornPacketHandler.INSTANCE.sendToServer(new PacketServerHighlightDebug(target));
+				} else {
+					positions = ClientDebugCache.getCachedPositions();
 				}
 			}
 			renderLinkedHighlights(positions);
