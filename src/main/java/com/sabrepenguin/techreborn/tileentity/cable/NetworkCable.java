@@ -1,22 +1,24 @@
 package com.sabrepenguin.techreborn.tileentity.cable;
 
 import com.github.bsideup.jabel.Desugar;
-import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class NetworkCable {
 	private final Set<BlockPos> tileEntities = new HashSet<>();
+
 	private final Map<BlockPos, Set<EnumFacing>> endpoints = new HashMap<>();
+	private final List<NetworkEndpoint> endpointList = new ArrayList<>();
+
 	private boolean powered = false;
 	private long centerX = 0;
 	private long centerY = 0;
@@ -82,6 +84,16 @@ public class NetworkCable {
 
 	public void addPointToNetwork(BlockPos pos, EnumFacing facing) {
 		endpoints.computeIfAbsent(pos, k -> EnumSet.noneOf(EnumFacing.class)).add(facing);
+
+		if (world.isBlockLoaded(pos)) {
+			TileEntity te = world.getTileEntity(pos);
+			if (te != null && !te.isInvalid() && te.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
+				IEnergyStorage storage = te.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
+				if (storage != null) {
+					endpointList.add(new NetworkEndpoint(te, storage, facing));
+				}
+			}
+		}
 	}
 
 	public void removePointFromNetwork(BlockPos pos, EnumFacing facing) {
@@ -90,6 +102,10 @@ public class NetworkCable {
 			if (endpoints.get(pos).isEmpty()) {
 				endpoints.remove(pos);
 			}
+			endpointList.removeIf(endpoint -> {
+				TileEntity te = endpoint.teRef.get();
+				return te != null && te.getPos().equals(pos) && endpoint.facing == facing;
+			});
 		}
 	}
 
@@ -107,6 +123,7 @@ public class NetworkCable {
 				this.addPointToNetwork(entry.getKey(), facing);
 			}
 		}
+		network.endpointList.clear();
 		network.endpoints.clear();
 
 		for (BlockPos pos: network.tileEntities) {
@@ -121,21 +138,57 @@ public class NetworkCable {
 	}
 
 	public void tick() {
-		if (TechRebornConfig.misc.cable.debugNetwork && world.getTotalWorldTime() % 10 == 0) {
-			if (world instanceof WorldServer server) {
-				Vec3d center = center();
-				server.spawnParticle(
-						EnumParticleTypes.END_ROD,
-						center.x + 0.5,
-						center.y + 0.5,
-						center.z + 0.5,
-						1,
-						0,
-						0,
-						0.0D,
-						0
-				);
+		if (world.isRemote || endpointList.isEmpty())
+			return;
+		List<IEnergyStorage> currentSources = new ArrayList<>();
+		List<IEnergyStorage> currentSinks = new ArrayList<>();
+
+		Iterator<NetworkEndpoint> iterator = endpointList.iterator();
+		while (iterator.hasNext()) {
+			NetworkEndpoint endpoint = iterator.next();
+			TileEntity te = endpoint.teRef.get();
+			if (te == null || te.isInvalid() || !world.isBlockLoaded(te.getPos())) {
+				iterator.remove();
+				continue;
 			}
+			if (endpoint.capability.canExtract()) {
+				currentSources.add(endpoint.capability);
+			}
+			if (endpoint.capability.canReceive()) {
+				currentSinks.add(endpoint.capability);
+			}
+		}
+		if (currentSinks.isEmpty() || currentSources.isEmpty())
+			return;
+
+		long totalDemand = 0;
+		for (int i = 0; i < currentSinks.size(); i++) {
+			totalDemand += currentSinks.get(i).receiveEnergy(Integer.MAX_VALUE, true);
+		}
+		if (totalDemand == 0)
+			return;
+
+		long totalProduction = 0;
+		for (int i = 0; i < currentSources.size(); i++) {
+			long needed = totalDemand - totalProduction;
+			if (needed <= 0) break;
+			int extractable = needed >= Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) needed;
+			totalProduction += currentSources.get(i).extractEnergy(extractable, false);
+		}
+
+		if (totalProduction == 0) {
+			powered = false;
+			return;
+		} else {
+			powered = true;
+		}
+
+		long remainingToDistribute = totalProduction;
+		for (int i = 0; i < currentSinks.size(); i++) {
+			if (remainingToDistribute <= 0) break;
+			int insertAmount = remainingToDistribute > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) remainingToDistribute;
+			int accepted = currentSinks.get(i).receiveEnergy(insertAmount, false);
+			remainingToDistribute -= accepted;
 		}
 	}
 
@@ -143,7 +196,6 @@ public class NetworkCable {
 		if (tileEntities.isEmpty() || world.isRemote)
 			return;
 		Set<BlockPos> unvisited = new HashSet<>(tileEntities);
-		List<Set<BlockPos>> subs = new ArrayList<>();
 		List<Pair<Set<BlockPos>, Map<BlockPos, Set<EnumFacing>>>> subgraphs = new ArrayList<>();
 		while (!unvisited.isEmpty()) {
 			BlockPos pos = unvisited.iterator().next();
@@ -181,35 +233,34 @@ public class NetworkCable {
 		if (subgraphs.size() > 1) {
 			var primary = subgraphs.get(0);
 			this.tileEntities.clear();
+			this.endpointList.clear();
+			this.endpoints.clear();
 			this.centerX = 0;
 			this.centerY = 0;
 			this.centerZ = 0;
-			for (BlockPos pos: primary.getLeft()) {
-				addToNetwork(pos);
-			}
-			for (Map.Entry<BlockPos, Set<EnumFacing>> entry: primary.getRight().entrySet()) {
-				for (EnumFacing face: entry.getValue()) {
-					addPointToNetwork(entry.getKey(), face);
-				}
-			}
+			buildNetwork(this, world, primary.getLeft(), primary.getRight());
 
 			for (int i = 1; i < subgraphs.size(); i++) {
 				var severedData = subgraphs.get(i);
 				NetworkCable networkCable = new NetworkCable(world);
-				for (Map.Entry<BlockPos, Set<EnumFacing>> entry: severedData.getRight().entrySet()) {
-					for (EnumFacing face: entry.getValue()) {
-						networkCable.addPointToNetwork(entry.getKey(), face);
-					}
+				buildNetwork(networkCable, world, severedData.getLeft(), severedData.getRight());
+			}
+		}
+	}
+
+	private static void buildNetwork(NetworkCable network, World world, Set<BlockPos> left, Map<BlockPos, Set<EnumFacing>> right) {
+		for (BlockPos pos: left) {
+			network.addToNetwork(pos);
+			if (world.isBlockLoaded(pos)) {
+				TileEntity te = world.getTileEntity(pos);
+				if (te instanceof TileEntityCable cable && !te.isInvalid()) {
+					cable.setNetworkSilent(network);
 				}
-				for (BlockPos pos: severedData.getLeft()) {
-					networkCable.addToNetwork(pos);
-					if (world.isBlockLoaded(pos)) {
-						TileEntity te = world.getTileEntity(pos);
-						if (te instanceof TileEntityCable cable && !te.isInvalid()) {
-							cable.setNetworkSilent(networkCable);
-						}
-					}
-				}
+			}
+		}
+		for (Map.Entry<BlockPos, Set<EnumFacing>> entry: right.entrySet()) {
+			for (EnumFacing face: entry.getValue()) {
+				network.addPointToNetwork(entry.getKey(), face);
 			}
 		}
 	}
@@ -223,5 +274,9 @@ public class NetworkCable {
 	}
 
 	@Desugar
-	private record GraphData(Set<BlockPos> cables, Map<BlockPos, Set<EnumFacing>> endpoints) {}
+	public record NetworkEndpoint(WeakReference<TileEntity> teRef, IEnergyStorage capability, EnumFacing facing) {
+		public NetworkEndpoint(TileEntity te, IEnergyStorage storage, EnumFacing facing) {
+			this(new WeakReference<>(te), storage, facing);
+		}
+	}
 }
