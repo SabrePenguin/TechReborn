@@ -221,4 +221,7 @@ public class NetworkCable {
 	public boolean isPowered() {
 		return powered;
 	}
+
+	@Desugar
+	private record GraphData(Set<BlockPos> cables, Map<BlockPos, Set<EnumFacing>> endpoints) {}
 }
