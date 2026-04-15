@@ -138,18 +138,19 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		return state.withProperty(UP, canConnect(worldIn, pos, EnumFacing.UP))
-				.withProperty(DOWN, canConnect(worldIn, pos, EnumFacing.DOWN))
-				.withProperty(SOUTH, canConnect(worldIn, pos, EnumFacing.SOUTH))
-				.withProperty(NORTH, canConnect(worldIn, pos, EnumFacing.NORTH))
-				.withProperty(EAST, canConnect(worldIn, pos, EnumFacing.EAST))
-				.withProperty(WEST, canConnect(worldIn, pos, EnumFacing.WEST));
+		return state.withProperty(UP, canConnect(state, worldIn, pos, EnumFacing.UP))
+				.withProperty(DOWN, canConnect(state, worldIn, pos, EnumFacing.DOWN))
+				.withProperty(SOUTH, canConnect(state, worldIn, pos, EnumFacing.SOUTH))
+				.withProperty(NORTH, canConnect(state, worldIn, pos, EnumFacing.NORTH))
+				.withProperty(EAST, canConnect(state, worldIn, pos, EnumFacing.EAST))
+				.withProperty(WEST, canConnect(state, worldIn, pos, EnumFacing.WEST));
 	}
 
-	private boolean canConnect(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+	private boolean canConnect(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing facing) {
 		BlockPos offset = pos.offset(facing);
+		IBlockState neighbor = world.getBlockState(offset);
 		if (world.getBlockState(offset).getBlock() == this)
-			return true;
+			return state.getValue(TYPE) == neighbor.getValue(TYPE);
 		TileEntity te = world instanceof ChunkCache chunkCache ? chunkCache.getTileEntity(offset, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(offset);
 		return te != null && te.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
 	}
@@ -307,18 +308,19 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 	}
 
 	public enum CableEnum implements IStringSerializable {
-		COPPER(0, true),
-		TIN(1, true),
-		GOLD(2, true),
-		HV(3, true),
-		GLASSFIBER(4),
-		INSULATEDCOPPER(5),
-		INSULATEDGOLD(6),
-		INSULATEDHV(7),
-		SUPERCONDUCTOR(8);
+		COPPER(0, true, 512),
+		TIN(1, true, 128),
+		GOLD(2, true, 2048),
+		HV(3, true, 8192),
+		GLASSFIBER(4, false, 32768),
+		INSULATEDCOPPER(5, false, 512),
+		INSULATEDGOLD(6, false, 2048),
+		INSULATEDHV(7, false, 8192),
+		SUPERCONDUCTOR(8, false, Long.MAX_VALUE);
 
 		final int metadata;
 		final boolean damage;
+		final long transferRate;
 
 		static final Int2ObjectMap<CableEnum> META_MAP = new Int2ObjectOpenHashMap<>();
 
@@ -327,17 +329,18 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 			META_MAP.defaultReturnValue(COPPER);
 		}
 
-		CableEnum(int metadata) {
-			this(metadata, false);
-		}
-
-		CableEnum(int metadata, boolean damage) {
+		CableEnum(int metadata, boolean damage, long transferRate) {
 			this.metadata = metadata;
 			this.damage = damage;
+			this.transferRate = transferRate;
 		}
 
 		public int metadata() {
 			return metadata;
+		}
+
+		public long getTransferRate() {
+			return transferRate;
 		}
 
 		@Override

@@ -1,6 +1,8 @@
 package com.sabrepenguin.techreborn.tileentity.cable;
 
+import com.sabrepenguin.techreborn.blocks.BlockCable;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -19,35 +21,40 @@ public class TileEntityCable extends TileEntity {
 	public void onLoad() {
 		if (world.isRemote)
 			return;
+		IBlockState thisState = world.getBlockState(pos);
+		BlockCable.CableEnum type = thisState.getValue(BlockCable.TYPE);
 		for(EnumFacing facing: EnumFacing.values()) {
 			BlockPos offset = pos.offset(facing);
 			if (world.isBlockLoaded(offset)) {
 				TileEntity te = world.getTileEntity(offset);
 				if (te instanceof TileEntityCable cable && !te.isInvalid()) {
-					if (cable.isPartOfNetwork()) {
-						if (this.network == null) {
-							this.network = cable.network;
-							this.network.addToNetwork(this.pos);
-						} else if (this.network != cable.network) {
-							NetworkCable small;
-							NetworkCable large;
-							if (this.network.networkSize() <= cable.network.networkSize()) {
-								small = this.network;
-								large = cable.network;
-							} else {
-								small = cable.network;
-								large = this.network;
+					IBlockState neighborState = world.getBlockState(offset);
+					if (type == neighborState.getValue(BlockCable.TYPE)) {
+						if (cable.isPartOfNetwork()) {
+							if (this.network == null) {
+								this.network = cable.network;
+								this.network.addToNetwork(this.pos);
+							} else if (this.network != cable.network) {
+								NetworkCable small;
+								NetworkCable large;
+								if (this.network.networkSize() <= cable.network.networkSize()) {
+									small = this.network;
+									large = cable.network;
+								} else {
+									small = cable.network;
+									large = this.network;
+								}
+								large.mergeNetwork(world, small);
+								this.network = large;
+								this.network.addToNetwork(pos);
 							}
-							large.mergeNetwork(world, small);
-							this.network = large;
-							this.network.addToNetwork(pos);
 						}
 					}
 				}
 			}
 		}
 		if (this.network == null) {
-			this.network = new NetworkCable(world, this.pos);
+			this.network = new NetworkCable(world, type.getTransferRate() , this.pos);
 		}
 		scanEndpoints();
 		super.onLoad();
@@ -97,16 +104,6 @@ public class TileEntityCable extends TileEntity {
 		}
 	}
 
-	public boolean isNeighborInNetwork(BlockPos pos) {
-		if (world.isBlockLoaded(pos)) {
-			TileEntity te = world.getTileEntity(pos);
-			if (te instanceof TileEntityCable cable) {
-				return cable.network == this.network;
-			}
-		}
-		return false;
-	}
-
 	public NetworkCable getNetwork() {
 		return this.network;
 	}
@@ -120,6 +117,4 @@ public class TileEntityCable extends TileEntity {
 	public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		return super.getCapability(capability, facing);
 	}
-
-
 }

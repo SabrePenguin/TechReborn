@@ -4,7 +4,6 @@ import com.github.bsideup.jabel.Desugar;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -19,53 +18,38 @@ public class NetworkCable {
 	private final Map<BlockPos, Set<EnumFacing>> endpoints = new HashMap<>();
 	private final List<NetworkEndpoint> endpointList = new ArrayList<>();
 
+	private final long maxTransfer;
+	private final int maxIntTransfer;
+
 	private boolean powered = false;
-	private long centerX = 0;
-	private long centerY = 0;
-	private long centerZ = 0;
 	private final World world;
 
-	public NetworkCable(World world) {
+	public NetworkCable(World world, long maxTransfer) {
 		this.world = world;
+		this.maxTransfer = maxTransfer;
+		maxIntTransfer = (int) Math.min(Integer.MAX_VALUE, maxTransfer);
 		NetworkCableManager.registerNetwork(world, this);
 	}
 
-	public NetworkCable(World world, BlockPos pos) {
-		this(world);
+	public NetworkCable(World world, long maxTransfer, BlockPos pos) {
+		this(world, maxTransfer);
 		addToNetwork(pos);
 	}
 
-	public void addToNetwork(TileEntityCable cable) {
-		addToNetwork(cable.getPos());
-	}
-
 	public void addToNetwork(BlockPos pos) {
-		if (tileEntities.add(pos)) {
-			centerX += pos.getX();
-			centerY += pos.getY();
-			centerZ += pos.getZ();
-		}
-	}
-
-	public void removeFromNetwork(TileEntityCable cable) {
-		removeFromNetwork(cable.getPos());
+		tileEntities.add(pos);
 	}
 
 	public void removeFromNetwork(BlockPos pos) {
 		if (tileEntities.remove(pos)) {
-			centerX -= pos.getX();
-			centerY -= pos.getY();
-			centerZ -= pos.getZ();
 			if (tileEntities.isEmpty()) {
 				NetworkCableManager.removeNetwork(world, this);
 			} else {
 				byte count = 0;
 				for (EnumFacing facing: EnumFacing.values()) {
 					BlockPos offset = pos.offset(facing);
-					if (world.isBlockLoaded(offset)) {
-						if (world.getTileEntity(pos.offset(facing)) instanceof TileEntityCable) {
-							count++;
-						}
+					if (tileEntities.contains(offset) || endpoints.containsKey(offset)) {
+						count++;
 					}
 					if (count > 1) {
 						recalculateNetwork();
@@ -74,12 +58,6 @@ public class NetworkCable {
 				}
 			}
 		}
-	}
-
-	private Vec3d center() {
-		int size = tileEntities.size();
-		if (size == 0) return Vec3d.ZERO;
-		return new Vec3d((double) centerX / size, (double) centerY / size, (double) centerZ / size);
 	}
 
 	public void addPointToNetwork(BlockPos pos, EnumFacing facing) {
@@ -137,6 +115,7 @@ public class NetworkCable {
 		NetworkCableManager.removeNetwork(world, network);
 	}
 
+	@SuppressWarnings("ForLoopReplaceableByForEach")
 	public void tick() {
 		if (world.isRemote || endpointList.isEmpty())
 			return;
@@ -163,7 +142,7 @@ public class NetworkCable {
 
 		long totalDemand = 0;
 		for (int i = 0; i < currentSinks.size(); i++) {
-			totalDemand += currentSinks.get(i).receiveEnergy(Integer.MAX_VALUE, true);
+			totalDemand += currentSinks.get(i).receiveEnergy(maxIntTransfer, true);
 		}
 		if (totalDemand == 0)
 			return;
@@ -172,7 +151,7 @@ public class NetworkCable {
 		for (int i = 0; i < currentSources.size(); i++) {
 			long needed = totalDemand - totalProduction;
 			if (needed <= 0) break;
-			int extractable = needed >= Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) needed;
+			int extractable = (int) Math.min(maxIntTransfer, needed);
 			totalProduction += currentSources.get(i).extractEnergy(extractable, false);
 		}
 
@@ -186,7 +165,7 @@ public class NetworkCable {
 		long remainingToDistribute = totalProduction;
 		for (int i = 0; i < currentSinks.size(); i++) {
 			if (remainingToDistribute <= 0) break;
-			int insertAmount = remainingToDistribute > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) remainingToDistribute;
+			int insertAmount = (int) Math.min(remainingToDistribute, maxIntTransfer);
 			int accepted = currentSinks.get(i).receiveEnergy(insertAmount, false);
 			remainingToDistribute -= accepted;
 		}
@@ -230,19 +209,16 @@ public class NetworkCable {
 			current = Pair.of(currentGraph, endpoints);
 			subgraphs.add(current);
 		}
-		if (subgraphs.size() > 1) {
+		if (!subgraphs.isEmpty()) {
 			var primary = subgraphs.get(0);
 			this.tileEntities.clear();
 			this.endpointList.clear();
 			this.endpoints.clear();
-			this.centerX = 0;
-			this.centerY = 0;
-			this.centerZ = 0;
 			buildNetwork(this, world, primary.getLeft(), primary.getRight());
 
 			for (int i = 1; i < subgraphs.size(); i++) {
 				var severedData = subgraphs.get(i);
-				NetworkCable networkCable = new NetworkCable(world);
+				NetworkCable networkCable = new NetworkCable(world, maxTransfer);
 				buildNetwork(networkCable, world, severedData.getLeft(), severedData.getRight());
 			}
 		}
