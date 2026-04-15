@@ -33,6 +33,7 @@ class CustomRecipeBuilder(BaseRecipeBuilder):
         self.outputs: list[Ingredient] = []
         self.recipe_time: int = -1
         self.energy_cost: int = -1
+        self.experience: float = 0
         self.with_type(recipe_type)
 
     def with_input(self, ingredient: Ingredient):
@@ -73,6 +74,8 @@ class CustomRecipeBuilder(BaseRecipeBuilder):
             result["recipe_time"] = self.recipe_time
         if self.energy_cost > 0:
             result["fe_cost"] = self.energy_cost
+        if self.experience > 0:
+            result["experience"] = self.experience
         return json.dumps(result, indent=4)
 
 
@@ -120,6 +123,14 @@ class ShapelessRecipeBuilder(CustomRecipeBuilder):
         CustomRecipeBuilder.__init__(self)
         self.with_type("minecraft:crafting_shapeless")
 
+class FurnaceRecipeBuilder(CustomRecipeBuilder):
+    def __init__(self):
+        CustomRecipeBuilder.__init__(self)
+        self.with_experience(1.0).with_type("techreborn:smelt")
+
+    def with_experience(self, experience: float):
+        self.experience = experience
+        return self
 
 def fluid_ingredient(fluid: str, amount: int = 1000):
     return {"type": "techreborn:fluid_container", "fluid": fluid, "amount": amount}

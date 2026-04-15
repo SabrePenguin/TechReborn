@@ -197,7 +197,27 @@ def misc_recipes():
         #     .with_pattern(["XXX"])
         #     .with_ingredient("X", Ingredient.item("rubber_planks", modid="techreborn"))
         #     .with_output(Ingredient.item("rubber_plank_double_slab", modid="techreborn", count=6))
-        # )
+        # ),
+        "iron_fence": (
+            ShapedRecipeBuilder()
+            .with_pattern(["RRR","RRR"])
+            .with_ingredient("R", Ingredient.meta(INGOTS, "refined_iron"))
+            .with_output(Ingredient.mod_item("refined_iron_fence"))
+        ),
+        "reinforced_glass1": (
+            ShapedRecipeBuilder()
+            .with_pattern(["GAG","GGG","GAG"])
+            .with_ingredient("G", Ingredient.oredict("blockGlass"))
+            .with_ingredient("A", Ingredient.oredict("plateAdvancedAlloy"))
+            .with_output(Ingredient.mod_item("reinforced_glass", count=7))
+        ),
+        "reinforced_glass2": (
+            ShapedRecipeBuilder()
+            .with_pattern(["GGG","AGA","GGG"])
+            .with_ingredient("G", Ingredient.oredict("blockGlass"))
+            .with_ingredient("A", Ingredient.oredict("plateAdvancedAlloy"))
+            .with_output(Ingredient.mod_item("reinforced_glass", count=7))
+        ),
     }
 
     base_name = RECIPES.joinpath("misc")
@@ -353,7 +373,8 @@ def parts_recipes():
         ),
         "basic_circuit": (  # TODO: IC2
             ShapedRecipeBuilder()
-            .with_pattern(["   ", "RIR", "   "])  # TODO: Add cables
+            .with_pattern(["CCC", "RIR", "CCC"])
+            .with_ingredient("C", Ingredient.meta(CABLES, "copper"))
             .with_ingredient("R", Ingredient.item("redstone"))
             .with_ingredient("I", Ingredient.oredict("ingotRefinedIron"))
             .with_output(Ingredient.meta(PARTS, "electronic_circuit"))
