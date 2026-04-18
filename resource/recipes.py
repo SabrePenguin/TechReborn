@@ -155,23 +155,6 @@ def gem_craft_creation():
 
 
 def standard_recipes():
-    dust_craft_creation()
-    smalldust_craft_creation()
-    nugget_craft_creation()
-    generic_single_craft_creation("nugget", INGOTS, NUGGETS, "nugget", "ingot", 9)
-
-    ingotn_craft_creation()
-    generic_3x3_craft_creation("ingot", NUGGETS, INGOTS, "ingotn", "nugget")
-    generic_single_craft_creation("ingot", BLOCK_STORAGE, INGOTS, "ingotb", "block", 9)
-    generic_single_craft_creation("ingot", BLOCK_STORAGE2, INGOTS, "ingotb", "block", 9)
-
-    generic_single_craft_creation("gem", BLOCK_STORAGE2, GEM, "gemb", "block", 9)
-    gem_craft_creation()
-
-    generic_3x3_craft_creation("block", GEM, BLOCK_STORAGE2, "block", "gem")
-    generic_3x3_craft_creation("block", INGOTS, BLOCK_STORAGE2, "block", "ingot")
-    generic_3x3_craft_creation("block", INGOTS, BLOCK_STORAGE, "block", "ingot")
-
     parts_recipes()
     misc_recipes()
     machine_recipes()

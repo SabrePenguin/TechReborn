@@ -11,15 +11,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
-	protected String[] pattern = new String[3];
-	private transient int index = 0;
+	protected List<String> pattern = new ArrayList<>();
 	protected Map<Character, AbstractBuilder.BasicIngredient> ingredients = new HashMap<>();
 
 	public ShapedBuilder() {
@@ -27,10 +23,11 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 	}
 
 	public ShapedBuilder pattern(String pattern) {
-		if (index >= 3)
+		if (this.pattern.size() >= 3)
 			throw new RuntimeException("Attempted to add fourth row to basic crafting shaped pattern");
-		this.pattern[index] = pattern;
-		index++;
+		if (pattern.length() > 3)
+			throw new RuntimeException("Recipe row too long: " + pattern);
+		this.pattern.add(pattern);
 		return self();
 	}
 
