@@ -1,0 +1,14 @@
+tasks.register("runDatagen") {
+    group = "datagen"
+    description = "Run to generate JSON files"
+    dependsOn "runClient"
+}
+
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.hasTask(tasks.named('runDatagen').get())) {
+        tasks.named("runClient").configure {
+            extraJvmArgs.add("-Dtechreborn.datagen=true")
+            extraJvmArgs.add("-Dtechreborn.srcroot=${project.projectDir}")
+        }
+    }
+}

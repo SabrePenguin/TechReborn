@@ -1,10 +1,12 @@
 package com.sabrepenguin.techreborn.util.handlers;
 
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.StringUtils;
 
 public class OreHandler {
 	public static void initOres() {
@@ -24,5 +26,14 @@ public class OreHandler {
 		OreDictionary.registerOre("treeSapling", new ItemStack(Blocks.SAPLING, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL));
 		OreDictionary.registerOre("gemCharcoal", new ItemStack(Items.COAL, 1, 1));
+	}
+
+	public static boolean hasOre(String oreType, String name) {
+		String newName = toOre(oreType, name);
+		return OreDictionary.doesOreNameExist(newName) && !OreDictionary.getOres(newName).isEmpty();
+	}
+
+	public static String toOre(String oreType, String name) {
+		return oreType + StringUtils.capitalize(ExtraStringUtils.capitalizeByUnderscore(name));
 	}
 }
