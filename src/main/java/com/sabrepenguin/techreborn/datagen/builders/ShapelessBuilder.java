@@ -11,13 +11,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ShapelessBuilder extends AbstractBuilder<ShapelessBuilder> {
-	protected List<AbstractBuilder.BasicIngredient> ingredients;
+	protected List<AbstractBuilder.BasicIngredient> ingredients = new ArrayList<>();
 
 	public ShapelessBuilder() {
 		this.withType("minecraft:crafting_shapeless");
+	}
+
+	public ShapelessBuilder requires(String oredict) {
+		ingredients.add(new Oredict(oredict, 1));
+		return self();
 	}
 
 	public ShapelessBuilder requires(ItemStack stack) {
@@ -27,6 +33,10 @@ public class ShapelessBuilder extends AbstractBuilder<ShapelessBuilder> {
 
 	@Override
 	public String save(File folder) {
+		if (!folder.exists()) {
+			if (!folder.mkdirs())
+				throw new RuntimeException("Unable to make directories");
+		}
 		try (Writer writer = new FileWriter(new File(folder, name))) {
 			GSON.toJson(this, writer);
 		} catch (IOException e) {

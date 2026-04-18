@@ -63,7 +63,10 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 		}
 		if (!checkedChars.isEmpty())
 			throw new RuntimeException("Unused keys: " + checkedChars.stream().map(Object::toString).collect(Collectors.joining(", ")));
-
+		if (!folder.exists()) {
+			if (!folder.mkdirs())
+				throw new RuntimeException("Unable to make directories");
+		}
 		try (Writer writer = new FileWriter(new File(folder, name))) {
 			GSON.toJson(this, writer);
 		} catch (IOException e) {

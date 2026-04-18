@@ -5,7 +5,12 @@ import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.blocks.meta.BlockStorage;
 import com.sabrepenguin.techreborn.blocks.meta.BlockStorage2;
 import com.sabrepenguin.techreborn.datagen.builders.ShapedBuilder;
+import com.sabrepenguin.techreborn.datagen.builders.ShapelessBuilder;
+import com.sabrepenguin.techreborn.items.TRItems;
+import com.sabrepenguin.techreborn.items.materials.Ingot;
+import com.sabrepenguin.techreborn.items.materials.Nugget;
 import com.sabrepenguin.techreborn.util.handlers.OreHandler;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import java.io.File;
@@ -15,22 +20,60 @@ public class StandardRecipes {
 
 	public static void initRecipes(String fileSource) {
 		File actualDirectory = new File(fileSource, RECIPE_DIR);
+		compression(actualDirectory);
+		expansion(actualDirectory);
+	}
+
+	private static void compression(File file) {
 		for (BlockStorage.Storage e: BlockStorage.Storage.values()) {
 			if (OreHandler.hasOre("ingot", e.getName())) {
-				cube("ingot", e.getName(), "_block", new ItemStack(TRBlocks.storage, 1, e.meta()), new File(actualDirectory, "block"));
+				cube("ingot", e.getName(), "_block", new ItemStack(TRBlocks.storage, 1, e.meta()), new File(file, "block"));
 			}
 			if (OreHandler.hasOre("gem", e.getName())) {
-				cube("gem", e.getName(), "_block", new ItemStack(TRBlocks.storage, 1, e.meta()), new File(actualDirectory, "block"));
+				cube("gem", e.getName(), "_block", new ItemStack(TRBlocks.storage, 1, e.meta()), new File(file, "block"));
 			}
 		}
 		for (BlockStorage2.Storage2 e: BlockStorage2.Storage2.values()) {
 			if (OreHandler.hasOre("ingot", e.getName())) {
-				cube("ingot", e.getName(), "_block", new ItemStack(TRBlocks.storage2, 1, e.meta()), new File(actualDirectory, "block"));
+				cube("ingot", e.getName(), "_block", new ItemStack(TRBlocks.storage2, 1, e.meta()), new File(file, "block"));
 			}
 			if (OreHandler.hasOre("gem", e.getName())) {
-				cube("gem", e.getName(), "_block", new ItemStack(TRBlocks.storage2, 1, e.meta()), new File(actualDirectory, "block"));
+				cube("gem", e.getName(), "_block", new ItemStack(TRBlocks.storage2, 1, e.meta()), new File(file, "block"));
 			}
 		}
+		for (Ingot.IngotMeta e: Ingot.IngotMeta.values()) {
+			if (OreHandler.hasOre("nugget", e.getName())) {
+				cube("nugget", e.getName(), "_ingotn", new ItemStack(TRItems.ingot, 1, e.metadata()), new File(file, "ingot"));
+			}
+		}
+		cube("nugget", "iron", "_ingotn", new ItemStack(Items.IRON_INGOT), new File(file, "ingot"));
+	}
+
+	private static void expansion(File file) {
+		for (Ingot.IngotMeta e: Ingot.IngotMeta.values()) {
+			if (OreHandler.hasOre("block", e.getName())) {
+				one_to_x("block", e.getName(), "_ingotb", new ItemStack(TRItems.ingot, 9, e.metadata()), new File(file, "ingot"));
+			}
+		}
+		new ShapelessBuilder()
+				.name("refined_iron_ingotb")
+				.requires(new ItemStack(TRBlocks.storage2, 1, BlockStorage2.Storage2.REFINED_IRON.meta()))
+				.withResult(new ItemStack(TRItems.ingot, 9, Ingot.IngotMeta.refined_iron.metadata()))
+				.save(new File(file, "ingot"));
+		for (Nugget.NuggetMeta e: Nugget.NuggetMeta.values()) {
+			if (OreHandler.hasOre("ingot", e.getName())) {
+				one_to_x("ingot", e.getName(), "_nugget", new ItemStack(TRItems.nuggets, 9, e.metadata()), new File(file, "nugget"));
+			}
+		}
+		one_to_x("gem", "diamond", "_nugget", new ItemStack(TRItems.nuggets, 9, Nugget.NuggetMeta.diamond.metadata()), new File(file, "nugget"));
+	}
+
+	private static void one_to_x(String type, String name, String fileName, ItemStack out, File recipeDir) {
+		new ShapelessBuilder()
+				.name(name + fileName)
+				.requires(OreHandler.toOre(type, name))
+				.withResult(out)
+				.save(recipeDir);
 	}
 
 	private static void cube(String type, String name, String fileName, ItemStack out, File recipeDir) {
