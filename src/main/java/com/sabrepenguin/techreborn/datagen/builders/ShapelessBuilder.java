@@ -4,6 +4,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.sabrepenguin.techreborn.datagen.builders.ingredients.IBasicIngredient;
+import com.sabrepenguin.techreborn.datagen.builders.ingredients.ItemIngredient;
+import com.sabrepenguin.techreborn.datagen.builders.ingredients.OreDictIngredient;
 import net.minecraft.item.ItemStack;
 
 import java.io.File;
@@ -15,19 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ShapelessBuilder extends AbstractBuilder<ShapelessBuilder> {
-	protected List<AbstractBuilder.BasicIngredient> ingredients = new ArrayList<>();
+	protected List<IBasicIngredient> ingredients = new ArrayList<>();
 
 	public ShapelessBuilder() {
 		this.withType("minecraft:crafting_shapeless");
 	}
 
 	public ShapelessBuilder requires(String oredict) {
-		ingredients.add(new Oredict(oredict, 1));
+		ingredients.add(new OreDictIngredient(oredict, 1));
 		return self();
 	}
 
 	public ShapelessBuilder requires(ItemStack stack) {
-		ingredients.add(new ItemIng(stack));
+		ingredients.add(new ItemIngredient(stack));
 		return self();
 	}
 

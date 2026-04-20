@@ -4,6 +4,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import com.sabrepenguin.techreborn.datagen.builders.ingredients.IBasicIngredient;
+import com.sabrepenguin.techreborn.datagen.builders.ingredients.ItemIngredient;
+import com.sabrepenguin.techreborn.datagen.builders.ingredients.OreDictIngredient;
 import net.minecraft.item.ItemStack;
 
 import java.io.File;
@@ -16,7 +19,7 @@ import java.util.stream.Collectors;
 
 public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 	protected List<String> pattern = new ArrayList<>();
-	protected Map<Character, AbstractBuilder.BasicIngredient> ingredients = new HashMap<>();
+	protected Map<Character, IBasicIngredient> ingredients = new HashMap<>();
 
 	public ShapedBuilder() {
 		this.withType("minecraft:crafting_shaped");
@@ -32,7 +35,7 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 	}
 
 	public ShapedBuilder define(char key, ItemStack ingredient) {
-		ingredients.put(key, new ItemIng(ingredient));
+		ingredients.put(key, new ItemIngredient(ingredient));
 		return self();
 	}
 
@@ -41,7 +44,7 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 	}
 
 	public ShapedBuilder define(char key, String oreDict, int count) {
-		ingredients.put(key, new Oredict(oreDict, count));
+		ingredients.put(key, new OreDictIngredient(oreDict, count));
 		return this;
 	}
 
@@ -52,7 +55,7 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 			if (p.length() > 3)
 				throw new RuntimeException("Pattern length cannot be larger than 3");
 			for (char c: p.toCharArray()) {
-				if (!ingredients.containsKey(c)) {
+				if (!ingredients.containsKey(c) && c != ' ') {
 					throw new RuntimeException("No ingredient for key " + c);
 				}
 				checkedChars.remove(c);
