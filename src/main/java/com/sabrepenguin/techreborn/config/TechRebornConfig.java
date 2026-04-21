@@ -13,8 +13,20 @@ import net.minecraftforge.fml.relauncher.Side;
 @Config(modid= Tags.MODID)
 public class TechRebornConfig {
 
+	@Config.LangKey("config.compat")
+	public static Compat compat = new Compat();
+
 	@Config.LangKey("config.misc")
 	public static Misc misc = new Misc();
+
+	public static class Compat {
+		@Config.LangKey("config.ic2")
+		public IC2 ic2;
+
+		public Compat() {
+			ic2 = new IC2();
+		}
+	}
 
 	public static class Misc {
 		@Config.LangKey("config.cable")
@@ -40,6 +52,15 @@ public class TechRebornConfig {
 			this.electrocutionSound = electrocutionSound;
 			this.electrocutionParticles = electrocutionParticles;
 			debugNetwork = false;
+		}
+	}
+
+	public static class IC2 {
+		@Config.LangKey("config.ic2.deduplicate")
+		public boolean deduplicate;
+
+		public IC2() {
+			deduplicate = false;
 		}
 	}
 

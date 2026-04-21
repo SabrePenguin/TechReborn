@@ -5,4 +5,8 @@ repositories {
         name 'Cleanroom Maven'
         url 'https://maven.cleanroommc.com'
     }
+    maven {
+        name = "ic2"
+        url = "https://maven.ic2.player.to/"
+    }
 }

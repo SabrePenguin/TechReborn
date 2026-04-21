@@ -45,4 +45,6 @@ dependencies {
         transitive = false
     }
     shadowImplementation("com.ibm.icu:icu4j:63.1")
+    compileOnly("net.industrial-craft:industrialcraft-2:2.8.+")
+    devOnlyNonPublishable("net.industrial-craft:industrialcraft-2:2.8.+")
 }
