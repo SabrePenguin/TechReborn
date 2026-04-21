@@ -1,10 +1,11 @@
 package com.sabrepenguin.techreborn;
 
-import com.sabrepenguin.techreborn.datagen.recipes.StandardRecipes;
+import com.sabrepenguin.techreborn.datagen.DatagenInit;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.proxy.IProxy;
 import com.sabrepenguin.techreborn.recipe.TRRecipeLoader;
 import com.sabrepenguin.techreborn.tabs.TRTab;
+import com.sabrepenguin.techreborn.util.ModLoadedUtil;
 import com.sabrepenguin.techreborn.worldgen.WorldGenTrees;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.crafting.IRecipe;
@@ -47,6 +48,7 @@ public class TechReborn {
 
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+		ModLoadedUtil.init();
         // register to the event bus so that we can listen to events
         MinecraftForge.EVENT_BUS.register(this);
 		TechRebornPacketHandler.init();
@@ -71,7 +73,7 @@ public class TechReborn {
     public void postInit(FMLPostInitializationEvent event) {
 		boolean isDev = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 		if (isDev && System.getProperty(Tags.MODID + ".datagen") != null && System.getProperty(Tags.MODID + ".datagen").equals("true")) {
-			StandardRecipes.initRecipes(System.getProperty(Tags.MODID + ".srcroot", ""));
+			DatagenInit.init(System.getProperty(Tags.MODID + ".srcroot", ""));
 		}
 		proxy.postInit(event);
     }

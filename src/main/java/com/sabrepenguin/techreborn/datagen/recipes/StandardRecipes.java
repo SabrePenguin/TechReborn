@@ -17,28 +17,80 @@ import java.io.File;
 public class StandardRecipes {
 	private static final String RECIPE_DIR = "src/main/resources/assets/" + Tags.MODID + "/recipes";
 
-	public static void initRecipes(String fileSource) {
-		File actualDirectory = new File(fileSource, RECIPE_DIR);
-		compression(actualDirectory);
-		expansion(actualDirectory);
-		throw new RuntimeException("Successfully built the files out, please restart without datagen enabled");
+	public static void initRecipes(File file) {
+		compression(file);
+		expansion(file);
+		recipes(file);
 	}
 
+	@SuppressWarnings("ConstantConditions")
+	private static void recipes(File file) {
+		machineRecipes(file);
+		File out = new File(file, "misc");
+		new ShapedBuilder<>()
+				.name("rubber_stairs_r")
+				.pattern("R  ")
+				.pattern("RR ")
+				.pattern("RRR")
+				.define('R', new ItemStack(TRBlocks.rubber_planks))
+				.withResult(new ItemStack(TRBlocks.rubber_plank_stair, 4))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("rubber_stairs_l")
+				.pattern("  R")
+				.pattern(" RR")
+				.pattern("RRR")
+				.define('R', new ItemStack(TRBlocks.rubber_planks))
+				.withResult(new ItemStack(TRBlocks.rubber_plank_stair, 4))
+				.save(out);
+		// TODO: Slab fixes
+		new ShapedBuilder<>()
+				.name("iron_fence")
+				.pattern("RRR")
+				.pattern("RRR")
+				.define('R', new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.refined_iron.metadata()))
+				.withResult(new ItemStack(TRBlocks.refined_iron_fence))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("reinforced_glass1")
+				.pattern("GAG")
+				.pattern("GGG")
+				.pattern("GAG")
+				.define('G', "blockGlass")
+				.define('A', "plateAdvancedAlloy")
+				.withResult(new ItemStack(TRBlocks.reinforced_glass, 7))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("reinforced_glass2")
+				.pattern("GGG")
+				.pattern("AGA")
+				.pattern("GGG")
+				.define('G', "blockGlass")
+				.define('A', "plateAdvancedAlloy")
+				.withResult(new ItemStack(TRBlocks.reinforced_glass, 7))
+				.save(out);
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	private static void machineRecipes(File file) {
+	}
+
+	@SuppressWarnings("ConstantConditions")
 	private static void compression(File file) {
 		for (BlockStorage.Storage e: BlockStorage.Storage.values()) {
-			if (OreHandler.hasOre("ingot", e.getName())) {
-				cube("ingot", e.getName(), "_block", new ItemStack(TRBlocks.storage, 1, e.meta()), new File(file, "block"));
-			}
 			if (OreHandler.hasOre("gem", e.getName())) {
 				cube("gem", e.getName(), "_block", new ItemStack(TRBlocks.storage, 1, e.meta()), new File(file, "block"));
 			}
+			if (OreHandler.hasOre("ingot", e.getName())) {
+				cube("ingot", e.getName(), "_block", new ItemStack(TRBlocks.storage, 1, e.meta()), new File(file, "block"));
+			}
 		}
 		for (BlockStorage2.Storage2 e: BlockStorage2.Storage2.values()) {
-			if (OreHandler.hasOre("ingot", e.getName())) {
-				cube("ingot", e.getName(), "_block", new ItemStack(TRBlocks.storage2, 1, e.meta()), new File(file, "block"));
-			}
 			if (OreHandler.hasOre("gem", e.getName())) {
 				cube("gem", e.getName(), "_block", new ItemStack(TRBlocks.storage2, 1, e.meta()), new File(file, "block"));
+			}
+			if (OreHandler.hasOre("ingot", e.getName())) {
+				cube("ingot", e.getName(), "_block", new ItemStack(TRBlocks.storage2, 1, e.meta()), new File(file, "block"));
 			}
 		}
 		for (Ingot.IngotMeta e: Ingot.IngotMeta.values()) {
@@ -57,13 +109,14 @@ public class StandardRecipes {
 		smallcube("dustSmall", "redstone", "_dust", new ItemStack(Items.REDSTONE), new File(file, "dust"));
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	private static void expansion(File file) {
 		for (Ingot.IngotMeta e: Ingot.IngotMeta.values()) {
 			if (OreHandler.hasOre("block", e.getName())) {
 				one_to_x("block", e.getName(), "_ingotb", new ItemStack(TRItems.ingot, 9, e.metadata()), new File(file, "ingot"));
 			}
 		}
-		new ShapelessBuilder()
+		new ShapelessBuilder<>()
 				.name("refined_iron_ingotb")
 				.requires(new ItemStack(TRBlocks.storage2, 1, BlockStorage2.Storage2.REFINED_IRON.meta()))
 				.withResult(new ItemStack(TRItems.ingot, 9, Ingot.IngotMeta.refined_iron.metadata()))
@@ -87,7 +140,7 @@ public class StandardRecipes {
 	}
 
 	private static void one_to_x(String type, String name, String fileName, ItemStack out, File recipeDir) {
-		new ShapelessBuilder()
+		new ShapelessBuilder<>()
 				.name(name + fileName)
 				.requires(OreHandler.toOre(type, name))
 				.withResult(out)
@@ -95,7 +148,7 @@ public class StandardRecipes {
 	}
 
 	private static void smallcube(String type, String name, String fileName, ItemStack out, File recipeDir) {
-		new ShapedBuilder()
+		new ShapedBuilder<>()
 				.name(name + fileName)
 				.define('I', OreHandler.toOre(type, name))
 				.pattern("II")
@@ -105,7 +158,7 @@ public class StandardRecipes {
 	}
 
 	private static void cube(String type, String name, String fileName, ItemStack out, File recipeDir) {
-		new ShapedBuilder()
+		new ShapedBuilder<>()
 				.name(name + fileName)
 				.define('I', OreHandler.toOre(type, name))
 				.pattern("III")
