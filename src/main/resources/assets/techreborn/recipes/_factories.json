@@ -1,9 +1,11 @@
 {
   "ingredients": {
     "fluid_container": "com.sabrepenguin.techreborn.recipe.fluids.FluidIngredientFactory",
-    "cell": "com.sabrepenguin.techreborn.recipe.fluids.CellIngredientFactory"
+    "cell": "com.sabrepenguin.techreborn.recipe.fluids.CellIngredientFactory",
+    "replaceable": "com.sabrepenguin.techreborn.recipe.replaceable.IngredientReplaceable"
   },
   "recipes": {
-    "shaped_fluid": "com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeFactory"
+    "shaped_fluid": "com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeFactory",
+    "replaceable_shaped": "com.sabrepenguin.techreborn.recipe.replaceable.ReplaceableShapedRecipeFactory"
   }
 }

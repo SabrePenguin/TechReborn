@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
+public class ShapedBuilder<T extends ShapedBuilder<T>> extends AbstractBuilder<T> {
 	protected List<String> pattern = new ArrayList<>();
 	protected Map<Character, IBasicIngredient> ingredients = new HashMap<>();
 
@@ -25,7 +25,7 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 		this.withType("minecraft:crafting_shaped");
 	}
 
-	public ShapedBuilder pattern(String pattern) {
+	public T pattern(String pattern) {
 		if (this.pattern.size() >= 3)
 			throw new RuntimeException("Attempted to add fourth row to basic crafting shaped pattern");
 		if (pattern.length() > 3)
@@ -34,22 +34,32 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 		return self();
 	}
 
-	public ShapedBuilder define(char key, ItemStack ingredient) {
+	public T define(char key, ItemStack ingredient) {
 		ingredients.put(key, new ItemIngredient(ingredient));
 		return self();
 	}
 
-	public ShapedBuilder define(char key, String oreDict) {
+	public T define(char key, String oreDict) {
 		return define(key, oreDict, 1);
 	}
 
-	public ShapedBuilder define(char key, String oreDict, int count) {
+	public T define(char key, String oreDict, int count) {
 		ingredients.put(key, new OreDictIngredient(oreDict, count));
-		return this;
+		return self();
+	}
+
+	public T define(char key, IBasicIngredient ingredient) {
+		ingredients.put(key, ingredient);
+		return self();
 	}
 
 	@Override
-	public String save(File folder) {
+	@SuppressWarnings("unchecked")
+	protected T getThis() {
+		return (T) this;
+	}
+
+	protected void checkRecipe() {
 		Set<Character> checkedChars = new HashSet<>(ingredients.keySet());
 		for (String p: pattern) {
 			if (p.length() > 3)
@@ -63,6 +73,11 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 		}
 		if (!checkedChars.isEmpty())
 			throw new RuntimeException("Unused keys: " + checkedChars.stream().map(Object::toString).collect(Collectors.joining(", ")));
+	}
+
+	@Override
+	public String save(File folder) {
+		checkRecipe();
 		if (!folder.exists()) {
 			if (!folder.mkdirs())
 				throw new RuntimeException("Unable to make directories");
@@ -75,7 +90,7 @@ public class ShapedBuilder extends AbstractBuilder<ShapedBuilder> {
 		return "";
 	}
 
-	public static class ShapedBuilderSerializer implements JsonSerializer<ShapedBuilder> {
+	public static class ShapedBuilderSerializer<T extends ShapedBuilder<T>> implements JsonSerializer<ShapedBuilder<T>> {
 
 		@Override
 		public JsonElement serialize(ShapedBuilder src, Type typeOfSrc, JsonSerializationContext context) {

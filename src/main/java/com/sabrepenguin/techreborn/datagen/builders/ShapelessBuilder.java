@@ -17,21 +17,26 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShapelessBuilder extends AbstractBuilder<ShapelessBuilder> {
+public class ShapelessBuilder<T extends ShapelessBuilder<T>> extends AbstractBuilder<T> {
 	protected List<IBasicIngredient> ingredients = new ArrayList<>();
 
 	public ShapelessBuilder() {
 		this.withType("minecraft:crafting_shapeless");
 	}
 
-	public ShapelessBuilder requires(String oredict) {
+	public T requires(String oredict) {
 		ingredients.add(new OreDictIngredient(oredict, 1));
 		return self();
 	}
 
-	public ShapelessBuilder requires(ItemStack stack) {
+	public T requires(ItemStack stack) {
 		ingredients.add(new ItemIngredient(stack));
 		return self();
+	}
+
+	@Override
+	protected T getThis() {
+		return (T) this;
 	}
 
 	@Override
@@ -48,7 +53,7 @@ public class ShapelessBuilder extends AbstractBuilder<ShapelessBuilder> {
 		return "";
 	}
 
-	public static class ShapelessBuilderSerializer implements JsonSerializer<ShapelessBuilder> {
+	public static class ShapelessBuilderSerializer<T extends ShapelessBuilder<T>> implements JsonSerializer<ShapelessBuilder<T>> {
 
 		@Override
 		public JsonElement serialize(ShapelessBuilder src, Type typeOfSrc, JsonSerializationContext context) {
