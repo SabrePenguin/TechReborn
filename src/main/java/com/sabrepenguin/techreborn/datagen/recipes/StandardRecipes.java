@@ -62,6 +62,33 @@ public class StandardRecipes {
 				.define('A', "plateAdvancedAlloy")
 				.withResult(new ItemStack(TRBlocks.reinforced_glass, 7))
 				.save(out);
+		new ShapelessBuilder<>()
+				.name("iridium_reinforced_stone")
+				.requires("stone")
+				.requires("plateIridiumAlloy")
+				.withResult(new ItemStack(TRBlocks.storage2, 1, BlockStorage2.Storage2.IRIDIUM_REINFORCED_STONE.meta()))
+				.save(out);
+		new ShapelessBuilder<>()
+				.name("iridium_reinforced_tungstensteel1")
+				.requires(new ItemStack(TRBlocks.storage2, 1, BlockStorage2.Storage2.TUNGSTENSTEEL.meta()))
+				.requires("plateIridium")
+				.withResult(new ItemStack(TRBlocks.storage2, 1, BlockStorage2.Storage2.IRIDIUM_REINFORCED_TUNGSTENSTEEL.meta()))
+				.save(out);
+		new ShapelessBuilder<>()
+				.name("iridium_reinforced_tungstensteel2")
+				.requires(new ItemStack(TRBlocks.storage2, 1, BlockStorage2.Storage2.IRIDIUM_REINFORCED_STONE.meta()))
+				.requires(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.tungstensteel.metadata()))
+				.withResult(new ItemStack(TRBlocks.storage2, 1, BlockStorage2.Storage2.IRIDIUM_REINFORCED_TUNGSTENSTEEL.meta()))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("cell")
+				.pattern(" T ")
+				.pattern("TPT")
+				.pattern(" T ")
+				.define('T', "ingotTin")
+				.define('P', "paneGlass")
+				.withResult(new ItemStack(TRItems.cell, 16))
+				.save(out);
 	}
 
 	@SuppressWarnings("ConstantConditions")

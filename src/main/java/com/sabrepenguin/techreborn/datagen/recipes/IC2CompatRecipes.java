@@ -103,6 +103,7 @@ public class IC2CompatRecipes {
 	private static void layered(File file, String name, IBasicIngredient top, IBasicIngredient middle, IBasicIngredient bottom, IBasicIngredient output) {
 		new ReplaceableShapedBuilder<>()
 				.name(name)
+				.withCondition(new IC2Condition("dedupe"))
 				.pattern("TTT")
 				.pattern("MMM")
 				.pattern("BBB")

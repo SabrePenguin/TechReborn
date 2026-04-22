@@ -21,6 +21,8 @@ public class IC2ConfigConditionFactory implements IConditionFactory {
 			return experimentalSupplier;
 		} else if (target.equals("classic_dedupe")) {
 			return () -> !(TechRebornConfig.compat.ic2.deduplicate && TechRebornConfig.compat.ic2.classic);
+		} else if (target.equals("dedupe")) {
+			return () -> !(TechRebornConfig.compat.ic2.deduplicate);
 		}
 		throw new RuntimeException("Invalid condition");
 	}

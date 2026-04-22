@@ -22,10 +22,8 @@ public class ListIngredient implements IBasicIngredient {
 
 		@Override
 		public JsonElement serialize(ListIngredient src, Type typeOfSrc, JsonSerializationContext context) {
-			TechReborn.LOGGER.warn("Serializing a ListIngredient");
 			JsonArray array = new JsonArray();
 			for (IBasicIngredient ingredient: src.ingredients) {
-				TechReborn.LOGGER.warn("Running ingredient");
 				array.add(context.serialize(ingredient));
 			}
 			return array;
