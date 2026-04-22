@@ -168,7 +168,6 @@ public class TRItems {
             }
         }
 		registerNormalItems(registry);
-		OreHandler.initOres();
     }
 
 	@SuppressWarnings("ConstantConditions")

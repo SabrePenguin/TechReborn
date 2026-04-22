@@ -6,6 +6,7 @@ import com.sabrepenguin.techreborn.proxy.IProxy;
 import com.sabrepenguin.techreborn.recipe.TRRecipeLoader;
 import com.sabrepenguin.techreborn.tabs.TRTab;
 import com.sabrepenguin.techreborn.util.ModLoadedUtil;
+import com.sabrepenguin.techreborn.util.handlers.OreHandler;
 import com.sabrepenguin.techreborn.worldgen.WorldGenTrees;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.crafting.IRecipe;
@@ -66,6 +67,7 @@ public class TechReborn {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 		GameRegistry.registerWorldGenerator(new WorldGenTrees(), 0);
+		OreHandler.initOres();
 		proxy.init(event);
     }
 
