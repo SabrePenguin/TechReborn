@@ -4,11 +4,24 @@ tasks.register("runDatagen") {
     dependsOn "runClient"
 }
 
+tasks.register("runDatagenDebug") {
+    group = "datagen"
+    description = "Run to generate JSON files with attachable debugger"
+    dependsOn "runClient"
+}
+
 gradle.taskGraph.whenReady { taskGraph ->
     if (taskGraph.hasTask(tasks.named('runDatagen').get())) {
         tasks.named("runClient").configure {
             extraJvmArgs.add("-Dtechreborn.datagen=true")
             extraJvmArgs.add("-Dtechreborn.srcroot=${project.projectDir}")
+        }
+    }
+    if (taskGraph.hasTask(tasks.named('runDatagenDebug').get())) {
+        tasks.named("runClient").configure {
+            extraJvmArgs.add("-Dtechreborn.datagen=true")
+            extraJvmArgs.add("-Dtechreborn.srcroot=${project.projectDir}")
+            extraJvmArgs.add("-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5005")
         }
     }
 }
