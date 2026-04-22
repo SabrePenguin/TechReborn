@@ -58,9 +58,12 @@ public class TechRebornConfig {
 	public static class IC2 {
 		@Config.LangKey("config.ic2.deduplicate")
 		public boolean deduplicate;
+		@Config.LangKey("config.ic2.classic")
+		public boolean classic;
 
 		public IC2() {
 			deduplicate = false;
+			classic = false;
 		}
 	}
 

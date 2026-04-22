@@ -8,16 +8,16 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IRecipeFactory;
 import net.minecraftforge.common.crafting.JsonContext;
 
-public class ReplaceableShapedRecipeFactory implements IRecipeFactory {
+public class ReplaceableShapelessRecipeFactory implements IRecipeFactory {
 	@Override
 	public IRecipe parse(JsonContext context, JsonObject json) {
 		JsonObject modifiedJson = new JsonObject();
 		json.entrySet().forEach(entry -> modifiedJson.add(entry.getKey(), entry.getValue()));
-		modifiedJson.addProperty("type", "minecraft:crafting_shaped");
+		modifiedJson.addProperty("type", "minecraft:crafting_shapeless");
 
 		JsonObject resultJson = json.getAsJsonObject("result");
 		JsonObject out = resultJson.getAsJsonObject("original");
-		if (TechRebornConfig.compat.ic2.deduplicate && ModLoadedUtil.IC2_LOADED) { // TODO Technically this should be generic, but eh
+		if (TechRebornConfig.compat.ic2.deduplicate && ModLoadedUtil.IC2_LOADED) {
 			out = resultJson.getAsJsonObject("replacement");
 		}
 		modifiedJson.add("result", out);

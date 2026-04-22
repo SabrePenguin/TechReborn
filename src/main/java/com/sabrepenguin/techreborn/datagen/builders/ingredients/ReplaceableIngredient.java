@@ -13,10 +13,16 @@ public class ReplaceableIngredient implements IBasicIngredient {
 
 	protected final ItemStack original;
 	protected final ItemStack replacement;
+	protected int count;
 
 	public ReplaceableIngredient(ItemStack original, ItemStack replacement) {
 		this.original = original;
 		this.replacement = replacement;
+	}
+
+	public ReplaceableIngredient count(int count) {
+		this.count = count;
+		return this;
 	}
 
 	public static final class ReplaceableIngredientSerializer implements JsonSerializer<ReplaceableIngredient> {
@@ -31,8 +37,10 @@ public class ReplaceableIngredient implements IBasicIngredient {
 				if (src.original.getHasSubtypes()) {
 					original.addProperty("data", src.original.getMetadata());
 				}
-				if (src.original.getCount() > 1)
+				if (src.original.getCount() > 1 && src.count == 0)
 					original.addProperty("count", src.original.getCount());
+				else if (src.count != 0)
+					original.addProperty("count", src.count);
 				element.add("original", original);
 			}
 			{
@@ -41,8 +49,10 @@ public class ReplaceableIngredient implements IBasicIngredient {
 				if (src.replacement.getHasSubtypes()) {
 					replacement.addProperty("data", src.replacement.getMetadata());
 				}
-				if (src.replacement.getCount() > 1)
+				if (src.replacement.getCount() > 1 && src.count == 0)
 					replacement.addProperty("count", src.replacement.getCount());
+				else if (src.count != 0)
+					replacement.addProperty("count", src.count);
 				element.add("replacement", replacement);
 			}
 			return element;

@@ -1,4 +1,7 @@
 {
+  "conditions": {
+    "ic2_condition": "com.sabrepenguin.techreborn.recipe.replaceable.IC2ConfigConditionFactory"
+  },
   "ingredients": {
     "fluid_container": "com.sabrepenguin.techreborn.recipe.fluids.FluidIngredientFactory",
     "cell": "com.sabrepenguin.techreborn.recipe.fluids.CellIngredientFactory",
@@ -6,6 +9,7 @@
   },
   "recipes": {
     "shaped_fluid": "com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeFactory",
-    "replaceable_shaped": "com.sabrepenguin.techreborn.recipe.replaceable.ReplaceableShapedRecipeFactory"
+    "replaceable_shaped": "com.sabrepenguin.techreborn.recipe.replaceable.ReplaceableShapedRecipeFactory",
+    "replaceable_shapeless": "com.sabrepenguin.techreborn.recipe.replaceable.ReplaceableShapelessRecipeFactory"
   }
 }

@@ -45,13 +45,6 @@ public class StandardRecipes {
 				.save(out);
 		// TODO: Slab fixes
 		new ShapedBuilder<>()
-				.name("iron_fence")
-				.pattern("RRR")
-				.pattern("RRR")
-				.define('R', new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.refined_iron.metadata()))
-				.withResult(new ItemStack(TRBlocks.refined_iron_fence))
-				.save(out);
-		new ShapedBuilder<>()
 				.name("reinforced_glass1")
 				.pattern("GAG")
 				.pattern("GGG")

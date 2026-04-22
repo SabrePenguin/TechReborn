@@ -1,10 +1,14 @@
 package com.sabrepenguin.techreborn.datagen.builders;
 
 import com.google.gson.*;
+import com.sabrepenguin.techreborn.datagen.builders.conditions.IC2Condition;
+import com.sabrepenguin.techreborn.datagen.builders.conditions.ICondition;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.*;
 import net.minecraft.item.ItemStack;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractBuilder<T extends AbstractBuilder<T>>  {
 	protected static final Gson GSON = new GsonBuilder().setPrettyPrinting()
@@ -12,14 +16,17 @@ public abstract class AbstractBuilder<T extends AbstractBuilder<T>>  {
 			.registerTypeAdapter(OreDictIngredient.class, new OreDictIngredient.OredictSerializer())
 			.registerTypeAdapter(FluidIngredient.class, new FluidIngredient.FluidIngSerializer())
 			.registerTypeAdapter(ReplaceableIngredient.class, new ReplaceableIngredient.ReplaceableIngredientSerializer())
+			.registerTypeAdapter(ListIngredient.class, new ListIngredient.ListIngredientSerializer())
 			.registerTypeAdapter(ShapedBuilder.class, new ShapedBuilder.ShapedBuilderSerializer<>())
 			.registerTypeAdapter(ShapelessBuilder.class, new ShapelessBuilder.ShapelessBuilderSerializer<>())
 			.registerTypeAdapter(ReplaceableShapedBuilder.class, new ReplaceableShapedBuilder.ReplaceableShapedBuilderSerializer<>())
-			.registerTypeAdapter(ListIngredient.class, new ListIngredient.ListIngredientSerializer())
+			.registerTypeAdapter(ReplaceableShapelessBuilder.class, new ReplaceableShapelessBuilder.ReplaceableShapelessBuilderSerializer<>())
+			.registerTypeAdapter(IC2Condition.class, new IC2Condition.IC2ConditionSerializer())
 			.create();
 	protected transient String name;
 	protected String type = "minecraft:crafting_shapeless";
 	protected ItemIngredient result;
+	protected List<ICondition> conditions = new ArrayList<>();
 
 	public T name(String name) {
 		if (!name.endsWith(".json"))
@@ -35,6 +42,11 @@ public abstract class AbstractBuilder<T extends AbstractBuilder<T>>  {
 
 	public T withResult(ItemStack output) {
 		this.result = new ItemIngredient(output);
+		return self();
+	}
+
+	public T withCondition(ICondition condition) {
+		conditions.add(condition);
 		return self();
 	}
 

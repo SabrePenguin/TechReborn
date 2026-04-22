@@ -2,7 +2,6 @@ package com.sabrepenguin.techreborn.datagen.recipes;
 
 import com.sabrepenguin.techreborn.blocks.BlockCable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
-import com.sabrepenguin.techreborn.blocks.meta.BlockMachineFrame;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.ReplaceableIngredient;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Ingot;
@@ -45,12 +44,11 @@ public enum IC2Duplicates {
 	SCRAP(new ItemStack(TRItems.part, 1, Part.PartMeta.scrap.metadata()), getIC2Item("crafting", "scrap")),
 //	SCRAP_BOX(new ItemStack(TRItems.SCRAP_BOX)),
 //	FREQ_TRANSMITTER(new ItemStack(TRItems.FREQUENCY_TRANSMITTER)),
-	RUBBER_WOOD(new ItemStack(TRBlocks.rubber_log), getIC2Item("rubber_wood", null)),
+	RUBBER_WOOD(new ItemStack(TRBlocks.rubber_log), getIC2Item("rubber_wood")),
 //	RE_BATTERY(new ItemStack(TRItems.RE_BATTERY)),
 //	ENERGY_CRYSTAL(new ItemStack(TRItems.ENERGY_CRYSTAL)),
 //	LAPATRON_CRYSTAL(new ItemStack(TRItems.LAPOTRONIC_CRYSTAL)),
 	CARBON_PLATE(new ItemStack(TRItems.plates, 1, Plate.PlateMeta.carbon.metadata()), getIC2Item("crafting", "carbon_plate")),
-//	IRON_FENCE(new ItemStack(TRBlocks.refined_iron_fence), getIC2Item("neutron_reflector", null)),
 
 //	REFINED_IRON(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.refined_iron.metadata()), true),
 //	BASIC_MACHINE_FRAME(new ItemStack(TRBlocks.machine_frame, 1, BlockMachineFrame.Frame.BASIC.meta()), true),
@@ -61,16 +59,16 @@ public enum IC2Duplicates {
 
 	final ItemStack ic2Stack;
 	final ItemStack trStack;
-	final boolean classic;
+	final Boolean classic;
 	
 	IC2Duplicates(ItemStack stack, ItemStack ic2stack) {
-		this(stack, ic2stack, false);
-	}
-
-	IC2Duplicates(ItemStack stack, ItemStack ic2stack, boolean classic) {
 		this.trStack = stack;
 		this.ic2Stack = ic2stack;
-		this.classic = classic;
+		this.classic = null;
+	}
+
+	static ItemStack getIC2Item(String item) {
+		return getIC2Item(item, null);
 	}
 
 	static ItemStack getIC2Item(String item, String variant) {
