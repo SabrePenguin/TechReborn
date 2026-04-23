@@ -19,52 +19,37 @@ public class TechRebornConfig {
 	@Config.LangKey("config.misc")
 	public static Misc misc = new Misc();
 
+	@Config.LangKey("config.item")
+	public static ItemConfig itemConfig = new ItemConfig();
+
 	public static class Compat {
 		@Config.LangKey("config.ic2")
-		public IC2 ic2;
-
-		public Compat() {
-			ic2 = new IC2();
-		}
+		public IC2 ic2 = new IC2();
 	}
 
 	public static class Misc {
 		@Config.LangKey("config.cable")
-		public Cable cable;
-
-		public Misc() {
-			cable = new Cable(true, true, true);
-		}
+		public Cable cable = new Cable();
 	}
 
 	public static class Cable {
 		@Config.LangKey("config.cable.uninsulatedElectrocutionDamage")
-		public boolean electrocutionDamage;
+		public boolean electrocutionDamage = true;
 		@Config.LangKey("config.cable.uninsulatedElectrocutionSound")
-		public boolean electrocutionSound;
+		public boolean electrocutionSound = true;
 		@Config.LangKey("config.cable.uninsulatedElectrocutionParticles")
-		public boolean electrocutionParticles;
+		public boolean electrocutionParticles = true;
 		@Config.LangKey("config.cable.debugNetwork")
-		public boolean debugNetwork;
-
-		public Cable(boolean electrocutionDamage, boolean electrocutionSound, boolean electrocutionParticles) {
-			this.electrocutionDamage = electrocutionDamage;
-			this.electrocutionSound = electrocutionSound;
-			this.electrocutionParticles = electrocutionParticles;
-			debugNetwork = false;
-		}
+		public boolean debugNetwork = false;
 	}
 
 	public static class IC2 {
 		@Config.LangKey("config.ic2.deduplicate")
-		public boolean deduplicate;
+		@Config.RequiresMcRestart
+		public boolean deduplicate = false;
 		@Config.LangKey("config.ic2.classic")
-		public boolean classic;
-
-		public IC2() {
-			deduplicate = false;
-			classic = false;
-		}
+		@Config.RequiresMcRestart
+		public boolean classic = false;
 	}
 
 	@Mod.EventBusSubscriber(value = Side.CLIENT, modid = Tags.MODID)
