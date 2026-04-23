@@ -4,15 +4,19 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvider;
 import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -23,7 +27,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ItemCloak extends ItemArmor implements INonStandardLocation {
-    private static final int MAX = 160_000_000;
+    private static final int MAX = TechRebornConfig.itemConfig.cloakingDevice.maxEnergy;
 
 	public ItemCloak(ArmorMaterial material) {
 		super(material, 0, EntityEquipmentSlot.CHEST);
@@ -69,7 +73,25 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation {
         return super.getDurabilityForDisplay(stack);
     }
 
-    public void setEnergy(ItemStack stack, int energy) {
+	@Override
+	@SuppressWarnings("ConstantConditions")
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+		if (itemStack.hasCapability(CapabilityEnergy.ENERGY, null)) {
+			IEnergyStorage storage = itemStack.getCapability(CapabilityEnergy.ENERGY, null);
+			int consumed = TechRebornConfig.itemConfig.cloakingDevice.consumption;
+			int extracted = storage.extractEnergy(consumed, true);
+			if (extracted == consumed) {
+				storage.extractEnergy(consumed, false);
+				player.setInvisible(true);
+			} else if (!player.isPotionActive(MobEffects.INVISIBILITY)) {
+				player.setInvisible(false);
+			}
+		} else if (!player.isPotionActive(MobEffects.INVISIBILITY)) {
+			player.setInvisible(false);
+		}
+	}
+
+	public void setEnergy(ItemStack stack, int energy) {
         if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
             IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
 			if (storage instanceof SettableEnergyStorage energyStorage) {
@@ -77,6 +99,15 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation {
 			}
         }
     }
+
+	@SuppressWarnings("ConstantConditions")
+	public static boolean active(ItemStack stack) {
+		if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
+			IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
+			return storage.getEnergyStored() > TechRebornConfig.itemConfig.cloakingDevice.consumption;
+		}
+		return false;
+	}
 
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
@@ -90,6 +121,6 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation {
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new PoweredItemCapabilityProvider(stack, MAX, 400, 0);
+        return new PoweredItemCapabilityProvider(stack, MAX, 400, TechRebornConfig.itemConfig.cloakingDevice.consumption);
     }
 }
