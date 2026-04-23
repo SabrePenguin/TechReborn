@@ -1,28 +1,29 @@
 package com.sabrepenguin.techreborn.items.armor;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.capability.PoweredItemCapability;
-import com.sabrepenguin.techreborn.items.IEnergy;
+import com.sabrepenguin.techreborn.TechReborn;
+import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvider;
+import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemCloak extends ItemArmor implements INonStandardLocation, IEnergy {
+import javax.annotation.ParametersAreNonnullByDefault;
 
-	private static final int COST = 10;
-	private static final int INPUT = 100;
-    private static final int MAX = 40_000_000;
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class ItemCloak extends ItemArmor implements INonStandardLocation {
+    private static final int MAX = 160_000_000;
 
 	public ItemCloak(ArmorMaterial material) {
 		super(material, 0, EntityEquipmentSlot.CHEST);
@@ -30,6 +31,7 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation, IEnerg
 		this.setTranslationKey(Tags.MODID + ".cloakingdevice");
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
+		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 	}
 
 	@Override
@@ -52,7 +54,6 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation, IEnerg
             this.setEnergy(empty, 0);
             items.add(empty);
         }
-        super.getSubItems(tab, items);
     }
 
     @Override
@@ -71,9 +72,9 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation, IEnerg
     public void setEnergy(ItemStack stack, int energy) {
         if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
             IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
-//            if (storage instanceof ItemEnergyStorage energyStorage) {
-//                energyStorage.setEnergyStored(energy);
-//            }
+			if (storage instanceof SettableEnergyStorage energyStorage) {
+				energyStorage.setEnergy(energy);
+			}
         }
     }
 
@@ -89,21 +90,6 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation, IEnerg
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-        return new PoweredItemCapability(stack, this);
-    }
-
-    @Override
-    public int getCapacity() {
-        return MAX;
-    }
-
-    @Override
-    public int getInputTransfer() {
-        return INPUT;
-    }
-
-    @Override
-    public int getOutputTransfer() {
-        return COST;
+        return new PoweredItemCapabilityProvider(stack, MAX, 400, 0);
     }
 }
