@@ -14,9 +14,10 @@ public class TechRebornItem extends Item implements INonStandardLocation {
         this.setTranslationKey(Tags.MODID + "." + translationKey);
     }
 
-    public TechRebornItem(String registryName, String translationKey) {
-        this(registryName, translationKey, "");
-    }
+	public TechRebornItem(String name, String prefix) {
+		ItemHelper.registerItem(this, name);
+		this.prefix = prefix;
+	}
 
     @Override
     public String getPrefix() {

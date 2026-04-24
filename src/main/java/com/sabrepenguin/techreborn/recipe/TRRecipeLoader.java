@@ -54,11 +54,12 @@ public class TRRecipeLoader {
 	}
 
 	public boolean loadRecipes() {
-		AlloyBuilder.init();
-		GrinderBuilder.init();
+		AlloyRecipes.init();
+		GrinderRecipes.init();
 		ExtractorRecipes.init();
 		CompressorRecipes.init();
 		PlateBenderRecipes.init();
+		WiremillRecipes.init();
 		boolean result = CraftingHelper.findFiles(mod, "assets/" + Tags.MODID + "/trrecipes/techreborn", this::preProcess, this::process, true, true);
 		for (ITRRegistry registry: registries.values()) {
 			registry.sortRecipes();

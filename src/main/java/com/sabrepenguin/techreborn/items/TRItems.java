@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.blocks.IBurnable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
@@ -13,8 +14,13 @@ import com.sabrepenguin.techreborn.items.armor.ItemLithiumBatpack;
 import com.sabrepenguin.techreborn.items.armor.TRArmor;
 import com.sabrepenguin.techreborn.items.battery.ItemBattery;
 import com.sabrepenguin.techreborn.items.materials.*;
+import com.sabrepenguin.techreborn.items.reactor.ItemIC2DepletedThoriumFuelRod;
+import com.sabrepenguin.techreborn.items.reactor.ItemIC2IridiumNeutronReflector;
+import com.sabrepenguin.techreborn.items.reactor.ItemIC2ThoriumFuelRod;
+import com.sabrepenguin.techreborn.items.reactor.ItemThoriumFuelRod;
 import com.sabrepenguin.techreborn.items.tools.*;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
+import com.sabrepenguin.techreborn.util.ModLoadedUtil;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -104,6 +110,14 @@ public class TRItems {
 	public static final ItemBattery lapotroncrystal = null;
 	public static final ItemBattery energycrystal = null;
 
+	public static final Item depleted_single_thorium_fuel_rod = null;
+	public static final Item depleted_dual_thorium_fuel_rod = null;
+	public static final Item depleted_quad_thorium_fuel_rod = null;
+	public static final ItemThoriumFuelRod single_thorium_fuel_rod = null;
+	public static final ItemThoriumFuelRod dual_thorium_fuel_rod = null;
+	public static final ItemThoriumFuelRod quad_thorium_fuel_rod = null;
+	public static final Item iridium_neutron_reflector = null;
+
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
             Arrays.asList(
@@ -175,6 +189,23 @@ public class TRItems {
 		items.add(new ItemBattery("lapotronicorb", TechRebornConfig.itemConfig.batteryItem.lapotronicMaxEnergy, 40_000));
 		items.add(new ItemBattery("lapotroncrystal", TechRebornConfig.itemConfig.batteryItem.lapotronicCrystalMaxEnergy, 40_000));
 		items.add(new ItemBattery("energycrystal", TechRebornConfig.itemConfig.batteryItem.energyCrystalMaxEnergy, 10_000));
+		if (!ModLoadedUtil.IC2_LOADED) {
+			items.add(new TechRebornItem("depleted_single_thorium_fuel_rod", "reactor"));
+			items.add(new TechRebornItem("depleted_dual_thorium_fuel_rod", "reactor"));
+			items.add(new TechRebornItem("depleted_quad_thorium_fuel_rod", "reactor"));
+			items.add(new ItemThoriumFuelRod("single_thorium_fuel_rod", 1));
+			items.add(new ItemThoriumFuelRod("dual_thorium_fuel_rod", 2));
+			items.add(new ItemThoriumFuelRod("quad_thorium_fuel_rod", 4));
+			items.add(new TechRebornItem("iridium_neutron_reflector", "reactor"));
+		} else {
+			items.add(new ItemIC2DepletedThoriumFuelRod("depleted_single_thorium_fuel_rod"));
+			items.add(new ItemIC2DepletedThoriumFuelRod("depleted_dual_thorium_fuel_rod"));
+			items.add(new ItemIC2DepletedThoriumFuelRod("depleted_quad_thorium_fuel_rod"));
+			items.add(new ItemIC2ThoriumFuelRod("single_thorium_fuel_rod", 1));
+			items.add(new ItemIC2ThoriumFuelRod("dual_thorium_fuel_rod", 2));
+			items.add(new ItemIC2ThoriumFuelRod("quad_thorium_fuel_rod", 4));
+			items.add(new ItemIC2IridiumNeutronReflector());
+		}
 
         return items;
     }

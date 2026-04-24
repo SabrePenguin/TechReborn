@@ -120,6 +120,14 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.energycrystal);
 		itemModelRegistration(TRItems.lapotroncrystal);
 		itemModelRegistration(TRItems.lapotronicorb);
+
+		itemModelRegistration(TRItems.depleted_single_thorium_fuel_rod);
+		itemModelRegistration(TRItems.depleted_dual_thorium_fuel_rod);
+		itemModelRegistration(TRItems.depleted_quad_thorium_fuel_rod);
+		itemModelRegistration(TRItems.single_thorium_fuel_rod);
+		itemModelRegistration(TRItems.dual_thorium_fuel_rod);
+		itemModelRegistration(TRItems.quad_thorium_fuel_rod);
+		itemModelRegistration(TRItems.iridium_neutron_reflector);
 	}
 
 	@SuppressWarnings("ConstantConditions")
