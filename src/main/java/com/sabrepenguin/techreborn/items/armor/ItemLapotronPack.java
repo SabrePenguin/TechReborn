@@ -1,10 +1,10 @@
 package com.sabrepenguin.techreborn.items.armor;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvider;
 import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
+import com.sabrepenguin.techreborn.items.ItemHelper;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.ItemStackUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -30,11 +30,8 @@ public class ItemLapotronPack extends ItemArmor implements INonStandardLocation 
 
 	public ItemLapotronPack() {
 		super(ArmorMaterial.DIAMOND, 7, EntityEquipmentSlot.CHEST);
-		this.setRegistryName(Tags.MODID, "lapotronpack");
-		this.setTranslationKey(Tags.MODID + ".lapotronpack");
+		ItemHelper.registerUnstackable(this, "lapotronpack");
 		this.setHasSubtypes(true);
-		this.setMaxStackSize(1);
-		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 	}
 
 	public void setEnergy(ItemStack stack, int energy) {

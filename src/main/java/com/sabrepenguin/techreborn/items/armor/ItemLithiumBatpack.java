@@ -1,10 +1,10 @@
 package com.sabrepenguin.techreborn.items.armor;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvider;
 import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
+import com.sabrepenguin.techreborn.items.ItemHelper;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.ItemStackUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -30,11 +30,8 @@ public class ItemLithiumBatpack extends ItemArmor implements INonStandardLocatio
 
 	public ItemLithiumBatpack() {
 		super(ArmorMaterial.DIAMOND, 7, EntityEquipmentSlot.CHEST);
-		this.setRegistryName(Tags.MODID, "lithiumbatpack");
-		this.setTranslationKey(Tags.MODID + ".lithiumbatpack");
+		ItemHelper.registerUnstackable(this, "lithiumbatpack");
 		this.setHasSubtypes(true);
-		this.setMaxStackSize(1);
-		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 	}
 
 	public void setEnergy(ItemStack stack, int energy) {

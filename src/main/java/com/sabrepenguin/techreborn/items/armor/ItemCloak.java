@@ -1,10 +1,10 @@
 package com.sabrepenguin.techreborn.items.armor;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvider;
 import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
+import com.sabrepenguin.techreborn.items.ItemHelper;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.ItemStackUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -32,11 +32,8 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation {
 
 	public ItemCloak(ArmorMaterial material) {
 		super(material, 0, EntityEquipmentSlot.CHEST);
-		this.setRegistryName(Tags.MODID, "cloakingdevice");
-		this.setTranslationKey(Tags.MODID + ".cloakingdevice");
+		ItemHelper.registerUnstackable(this, "cloakingdevice");
         this.setHasSubtypes(true);
-        this.setMaxStackSize(1);
-		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 	}
 
 	@Override

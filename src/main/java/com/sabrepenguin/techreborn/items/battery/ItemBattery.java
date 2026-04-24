@@ -4,6 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvider;
 import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
+import com.sabrepenguin.techreborn.items.ItemHelper;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.ItemStackUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -28,12 +29,8 @@ public class ItemBattery extends Item implements INonStandardLocation {
 
 	@SuppressWarnings("ConstantConditions")
 	public ItemBattery(String name, int capacity, int maxTransfer) {
-		super();
-		this.setRegistryName(Tags.MODID, name);
-		this.setTranslationKey(Tags.MODID + "." + name);
-		this.setMaxStackSize(1);
+		ItemHelper.registerUnstackable(this, name);
 		this.setHasSubtypes(true);
-		this.setCreativeTab(TechReborn.RESOURCE_TAB);
 		this.capacity = capacity;
 		this.maxTransfer = maxTransfer;
 		this.addPropertyOverride(new ResourceLocation("techreborn:empty_power"), (stack, worldIn, entityIn) -> {
