@@ -6,6 +6,7 @@ import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvid
 import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
+import com.sabrepenguin.techreborn.util.ItemStackUtils;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -46,6 +47,9 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation {
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
+			ItemStack empty = new ItemStack(this);
+			this.setEnergy(empty, 0);
+			items.add(empty);
             ItemStack full = new ItemStack(this);
             if (full.hasCapability(CapabilityEnergy.ENERGY, null)) {
                 IEnergyStorage storage = full.getCapability(CapabilityEnergy.ENERGY, null);
@@ -54,23 +58,12 @@ public class ItemCloak extends ItemArmor implements INonStandardLocation {
                     items.add(full);
                 }
             }
-            ItemStack empty = new ItemStack(this);
-            this.setEnergy(empty, 0);
-            items.add(empty);
         }
     }
 
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
-        if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
-            IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
-            if (storage != null) {
-                double maxAmount = storage.getMaxEnergyStored();
-                double energyDif = maxAmount - storage.getEnergyStored();
-                return energyDif/maxAmount;
-            }
-        }
-        return super.getDurabilityForDisplay(stack);
+        return ItemStackUtils.getItemStackDurabilityForDisplay(stack);
     }
 
 	@Override

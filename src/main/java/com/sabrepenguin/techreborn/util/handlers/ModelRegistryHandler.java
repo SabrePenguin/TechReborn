@@ -106,12 +106,20 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.sapphireboots);
 
 		itemModelRegistration(TRItems.cloakingdevice);
+		itemModelRegistration(TRItems.lapotronpack);
+		itemModelRegistration(TRItems.lithiumbatpack);
 
 		itemModelRegistration(TRItems.wrench);
 		itemModelRegistration(TRItems.treetap);
 		itemModelRegistration(TRItems.configurinator);
 
 		metaItemRegistration(TRItems.upgrades);
+
+		itemModelRegistration(TRItems.rebattery);
+		itemModelRegistration(TRItems.lithiumbattery);
+		itemModelRegistration(TRItems.energycrystal);
+		itemModelRegistration(TRItems.lapotroncrystal);
+		itemModelRegistration(TRItems.lapotronicorb);
 	}
 
 	@SuppressWarnings("ConstantConditions")

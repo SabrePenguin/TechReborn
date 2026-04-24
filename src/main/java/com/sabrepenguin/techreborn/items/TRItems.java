@@ -3,15 +3,18 @@ package com.sabrepenguin.techreborn.items;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.IBurnable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.itemblock.IMetaInformation;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockBurnable;
 import com.sabrepenguin.techreborn.itemblock.ItemBlockEnum;
 import com.sabrepenguin.techreborn.items.armor.ItemCloak;
+import com.sabrepenguin.techreborn.items.armor.ItemLapotronPack;
+import com.sabrepenguin.techreborn.items.armor.ItemLithiumBatpack;
 import com.sabrepenguin.techreborn.items.armor.TRArmor;
+import com.sabrepenguin.techreborn.items.battery.ItemBattery;
 import com.sabrepenguin.techreborn.items.materials.*;
 import com.sabrepenguin.techreborn.items.tools.*;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
-import com.sabrepenguin.techreborn.util.handlers.OreHandler;
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -28,7 +31,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = Tags.MODID)
@@ -85,6 +87,9 @@ public class TRItems {
 	public static final TRArmor peridotboots = null;
 
 	public static final ItemCloak cloakingdevice = null;
+	public static final ItemLapotronPack lapotronpack = null;
+	public static final ItemLithiumBatpack lithiumbatpack = null;
+
     public static final ItemWrench wrench = null;
 	public static final TreeTap treetap = null;
 	public static final ItemUpgrade upgrades = null;
@@ -92,6 +97,12 @@ public class TRItems {
 	public static final ItemConfigurinator configurinator = null;
 
 	public static final ItemCell cell = null;
+
+	public static final ItemBattery rebattery = null;
+	public static final ItemBattery lithiumbattery = null;
+	public static final ItemBattery lapotronicorb = null;
+	public static final ItemBattery lapotroncrystal = null;
+	public static final ItemBattery energycrystal = null;
 
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
@@ -147,6 +158,9 @@ public class TRItems {
 		items.add(new TRArmor("sapphire", MaterialsTR.SAPPHIRE_ARMOR, EntityEquipmentSlot.FEET, "gemSapphire"));
 
 		items.add(new ItemCloak(MaterialsTR.CLOAKING_ARMOR));
+		items.add(new ItemLapotronPack());
+		items.add(new ItemLithiumBatpack());
+
         items.add(new ItemWrench());
 		items.add(new TreeTap());
 
@@ -155,6 +169,13 @@ public class TRItems {
 		items.add(new ItemConfigurinator());
 
 		items.add(new ItemCell());
+
+		items.add(new ItemBattery("rebattery", 40_000, 100));
+		items.add(new ItemBattery("lithiumbattery", 400_000, 1_000));
+		items.add(new ItemBattery("lapotronicorb", TechRebornConfig.itemConfig.batteryItem.lapotronicMaxEnergy, 40_000));
+		items.add(new ItemBattery("lapotroncrystal", TechRebornConfig.itemConfig.batteryItem.lapotronicCrystalMaxEnergy, 40_000));
+		items.add(new ItemBattery("energycrystal", TechRebornConfig.itemConfig.batteryItem.energyCrystalMaxEnergy, 10_000));
+
         return items;
     }
 
