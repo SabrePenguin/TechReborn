@@ -492,10 +492,10 @@ item.techreborn.lapotronpack.name=Paquet d'Orbes Lapotroniques
 item.techreborn.lithiumbatpack.name=Propulseur au Lithium
 
 #Items-Battery
-item.techreborn.energyCrystal.name=Cristal d'Énergie
-item.techreborn.lapotronCrystal.name=Cristal Lapotronique
+item.techreborn.energycrystal.name=Cristal d'Énergie
+item.techreborn.lapotroncrystal.name=Cristal Lapotronique
 item.techreborn.lapotronicorb.name=Orbe d'Énergie Lapotronique
-item.techreborn.lithiumBattery.name=Batterie au Lithium
+item.techreborn.lithiumbattery.name=Batterie au Lithium
 item.techreborn.rebattery.name=Pile Rechargeable
 
 #Items-Tools

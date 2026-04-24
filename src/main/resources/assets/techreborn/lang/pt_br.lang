@@ -483,10 +483,10 @@ item.techreborn.lapotronpack.name=Mochila-Orbe Lapotrônica
 item.techreborn.lithiumbatpack.name=Mochila-Bateria de Lítio
 
 #Items-Battery
-item.techreborn.energyCrystal.name=Cristal de Energia
-item.techreborn.lapotronCrystal.name=Cristal Lapotron
+item.techreborn.energycrystal.name=Cristal de Energia
+item.techreborn.lapotroncrystal.name=Cristal Lapotron
 item.techreborn.lapotronicorb.name=Orbe de Energia Lapotrônica
-item.techreborn.lithiumBattery.name=Bateria de Lítio
+item.techreborn.lithiumbattery.name=Bateria de Lítio
 item.techreborn.rebattery.name=Bateria
 
 #Items-Tools

@@ -509,10 +509,10 @@ item.techreborn.lapotronpack.name=Лапотронный пак
 item.techreborn.lithiumbatpack.name=Литиевый энергоранец
 
 #Items-Battery
-item.techreborn.energyCrystal.name=Энергетический кристалл
-item.techreborn.lapotronCrystal.name=Лазуротроновый кристалл
+item.techreborn.energycrystal.name=Энергетический кристалл
+item.techreborn.lapotroncrystal.name=Лазуротроновый кристалл
 item.techreborn.lapotronicorb.name=Лапотронный энергетический шар
-item.techreborn.lithiumBattery.name=Литиевый аккумулятор
+item.techreborn.lithiumbattery.name=Литиевый аккумулятор
 item.techreborn.rebattery.name=Аккумулятор
 
 #Items-Tools

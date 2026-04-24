@@ -287,9 +287,9 @@ item.techreborn.part.carbon_fiber.name=Kohlenstofffasern
 item.techreborn.cloakingdevice.name=Elektroeinhandphotonenoptiktarnfeldgenerator
 
 #Items-Battery
-item.techreborn.energyCrystal.name=Energiekristall
-item.techreborn.lapotronCrystal.name=Lapotronkristall
-item.techreborn.lithiumBattery.name=Lithiumbatterie
+item.techreborn.energycrystal.name=Energiekristall
+item.techreborn.lapotroncrystal.name=Lapotronkristall
+item.techreborn.lithiumbattery.name=Lithiumbatterie
 item.techreborn.rebattery.name=Batterie
 
 #Items-Tools

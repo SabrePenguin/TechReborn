@@ -519,10 +519,10 @@ item.techreborn.lapotronpack.name=Lapotronic Orbpack
 item.techreborn.lithiumbatpack.name=Lithium Batpack
 
 #Items-Battery
-item.techreborn.energyCrystal.name=Energy Crystal
-item.techreborn.lapotronCrystal.name=Lapotron Crystal
+item.techreborn.energycrystal.name=Energy Crystal
+item.techreborn.lapotroncrystal.name=Lapotron Crystal
 item.techreborn.lapotronicorb.name=Lapotronic Energy Orb
-item.techreborn.lithiumBattery.name=Lithium Battery
+item.techreborn.lithiumbattery.name=Lithium Battery
 item.techreborn.rebattery.name=Battery
 
 #Items-Tools

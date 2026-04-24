@@ -492,10 +492,10 @@ item.techreborn.part.compressed_plantball.name=圧縮植物玉
 item.techreborn.cloakingdevice.name=隠蔽装置
 
 #Items-Battery
-item.techreborn.energyCrystal.name=エネルギー結晶
-item.techreborn.lapotronCrystal.name=ラポトロン結晶
+item.techreborn.energycrystal.name=エネルギー結晶
+item.techreborn.lapotroncrystal.name=ラポトロン結晶
 item.techreborn.lapotronicorb.name=ラポトロンエネルギー珠
-item.techreborn.lithiumBattery.name=リチウム電池
+item.techreborn.lithiumbattery.name=リチウム電池
 item.techreborn.rebattery.name=蓄電池
 
 #Items-Tools
