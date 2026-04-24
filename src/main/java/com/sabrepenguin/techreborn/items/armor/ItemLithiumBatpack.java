@@ -10,11 +10,13 @@ import com.sabrepenguin.techreborn.util.ItemStackUtils;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -42,6 +44,37 @@ public class ItemLithiumBatpack extends ItemArmor implements INonStandardLocatio
 				energyStorage.setEnergy(energy);
 			}
 		}
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	public static void distributeToInventory(World world, EntityPlayer player, ItemStack stack, int transfer) {
+		if (world.isRemote)
+			return;
+		if (stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
+			IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
+			for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+				if (storage.getEnergyStored() == 0)
+					break;
+				ItemStack target = player.inventory.getStackInSlot(i);
+				if (!target.isEmpty() && target.hasCapability(CapabilityEnergy.ENERGY, null)) {
+					IEnergyStorage targetStorage = target.getCapability(CapabilityEnergy.ENERGY, null);
+					if (targetStorage.getEnergyStored() == targetStorage.getMaxEnergyStored())
+						continue;
+					int extracted = storage.extractEnergy(transfer, true);
+					if (extracted > 0) {
+						int inserted = targetStorage.receiveEnergy(extracted, false);
+						storage.extractEnergy(inserted, false);
+					}
+				}
+			}
+		}
+	}
+
+	// ItemArmor
+
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+		distributeToInventory(world, player, itemStack, TechRebornConfig.itemConfig.lithiumBatpack.transferLimit);
 	}
 
 	@Override
