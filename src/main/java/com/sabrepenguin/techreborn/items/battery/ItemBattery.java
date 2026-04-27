@@ -1,7 +1,5 @@
 package com.sabrepenguin.techreborn.items.battery;
 
-import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvider;
 import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
 import com.sabrepenguin.techreborn.items.ItemHelper;
@@ -66,17 +64,7 @@ public class ItemBattery extends Item implements INonStandardLocation {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (this.isInCreativeTab(tab)) {
-			ItemStack empty = new ItemStack(this);
-			this.setEnergy(empty, 0);
-			items.add(empty);
-			ItemStack full = new ItemStack(this);
-			if (full.hasCapability(CapabilityEnergy.ENERGY, null)) {
-				IEnergyStorage storage = full.getCapability(CapabilityEnergy.ENERGY, null);
-				if (storage != null) {
-					this.setEnergy(full, capacity);
-					items.add(full);
-				}
-			}
+			ItemStackUtils.getFullAndEmptySubItems(this, items, capacity);
 		}
 	}
 
