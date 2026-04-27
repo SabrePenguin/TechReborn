@@ -4,7 +4,6 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Part;
-import com.sabrepenguin.techreborn.util.WorldUtils;
 import com.sabrepenguin.techreborn.util.handlers.ModSounds;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockLog;
@@ -13,6 +12,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -128,7 +128,7 @@ public class BlockRubberLog extends BlockLog {
 					playerIn.getHeldItem(hand).damageItem(1,playerIn);
 					ItemStack drop = new ItemStack(TRItems.part, 1, Part.PartMeta.sap.metadata());
 					if (!playerIn.inventory.addItemStackToInventory(drop)) {
-						WorldUtils.dropItem(drop, worldIn, pos.offset(facing));
+						InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), drop);
 					}
 				}
 				return true;
