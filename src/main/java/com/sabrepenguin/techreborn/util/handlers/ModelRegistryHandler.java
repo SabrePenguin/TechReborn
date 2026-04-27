@@ -128,6 +128,10 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.dual_thorium_fuel_rod);
 		itemModelRegistration(TRItems.quad_thorium_fuel_rod);
 		itemModelRegistration(TRItems.iridium_neutron_reflector);
+
+		itemModelRegistration(TRItems.ironchainsaw);
+		itemModelRegistration(TRItems.diamondchainsaw);
+		itemModelRegistration(TRItems.advancedchainsaw);
 	}
 
 	@SuppressWarnings("ConstantConditions")

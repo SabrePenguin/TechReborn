@@ -1,0 +1,14 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "techreborn:items/tool/chainsaw/steel_chainsaw"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "techreborn:animated": 1
+      },
+      "model": "techreborn:item/tool/chainsaw/steel_chainsaw_animated"
+    }
+  ]
+}

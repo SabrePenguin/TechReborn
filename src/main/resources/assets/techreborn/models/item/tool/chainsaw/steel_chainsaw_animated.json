@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "techreborn:items/tool/chainsaw/steel_chainsaw_animated"
+  }
+}
