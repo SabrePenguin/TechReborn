@@ -574,10 +574,10 @@ techreborn.message.alarm=切り替え：
 techreborn.message.allPlayers=全てのプレイヤー
 techreborn.message.onlyOtherPlayers=他のプレイヤー
 techreborn.message.onlyYou=自分
-techreborn.message.nanosaberActive=稼働中
-techreborn.message.nanosaberActivate=発動
-techreborn.message.nanosaberDeactivating=停止
-techreborn.message.nanosaberInactive=停止中
+techreborn.message.active=稼働中
+techreborn.message.activate=発動
+techreborn.message.deactivating=停止
+techreborn.message.inactive=停止中
 
 keys.techreborn.config=設定
 

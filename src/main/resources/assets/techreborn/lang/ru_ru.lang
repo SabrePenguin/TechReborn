@@ -591,7 +591,7 @@ item.peridotBoots.name=Сапоги из хризолита
 
 #Message
 techreborn.message.missingmultiblock=Мультиблочная структура не закончена
-techreborn.message.setTo=Установить на
+techreborn.message.set_to=Установить на
 techreborn.message.in=в
 techreborn.message.noCoordsSet=Координаты не установлены
 techreborn.message.coordsHaveBeen=Координаты были
@@ -601,12 +601,12 @@ techreborn.message.alarm=Переключен на:
 techreborn.message.allPlayers=Все игроки
 techreborn.message.onlyOtherPlayers=Только другие игроки
 techreborn.message.onlyYou=Только Вы
-techreborn.message.nanosaberActive=Включена
-techreborn.message.nanosaberActivate=Активация
-techreborn.message.nanosaberDeactivating=Деактивация
-techreborn.message.nanosaberInactive=Выключена
-techreborn.message.nanosaberEnergyErrorTo=Недостаточно энергии для
-techreborn.message.nanosaberEnergyError=Недостаточно энергии:
+techreborn.message.active=Включена
+techreborn.message.activate=Активация
+techreborn.message.deactivating=Деактивация
+techreborn.message.inactive=Выключена
+techreborn.message.energy_error_to=Недостаточно энергии для
+techreborn.message.energy_error=Недостаточно энергии:
 
 keys.techreborn.category=Раздел TechReborn
 keys.techreborn.config=Конфиг

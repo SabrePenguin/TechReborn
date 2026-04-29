@@ -608,7 +608,7 @@ item.peridotBoots.name=橄榄石靴子
 
 #Message
 techreborn.message.missingmultiblock=多方块结构缺失
-techreborn.message.setTo=设置为
+techreborn.message.set_to=设置为
 techreborn.message.in=在
 techreborn.message.noCoordsSet=没有设置坐标
 techreborn.message.coordsHaveBeen=坐标已设置为
@@ -618,12 +618,12 @@ techreborn.message.alarm=切换到：
 techreborn.message.allPlayers=所有玩家
 techreborn.message.onlyOtherPlayers=仅其他玩家
 techreborn.message.onlyYou=仅自己
-techreborn.message.nanosaberActive=已激活
-techreborn.message.nanosaberActivate=激活
-techreborn.message.nanosaberDeactivating=停用
-techreborn.message.nanosaberInactive=未激活
-techreborn.message.nanosaberEnergyErrorTo=没有足够的能量
-techreborn.message.nanosaberEnergyError=没有足够的能量：
+techreborn.message.active=已激活
+techreborn.message.activate=激活
+techreborn.message.deactivating=停用
+techreborn.message.inactive=未激活
+techreborn.message.energy_error_to=没有足够的能量
+techreborn.message.energy_error=没有足够的能量：
 
 keys.techreborn.category=科技复兴分类
 keys.techreborn.config=配置

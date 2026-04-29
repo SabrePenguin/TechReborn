@@ -55,10 +55,10 @@ public class ItemChainsawAdvanced extends ItemChainsaw {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (!ItemStackUtils.checkIsActive(stack)) {
 			tooltip.add(TextFormatting.YELLOW + "Shear: " + TextFormatting.RED +
-					I18n.format("techreborn.message.nanosaberInactive"));
+					I18n.format("techreborn.message.inactive"));
 		} else {
 			tooltip.add(TextFormatting.YELLOW + "Shear: " + TextFormatting.GREEN +
-					I18n.format("techreborn.message.nanosaberActive"));
+					I18n.format("techreborn.message.active"));
 		}
 	}
 
@@ -76,8 +76,8 @@ public class ItemChainsawAdvanced extends ItemChainsaw {
 				if (worldIn.isRemote) {
 					ChatUtils.sendUpdatingMessage(
 							new TextComponentString(
-									TextFormatting.GRAY + I18n.format("techreborn.message.setTo") + " " +
-											TextFormatting.GOLD + I18n.format("techreborn.message.nanosaberInactive")
+									TextFormatting.GRAY + I18n.format("techreborn.message.set_to") + " " +
+											TextFormatting.GOLD + I18n.format("techreborn.message.inactive")
 							),
 							ChatUtils.ACTIVE_TOOL
 					);
@@ -87,8 +87,8 @@ public class ItemChainsawAdvanced extends ItemChainsaw {
 				if (worldIn.isRemote) {
 					ChatUtils.sendUpdatingMessage(
 							new TextComponentString(
-									TextFormatting.GRAY + I18n.format("techreborn.message.setTo") + " " +
-											TextFormatting.GOLD + I18n.format("techreborn.message.nanosaberActive")
+									TextFormatting.GRAY + I18n.format("techreborn.message.set_to") + " " +
+											TextFormatting.GOLD + I18n.format("techreborn.message.active")
 							),
 							ChatUtils.ACTIVE_TOOL
 					);

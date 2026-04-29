@@ -563,7 +563,7 @@ item.peridotBoots.name=Botas de Peridoto
 
 #Message
 techreborn.message.missingmultiblock=Estrutura Incompleta
-techreborn.message.setTo=Marcado em
+techreborn.message.set_to=Marcado em
 techreborn.message.in=em
 techreborn.message.noCoordsSet=Nenhuma Coordenada
 techreborn.message.coordsHaveBeen=As coordenadas foram
@@ -572,12 +572,12 @@ techreborn.message.detects=Detecta
 techreborn.message.allPlayers=Todos os Players
 techreborn.message.onlyOtherPlayers=Apenas Outros Players
 techreborn.message.onlyYou=Apenas Você
-techreborn.message.nanosaberActive=Ativo
-techreborn.message.nanosaberActivate=Ativar
-techreborn.message.nanosaberDeactivating=Desativando
-techreborn.message.nanosaberInactive=Inactivo
-techreborn.message.nanosaberEnergyErrorTo=Sem energia suficiente para
-techreborn.message.nanosaberEnergyError=Sem energia suficiente:
+techreborn.message.active=Ativo
+techreborn.message.activate=Ativar
+techreborn.message.deactivating=Desativando
+techreborn.message.inactive=Inactivo
+techreborn.message.energy_error_to=Sem energia suficiente para
+techreborn.message.energy_error=Sem energia suficiente:
 
 keys.techreborn.category=Categoria: TechReborn
 

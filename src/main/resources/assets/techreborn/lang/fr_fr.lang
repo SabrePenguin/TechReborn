@@ -572,7 +572,7 @@ item.peridotBoots.name=Bottes en Péridot
 
 #Message
 techreborn.message.missingmultiblock=MultiBloc Incomplet
-techreborn.message.setTo=Définir sur
+techreborn.message.set_to=Définir sur
 techreborn.message.in=dans
 techreborn.message.noCoordsSet=Aucune Coordonnées Définie
 techreborn.message.coordsHaveBeen=Les coordonnées ont été
@@ -582,12 +582,12 @@ techreborn.message.alarm=Remplacé par :
 techreborn.message.allPlayers=Tous les Joueurs
 techreborn.message.onlyOtherPlayers=Uniquement les Autres Joueurs
 techreborn.message.onlyYou=Uniquement Vous
-techreborn.message.nanosaberActive=Actif
-techreborn.message.nanosaberActivate=Activer
-techreborn.message.nanosaberDeactivating=Désactivation
-techreborn.message.nanosaberInactive=Inactif
-techreborn.message.nanosaberEnergyErrorTo=Pas Assez d'Énergie pour
-techreborn.message.nanosaberEnergyError=Pas Assez d'Énergie :
+techreborn.message.active=Actif
+techreborn.message.activate=Activer
+techreborn.message.deactivating=Désactivation
+techreborn.message.inactive=Inactif
+techreborn.message.energy_error_to=Pas Assez d'Énergie pour
+techreborn.message.energy_error=Pas Assez d'Énergie :
 
 keys.techreborn.category=Catégorie TechReborn
 keys.techreborn.config=Configuration

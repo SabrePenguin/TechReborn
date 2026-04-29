@@ -296,7 +296,7 @@ item.rubySword.name=紅寶石劍
 
 #Message
 techreborn.message.missingmultiblock=多方塊機器構造不完整
-techreborn.message.setTo=設定為
+techreborn.message.set_to=設定為
 techreborn.message.in=在
 techreborn.message.noCoordsSet=未定義座標
 techreborn.message.coordsHaveBeen=座標已被
