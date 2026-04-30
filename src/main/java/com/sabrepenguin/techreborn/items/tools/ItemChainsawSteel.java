@@ -20,9 +20,4 @@ public class ItemChainsawSteel extends ItemChainsaw {
 	public ResourceLocation getResourceLocation() {
 		return new ResourceLocation(Tags.MODID, "steel_chainsaw");
 	}
-
-	@Override
-	public boolean canHarvestBlock(IBlockState blockIn) {
-		return Items.IRON_AXE.canHarvestBlock(blockIn);
-	}
 }

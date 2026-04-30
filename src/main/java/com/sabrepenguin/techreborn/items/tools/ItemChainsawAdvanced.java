@@ -63,11 +63,6 @@ public class ItemChainsawAdvanced extends ItemChainsaw {
 	}
 
 	@Override
-	public boolean canHarvestBlock(IBlockState blockIn) {
-		return Items.IRON_AXE.canHarvestBlock(blockIn);
-	}
-
-	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		final ItemStack stack = playerIn.getHeldItem(handIn);
 		if (playerIn.isSneaking()) {

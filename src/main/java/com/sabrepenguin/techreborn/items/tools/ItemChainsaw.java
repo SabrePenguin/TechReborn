@@ -15,7 +15,6 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -39,20 +38,20 @@ public abstract class ItemChainsaw extends ItemAxe implements INonStandardLocati
 		super(material);
 		ItemHelper.registerUnstackable(this, name);
 		this.setHasSubtypes(true);
+		this.setNoRepair();
+
+		this.setHarvestLevel("axe", material.getHarvestLevel());
 
 		this.efficiency = unpoweredSpeed;
 		this.energyCost = energyCost;
 		this.maxCapacity = maxCapacity;
 		this.maxReceive = maxReceive;
+		ItemHelper.addAnimatedItemProperty(this, energyCost);
+	}
 
-		this.addPropertyOverride(new ResourceLocation("techreborn:animated"), (stack, worldIn, entityIn) -> {
-			if (!stack.isEmpty() && stack.hasCapability(CapabilityEnergy.ENERGY, null)) {
-				IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
-				if (storage.getEnergyStored() >= energyCost && entityIn != null && entityIn.getHeldItemMainhand().isItemEqual(stack))
-					return 1;
-			}
-			return 0;
-		});
+	@Override
+	public String getPrefix() {
+		return "tool/chainsaw";
 	}
 
 	@Override
@@ -104,11 +103,6 @@ public abstract class ItemChainsaw extends ItemAxe implements INonStandardLocati
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
 		return ItemStackUtils.getItemStackDurabilityForDisplay(stack);
-	}
-
-	@Override
-	public String getPrefix() {
-		return "tool/chainsaw";
 	}
 
 	@Override
