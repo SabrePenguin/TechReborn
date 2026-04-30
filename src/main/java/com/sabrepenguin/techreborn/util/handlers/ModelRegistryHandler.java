@@ -129,11 +129,11 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.quad_thorium_fuel_rod);
 		itemModelRegistration(TRItems.iridium_neutron_reflector);
 
-		itemModelRegistration(TRItems.ironchainsaw);
+		itemModelRegistration(TRItems.steel_chainsaw);
 		itemModelRegistration(TRItems.diamondchainsaw);
 		itemModelRegistration(TRItems.advancedchainsaw);
 
-		itemModelRegistration(TRItems.irondrill);
+		itemModelRegistration(TRItems.steel_drill);
 		itemModelRegistration(TRItems.diamonddrill);
 		itemModelRegistration(TRItems.advanceddrill);
 	}

@@ -119,10 +119,12 @@ public class TRItems {
 	public static final Item iridium_neutron_reflector = null;
 
 	public static final ItemChainsaw diamondchainsaw = null;
-	public static final ItemChainsaw ironchainsaw = null;
+	@GameRegistry.ObjectHolder("ironchainsaw")
+	public static final ItemChainsaw steel_chainsaw = null;
 	public static final ItemChainsawAdvanced advancedchainsaw = null;
 
-	public static final ItemDrill irondrill = null;
+	@GameRegistry.ObjectHolder("irondrill")
+	public static final ItemDrill steel_drill = null;
 	public static final ItemDrill diamonddrill = null;
 	public static final ItemDrill advanceddrill = null;
 
@@ -219,7 +221,7 @@ public class TRItems {
 		items.add(ItemChainsaw.diamondChainsaw());
 		items.add(new ItemChainsawAdvanced());
 
-		items.add(ItemDrill.ironDrill());
+		items.add(ItemDrill.steelDrill());
 		items.add(ItemDrill.diamondDrill());
 		items.add(new ItemDrillAdvanced());
 

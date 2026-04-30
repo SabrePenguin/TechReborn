@@ -135,7 +135,7 @@ public class ItemDrill extends ItemPickaxe implements INonStandardLocation {
 		drill.setCustomFile(new ResourceLocation(Tags.MODID, "diamond_drill"));
 		return drill;
 	}
-	public static ItemDrill ironDrill() {
+	public static ItemDrill steelDrill() {
 		ItemDrill drill = new ItemDrill(ToolMaterial.IRON, "irondrill", 50,
 				100, TechRebornConfig.itemConfig.drills.ironDrillMaxEnergy, 0.5f, 10);
 		drill.setCustomFile(new ResourceLocation(Tags.MODID, "steel_drill"));
