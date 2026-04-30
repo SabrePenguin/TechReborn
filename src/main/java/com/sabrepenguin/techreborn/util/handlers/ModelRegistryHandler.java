@@ -136,6 +136,10 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.steel_drill);
 		itemModelRegistration(TRItems.diamonddrill);
 		itemModelRegistration(TRItems.advanceddrill);
+
+		itemModelRegistration(TRItems.steeljackhammer);
+		itemModelRegistration(TRItems.diamondjackhammer);
+		itemModelRegistration(TRItems.advanced_jackhammer);
 	}
 
 	@SuppressWarnings("ConstantConditions")

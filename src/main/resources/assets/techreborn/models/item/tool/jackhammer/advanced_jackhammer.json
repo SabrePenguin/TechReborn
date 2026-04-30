@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "techreborn:items/tool/jackhammer/advanced_jackhammer"
+  }
+}

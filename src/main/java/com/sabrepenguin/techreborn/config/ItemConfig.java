@@ -16,6 +16,8 @@ public class ItemConfig {
 	public Chainsaws chainsaws = new Chainsaws();
 	@Config.LangKey("config.item.drills")
 	public Drills drills = new Drills();
+	@Config.LangKey("config.item.jackhammers")
+	public Jackhammers jackhammers = new Jackhammers();
 
 	public static class CloakingDevice {
 		@Config.LangKey("config.max_energy")
@@ -72,5 +74,17 @@ public class ItemConfig {
 		@Config.LangKey("config.advanced_drill.max_energy")
 		@Config.RequiresMcRestart
 		public int advancedDrillMaxEnergy = 4_000_000;
+	}
+
+	public static class Jackhammers {
+		@Config.LangKey("config.steel_jackhammer.max_energy")
+		@Config.RequiresMcRestart
+		public int steelJackhammerMaxEnergy = 40_000;
+		@Config.LangKey("config.diamond_jackhammer.max_energy")
+		@Config.RequiresMcRestart
+		public int diamondJackhammerMaxEnergy = 400_000;
+		@Config.LangKey("config.advanced_jackhammer.max_energy")
+		@Config.RequiresMcRestart
+		public int advancedJackhamerMaxEnergy = 4_000_000;
 	}
 }

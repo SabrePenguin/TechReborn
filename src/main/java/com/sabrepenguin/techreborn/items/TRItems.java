@@ -1,7 +1,6 @@
 package com.sabrepenguin.techreborn.items;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.blocks.IBurnable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
@@ -128,6 +127,11 @@ public class TRItems {
 	public static final ItemDrill diamonddrill = null;
 	public static final ItemDrill advanceddrill = null;
 
+	public static final ItemJackhammer steeljackhammer = null;
+	public static final ItemJackhammer diamondjackhammer = null;
+	@GameRegistry.ObjectHolder("ironjackhammer")
+	public static final ItemJackhammer advanced_jackhammer = null;
+
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
             Arrays.asList(
@@ -224,6 +228,10 @@ public class TRItems {
 		items.add(ItemDrill.steelDrill());
 		items.add(ItemDrill.diamondDrill());
 		items.add(new ItemDrillAdvanced());
+
+		items.add(ItemJackhammer.steelJackhammer());
+		items.add(ItemJackhammer.diamondJackhammer());
+		items.add(ItemJackhammer.advancedJackhammer());
 
         return items;
     }
