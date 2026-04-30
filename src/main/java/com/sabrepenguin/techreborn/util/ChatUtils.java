@@ -5,6 +5,7 @@ import net.minecraft.util.text.ITextComponent;
 
 public class ChatUtils {
 	public static final int ACTIVE_TOOL = 0;
+	public static final int DEBUG_TOOL = 1;
 
 	private static final int OFFSET = 8929;
 

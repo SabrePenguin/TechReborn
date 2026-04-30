@@ -132,6 +132,8 @@ public class TRItems {
 	@GameRegistry.ObjectHolder("ironjackhammer")
 	public static final ItemJackhammer advanced_jackhammer = null;
 
+	public static final ItemDebug debug = null;
+
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
             Arrays.asList(
@@ -232,6 +234,8 @@ public class TRItems {
 		items.add(ItemJackhammer.steelJackhammer());
 		items.add(ItemJackhammer.diamondJackhammer());
 		items.add(ItemJackhammer.advancedJackhammer());
+
+		items.add(new ItemDebug());
 
         return items;
     }
