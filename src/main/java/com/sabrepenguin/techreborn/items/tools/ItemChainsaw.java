@@ -1,6 +1,8 @@
 package com.sabrepenguin.techreborn.items.tools;
 
+import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.capability.energy.PoweredItemCapabilityProvider;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.items.ItemHelper;
 import com.sabrepenguin.techreborn.util.INonStandardLocation;
 import com.sabrepenguin.techreborn.util.ItemStackUtils;
@@ -15,6 +17,7 @@ import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -27,12 +30,14 @@ import java.util.Random;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class ItemChainsaw extends ItemAxe implements INonStandardLocation {
+public class ItemChainsaw extends ItemAxe implements INonStandardLocation {
 	private static final Random RANDOM = new Random();
 	protected final int energyCost;
 	protected final float poweredSpeed = 20f;
 	protected final int maxCapacity;
 	protected final int maxReceive;
+
+	protected ResourceLocation fileLocation;
 
 	public ItemChainsaw(ToolMaterial material, String name, int energyCost, int maxReceive, int maxCapacity, float unpoweredSpeed) {
 		super(material);
@@ -47,6 +52,20 @@ public abstract class ItemChainsaw extends ItemAxe implements INonStandardLocati
 		this.maxCapacity = maxCapacity;
 		this.maxReceive = maxReceive;
 		ItemHelper.addAnimatedItemProperty(this, energyCost);
+	}
+
+	@Override
+	public boolean hasResourceLocation() {
+		return fileLocation != null;
+	}
+
+	@Override
+	public ResourceLocation getResourceLocation() {
+		return fileLocation;
+	}
+
+	protected void setCustomFile(ResourceLocation location) {
+		fileLocation = location;
 	}
 
 	@Override
@@ -108,5 +127,19 @@ public abstract class ItemChainsaw extends ItemAxe implements INonStandardLocati
 	@Override
 	public int getItemEnchantability() {
 		return 20;
+	}
+
+	public static ItemChainsaw diamondChainsaw() {
+		ItemChainsaw chainsaw = new ItemChainsaw(ToolMaterial.DIAMOND, "diamondchainsaw", 250, 1000,
+				TechRebornConfig.itemConfig.chainsaws.diamondChainsawMaxEnergy, 1f);
+		chainsaw.setCustomFile(new ResourceLocation(Tags.MODID, "diamond_chainsaw"));
+		return chainsaw;
+	}
+
+	public static ItemChainsaw steelChainsaw() {
+		ItemChainsaw chainsaw = new ItemChainsaw(ToolMaterial.DIAMOND, "ironchainsaw", 250, 1000,
+				TechRebornConfig.itemConfig.chainsaws.diamondChainsawMaxEnergy, 1f);
+		chainsaw.setCustomFile(new ResourceLocation(Tags.MODID, "steel_chainsaw"));
+		return chainsaw;
 	}
 }

@@ -118,8 +118,8 @@ public class TRItems {
 	public static final ItemThoriumFuelRod quad_thorium_fuel_rod = null;
 	public static final Item iridium_neutron_reflector = null;
 
-	public static final ItemChainsawDiamond diamondchainsaw = null;
-	public static final ItemChainsawSteel ironchainsaw = null;
+	public static final ItemChainsaw diamondchainsaw = null;
+	public static final ItemChainsaw ironchainsaw = null;
 	public static final ItemChainsawAdvanced advancedchainsaw = null;
 
 	public static final ItemDrill irondrill = null;
@@ -215,8 +215,8 @@ public class TRItems {
 			items.add(new ItemIC2IridiumNeutronReflector());
 		}
 
-		items.add(new ItemChainsawSteel());
-		items.add(new ItemChainsawDiamond());
+		items.add(ItemChainsaw.steelChainsaw());
+		items.add(ItemChainsaw.diamondChainsaw());
 		items.add(new ItemChainsawAdvanced());
 
 		items.add(ItemDrill.ironDrill());
