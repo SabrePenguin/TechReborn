@@ -122,6 +122,10 @@ public class TRItems {
 	public static final ItemChainsawSteel ironchainsaw = null;
 	public static final ItemChainsawAdvanced advancedchainsaw = null;
 
+	public static final ItemDrill irondrill = null;
+	public static final ItemDrill diamonddrill = null;
+	public static final ItemDrill advanceddrill = null;
+
     public static List<Item> getItems() {
         final List<Item> items = new ArrayList<>(
             Arrays.asList(
@@ -214,6 +218,10 @@ public class TRItems {
 		items.add(new ItemChainsawSteel());
 		items.add(new ItemChainsawDiamond());
 		items.add(new ItemChainsawAdvanced());
+
+		items.add(ItemDrill.ironDrill());
+		items.add(ItemDrill.diamondDrill());
+		items.add(new ItemDrillAdvanced());
 
         return items;
     }
