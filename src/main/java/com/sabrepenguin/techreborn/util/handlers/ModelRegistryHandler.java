@@ -111,6 +111,7 @@ public class ModelRegistryHandler {
 
 		itemModelRegistration(TRItems.wrench);
 		itemModelRegistration(TRItems.treetap);
+		itemModelRegistration(TRItems.electrictreetap);
 		itemModelRegistration(TRItems.configurinator);
 
 		metaItemRegistration(TRItems.upgrades);

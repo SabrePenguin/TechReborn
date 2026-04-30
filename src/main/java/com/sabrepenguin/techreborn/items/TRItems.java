@@ -96,7 +96,8 @@ public class TRItems {
 	public static final ItemLithiumBatpack lithiumbatpack = null;
 
     public static final ItemWrench wrench = null;
-	public static final TreeTap treetap = null;
+	public static final ItemTreeTap treetap = null;
+	public static final ItemTreeTapElectric electrictreetap = null;
 	public static final ItemUpgrade upgrades = null;
 
 	public static final ItemConfigurinator configurinator = null;
@@ -192,7 +193,13 @@ public class TRItems {
 		items.add(new ItemLithiumBatpack());
 
         items.add(new ItemWrench());
-		items.add(new TreeTap());
+		if (!ModLoadedUtil.IC2_LOADED) {
+			items.add(new ItemTreeTap());
+			items.add(new ItemTreeTapElectric());
+		} else {
+			items.add(new ItemIC2TreeTap());
+			items.add(new ItemIC2TreeTapElectric());
+		}
 
 		items.add(new ItemUpgrade());
 

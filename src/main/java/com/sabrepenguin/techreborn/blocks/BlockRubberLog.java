@@ -4,6 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Part;
+import com.sabrepenguin.techreborn.items.tools.ItemTreeTapElectric;
 import com.sabrepenguin.techreborn.util.handlers.ModSounds;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockLog;
@@ -13,6 +14,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -21,6 +23,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Random;
@@ -120,12 +124,19 @@ public class BlockRubberLog extends BlockLog {
 		ItemStack itemInHand = playerIn.getHeldItem(hand);
 		if (itemInHand.isEmpty())
 			return false;
-		if (itemInHand.getItem() == TRItems.treetap) {
+		Item item = itemInHand.getItem();
+		if (item == TRItems.treetap || item == TRItems.electrictreetap) {
 			if (state.getValue(HAS_SAP) && state.getValue(SAP) == facing) {
 				worldIn.setBlockState(pos, state.withProperty(HAS_SAP, false).withProperty(SAP, EnumFacing.NORTH));
 				worldIn.playSound(null, pos, ModSounds.SAP_EXTRACT, SoundCategory.BLOCKS, 0.6f, 1f);
 				if (!worldIn.isRemote) {
-					playerIn.getHeldItem(hand).damageItem(1,playerIn);
+					if (item == TRItems.treetap) {
+						playerIn.getHeldItem(hand).damageItem(1, playerIn);
+					} else if (item == TRItems.electrictreetap) {
+						if (!ItemTreeTapElectric.drainPower(itemInHand)) {
+							return false;
+						}
+					}
 					ItemStack drop = new ItemStack(TRItems.part, 1, Part.PartMeta.sap.metadata());
 					if (!playerIn.inventory.addItemStackToInventory(drop)) {
 						InventoryHelper.spawnItemStack(worldIn, pos.getX(), pos.getY(), pos.getZ(), drop);
