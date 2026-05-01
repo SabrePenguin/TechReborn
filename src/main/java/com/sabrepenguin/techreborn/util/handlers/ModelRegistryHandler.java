@@ -147,6 +147,7 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.nanosaber);
 		itemModelRegistration(TRItems.frequencytransmitter);
 
+		itemModelRegistration(TRItems.manual);
 		itemModelRegistration(TRItems.debug);
 	}
 

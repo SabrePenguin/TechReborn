@@ -138,6 +138,7 @@ public class TRItems {
 	public static final ItemNanosaber nanosaber = null;
 	public static final ItemFrequencyTransmitter frequencytransmitter = null;
 
+	public static final ItemManual manual = null;
 	public static final ItemDebug debug = null;
 
     public static List<Item> getItems() {
@@ -252,6 +253,7 @@ public class TRItems {
 		items.add(new ItemNanosaber());
 		items.add(new ItemFrequencyTransmitter());
 
+		items.add(new ItemManual());
 		items.add(new ItemDebug());
 
         return items;
