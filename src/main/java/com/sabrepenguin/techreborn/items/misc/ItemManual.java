@@ -1,4 +1,4 @@
-package com.sabrepenguin.techreborn.items.tools;
+package com.sabrepenguin.techreborn.items.misc;
 
 import com.sabrepenguin.techreborn.items.ItemHelper;
 import mcp.MethodsReturnNonnullByDefault;

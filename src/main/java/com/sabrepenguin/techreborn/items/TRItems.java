@@ -13,6 +13,8 @@ import com.sabrepenguin.techreborn.items.armor.ItemLithiumBatpack;
 import com.sabrepenguin.techreborn.items.armor.TRArmor;
 import com.sabrepenguin.techreborn.items.battery.ItemBattery;
 import com.sabrepenguin.techreborn.items.materials.*;
+import com.sabrepenguin.techreborn.items.misc.ItemManual;
+import com.sabrepenguin.techreborn.items.misc.ItemScrapBox;
 import com.sabrepenguin.techreborn.items.reactor.ItemIC2DepletedThoriumFuelRod;
 import com.sabrepenguin.techreborn.items.reactor.ItemIC2IridiumNeutronReflector;
 import com.sabrepenguin.techreborn.items.reactor.ItemIC2ThoriumFuelRod;
@@ -138,6 +140,7 @@ public class TRItems {
 	public static final ItemNanosaber nanosaber = null;
 	public static final ItemFrequencyTransmitter frequencytransmitter = null;
 
+	public static final ItemScrapBox scrapbox = null;
 	public static final ItemManual manual = null;
 	public static final ItemDebug debug = null;
 
@@ -253,6 +256,7 @@ public class TRItems {
 		items.add(new ItemNanosaber());
 		items.add(new ItemFrequencyTransmitter());
 
+		items.add(new ItemScrapBox());
 		items.add(new ItemManual());
 		items.add(new ItemDebug());
 
