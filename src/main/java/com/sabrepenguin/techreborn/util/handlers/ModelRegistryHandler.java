@@ -145,6 +145,7 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.rockcutter);
 		itemModelRegistration(TRItems.omnitool);
 		itemModelRegistration(TRItems.nanosaber);
+		itemModelRegistration(TRItems.frequencytransmitter);
 
 		itemModelRegistration(TRItems.debug);
 	}
