@@ -28,6 +28,9 @@ public class ItemConfig {
 	@Config.LangKey("item.techreborn.omnitool.name")
 	@Config.RequiresMcRestart
 	public OmniTool omniTool = new OmniTool();
+	@Config.LangKey("item.techreborn.nanosaber.name")
+	@Config.RequiresMcRestart
+	public Nanosaber nanosaber = new Nanosaber();
 
 	public static class CloakingDevice {
 		@Config.LangKey("config.max_energy")
@@ -94,5 +97,12 @@ public class ItemConfig {
 	public static class OmniTool {
 		@Config.LangKey("config.max_energy")
 		public int omniToolMaxEnergy = 20_000;
+	}
+
+	public static class Nanosaber {
+		@Config.LangKey("config.max_energy")
+		public int nanosaberMaxEnergy = 640_000;
+		@Config.LangKey("config.max_damage")
+		public int nanosaberDamageWhenActive = 20;
 	}
 }

@@ -135,6 +135,7 @@ public class TRItems {
 
 	public static final ItemRockCutter rockcutter = null;
 	public static final ItemOmniTool omnitool = null;
+	public static final ItemNanosaber nanosaber = null;
 
 	public static final ItemDebug debug = null;
 
@@ -247,6 +248,7 @@ public class TRItems {
 
 		items.add(new ItemRockCutter());
 		items.add(new ItemOmniTool());
+		items.add(new ItemNanosaber());
 
 		items.add(new ItemDebug());
 
