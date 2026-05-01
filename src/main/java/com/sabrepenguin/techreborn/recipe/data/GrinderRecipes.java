@@ -13,7 +13,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
-public class GrinderBuilder {
+public class GrinderRecipes {
 	public static final BasicRegistry REGISTRY = RegistryHandler.instance().getGrinderRegistry();
 
 	private static BasicOutputRecipe stringToRecipe(String name) {

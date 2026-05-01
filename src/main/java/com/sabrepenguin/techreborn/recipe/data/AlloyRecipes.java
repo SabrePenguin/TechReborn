@@ -9,7 +9,7 @@ import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import java.util.Arrays;
 import java.util.List;
 
-public class AlloyBuilder {
+public class AlloyRecipes {
 	public static final BasicRegistry REGISTRY = RegistryHandler.instance().getAlloyRegistry();
 
 	public static void init() {
