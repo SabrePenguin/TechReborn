@@ -319,6 +319,7 @@ public class TRItems {
 		register(registry, TRBlocks.implosion_compressor);
 		register(registry, TRBlocks.industrial_blast_furnace);
 		register(registry, TRBlocks.industrial_centrifuge);
+		register(registry, TRBlocks.industrial_electrolyzer);
 		register(registry, TRBlocks.industrial_grinder);
 		register(registry, TRBlocks.industrial_sawmill);
 		register(registry, TRBlocks.vacuum_freezer);
