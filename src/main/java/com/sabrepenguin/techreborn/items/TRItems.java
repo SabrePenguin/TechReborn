@@ -133,6 +133,9 @@ public class TRItems {
 	@GameRegistry.ObjectHolder("ironjackhammer")
 	public static final ItemJackhammer advanced_jackhammer = null;
 
+	public static final ItemRockCutter rockcutter = null;
+	public static final ItemOmniTool omnitool = null;
+
 	public static final ItemDebug debug = null;
 
     public static List<Item> getItems() {
@@ -241,6 +244,9 @@ public class TRItems {
 		items.add(ItemJackhammer.steelJackhammer());
 		items.add(ItemJackhammer.diamondJackhammer());
 		items.add(ItemJackhammer.advancedJackhammer());
+
+		items.add(new ItemRockCutter());
+		items.add(new ItemOmniTool());
 
 		items.add(new ItemDebug());
 

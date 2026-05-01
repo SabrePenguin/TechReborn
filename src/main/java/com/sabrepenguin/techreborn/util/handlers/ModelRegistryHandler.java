@@ -142,6 +142,9 @@ public class ModelRegistryHandler {
 		itemModelRegistration(TRItems.diamondjackhammer);
 		itemModelRegistration(TRItems.advanced_jackhammer);
 
+		itemModelRegistration(TRItems.rockcutter);
+		itemModelRegistration(TRItems.omnitool);
+
 		itemModelRegistration(TRItems.debug);
 	}
 

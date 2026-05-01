@@ -11,13 +11,23 @@ public class ItemConfig {
 	@Config.LangKey("item.techreborn.lithiumbatpack.name")
 	public LithiumBatpack lithiumBatpack = new LithiumBatpack();
 	@Config.LangKey("item.techreborn.rebattery.name")
+	@Config.RequiresMcRestart
 	public BatteryItem batteryItem = new BatteryItem();
 	@Config.LangKey("config.item.chainsaw")
+	@Config.RequiresMcRestart
 	public Chainsaws chainsaws = new Chainsaws();
 	@Config.LangKey("config.item.drills")
+	@Config.RequiresMcRestart
 	public Drills drills = new Drills();
 	@Config.LangKey("config.item.jackhammers")
+	@Config.RequiresMcRestart
 	public Jackhammers jackhammers = new Jackhammers();
+	@Config.LangKey("item.techreborn.rockcutter.name")
+	@Config.RequiresMcRestart
+	public RockCutter rockCutter = new RockCutter();
+	@Config.LangKey("item.techreborn.omnitool.name")
+	@Config.RequiresMcRestart
+	public OmniTool omniTool = new OmniTool();
 
 	public static class CloakingDevice {
 		@Config.LangKey("config.max_energy")
@@ -42,49 +52,47 @@ public class ItemConfig {
 
 	public static class BatteryItem {
 		@Config.LangKey("config.lapotronic.max_energy")
-		@Config.RequiresMcRestart
 		public int lapotronicMaxEnergy = 400_000_000;
 		@Config.LangKey("config.lapotronic_crystal.max_energy")
-		@Config.RequiresMcRestart
 		public int lapotronicCrystalMaxEnergy = 40_000_000;
 		@Config.LangKey("config.energy_crystal.max_energy")
-		@Config.RequiresMcRestart
 		public int energyCrystalMaxEnergy = 4_000_000;
 	}
 
 	public static class Chainsaws {
 		@Config.LangKey("config.iron_chainsaw.max_energy")
-		@Config.RequiresMcRestart
 		public int ironChainsawMaxEnergy = 40_000;
 		@Config.LangKey("config.diamond_chainsaw.max_energy")
-		@Config.RequiresMcRestart
 		public int diamondChainsawMaxEnergy = 400_000;
 		@Config.LangKey("config.advanced_chainsaw.max_energy")
-		@Config.RequiresMcRestart
 		public int advancedChainsawMaxEnergy = 4_000_000;
 	}
 
 	public static class Drills {
 		@Config.LangKey("config.iron_drill.max_energy")
-		@Config.RequiresMcRestart
 		public int ironDrillMaxEnergy = 40_000;
 		@Config.LangKey("config.diamond_drill.max_energy")
-		@Config.RequiresMcRestart
 		public int diamondDrillMaxEnergy = 400_000;
 		@Config.LangKey("config.advanced_drill.max_energy")
-		@Config.RequiresMcRestart
 		public int advancedDrillMaxEnergy = 4_000_000;
 	}
 
 	public static class Jackhammers {
 		@Config.LangKey("config.steel_jackhammer.max_energy")
-		@Config.RequiresMcRestart
 		public int steelJackhammerMaxEnergy = 40_000;
 		@Config.LangKey("config.diamond_jackhammer.max_energy")
-		@Config.RequiresMcRestart
 		public int diamondJackhammerMaxEnergy = 400_000;
 		@Config.LangKey("config.advanced_jackhammer.max_energy")
-		@Config.RequiresMcRestart
 		public int advancedJackhamerMaxEnergy = 4_000_000;
+	}
+
+	public static class RockCutter {
+		@Config.LangKey("config.max_energy")
+		public int rockCutterMaxEnergy = 400_000;
+	}
+
+	public static class OmniTool {
+		@Config.LangKey("config.max_energy")
+		public int omniToolMaxEnergy = 20_000;
 	}
 }

@@ -1,12 +1,14 @@
 package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.items.TRItems;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,4 +40,19 @@ public class InventoryUtils {
             InventoryHelper.spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), item);
         }
     }
+
+	public static ItemStack findItem(EntityPlayer player, String oreDict) {
+		int torchId = OreDictionary.getOreID(oreDict);
+		for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
+			ItemStack checkStack = player.inventory.getStackInSlot(i);
+			if (!checkStack.isEmpty()) {
+				int[] ids = OreDictionary.getOreIDs(checkStack);
+				for(int id: ids) {
+					if (id == torchId)
+						return checkStack;
+				}
+			}
+		}
+		return ItemStack.EMPTY;
+	}
 }
