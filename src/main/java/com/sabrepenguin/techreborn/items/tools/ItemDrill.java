@@ -87,7 +87,7 @@ public class ItemDrill extends ItemPickaxe implements INonStandardLocation {
 				storage.extractEnergy(cost, false);
 			}
 		}
-		return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
+		return true;
 	}
 
 	@Override
