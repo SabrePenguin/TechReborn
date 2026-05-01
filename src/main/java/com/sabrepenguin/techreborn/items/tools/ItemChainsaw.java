@@ -125,6 +125,11 @@ public class ItemChainsaw extends ItemAxe implements INonStandardLocation {
 	}
 
 	@Override
+	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+		return !oldStack.isItemEqual(newStack);
+	}
+
+	@Override
 	public int getItemEnchantability() {
 		return 20;
 	}
@@ -138,7 +143,7 @@ public class ItemChainsaw extends ItemAxe implements INonStandardLocation {
 
 	public static ItemChainsaw steelChainsaw() {
 		ItemChainsaw chainsaw = new ItemChainsaw(ToolMaterial.DIAMOND, "ironchainsaw", 250, 1000,
-				TechRebornConfig.itemConfig.chainsaws.diamondChainsawMaxEnergy, 1f);
+				TechRebornConfig.itemConfig.chainsaws.ironChainsawMaxEnergy, 1f);
 		chainsaw.setCustomFile(new ResourceLocation(Tags.MODID, "steel_chainsaw"));
 		return chainsaw;
 	}

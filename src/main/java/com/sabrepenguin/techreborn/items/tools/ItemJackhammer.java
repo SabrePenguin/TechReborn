@@ -122,6 +122,11 @@ public class ItemJackhammer extends ItemPickaxe implements INonStandardLocation 
 		return new PoweredItemCapabilityProvider(stack, maxCapacity, maxReceive, cost);
 	}
 
+	@Override
+	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+		return !oldStack.isItemEqual(newStack);
+	}
+
 	public static ItemJackhammer diamondJackhammer() {
 		ItemJackhammer diamondJackhammer = new ItemJackhammer(ToolMaterial.DIAMOND, "diamondjackhammer", 100, 1000,
 				TechRebornConfig.itemConfig.jackhammers.diamondJackhammerMaxEnergy, 16f);

@@ -111,6 +111,11 @@ public class ItemDrill extends ItemPickaxe implements INonStandardLocation {
 	}
 
 	@Override
+	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+		return !oldStack.isItemEqual(newStack);
+	}
+
+	@Override
 	public String getPrefix() {
 		return "tool/drill";
 	}
