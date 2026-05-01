@@ -81,7 +81,11 @@ public class GrinderRecipes {
 				.setRecipeTime(300)
 				.setEnergyCost(8)
 				.build());
-		REGISTRY.addRecipe(stringToRecipe("platinum"));
+		try {
+			REGISTRY.addRecipe(stringToRecipe("platinum"));
+		} catch (RuntimeException e) {
+			TechReborn.LOGGER.info("No platinum oredict");
+		}
 		REGISTRY.addRecipe(stringToRecipe("peridot"));
 		try {
 			REGISTRY.addRecipe(new BasicBuilder<>()
