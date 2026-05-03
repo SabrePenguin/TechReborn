@@ -22,6 +22,12 @@ public class OreHandler {
 		OreDictionary.registerOre("stairWood", TRBlocks.rubber_plank_stair);
 		OreDictionary.registerOre("treeLeaves", TRBlocks.rubber_leaves);
 		OreDictionary.registerOre("leavesRubber", TRBlocks.rubber_leaves);
+		OreDictionary.registerOre("glassReinforced", TRBlocks.reinforced_glass);
+
+		OreDictionary.registerOre("lapotronCrystal", TRItems.lapotroncrystal);
+		OreDictionary.registerOre("energyCrystal", TRItems.energycrystal);
+		OreDictionary.registerOre("drillBasic", TRItems.steel_drill);
+		OreDictionary.registerOre("drillDiamond", TRItems.diamonddrill);
 
 		OreDictionary.registerOre("treeLeaves", new ItemStack(Blocks.LEAVES, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(Blocks.LEAVES2, 1, OreDictionary.WILDCARD_VALUE));
