@@ -17,6 +17,8 @@ public abstract class IC2AbstractHandler {
 	public abstract boolean extractSap(EntityPlayer player, World world, BlockPos pos, EnumFacing side, IBlockState state,
 							  List<ItemStack> stacks);
 
+	IC2AbstractHandler() {}
+
 	private static IC2AbstractHandler getNewInstance() {
 		if (IC2.version == Version.NEW) {
 			return new IC2Experimental();
@@ -27,5 +29,9 @@ public abstract class IC2AbstractHandler {
 
 	public static IC2AbstractHandler getInstance() {
 		return instance;
+	}
+
+	public static boolean isClassic() {
+		return IC2.version.isClassic();
 	}
 }
