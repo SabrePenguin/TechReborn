@@ -34,18 +34,18 @@ public class IC2CompatRecipes {
 				.requires(IC2Duplicates.RUBBER_WOOD.getIngredient())
 				.withResult(new ItemStack(TRBlocks.rubber_planks, 4))
 				.save(location);
-	}
-
-	public static void classic(File file) {
-		File location = new File(file, "ic2compat/classic");
 		new ShapedBuilder<>()
 				.name("iron_fence")
-				.withCondition(new IC2Condition("classic_dedupe"))
+				.withCondition(new IC2Condition("dedupe"))
 				.pattern("III")
 				.pattern("III")
 				.define('I', "ingotRefinedIron")
 				.withResult(new ItemStack(TRBlocks.refined_iron_fence))
 				.save(location);
+	}
+
+	public static void classic(File file) {
+		File location = new File(file, "ic2compat/classic");
 	}
 
 	public static void alloyRecipes(File file) {

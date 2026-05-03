@@ -4,8 +4,7 @@ import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.ReplaceableIngredient;
 import net.minecraft.item.ItemStack;
 
-public enum IC2Classic {
-	IRON_FENCE(new ItemStack(TRBlocks.refined_iron_fence), IC2Duplicates.getIC2Item("fence", "iron"));
+public enum IC2Classic {;
 
 	final ItemStack trStack;
 	final ItemStack ic2Stack;
