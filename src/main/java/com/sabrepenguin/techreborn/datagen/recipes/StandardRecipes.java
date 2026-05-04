@@ -177,6 +177,26 @@ public class StandardRecipes {
 				.define('C', new ItemStack(TRBlocks.quantum_chest))
 				.withResult(new ItemStack(TRBlocks.quantum_tank))
 				.save(out);
+		new ShapedBuilder<>()
+				.name("incandescent_lamp")
+				.pattern("GGG")
+				.pattern("TCT")
+				.pattern("GGG")
+				.define('G', "paneGlass")
+				.define('T', IC2Duplicates.CABLE_COPPER.getIngredient())
+				.define('C', new ItemStack(TRItems.part, 1, Part.PartMeta.carbon_fiber.metadata()))
+				.withResult(new ItemStack(TRBlocks.lamp_incandescent))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("led_lamp")
+				.pattern("GGG")
+				.pattern("TLT")
+				.pattern("GGG")
+				.define('G', "paneGlass")
+				.define('T', IC2Duplicates.CABLE_TIN.getIngredient())
+				.define('L', "dustGlowstone")
+				.withResult(new ItemStack(TRBlocks.lamp_led))
+				.save(out);
 	}
 
 	@SuppressWarnings("ConstantConditions")
