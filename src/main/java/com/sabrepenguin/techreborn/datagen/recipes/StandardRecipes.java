@@ -7,6 +7,7 @@ import com.sabrepenguin.techreborn.blocks.meta.BlockMachineFrame;
 import com.sabrepenguin.techreborn.blocks.meta.BlockStorage;
 import com.sabrepenguin.techreborn.blocks.meta.BlockStorage2;
 import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapedBuilder;
+import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapelessBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ShapedBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ShapelessBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.ItemIngredient;
@@ -99,6 +100,12 @@ public class StandardRecipes {
 				.define('P', "paneGlass")
 				.withResult(new ItemStack(TRItems.cell, 16))
 				.save(out);
+		new ReplaceableShapelessBuilder<>()
+				.name("frequency_transmitter")
+				.requires(IC2Duplicates.CABLE_ICOPPER.getIngredient())
+				.requires("circuitBasic")
+				.withOutput(IC2Duplicates.FREQ_TRANSMITTER.getIngredient())
+				.save(out);
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -114,6 +121,23 @@ public class StandardRecipes {
 					.define('I', "ingotRefinedIron")
 					.define('F', IC2Duplicates.IRON_FURNACE.getIngredient())
 					.withResult(new ItemStack(TRBlocks.iron_alloy_furnace))
+					.save(simple);
+			new ReplaceableShapedBuilder<>()
+					.name("iron_furnace")
+					.pattern("III")
+					.pattern("I I")
+					.pattern("III")
+					.define('I', "ingotIron")
+					.withOutput(IC2Duplicates.IRON_FURNACE.getIngredient())
+					.save(simple);
+			new ReplaceableShapedBuilder<>()
+					.name("iron_furnace_upgrade")
+					.pattern(" I ")
+					.pattern("I I")
+					.pattern("IFI")
+					.define('I', "ingotIron")
+					.define('F', new ItemStack(Blocks.FURNACE))
+					.withOutput(IC2Duplicates.IRON_FURNACE.getIngredient())
 					.save(simple);
 		}
 		{
@@ -142,6 +166,22 @@ public class StandardRecipes {
 					.define('A', new ItemStack(TRBlocks.machine_casing, 1, BlockMachineCasing.Casing.ADVANCED.meta()))
 					.define('C', "circuitMaster")
 					.withResult(new ItemStack(TRBlocks.lightning_rod))
+					.save(generators);
+			new ReplaceableShapelessBuilder<>()
+					.name("generator")
+					.requires("reBattery")
+					.requires("machineBlockBasic")
+					.withOutput(IC2Duplicates.GENERATOR.getIngredient())
+					.save(generators);
+			new ReplaceableShapedBuilder<>()
+					.name("water_mill")
+					.pattern("SWS")
+					.pattern("WGW")
+					.pattern("SWS")
+					.define('S', "stickWood")
+					.define('W', "plankWood")
+					.define('G', IC2Duplicates.GENERATOR.getIngredient())
+					.withOutput(IC2Duplicates.WATER_MILL.getIngredient())
 					.save(generators);
 		}
 		{
@@ -221,14 +261,44 @@ public class StandardRecipes {
 					.withOutput(IC2Duplicates.COMPRESSOR.getIngredient())
 					.save(processing);
 			new ReplaceableShapedBuilder<>()
-					.name("compressor")
-					.pattern("S S")
-					.pattern("SCS")
-					.pattern("SMS")
+					.name("electrical_furnace")
+					.pattern(" C ")
+					.pattern("RFR")
 					.define('C', "circuitBasic")
-					.define('S', "stone")
+					.define('R', "dustRedstone")
+					.define('F', IC2Duplicates.IRON_FURNACE.getIngredient())
+					.withOutput(IC2Duplicates.ELECTRICAL_FURNACE.getIngredient())
+					.save(processing);
+			new ReplaceableShapedBuilder<>()
+					.name("extractor")
+					.pattern("TMT")
+					.pattern("TCT")
+					.define('T', new ItemStack(TRItems.treetap, 1, OreDictionary.WILDCARD_VALUE))
 					.define('M', "machineBlockBasic")
-					.withOutput(IC2Duplicates.COMPRESSOR.getIngredient())
+					.define('C', "circuitBasic")
+					.withOutput(IC2Duplicates.EXTRACTOR.getIngredient())
+					.save(processing);
+			new ReplaceableShapedBuilder<>()
+					.name("recycler")
+					.pattern(" B ")
+					.pattern("DCD")
+					.pattern("GDG")
+					.define('B', "circuitBasic")
+					.define('D', "dirt")
+					.define('C', IC2Duplicates.COMPRESSOR.getIngredient())
+					.define('G', "glowstoneDust")
+					.withOutput(IC2Duplicates.RECYCLER.getIngredient())
+					.save(processing);
+			new ReplaceableShapedBuilder<>()
+					.name("grinder")
+					.pattern("FFF")
+					.pattern("SMS")
+					.pattern(" C ")
+					.define('F', new ItemStack(Items.FLINT))
+					.define('S', new ItemStack(Blocks.COBBLESTONE, 1, 0))
+					.define('M', new ItemStack(TRBlocks.machine_frame, 1, BlockMachineFrame.Frame.BASIC.meta()))
+					.define('C', "circuitBasic")
+					.withOutput(IC2Duplicates.GRINDER.getIngredient())
 					.save(processing);
 			new ShapedBuilder<>()
 					.name("wire_mill")
