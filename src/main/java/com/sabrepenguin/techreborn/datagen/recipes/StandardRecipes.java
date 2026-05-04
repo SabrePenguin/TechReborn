@@ -12,6 +12,7 @@ import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapelessBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ShapedBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ShapelessBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.conditions.IC2Condition;
+import com.sabrepenguin.techreborn.datagen.builders.conditions.ModLoadedCondition;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.ItemIngredient;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.ListIngredient;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.OreDictIngredient;
@@ -109,6 +110,36 @@ public class StandardRecipes {
 				.requires(IC2Duplicates.CABLE_ICOPPER.getIngredient())
 				.requires("circuitBasic")
 				.withOutput(IC2Duplicates.FREQ_TRANSMITTER.getIngredient())
+				.save(out);
+		new ShapedBuilder<>()
+				.name("thorium_dual_rod")
+				.withCondition(new ModLoadedCondition("ic2"))
+				.pattern("RPR")
+				.define('R', new ItemStack(TRItems.single_thorium_fuel_rod))
+				.define('P', new ListIngredient()
+						.addIngredient(new OreDictIngredient("plateCopper", 1))
+						.addIngredient(new OreDictIngredient("plateLead", 1)))
+				.withResult(new ItemStack(TRItems.dual_thorium_fuel_rod))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("thorium_quad_rod_copper")
+				.withCondition(new ModLoadedCondition("ic2"))
+				.pattern(" R ")
+				.pattern("PPP")
+				.pattern(" R ")
+				.define('R', new ItemStack(TRItems.dual_thorium_fuel_rod))
+				.define('P', "plateCopper")
+				.withResult(new ItemStack(TRItems.quad_thorium_fuel_rod))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("thorium_quad_rod_lead")
+				.withCondition(new ModLoadedCondition("ic2"))
+				.pattern(" R ")
+				.pattern("PPP")
+				.pattern(" R ")
+				.define('R', new ItemStack(TRItems.dual_thorium_fuel_rod))
+				.define('P', "plateLead")
+				.withResult(new ItemStack(TRItems.quad_thorium_fuel_rod))
 				.save(out);
 	}
 

@@ -7,7 +7,7 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
-public class ModLoadedCondition {
+public class ModLoadedCondition implements ICondition {
 	protected final String modid;
 	public ModLoadedCondition(String modid) {
 		this.modid = modid;
