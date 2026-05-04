@@ -17,6 +17,7 @@ public abstract class AbstractBuilder<T extends AbstractBuilder<T>>  {
 			.registerTypeAdapter(FluidIngredient.class, new FluidIngredient.FluidIngSerializer())
 			.registerTypeAdapter(ReplaceableIngredient.class, new ReplaceableIngredient.ReplaceableIngredientSerializer())
 			.registerTypeAdapter(ListIngredient.class, new ListIngredient.ListIngredientSerializer())
+			.registerTypeAdapter(CellIngredient.class, new CellIngredient.CellIngredientSerializer())
 			.registerTypeAdapter(ShapedBuilder.class, new ShapedBuilder.ShapedBuilderSerializer<>())
 			.registerTypeAdapter(ShapelessBuilder.class, new ShapelessBuilder.ShapelessBuilderSerializer<>())
 			.registerTypeAdapter(ReplaceableShapedBuilder.class, new ReplaceableShapedBuilder.ReplaceableShapedBuilderSerializer<>())
