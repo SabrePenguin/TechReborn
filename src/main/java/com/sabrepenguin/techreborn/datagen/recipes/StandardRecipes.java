@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.datagen.recipes;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.blocks.machines.energy.BlockSolarPanel;
 import com.sabrepenguin.techreborn.blocks.meta.BlockMachineCasing;
 import com.sabrepenguin.techreborn.blocks.meta.BlockMachineFrame;
 import com.sabrepenguin.techreborn.blocks.meta.BlockStorage;
@@ -10,6 +11,7 @@ import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapedBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapelessBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ShapedBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ShapelessBuilder;
+import com.sabrepenguin.techreborn.datagen.builders.conditions.IC2Condition;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.ItemIngredient;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.ListIngredient;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.OreDictIngredient;
@@ -184,6 +186,130 @@ public class StandardRecipes {
 					.define('W', "plankWood")
 					.define('G', IC2Duplicates.GENERATOR.getIngredient())
 					.withOutput(IC2Duplicates.WATER_MILL.getIngredient())
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("solar_panel_basic")
+					.pattern("DLD")
+					.pattern("LDL")
+					.pattern("CGC")
+					.define('D', "dustCoal")
+					.define('L', "paneGlass")
+					.define('C', "circuitBasic")
+					.define('G', IC2Duplicates.GENERATOR.getIngredient())
+					.withResult(new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.BASIC.metadata()))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("solar_panel_hybrid")
+					.pattern("SSS")
+					.pattern("STS")
+					.pattern("SSS")
+					.define('S', new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.BASIC.metadata()))
+					.define('T', new ItemStack(TRBlocks.lv_transformer))
+					.withResult(new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.HYBRID.metadata()))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("solar_panel_advanced")
+					.pattern("SSS")
+					.pattern("STS")
+					.pattern("SSS")
+					.define('S', new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.HYBRID.metadata()))
+					.define('T', new ItemStack(TRBlocks.mv_transformer))
+					.withResult(new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.ADVANCED.metadata()))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("solar_panel_ultimate")
+					.pattern("SSS")
+					.pattern("STS")
+					.pattern("SSS")
+					.define('S', new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.ADVANCED.metadata()))
+					.define('T', new ItemStack(TRBlocks.hv_transformer))
+					.withResult(new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.ULTIMATE.metadata()))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("solar_panel_quantum")
+					.pattern("SSS")
+					.pattern("STS")
+					.pattern("SSS")
+					.define('S', new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.ULTIMATE.metadata()))
+					.define('T', new ItemStack(TRBlocks.ev_transformer))
+					.withResult(new ItemStack(TRBlocks.solar_panel, 1, BlockSolarPanel.SolarPanelEnum.QUANTUM.metadata()))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("diesel_generator_bronze")
+					.pattern("III")
+					.pattern("IHI")
+					.pattern("CGC")
+					.define('I', "plateBronze")
+					.define('H', "glassReinforced")
+					.define('C', "circuitBasic")
+					.define('G', IC2Duplicates.GENERATOR.getIngredient())
+					.withResult(new ItemStack(TRBlocks.diesel_generator))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("diesel_generator_brass")
+					.pattern("III")
+					.pattern("IHI")
+					.pattern("CGC")
+					.define('I', "plateBrass")
+					.define('H', "glassReinforced")
+					.define('C', "circuitBasic")
+					.define('G', IC2Duplicates.GENERATOR.getIngredient())
+					.withResult(new ItemStack(TRBlocks.diesel_generator))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("semi_fluid_generator_ri")
+					.pattern("III")
+					.pattern("IHI")
+					.pattern("CGC")
+					.define('I', "plateRefinedIron")
+					.define('H', "glassReinforced")
+					.define('C', "circuitBasic")
+					.define('G', IC2Duplicates.GENERATOR.getIngredient())
+					.withResult(new ItemStack(TRBlocks.semi_fluid_generator))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("semi_fluid_generator_a")
+					.pattern("III")
+					.pattern("IHI")
+					.pattern("CGC")
+					.define('I', "plateAluminum")
+					.define('H', "glassReinforced")
+					.define('C', "circuitBasic")
+					.define('G', IC2Duplicates.GENERATOR.getIngredient())
+					.withResult(new ItemStack(TRBlocks.semi_fluid_generator))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("gas_turbine_invar")
+					.pattern("IAI")
+					.pattern("WGW")
+					.pattern("IAI")
+					.define('I', "plateInvar")
+					.define('A', "circuitAdvanced")
+					.define('W', new ItemStack(TRBlocks.wind_mill))
+					.define('G', "glassReinforced")
+					.withResult(new ItemStack(TRBlocks.gas_turbine))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("gas_turbine_aluminum")
+					.pattern("IAI")
+					.pattern("WGW")
+					.pattern("IAI")
+					.define('I', "plateAluminum")
+					.define('A', "circuitAdvanced")
+					.define('W', new ItemStack(TRBlocks.wind_mill))
+					.define('G', "glassReinforced")
+					.withResult(new ItemStack(TRBlocks.gas_turbine))
+					.save(generators);
+			new ShapedBuilder<>()
+					.name("thermal_generator")
+					.pattern("III")
+					.pattern("IHI")
+					.pattern("CGC")
+					.define('I', "plateInvar")
+					.define('H', "glassReinforced")
+					.define('C', "circuitAdvanced")
+					.define('G', IC2Duplicates.GENERATOR.getIngredient())
+					.withResult(new ItemStack(TRBlocks.thermal_generator))
 					.save(generators);
 		}
 		{
@@ -643,6 +769,63 @@ public class StandardRecipes {
 					.define('G', IC2Duplicates.GENERATOR.getIngredient())
 					.withResult(new ItemStack(TRBlocks.plasma_generator))
 					.save(processing);
+			new ShapedBuilder<>()
+					.name("canning_machine")
+					.pattern("TCT")
+					.pattern("TBT")
+					.pattern("TTT")
+					.define('T', "ingotTin")
+					.define('C', "circuitBasic")
+					.define('B', "machineBlockBasic")
+					.withResult(new ItemStack(TRBlocks.solid_canning_machine))
+					.save(processing);
+		}
+		{
+			File transformers = new File(file, "transformers");
+			new ShapedBuilder<>()
+					.name("ev_transformer")
+					.pattern(" H ")
+					.pattern("CML")
+					.pattern(" H ")
+					.define('H', IC2Duplicates.CABLE_IHV.getIngredient())
+					.define('C', "circuitAdvanced")
+					.define('M', IC2Duplicates.HVT.getIngredient())
+					.define('L', IC2Duplicates.ENERGY_CRYSTAL.getIngredient())
+					.withResult(new ItemStack(TRBlocks.ev_transformer))
+					.save(transformers);
+			new ReplaceableShapedBuilder<>()
+					.name("lv_transformer")
+					.withCondition(IC2Condition.DeduplicateCondition())
+					.pattern("PWP")
+					.pattern("CCC")
+					.pattern("PPP")
+					.define('P', "plankWood")
+					.define('W', IC2Duplicates.CABLE_TIN.getIngredient())
+					.define('C', "ingotCopper")
+					.withOutput(IC2Duplicates.LVT.getIngredient())
+					.save(transformers);
+			new ReplaceableShapedBuilder<>()
+					.name("mv_transformer")
+					.withCondition(IC2Condition.DeduplicateCondition())
+					.pattern("G")
+					.pattern("M")
+					.pattern("G")
+					.define('G', IC2Duplicates.CABLE_ICOPPER.getIngredient())
+					.define('M', "machineBlockBasic")
+					.withOutput(IC2Duplicates.MVT.getIngredient())
+					.save(transformers);
+			new ReplaceableShapedBuilder<>()
+					.name("hv_transformer")
+					.withCondition(IC2Condition.DeduplicateCondition())
+					.pattern(" H ")
+					.pattern("CML")
+					.pattern(" H ")
+					.define('H', IC2Duplicates.CABLE_GOLD.getIngredient())
+					.define('C', "circuitBasic")
+					.define('M', IC2Duplicates.MVT.getIngredient())
+					.define('L', new ItemStack(TRItems.lithiumbattery))
+					.withOutput(IC2Duplicates.HVT.getIngredient())
+					.save(transformers);
 		}
 	}
 
