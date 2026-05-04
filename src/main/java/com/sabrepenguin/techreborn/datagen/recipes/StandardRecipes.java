@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.datagen.recipes;
 
 import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.blocks.BlockCable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.blocks.machines.energy.BlockSolarPanel;
 import com.sabrepenguin.techreborn.blocks.meta.BlockMachineCasing;
@@ -140,6 +141,17 @@ public class StandardRecipes {
 				.define('R', new ItemStack(TRItems.dual_thorium_fuel_rod))
 				.define('P', "plateLead")
 				.withResult(new ItemStack(TRItems.quad_thorium_fuel_rod))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("alarm")
+				.pattern("ICI")
+				.pattern("SRS")
+				.pattern("ICI")
+				.define('I', "ingotIron")
+				.define('C', new ItemStack(TRBlocks.cable, 1, BlockCable.CableEnum.COPPER.metadata()))
+				.define('S', IC2Duplicates.CABLE_COPPER.getIngredient())
+				.define('R', "blockRedstone")
+				.withResult(new ItemStack(TRBlocks.alarm))
 				.save(out);
 	}
 
@@ -810,6 +822,19 @@ public class StandardRecipes {
 					.define('B', "machineBlockBasic")
 					.withResult(new ItemStack(TRBlocks.solid_canning_machine))
 					.save(processing);
+			new ShapedBuilder<>()
+					.name("fluid_replicator")
+					.pattern("PCP")
+					.pattern("CFC")
+					.pattern("ESR")
+					.define('P', "plateTungstensteel")
+					.define('C', "circuitMaster")
+					.define('F', "machineBlockElite")
+					.define('E', new ItemStack(TRBlocks.industrial_electrolyzer))
+					.define('R', new ItemStack(TRBlocks.chemical_reactor))
+					.define('S', "craftingSuperconductor")
+					.withResult(new ItemStack(TRBlocks.fluid_replicator))
+					.save(processing);
 		}
 		{
 			File transformers = new File(file, "transformers");
@@ -856,6 +881,40 @@ public class StandardRecipes {
 					.define('M', IC2Duplicates.MVT.getIngredient())
 					.define('L', new ItemStack(TRItems.lithiumbattery))
 					.withOutput(IC2Duplicates.HVT.getIngredient())
+					.save(transformers);
+			new ReplaceableShapedBuilder<>()
+					.name("batbox")
+					.withCondition(IC2Condition.DeduplicateCondition())
+					.pattern("WCW")
+					.pattern("BBB")
+					.pattern("WWW")
+					.define('W', "plankWood")
+					.define('C', IC2Duplicates.CABLE_ICOPPER.getIngredient())
+					.define('B', "reBattery")
+					.withOutput(IC2Duplicates.BAT_BOX.getIngredient())
+					.save(transformers);
+			new ReplaceableShapedBuilder<>()
+					.name("mfe")
+					.withCondition(IC2Condition.DeduplicateCondition())
+					.pattern("GEG")
+					.pattern("EME")
+					.pattern("GEG")
+					.define('G', IC2Duplicates.CABLE_IGOLD.getIngredient())
+					.define('E', "energyCrystal")
+					.define('M', "machineBlockBasic")
+					.withOutput(IC2Duplicates.MFE.getIngredient())
+					.save(transformers);
+			new ReplaceableShapedBuilder<>()
+					.name("mfsu")
+					.withCondition(IC2Condition.DeduplicateCondition())
+					.pattern("LAL")
+					.pattern("LML")
+					.pattern("LOL")
+					.define('L', "lapotronCrystal")
+					.define('A', "circuitAdvanced")
+					.define('M', IC2Duplicates.MFE.getIngredient())
+					.define('O', "machineBlockAdvanced")
+					.withOutput(IC2Duplicates.MFSU.getIngredient())
 					.save(transformers);
 		}
 	}
