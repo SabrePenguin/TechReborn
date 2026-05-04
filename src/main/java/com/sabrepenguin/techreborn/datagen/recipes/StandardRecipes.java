@@ -32,6 +32,8 @@ public class StandardRecipes {
 		expansion(file);
 		recipes(file);
 		gear(file);
+		PartRecipes.parts(file);
+		PartRecipes.cables(file);
 	}
 
 	@SuppressWarnings("ConstantConditions")

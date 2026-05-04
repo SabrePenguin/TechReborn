@@ -24,6 +24,7 @@ public class OreHandler {
 		OreDictionary.registerOre("leavesRubber", TRBlocks.rubber_leaves);
 		OreDictionary.registerOre("glassReinforced", TRBlocks.reinforced_glass);
 
+		OreDictionary.registerOre("reBattery", TRItems.rebattery);
 		OreDictionary.registerOre("lapotronCrystal", TRItems.lapotroncrystal);
 		OreDictionary.registerOre("energyCrystal", TRItems.energycrystal);
 		OreDictionary.registerOre("drillBasic", TRItems.steel_drill);
