@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.datagen.builders;
 import com.google.gson.*;
 import com.sabrepenguin.techreborn.datagen.builders.conditions.IC2Condition;
 import com.sabrepenguin.techreborn.datagen.builders.conditions.ICondition;
+import com.sabrepenguin.techreborn.datagen.builders.conditions.ModLoadedCondition;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.*;
 import net.minecraft.item.ItemStack;
 
@@ -23,6 +24,7 @@ public abstract class AbstractBuilder<T extends AbstractBuilder<T>>  {
 			.registerTypeAdapter(ReplaceableShapedBuilder.class, new ReplaceableShapedBuilder.ReplaceableShapedBuilderSerializer<>())
 			.registerTypeAdapter(ReplaceableShapelessBuilder.class, new ReplaceableShapelessBuilder.ReplaceableShapelessBuilderSerializer<>())
 			.registerTypeAdapter(IC2Condition.class, new IC2Condition.IC2ConditionSerializer())
+			.registerTypeAdapter(ModLoadedCondition.class, new ModLoadedCondition.ModLoadedConditionSerializer())
 			.create();
 	protected transient String name;
 	protected String type = "minecraft:crafting_shapeless";
