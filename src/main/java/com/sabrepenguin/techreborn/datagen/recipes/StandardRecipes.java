@@ -153,6 +153,30 @@ public class StandardRecipes {
 				.define('R', "blockRedstone")
 				.withResult(new ItemStack(TRBlocks.alarm))
 				.save(out);
+		new ShapedBuilder<>()
+				.name("quantum_chest")
+				.withCondition(new ModLoadedCondition("quantumstorage").invert())
+				.pattern("DCD")
+				.pattern("ATA")
+				.pattern("DQD")
+				.define('D', new ItemStack(TRItems.part, 1, Part.PartMeta.data_orb.metadata()))
+				.define('C', new ItemStack(TRItems.part, 1, Part.PartMeta.computer_monitor.metadata()))
+				.define('A', "machineBlockElite")
+				.define('T', IC2Duplicates.COMPRESSOR.getIngredient())
+				.define('Q', new ItemStack(TRBlocks.digital_chest))
+				.withResult(new ItemStack(TRBlocks.quantum_chest))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("quantum_tank")
+				.withCondition(new ModLoadedCondition("quantumstorage").invert())
+				.pattern("EPE")
+				.pattern("PCP")
+				.pattern("EPE")
+				.define('E', "circuitAdvanced")
+				.define('P', "platePlatinum")
+				.define('C', new ItemStack(TRBlocks.quantum_chest))
+				.withResult(new ItemStack(TRBlocks.quantum_tank))
+				.save(out);
 	}
 
 	@SuppressWarnings("ConstantConditions")
