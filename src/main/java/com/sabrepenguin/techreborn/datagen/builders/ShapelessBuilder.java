@@ -51,6 +51,8 @@ public class ShapelessBuilder<T extends ShapelessBuilder<T>> extends AbstractBui
 			if (!folder.mkdirs())
 				throw new RuntimeException("Unable to make directories");
 		}
+		if (this.result == null)
+			throw new RuntimeException("Does not have a result");
 		try (Writer writer = new FileWriter(new File(folder, name))) {
 			GSON.toJson(this, writer);
 		} catch (IOException e) {
