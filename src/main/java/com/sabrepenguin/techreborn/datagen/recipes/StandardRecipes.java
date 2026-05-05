@@ -35,9 +35,9 @@ public class StandardRecipes {
 		compression(file);
 		expansion(file);
 		recipes(file);
-		gear(file);
 		PartRecipes.parts(file);
 		PartRecipes.cables(file);
+		ToolRecipes.gear(file);
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -979,6 +979,20 @@ public class StandardRecipes {
 				.define('I', "plateIridiumAlloy")
 				.define('O', "ingotChrome")
 				.withResult(cloak)
+				.save(location);
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	private static void upgradeRecipes(File file) {
+		File location = new File(file, "upgrades");
+		new ShapedBuilder<>()
+				.pattern("PPP")
+				.pattern("WBW")
+				.pattern("PCP")
+				.define('P', "plankWood")
+				.define('W', "plankWood")
+				.define('B', "plankWood")
+				.define('C', "circuitBasic")
 				.save(location);
 	}
 

@@ -31,6 +31,8 @@ public class ItemConfig {
 	@Config.LangKey("item.techreborn.nanosaber.name")
 	@Config.RequiresMcRestart
 	public Nanosaber nanosaber = new Nanosaber();
+	@Config.LangKey("config.item.loadarmor")
+	public boolean loadArmor = true;
 
 	public static class CloakingDevice {
 		@Config.LangKey("config.max_energy")

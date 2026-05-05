@@ -1,7 +1,8 @@
 {
   "conditions": {
     "ic2_condition": "com.sabrepenguin.techreborn.recipe.replaceable.IC2ConfigConditionFactory",
-    "mod_not_loaded": "com.sabrepenguin.techreborn.recipe.misc.ModNotLoadedConditionFactory"
+    "mod_not_loaded": "com.sabrepenguin.techreborn.recipe.misc.ModNotLoadedConditionFactory",
+    "config": "com.sabrepenguin.techreborn.recipe.misc.ConfigConditionFactory"
   },
   "ingredients": {
     "fluid_container": "com.sabrepenguin.techreborn.recipe.fluids.FluidIngredientFactory",
