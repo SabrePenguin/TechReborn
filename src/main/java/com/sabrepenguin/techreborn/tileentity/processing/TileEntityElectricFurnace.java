@@ -21,6 +21,7 @@ import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
@@ -219,9 +220,9 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	public void update() {
 		if (this.world.isRemote)
 			return;
-		if (this.cachedRevision != UpgradeUtils.config_revision) {
+		if (this.cachedRevision != TechRebornConfig.getConfigRevision()) {
 			shouldRecalculate = true;
-			this.cachedRevision = UpgradeUtils.config_revision;
+			this.cachedRevision = TechRebornConfig.getConfigRevision();
 		}
 		if (shouldRecalculate) {
 			shouldRecalculate = false;

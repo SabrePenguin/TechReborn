@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.tileentity;
 
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
-import com.sabrepenguin.techreborn.util.UpgradeUtils;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -140,9 +140,9 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 			return;
 		}
 
-		if (cachedRevision != UpgradeUtils.config_revision) {
+		if (cachedRevision != TechRebornConfig.getConfigRevision()) {
 			shouldRecalculate = true;
-			cachedRevision = UpgradeUtils.config_revision;
+			cachedRevision = TechRebornConfig.getConfigRevision();
 		}
 		if (shouldRecalculate) {
 			shouldRecalculate = false;

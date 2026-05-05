@@ -12,6 +12,8 @@ import net.minecraftforge.fml.relauncher.Side;
 
 @Config(modid= Tags.MODID)
 public class TechRebornConfig {
+	@Config.Ignore
+	private static int configRevision = 0;
 
 	@Config.LangKey("config.compat")
 	public static Compat compat = new Compat();
@@ -24,6 +26,10 @@ public class TechRebornConfig {
 
 	@Config.LangKey("config.machines")
 	public static MachineConfig machineConfig = new MachineConfig();
+
+	public static int getConfigRevision() {
+		return configRevision;
+	}
 
 	public static class Compat {
 		@Config.LangKey("config.ic2")
@@ -62,6 +68,7 @@ public class TechRebornConfig {
 			if (event.getModID().equals(Tags.MODID)) {
 				ConfigManager.sync(Tags.MODID, Config.Type.INSTANCE);
 				cableDebugHandler();
+				configRevision++;
 			}
 		}
 

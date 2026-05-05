@@ -5,24 +5,11 @@ import com.sabrepenguin.techreborn.items.ItemUpgrade;
 import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.items.IItemHandler;
 
 @Mod.EventBusSubscriber(modid = Tags.MODID)
 public class UpgradeUtils {
-
-	public static int config_revision = 0;
-
-	//TODO: Move to config
-	@SubscribeEvent
-	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.getModID().equals(Tags.MODID)) {
-//			ConfigManager.sync(Tags.MODID, Config.Type.INSTANCE);
-			UpgradeUtils.config_revision++;
-		}
-	}
 
 	//TODO: Config of multipliers
 	public static float overclock_processing = 0.25f;
