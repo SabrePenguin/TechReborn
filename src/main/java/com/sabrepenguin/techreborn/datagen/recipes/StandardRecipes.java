@@ -1,6 +1,5 @@
 package com.sabrepenguin.techreborn.datagen.recipes;
 
-import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockCable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.blocks.fluids.TRFluids;
@@ -17,6 +16,7 @@ import com.sabrepenguin.techreborn.items.ItemUpgrade;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.*;
 import com.sabrepenguin.techreborn.util.handlers.OreHandler;
+import ic2.api.item.IC2Items;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -25,6 +25,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.io.File;
 
 public class StandardRecipes {
+	private static final ModLoadedCondition IC2 = new ModLoadedCondition("ic2");
 
 	public static void initRecipes(File file) {
 		compression(file);
@@ -111,7 +112,7 @@ public class StandardRecipes {
 				.save(out);
 		new ShapedBuilder<>()
 				.name("thorium_dual_rod")
-				.withCondition(new ModLoadedCondition("ic2"))
+				.withCondition(IC2)
 				.pattern("RPR")
 				.define('R', new ItemStack(TRItems.single_thorium_fuel_rod))
 				.define('P', new ListIngredient()
@@ -121,7 +122,7 @@ public class StandardRecipes {
 				.save(out);
 		new ShapedBuilder<>()
 				.name("thorium_quad_rod_copper")
-				.withCondition(new ModLoadedCondition("ic2"))
+				.withCondition(IC2)
 				.pattern(" R ")
 				.pattern("PPP")
 				.pattern(" R ")
@@ -131,7 +132,7 @@ public class StandardRecipes {
 				.save(out);
 		new ShapedBuilder<>()
 				.name("thorium_quad_rod_lead")
-				.withCondition(new ModLoadedCondition("ic2"))
+				.withCondition(IC2)
 				.pattern(" R ")
 				.pattern("PPP")
 				.pattern(" R ")
@@ -248,6 +249,30 @@ public class StandardRecipes {
 				.define('T', "ingotTin")
 				.define('R', "dustRedstone")
 				.withResult(new ItemStack(TRItems.rebattery))
+				.save(out);
+		new ShapelessBuilder<>()
+				.name("rubber")
+				.withCondition(IC2)
+				.requires(IC2Items.getItem("crafting", "rubber"))
+				.withResult(new ItemStack(TRItems.part, 1, Part.PartMeta.rubber.metadata()))
+				.save(out);
+		new ShapelessBuilder<>()
+				.name("rubber_ic2")
+				.withCondition(IC2)
+				.requires(new ItemStack(TRItems.part, 1, Part.PartMeta.rubber.metadata()))
+				.withResult(IC2Items.getItem("crafting", "rubber"))
+				.save(out);
+		new ShapelessBuilder<>()
+				.name("machine_frame")
+				.withCondition(IC2)
+				.requires(IC2Items.getItem("resource", "machine"))
+				.withResult(new ItemStack(TRBlocks.machine_frame, 1, BlockMachineFrame.Frame.BASIC.meta()))
+				.save(out);
+		new ShapelessBuilder<>()
+				.name("machine_frame_ic2")
+				.withCondition(IC2)
+				.requires(new ItemStack(TRBlocks.machine_frame, 1, BlockMachineFrame.Frame.BASIC.meta()))
+				.withResult(IC2Items.getItem("resource", "machine"))
 				.save(out);
 	}
 
@@ -1514,7 +1539,7 @@ public class StandardRecipes {
 	private static void layered(File file, String name, IBasicIngredient top, IBasicIngredient middle, IBasicIngredient bottom, IBasicIngredient output) {
 		new ReplaceableShapedBuilder<>()
 				.name(name)
-				.withCondition(new IC2Condition("dedupe"))
+				.withCondition(IC2Condition.DeduplicateCondition())
 				.pattern("TTT")
 				.pattern("MMM")
 				.pattern("BBB")

@@ -11,23 +11,27 @@ import java.lang.reflect.Type;
 public class IC2Condition implements ICondition {
 	private final Condition profile;
 
-	public IC2Condition(String profile) {
-		this.profile = Condition.fromString(profile);
-	}
-
-	public IC2Condition(Condition condition) {
+	IC2Condition(Condition condition) {
 		this.profile = condition;
 	}
 
-	public static IC2Condition ClassicCondition() {
+	public static IC2Condition ClassicDedupeCondition() {
 		return new IC2Condition(Condition.CLASSIC_DEDUPE);
 	}
 
-	public static IC2Condition ExperimentalCondition() {
+	public static IC2Condition ExperimentalDedupeCondition() {
 		return new IC2Condition(Condition.EXP_DEDUPE);
 	}
 
 	public static IC2Condition DeduplicateCondition() {
+		return new IC2Condition(Condition.DEDUPE);
+	}
+
+	public static IC2Condition ClassicCondition() {
+		return new IC2Condition(Condition.DEDUPE);
+	}
+
+	public static IC2Condition ExperimentalCondition() {
 		return new IC2Condition(Condition.DEDUPE);
 	}
 
@@ -45,17 +49,9 @@ public class IC2Condition implements ICondition {
 	public enum Condition {
 		DEDUPE,
 		CLASSIC_DEDUPE,
-		EXP_DEDUPE;
-
-		public static Condition fromString(String string) {
-			if (string.equals("dedupe"))
-				return DEDUPE;
-			if (string.equals("classic_dedupe"))
-				return CLASSIC_DEDUPE;
-			if (string.equals("exp_dedupe"))
-				return EXP_DEDUPE;
-			throw new RuntimeException("Not a valid condition");
-		}
+		EXP_DEDUPE,
+		CLASSIC,
+		EXPERIMENTAL;
 
 
 		@Override
@@ -64,6 +60,8 @@ public class IC2Condition implements ICondition {
 				case DEDUPE -> "dedupe";
 				case CLASSIC_DEDUPE -> "classic_dedupe";
 				case EXP_DEDUPE -> "exp_dedupe";
+				case CLASSIC -> "classic";
+				case EXPERIMENTAL -> "experimental";
 			};
 		}
 	}
