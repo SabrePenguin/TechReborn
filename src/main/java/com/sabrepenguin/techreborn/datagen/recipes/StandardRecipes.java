@@ -685,7 +685,7 @@ public class StandardRecipes {
 					.define('B', "circuitBasic")
 					.define('D', "dirt")
 					.define('C', IC2Duplicates.COMPRESSOR.getIngredient())
-					.define('G', "glowstoneDust")
+					.define('G', "dustGlowstone")
 					.withOutput(IC2Duplicates.RECYCLER.getIngredient())
 					.save(processing);
 			new ReplaceableShapedBuilder<>()

@@ -41,5 +41,7 @@ public class MachineConfig {
 		public int maxEnergy = 4000;
 		@Config.LangKey("config.transfer_limit")
 		public int maxInput = 128;
+		@Config.LangKey("config.recycler.scrap_chance")
+		public int scrapChance = 6;
 	}
 }

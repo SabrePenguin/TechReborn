@@ -52,9 +52,10 @@ public class TileEntityRecycler extends TileEntityIOManager implements IGuiHolde
 	protected int cachedProcessTime;
 	private int cachedEnergyCost;
 
+	@SuppressWarnings("ConstantConditions")
 	protected static ItemStack recipeOutput = new ItemStack(TRItems.part, 1, Part.PartMeta.scrap.metadata());
 	private final Random random = new Random();
-	private final int chance = 6;
+	private final int chance = TechRebornConfig.machineConfig.recycler.scrapChance;
 	protected int processTime = 0;
 	private boolean isActive = false;
 

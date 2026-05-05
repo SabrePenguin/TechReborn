@@ -6,10 +6,7 @@ import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.jei.categories.AlloyCategory;
 import com.sabrepenguin.techreborn.jei.categories.OneToOneCategory;
 import com.sabrepenguin.techreborn.jei.categories.SingleItemCategory;
-import com.sabrepenguin.techreborn.jei.wrappers.AlloyWrapper;
-import com.sabrepenguin.techreborn.jei.wrappers.OneToOneRecipeWrapper;
-import com.sabrepenguin.techreborn.jei.wrappers.FluidRecipeJEIWrapper;
-import com.sabrepenguin.techreborn.jei.wrappers.SingleItemRecipeWrapper;
+import com.sabrepenguin.techreborn.jei.wrappers.*;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeWrapper;
 import com.sabrepenguin.techreborn.util.ModLoadedUtil;
@@ -41,7 +38,7 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCategories(new OneToOneCategory(helper, GRINDER_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, EXTRACTOR_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, PLATE_BENDING_UID));
-		registry.addRecipeCategories(new SingleItemCategory(helper, RECYCLER_UID));
+		registry.addRecipeCategories(new SingleItemCategory(helper, RECYCLER_UID, 58));
 		registry.addRecipeCategories(new OneToOneCategory(helper, WIRE_MILL_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, COMPRESSOR_UID));
 	}
@@ -70,7 +67,7 @@ public class TRRecipePlugin implements IModPlugin {
 				handler.getPlateBenderRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),
 				PLATE_BENDING_UID);
 		if (ModLoadedUtil.IC2_LOADED && !TechRebornConfig.machineConfig.recycler.ic2Scrap) {
-			registry.addRecipes(Arrays.asList(new SingleItemRecipeWrapper(SingleItemRecipeWrapper.SCRAP_INPUT, SingleItemRecipeWrapper.SCRAP, 45, 8)), RECYCLER_UID);
+			registry.addRecipes(Arrays.asList(new RecyclerRecipeWrapper(SingleItemRecipeWrapper.SCRAP_INPUT, SingleItemRecipeWrapper.SCRAP, 45, 8)), RECYCLER_UID);
 		}
 		registry.addRecipes(
 				handler.getWireMillRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),

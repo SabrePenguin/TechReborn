@@ -27,7 +27,7 @@
     },
     "G": {
       "type": "forge:ore_dict",
-      "ore": "glowstoneDust"
+      "ore": "dustGlowstone"
     }
   },
   "result": {
