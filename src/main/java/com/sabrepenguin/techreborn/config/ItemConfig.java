@@ -31,6 +31,8 @@ public class ItemConfig {
 	@Config.LangKey("item.techreborn.nanosaber.name")
 	@Config.RequiresMcRestart
 	public Nanosaber nanosaber = new Nanosaber();
+	@Config.LangKey("config.item.upgrades")
+	public Upgrades upgrades = new Upgrades();
 	@Config.LangKey("config.item.loadarmor")
 	public boolean loadArmor = true;
 
@@ -106,5 +108,18 @@ public class ItemConfig {
 		public int nanosaberMaxEnergy = 640_000;
 		@Config.LangKey("config.max_damage")
 		public int nanosaberDamageWhenActive = 20;
+	}
+
+	public static class Upgrades {
+		@Config.LangKey("config.upgrades.overclock_processing_speed")
+		public float overclockProcessing = 0.25f;
+		@Config.LangKey("config.upgrades.overclock_energy_multiplier")
+		public float overclockEnergyMultiplier = 0.75f;
+		@Config.LangKey("config.upgrades.transformer_multiplier")
+		public float transformerMultiplier = 4f;
+		@Config.LangKey("config.upgrades.energy_storage_increase")
+		public int storageIncrease = 160_000;
+		@Config.LangKey("config.upgrades.exponential")
+		public boolean exponential = false;
 	}
 }

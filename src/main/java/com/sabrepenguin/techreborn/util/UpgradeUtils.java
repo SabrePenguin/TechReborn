@@ -1,23 +1,15 @@
 package com.sabrepenguin.techreborn.util;
 
-import com.sabrepenguin.techreborn.Tags;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.items.ItemUpgrade;
 import com.sabrepenguin.techreborn.items.TRItems;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandler;
 
-@Mod.EventBusSubscriber(modid = Tags.MODID)
 public class UpgradeUtils {
 
-	//TODO: Config of multipliers
-	public static float overclock_processing = 0.25f;
-	public static float overclock_energy_multiplier = 0.75f;
-	public static float transformer_multiplier = 4f;
-	public static int storage_increase = 160_000;
-	private final static boolean exponential = false;
-
+	@SuppressWarnings("ConstantConditions")
 	public static float getProcessingTimeMultiplier(IItemHandler handler) {
 		float base = 1;
 		for (int i = 0; i < handler.getSlots(); i++) {
@@ -26,10 +18,10 @@ public class UpgradeUtils {
 			int meta = upgrade.getMetadata();
 			if (item == TRItems.upgrades) {
 				if (meta == ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()) {
-					if (exponential) {
-						base *= (1f - overclock_processing);
+					if (TechRebornConfig.itemConfig.upgrades.exponential) {
+						base *= (1f - TechRebornConfig.itemConfig.upgrades.overclockProcessing);
 					} else {
-						base -= overclock_processing;
+						base -= TechRebornConfig.itemConfig.upgrades.overclockProcessing;
 					}
 					if (base < 0.01)
 						base = 0.01f;
@@ -39,6 +31,7 @@ public class UpgradeUtils {
 		return base;
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public static int getProcessingTimeMultiplier(IItemHandler handler, int baseAmount) {
 		float base = 1;
 		for (int i = 0; i < handler.getSlots(); i++) {
@@ -47,10 +40,10 @@ public class UpgradeUtils {
 			int meta = upgrade.getMetadata();
 			if (item == TRItems.upgrades) {
 				if (meta == ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()) {
-					if (exponential) {
-						base *= (1f - overclock_processing);
+					if (TechRebornConfig.itemConfig.upgrades.exponential) {
+						base *= (1f - TechRebornConfig.itemConfig.upgrades.overclockProcessing);
 					} else {
-						base -= overclock_processing;
+						base -= TechRebornConfig.itemConfig.upgrades.overclockProcessing;
 					}
 					if (base < 0.01)
 						base = 0.01f;
@@ -60,6 +53,7 @@ public class UpgradeUtils {
 		return (int) (base * baseAmount);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public static int getTotalCostMultiplier(IItemHandler handler, int energyCost) {
 		float base = 1;
 		for (int i = 0; i < handler.getSlots(); i++) {
@@ -68,13 +62,14 @@ public class UpgradeUtils {
 			int meta = upgrade.getMetadata();
 			if (item == TRItems.upgrades) {
 				if (meta == ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()) {
-					base += overclock_energy_multiplier;
+					base += TechRebornConfig.itemConfig.upgrades.overclockEnergyMultiplier;
 				}
 			}
 		}
 		return (int) (base * energyCost);
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public static float getTotalCostMultiplier(IItemHandler handler) {
 		float base = 1;
 		for (int i = 0; i < handler.getSlots(); i++) {
@@ -83,7 +78,7 @@ public class UpgradeUtils {
 			int meta = upgrade.getMetadata();
 			if (item == TRItems.upgrades) {
 				if (meta == ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()) {
-					base += overclock_energy_multiplier;
+					base += TechRebornConfig.itemConfig.upgrades.overclockEnergyMultiplier;
 				}
 			}
 		}
@@ -95,6 +90,7 @@ public class UpgradeUtils {
 	 * @param handler The inventory containing upgrades
 	 * @return The total multiplier for the energy
 	 */
+	@SuppressWarnings("ConstantConditions")
 	public static float getEnergyTransferMultiplier(IItemHandler handler) {
 		float base = 1;
 		for (int i = 0; i < handler.getSlots(); i++) {
@@ -103,7 +99,7 @@ public class UpgradeUtils {
 			int meta = upgrade.getMetadata();
 			if (item == TRItems.upgrades) {
 				if (meta == ItemUpgrade.UpgradeEnum.TRANSFORMER.metadata()) {
-					base *= transformer_multiplier;
+					base *= TechRebornConfig.itemConfig.upgrades.transformerMultiplier;
 				} else if (meta == ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()) {
 					base *= 2;
 				}
@@ -112,6 +108,7 @@ public class UpgradeUtils {
 		return base;
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public static int getTotalEnergyStorageIncrease(IItemHandler handler, int base) {
 		int total = 0;
 		for (int i = 0; i < handler.getSlots(); i++) {
@@ -120,7 +117,7 @@ public class UpgradeUtils {
 			int meta = upgrade.getMetadata();
 			if (item == TRItems.upgrades) {
 				if (meta == ItemUpgrade.UpgradeEnum.ENERGY_STORAGE.metadata()) {
-					total += storage_increase;
+					total += TechRebornConfig.itemConfig.upgrades.storageIncrease;
 				} else if (meta == ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()) {
 					total += base;
 				}
