@@ -33,6 +33,7 @@ public class StandardRecipes {
 		recipes(file);
 		upgradeRecipes(file);
 		alloyRecipes(file);
+		uuMatter(file);
 		PartRecipes.parts(file);
 		PartRecipes.cables(file);
 		ToolRecipes.gear(file);
