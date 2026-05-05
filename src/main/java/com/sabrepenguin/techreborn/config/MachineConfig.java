@@ -3,6 +3,12 @@ package com.sabrepenguin.techreborn.config;
 import net.minecraftforge.common.config.Config;
 
 public class MachineConfig {
+	@Config.LangKey("tile.techreborn.alloy_smelter.name")
+	@Config.RequiresWorldRestart
+	public Generic alloySmelter = new Generic(4000, 128);
+	@Config.LangKey("tile.techreborn.grinder.name")
+	@Config.RequiresWorldRestart
+	public ElectricFurnace electricFurnace = new ElectricFurnace();
 	@Config.LangKey("tile.techreborn.grinder.name")
 	@Config.RequiresWorldRestart
 	public Generic grinder = new Generic(40000, 128);
@@ -43,5 +49,14 @@ public class MachineConfig {
 		public int maxInput = 128;
 		@Config.LangKey("config.recycler.scrap_chance")
 		public int scrapChance = 6;
+	}
+
+	public static class ElectricFurnace {
+		@Config.LangKey("config.max_cost")
+		public int maxCost = 24;
+		@Config.LangKey("config.max_energy")
+		public int maxEnergy = 4000;
+		@Config.LangKey("config.transfer_limit")
+		public int maxInput = 128;
 	}
 }

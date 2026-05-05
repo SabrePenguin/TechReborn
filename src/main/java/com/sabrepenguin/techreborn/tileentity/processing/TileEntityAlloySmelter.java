@@ -15,6 +15,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.*;
 import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
@@ -43,10 +44,8 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 	private BasicOutputRecipe cachedRecipe = null;
 	private int processTime = 0;
 	private boolean isActive = false;
-
-	// TODO: Config
-	private static int maxReceive = 128;
-	private static int baseCapacity = 4000;
+	private static final int maxReceive = TechRebornConfig.machineConfig.alloySmelter.maxInput;
+	private static final int baseCapacity = TechRebornConfig.machineConfig.alloySmelter.maxEnergy;
 
 	private int totalProcessTime;
 	private float cachedProcessMultiplier;

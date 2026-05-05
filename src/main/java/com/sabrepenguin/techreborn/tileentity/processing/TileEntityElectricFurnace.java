@@ -69,11 +69,10 @@ public class TileEntityElectricFurnace extends TileEntity implements ITickable, 
 	private int processTime = 0;
 	private boolean isActive = false;
 
-	//TODO: config
-	private int totalProcessTime = 200;
-	private int energyCost = 24;
-	private int maxReceive = 128;
-	private int baseCapacity = 4000;
+	private static final int totalProcessTime = 200;
+	private final int energyCost = TechRebornConfig.machineConfig.electricFurnace.maxCost;
+	private final int maxReceive = TechRebornConfig.machineConfig.electricFurnace.maxInput;
+	private final int baseCapacity = TechRebornConfig.machineConfig.electricFurnace.maxEnergy;
 
 	private int cachedProcessTime;
 	private int cachedEnergyCost;
