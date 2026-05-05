@@ -9,12 +9,14 @@ import java.io.File;
 
 public class DatagenInit {
 	private static final String RECIPE_DIR = "src/main/resources/assets/" + Tags.MODID + "/recipes";
+	private static final String TRRECIPE_DIR = "src/main/resources/assets/" + Tags.MODID + "/trrecipes";
 
 	public static void init(String fileSource) {
 		if (!Loader.isModLoaded("ic2")) {
 			throw new RuntimeException("IC2 is not in the modlist, and must be loaded for datagen");
 		}
 		StandardRecipes.initRecipes(new File(fileSource, RECIPE_DIR));
+		StandardRecipes.initFurnaceRecipes(new File(fileSource, TRRECIPE_DIR));
 		IC2CompatRecipes.initRecipes(new File(fileSource, RECIPE_DIR));
 		throw new RuntimeException("Successfully built the files out, please restart without datagen enabled");
 	}

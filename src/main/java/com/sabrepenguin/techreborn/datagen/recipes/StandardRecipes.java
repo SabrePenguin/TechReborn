@@ -5,10 +5,7 @@ import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.blocks.fluids.TRFluids;
 import com.sabrepenguin.techreborn.blocks.machines.energy.BlockSolarPanel;
 import com.sabrepenguin.techreborn.blocks.meta.*;
-import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapedBuilder;
-import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapelessBuilder;
-import com.sabrepenguin.techreborn.datagen.builders.ShapedBuilder;
-import com.sabrepenguin.techreborn.datagen.builders.ShapelessBuilder;
+import com.sabrepenguin.techreborn.datagen.builders.*;
 import com.sabrepenguin.techreborn.datagen.builders.conditions.IC2Condition;
 import com.sabrepenguin.techreborn.datagen.builders.conditions.ModLoadedCondition;
 import com.sabrepenguin.techreborn.datagen.builders.ingredients.*;
@@ -37,6 +34,115 @@ public class StandardRecipes {
 		PartRecipes.parts(file);
 		PartRecipes.cables(file);
 		ToolRecipes.gear(file);
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	public static void initFurnaceRecipes(File file) {
+		new FurnaceBuilder<>()
+				.name("rubber")
+				.withInput(new ItemStack(TRItems.part, 1, Part.PartMeta.sap.metadata()))
+				.withResult(new ItemStack(TRItems.part, 1, Part.PartMeta.rubber.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("refined_iron")
+				.withInput(new ItemStack(Items.IRON_INGOT))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.refined_iron.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("brass_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.brass.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.brass.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("iron_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.iron.metadata()))
+				.withResult(new ItemStack(Items.IRON_INGOT))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("gold_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.gold.metadata()))
+				.withResult(new ItemStack(Items.GOLD_INGOT))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("bronze_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.bronze.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.bronze.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("copper_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.copper.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.copper.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("copper_ore")
+				.withInput(new ItemStack(TRBlocks.ore2, 1, OreBlock2.Ore2.COPPER.meta()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.copper.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("electrum_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.electrum.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.electrum.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("invar_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.invar.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.invar.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("lead_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.lead.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.lead.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("lead_ore")
+				.withInput(new ItemStack(TRBlocks.ore, 1, OreBlock.Ore.LEAD.meta()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.lead.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("nickel_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.nickel.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.nickel.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("platinum_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.platinum.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.platinum.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("silver_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.silver.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.silver.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("silver_ore")
+				.withInput(new ItemStack(TRBlocks.ore, 1, OreBlock.Ore.SILVER.meta()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.silver.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("tin_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.tin.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.tin.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("tin_ore")
+				.withInput(new ItemStack(TRBlocks.ore2, 1, OreBlock2.Ore2.TIN.meta()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.tin.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("zinc_dust")
+				.withInput(new ItemStack(TRItems.dust, 1, Dust.MetaDust.zinc.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.zinc.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("sheldonite_ore")
+				.withInput(new ItemStack(TRBlocks.ore, 1, OreBlock.Ore.SHELDONITE.meta()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.platinum.metadata()))
+				.save(file);
+		new FurnaceBuilder<>()
+				.name("mixed_metal")
+				.withInput(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.mixed_metal.metadata()))
+				.withResult(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.advanced_alloy.metadata()))
+				.save(file);
 	}
 
 	@SuppressWarnings("ConstantConditions")

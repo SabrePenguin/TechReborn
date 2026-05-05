@@ -24,6 +24,7 @@ public abstract class AbstractBuilder<T extends AbstractBuilder<T>>  {
 			.registerTypeAdapter(ShapelessBuilder.class, new ShapelessBuilder.ShapelessBuilderSerializer<>())
 			.registerTypeAdapter(ReplaceableShapedBuilder.class, new ReplaceableShapedBuilder.ReplaceableShapedBuilderSerializer<>())
 			.registerTypeAdapter(ReplaceableShapelessBuilder.class, new ReplaceableShapelessBuilder.ReplaceableShapelessBuilderSerializer<>())
+			.registerTypeAdapter(FurnaceBuilder.class, new FurnaceBuilder.FurnaceBuilderSerializer<>())
 			.registerTypeAdapter(IC2Condition.class, new IC2Condition.IC2ConditionSerializer())
 			.registerTypeAdapter(ModLoadedCondition.class, new ModLoadedCondition.ModLoadedConditionSerializer())
 			.registerTypeAdapter(ConfigCondition.class, new ConfigCondition.ConfigConditionSerializer())
