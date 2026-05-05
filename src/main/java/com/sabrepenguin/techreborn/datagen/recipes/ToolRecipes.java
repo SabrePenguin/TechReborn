@@ -206,7 +206,7 @@ public class ToolRecipes {
 				.define('B', new ItemStack(TRItems.lithiumbattery))
 				.define('C', "circuitAdvanced")
 				.define('P', "plateAluminum")
-				.withResult(new ItemStack(TRItems.lapotronpack))
+				.withResult(new ItemStack(TRItems.lithiumbatpack))
 				.save(armor);
 		armorList(armor, "ruby", "gemRuby", TRItems.rubyhelmet, TRItems.rubychestplate,
 				TRItems.rubyleggings, TRItems.rubyboots, TRItems.rubysword, TRItems.rubypickaxe,

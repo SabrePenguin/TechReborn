@@ -3,38 +3,35 @@ package com.sabrepenguin.techreborn.datagen.recipes;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockCable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.blocks.fluids.TRFluids;
 import com.sabrepenguin.techreborn.blocks.machines.energy.BlockSolarPanel;
-import com.sabrepenguin.techreborn.blocks.meta.BlockMachineCasing;
-import com.sabrepenguin.techreborn.blocks.meta.BlockMachineFrame;
-import com.sabrepenguin.techreborn.blocks.meta.BlockStorage;
-import com.sabrepenguin.techreborn.blocks.meta.BlockStorage2;
+import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapedBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ReplaceableShapelessBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ShapedBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.ShapelessBuilder;
 import com.sabrepenguin.techreborn.datagen.builders.conditions.IC2Condition;
 import com.sabrepenguin.techreborn.datagen.builders.conditions.ModLoadedCondition;
-import com.sabrepenguin.techreborn.datagen.builders.ingredients.ItemIngredient;
-import com.sabrepenguin.techreborn.datagen.builders.ingredients.ListIngredient;
-import com.sabrepenguin.techreborn.datagen.builders.ingredients.OreDictIngredient;
+import com.sabrepenguin.techreborn.datagen.builders.ingredients.*;
+import com.sabrepenguin.techreborn.items.ItemUpgrade;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.*;
 import com.sabrepenguin.techreborn.util.handlers.OreHandler;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.File;
 
 public class StandardRecipes {
-	private static final String RECIPE_DIR = "src/main/resources/assets/" + Tags.MODID + "/recipes";
 
 	public static void initRecipes(File file) {
 		compression(file);
 		expansion(file);
 		recipes(file);
+		upgradeRecipes(file);
+		alloyRecipes(file);
 		PartRecipes.parts(file);
 		PartRecipes.cables(file);
 		ToolRecipes.gear(file);
@@ -196,6 +193,61 @@ public class StandardRecipes {
 				.define('T', IC2Duplicates.CABLE_TIN.getIngredient())
 				.define('L', "dustGlowstone")
 				.withResult(new ItemStack(TRBlocks.lamp_led))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("lapotronic_orb")
+				.pattern("LLL")
+				.pattern("LPL")
+				.pattern("LLL")
+				.define('L', "lapotronCrystal")
+				.define('P', "plateIridiumAlloy")
+				.withResult(new ItemStack(TRItems.lapotronicorb))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("lithium_battery")
+				.pattern(" C ")
+				.pattern("PFP")
+				.pattern("PFP")
+				.define('C', IC2Duplicates.CABLE_IGOLD.getIngredient())
+				.define('P', "plateAluminum")
+				.define('F', new CellIngredient(TRFluids.LITHIUM))
+				.withResult(new ItemStack(TRItems.lithiumbattery))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("energy_crystal")
+				.withCondition(IC2Condition.DeduplicateCondition())
+				.pattern("RRR")
+				.pattern("RDR")
+				.pattern("RRR")
+				.define('R', "dustRedstone")
+				.define('D', new ListIngredient()
+						.addIngredient(new OreDictIngredient("gemDiamond", 1))
+						.addIngredient(new OreDictIngredient("gemRuby", 1)))
+				.withResult(new ItemStack(TRItems.energycrystal))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("lapotronic_crystal")
+				.withCondition(IC2Condition.DeduplicateCondition())
+				.pattern("LCL")
+				.pattern("LEL")
+				.pattern("LCL")
+				.define('L', new ItemStack(Items.DYE, 1, 4))
+				.define('E', new ListIngredient()
+						.addIngredient(new OreDictIngredient("energyCrystal", 1))
+						.addIngredient(new OreDictIngredient("gemSapphire", 1)))
+				.define('C', "circuitBasic")
+				.withResult(new ItemStack(TRItems.lapotroncrystal))
+				.save(out);
+		new ShapedBuilder<>()
+				.name("re_battery")
+				.withCondition(IC2Condition.DeduplicateCondition())
+				.pattern(" W ")
+				.pattern("TRT")
+				.pattern("TRT")
+				.define('W', IC2Duplicates.CABLE_ICOPPER.getIngredient())
+				.define('T', "ingotTin")
+				.define('R', "dustRedstone")
+				.withResult(new ItemStack(TRItems.rebattery))
 				.save(out);
 	}
 
@@ -964,36 +1016,354 @@ public class StandardRecipes {
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	private static void gear(File file) {
-		File location = new File(file, "gear");
-		NBTTagCompound energy = new NBTTagCompound();
-		energy.setInteger("energy", 0);
-		ItemStack cloak = new ItemStack(TRItems.cloakingdevice);
-		cloak.setTagCompound(energy);
-		new ShapedBuilder<>()
-				.name("cloak")
-				.pattern("CIC")
-				.pattern("IOI")
-				.pattern("CIC")
-				.define('C', "ingotChrome")
-				.define('I', "plateIridiumAlloy")
-				.define('O', "ingotChrome")
-				.withResult(cloak)
-				.save(location);
-	}
-
-	@SuppressWarnings("ConstantConditions")
 	private static void upgradeRecipes(File file) {
 		File location = new File(file, "upgrades");
 		new ShapedBuilder<>()
+				.name("energy_storage")
 				.pattern("PPP")
 				.pattern("WBW")
 				.pattern("PCP")
 				.define('P', "plankWood")
-				.define('W', "plankWood")
-				.define('B', "plankWood")
+				.define('W', IC2Duplicates.CABLE_ICOPPER.getIngredient())
+				.define('B', "reBattery")
 				.define('C', "circuitBasic")
+				.withResult(new ItemStack(TRItems.upgrades, 1, ItemUpgrade.UpgradeEnum.ENERGY_STORAGE.metadata()))
 				.save(location);
+		new ShapedBuilder<>()
+				.name("overclock")
+				.pattern("TTT")
+				.pattern("WCW")
+				.define('T', new ItemStack(TRItems.part, 1, Part.PartMeta.coolant_simple.metadata()))
+				.define('W', IC2Duplicates.CABLE_ICOPPER.getIngredient())
+				.define('C', "circuitBasic")
+				.withResult(new ItemStack(TRItems.upgrades, 1, ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()))
+				.save(location);
+		new ShapedBuilder<>()
+				.name("overclock_helium")
+				.pattern("TTT")
+				.pattern("WCW")
+				.define('T', new ItemStack(TRItems.part, 1, Part.PartMeta.helium_coolant_simple.metadata()))
+				.define('W', IC2Duplicates.CABLE_ICOPPER.getIngredient())
+				.define('C', "circuitBasic")
+				.withResult(new ItemStack(TRItems.upgrades, 2, ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()))
+				.save(location);
+		new ShapedBuilder<>()
+				.name("overclock_nak")
+				.pattern("TTT")
+				.pattern("WCW")
+				.define('T', new ItemStack(TRItems.part, 1, Part.PartMeta.nak_coolant_simple.metadata()))
+				.define('W', IC2Duplicates.CABLE_ICOPPER.getIngredient())
+				.define('C', "circuitBasic")
+				.withResult(new ItemStack(TRItems.upgrades, 2, ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()))
+				.save(location);
+		new ShapedBuilder<>()
+				.name("transformer")
+				.pattern("GGG")
+				.pattern("WTW")
+				.pattern("GCG")
+				.define('G', "blockGlass")
+				.define('W', IC2Duplicates.CABLE_IGOLD.getIngredient())
+				.define('T', IC2Duplicates.MVT.getIngredient())
+				.define('C', "circuitBasic")
+				.withResult(new ItemStack(TRItems.upgrades, 1, ItemUpgrade.UpgradeEnum.TRANSFORMER.metadata()))
+				.save(location);
+		new ShapedBuilder<>()
+				.name("superconductor")
+				.pattern("SOS")
+				.pattern("CMC")
+				.pattern("SOS")
+				.define('S', new ItemStack(TRItems.part, 1, Part.PartMeta.enhanced_super_conductor.metadata()))
+				.define('O', new ItemStack(TRItems.part, 1, Part.PartMeta.data_orb.metadata()))
+				.define('C', new ItemStack(TRBlocks.cable, 1, BlockCable.CableEnum.SUPERCONDUCTOR.metadata()))
+				.define('M', new ItemStack(TRBlocks.machine_frame, 1, BlockMachineFrame.Frame.HIGHLY_ADVANCED.meta()))
+				.withResult(new ItemStack(TRItems.upgrades, 1, ItemUpgrade.UpgradeEnum.SUPERCONDUCTOR.metadata()))
+				.save(location);
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	private static void uuMatter(File file) {
+		File uu = new File(file, "uumatter");
+		ItemStack uuMatter = new ItemStack(TRItems.uumatter);
+		new ShapedBuilder<>()
+				.name("logs")
+				.pattern(" U ")
+				.pattern("   ")
+				.pattern("   ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.LOG, 8))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("stone")
+				.pattern("   ")
+				.pattern(" U ")
+				.pattern("   ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.STONE, 16))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("snow")
+				.pattern("U U")
+				.pattern("   ")
+				.pattern("   ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.SNOW, 16))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("grass")
+				.pattern("   ")
+				.pattern("U  ")
+				.pattern("U  ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.GRASS, 16))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("obsidian")
+				.pattern("U U")
+				.pattern("U U")
+				.pattern("   ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.OBSIDIAN, 12))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("glass")
+				.pattern(" U ")
+				.pattern("U U")
+				.pattern(" U ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.GLASS, 32))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("dye")
+				.pattern("UU ")
+				.pattern("  U")
+				.pattern("UU ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.DYE, 32, 3))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("glowstone")
+				.pattern(" U ")
+				.pattern("U U")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.GLOWSTONE, 8))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("cactus")
+				.pattern(" U ")
+				.pattern("UUU")
+				.pattern("U U")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.CACTUS, 48))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("sugarcane")
+				.pattern("U U")
+				.pattern("U U")
+				.pattern("U U")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.REEDS, 48))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("vines")
+				.pattern("U  ")
+				.pattern("U  ")
+				.pattern("U  ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.VINE, 24))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("snowball")
+				.pattern("   ")
+				.pattern("   ")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.SNOWBALL, 16))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("clay_ball")
+				.pattern("UU ")
+				.pattern("U  ")
+				.pattern("UU ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.CLAY_BALL, 48))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("water_lily")
+				.pattern("U U")
+				.pattern(" U ")
+				.pattern(" U ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.WATERLILY, 64))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("gunpowder")
+				.pattern("UUU")
+				.pattern("U  ")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.GUNPOWDER, 15))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("bone")
+				.pattern("U  ")
+				.pattern("UU ")
+				.pattern("U  ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.BONE, 32))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("feather")
+				.pattern(" U ")
+				.pattern(" U ")
+				.pattern("U U")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.FEATHER, 32))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("dye")
+				.pattern(" UU")
+				.pattern(" UU")
+				.pattern(" U ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.DYE, 48))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("ender_pearl")
+				.pattern("UUU")
+				.pattern("U U")
+				.pattern(" U ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.ENDER_PEARL, 1))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("coal")
+				.pattern("  U")
+				.pattern("U  ")
+				.pattern("  U")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.COAL, 5, 0))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("iron_ore")
+				.pattern("U U")
+				.pattern(" U ")
+				.pattern("U U")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.IRON_ORE, 2))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("gold_ore")
+				.pattern(" U ")
+				.pattern("UUU")
+				.pattern(" U ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.GOLD_ORE, 2))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("redstone")
+				.pattern("   ")
+				.pattern(" U ")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.REDSTONE, 24))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("lapis")
+				.pattern(" U ")
+				.pattern(" U ")
+				.pattern(" UU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.DYE, 9, 4))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("emerald_ore")
+				.pattern("UU ")
+				.pattern("U U")
+				.pattern(" UU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Blocks.EMERALD_ORE, 1))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("emerald")
+				.pattern("UUU")
+				.pattern("UUU")
+				.pattern(" U ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.EMERALD, 2))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("diamond")
+				.pattern("UUU")
+				.pattern("UUU")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(Items.DIAMOND, 1))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("tin_dust")
+				.pattern("   ")
+				.pattern("U U")
+				.pattern("  U")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(TRItems.dust, 10, Dust.MetaDust.tin.metadata()))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("copper_dust")
+				.pattern("  U")
+				.pattern("U U")
+				.pattern("   ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(TRItems.dust, 10, Dust.MetaDust.copper.metadata()))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("lead_dust")
+				.pattern("UUU")
+				.pattern("UUU")
+				.pattern("U  ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(TRItems.dust, 14, Dust.MetaDust.lead.metadata()))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("platinum_dust")
+				.pattern(" U ")
+				.pattern("UUU")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(TRItems.dust, 1, Dust.MetaDust.platinum.metadata()))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("tungsten_dust")
+				.pattern("U  ")
+				.pattern("UUU")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(TRItems.dust, 1, Dust.MetaDust.tungsten.metadata()))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("titanium_dust")
+				.pattern("UUU")
+				.pattern(" U ")
+				.pattern(" U ")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(TRItems.dust, 2, Dust.MetaDust.titanium.metadata()))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("aluminum_dust")
+				.pattern(" U ")
+				.pattern(" U ")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(TRItems.dust, 16, Dust.MetaDust.aluminum.metadata()))
+				.save(uu);
+		new ShapedBuilder<>()
+				.name("iridium_ore")
+				.pattern("UUU")
+				.pattern(" U ")
+				.pattern("UUU")
+				.define('U', uuMatter)
+				.withResult(new ItemStack(TRBlocks.ore, 1, OreBlock.Ore.IRIDIUM.meta()))
+				.save(uu);
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -1087,5 +1457,71 @@ public class StandardRecipes {
 				.pattern("III")
 				.withResult(out)
 				.save(recipeDir);
+	}
+
+	public static void alloyRecipes(File file) {
+		File location = new File(file, "alloy");
+		IBasicIngredient refinedIron = new OreDictIngredient("ingotRefinedIron", 1);
+		IBasicIngredient nickel = new OreDictIngredient("ingotNickel", 1);
+		IBasicIngredient invar = new OreDictIngredient("ingotInvar", 1);
+		IBasicIngredient titanium = new OreDictIngredient("ingotTitanium", 1);
+		IBasicIngredient tungsten = new OreDictIngredient("ingotTungsten", 1);
+		IBasicIngredient tungstensteel = new OreDictIngredient("ingotTungstensteel", 1);
+		IBasicIngredient bronze = new OreDictIngredient("ingotBronze", 1);
+		IBasicIngredient brass = new OreDictIngredient("ingotBrass", 1);
+		IBasicIngredient tin = new OreDictIngredient("ingotTin", 1);
+		IBasicIngredient zinc = new OreDictIngredient("ingotZinc", 1);
+		IBasicIngredient aluminum = new ListIngredient()
+				.addIngredient(new OreDictIngredient("ingotAluminum", 1))
+				.addIngredient(new OreDictIngredient("ingotAluminium", 1));
+		ReplaceableIngredient metal = IC2Duplicates.MIXED_METAL.getIngredient();
+		layered(location, "alloy_rbot", refinedIron, bronze, tin, metal.count(2));
+		layered(location, "alloy_rboz", refinedIron, bronze, zinc, metal);
+		layered(location, "alloy_rbat", refinedIron, brass, tin, metal);
+		layered(location, "alloy_rbaz", refinedIron, brass, zinc, metal);
+		layered(location, "alloy_nbot", nickel, bronze, tin, metal.count(3));
+		layered(location, "alloy_nboz", nickel, bronze, zinc, metal);
+		layered(location, "alloy_nbat", nickel, brass, tin, metal);
+		layered(location, "alloy_nbaz", nickel, brass, zinc, metal);
+		layered(location, "alloy_nboa", nickel, bronze, aluminum, metal.count(4));
+		layered(location, "alloy_nbaa", nickel, brass, aluminum, metal);
+		layered(location, "alloy_ibot", invar, bronze, tin, metal.count(4));
+		layered(location, "alloy_iboz", invar, bronze, zinc, metal);
+		layered(location, "alloy_ibat", invar, brass, tin, metal);
+		layered(location, "alloy_ibaz", invar, brass, zinc, metal);
+		layered(location, "alloy_iboa", invar, bronze, aluminum, metal.count(5));
+		layered(location, "alloy_ibaa", invar, brass, aluminum, metal);
+		layered(location, "alloy_tbot", titanium, bronze, tin, metal.count(5));
+		layered(location, "alloy_tboz", titanium, bronze, zinc, metal);
+		layered(location, "alloy_tbat", titanium, brass, tin, metal);
+		layered(location, "alloy_tbaz", titanium, brass, zinc, metal);
+		layered(location, "alloy_wbot", tungsten, bronze, tin, metal);
+		layered(location, "alloy_wboz", tungsten, bronze, zinc, metal);
+		layered(location, "alloy_wbat", tungsten, brass, tin, metal);
+		layered(location, "alloy_wbaz", tungsten, brass, zinc, metal);
+		layered(location, "alloy_iboa", titanium, bronze, aluminum, metal.count(6));
+		layered(location, "alloy_ibaa", titanium, brass, aluminum, metal);
+		layered(location, "alloy_wboa", tungsten, bronze, aluminum, metal);
+		layered(location, "alloy_wbaa", tungsten, brass, aluminum, metal);
+		layered(location, "alloy_tsbot", tungstensteel, bronze, tin, metal.count(8));
+		layered(location, "alloy_tsboz", tungstensteel, bronze, zinc, metal);
+		layered(location, "alloy_tsbat", tungstensteel, brass, tin, metal);
+		layered(location, "alloy_tsbaz", tungstensteel, brass, zinc, metal);
+		layered(location, "alloy_tsboa", tungstensteel, bronze, aluminum, metal.count(9));
+		layered(location, "alloy_tsbaa", tungstensteel, brass, aluminum, metal);
+	}
+
+	private static void layered(File file, String name, IBasicIngredient top, IBasicIngredient middle, IBasicIngredient bottom, IBasicIngredient output) {
+		new ReplaceableShapedBuilder<>()
+				.name(name)
+				.withCondition(new IC2Condition("dedupe"))
+				.pattern("TTT")
+				.pattern("MMM")
+				.pattern("BBB")
+				.define('T', top)
+				.define('M', middle)
+				.define('B', bottom)
+				.withOutput(output)
+				.save(file);
 	}
 }
