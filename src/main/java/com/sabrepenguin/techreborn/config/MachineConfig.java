@@ -1,0 +1,33 @@
+package com.sabrepenguin.techreborn.config;
+
+import net.minecraftforge.common.config.Config;
+
+public class MachineConfig {
+	@Config.LangKey("tile.techreborn.grinder.name")
+	@Config.RequiresWorldRestart
+	public Generic grinder = new Generic(40000, 128);
+	@Config.LangKey("tile.techreborn.extractor.name")
+	@Config.RequiresWorldRestart
+	public Generic extractor = new Generic(40000, 128);
+	@Config.LangKey("tile.techreborn.plate_bending_machine.name")
+	@Config.RequiresWorldRestart
+	public Generic plateBendingMachine = new Generic(40000, 128);
+	@Config.LangKey("tile.techreborn.wire_mill.name")
+	@Config.RequiresWorldRestart
+	public Generic wireMill = new Generic(40000, 128);
+	@Config.LangKey("tile.techreborn.compressor.name")
+	@Config.RequiresWorldRestart
+	public Generic compressor = new Generic(40000, 128);
+
+	public static class Generic {
+		@Config.LangKey("config.max_energy")
+		public int maxEnergy;
+		@Config.LangKey("config.transfer_limit")
+		public int maxInput;
+
+		public Generic(int energy, int maxInput) {
+			this.maxEnergy = energy;
+			this.maxInput = maxInput;
+		}
+	}
+}

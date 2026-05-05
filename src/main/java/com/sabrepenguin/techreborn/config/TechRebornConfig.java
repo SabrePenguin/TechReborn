@@ -22,6 +22,9 @@ public class TechRebornConfig {
 	@Config.LangKey("config.item")
 	public static ItemConfig itemConfig = new ItemConfig();
 
+	@Config.LangKey("config.machines")
+	public static MachineConfig machineConfig = new MachineConfig();
+
 	public static class Compat {
 		@Config.LangKey("config.ic2")
 		public IC2 ic2 = new IC2();
