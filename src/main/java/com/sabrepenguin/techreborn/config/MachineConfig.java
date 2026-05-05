@@ -18,6 +18,9 @@ public class MachineConfig {
 	@Config.LangKey("tile.techreborn.compressor.name")
 	@Config.RequiresWorldRestart
 	public Generic compressor = new Generic(40000, 128);
+	@Config.LangKey("tile.techreborn.recycler.name")
+	@Config.RequiresWorldRestart
+	public Recycler recycler = new Recycler();
 
 	public static class Generic {
 		@Config.LangKey("config.max_energy")
@@ -29,5 +32,14 @@ public class MachineConfig {
 			this.maxEnergy = energy;
 			this.maxInput = maxInput;
 		}
+	}
+
+	public static class Recycler {
+		@Config.LangKey("config.recycler.ic2scrap")
+		public boolean ic2Scrap = false;
+		@Config.LangKey("config.max_energy")
+		public int maxEnergy = 4000;
+		@Config.LangKey("config.transfer_limit")
+		public int maxInput = 128;
 	}
 }

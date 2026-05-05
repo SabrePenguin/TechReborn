@@ -11,10 +11,8 @@ import com.sabrepenguin.techreborn.blocks.machines.tier2.*;
 import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
-import com.sabrepenguin.techreborn.tileentity.processing.TEProcessing;
-import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAlloySmelter;
-import com.sabrepenguin.techreborn.tileentity.processing.TileEntityElectricFurnace;
-import com.sabrepenguin.techreborn.tileentity.processing.TileEntityRecycler;
+import com.sabrepenguin.techreborn.tileentity.processing.*;
+import com.sabrepenguin.techreborn.util.ModLoadedUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
@@ -176,6 +174,7 @@ public class TRBlocks {
 				new BlockHorizontalMachine("extractor", "machines/tier1", TEProcessing.TileEntityExtractor::new),
 				new BlockHorizontalMachine("grinder", "machines/tier1", TEProcessing.TileEntityGrinder::new),
 				new BlockHorizontalMachine("plate_bending_machine", "machines/tier1", TEProcessing.TileEntityPlateBendingMachine::new),
+				ModLoadedUtil.IC2_LOADED ? new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityIC2Recycler::new) :
 				new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityRecycler::new),
 				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1"),
 				new BlockHorizontalMachine("wire_mill", "machines/tier1", TEProcessing.TileEntityWireMill::new),

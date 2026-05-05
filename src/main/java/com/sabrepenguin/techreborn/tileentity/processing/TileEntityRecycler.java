@@ -15,6 +15,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.LargeItemSlot;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
@@ -51,14 +52,15 @@ public class TileEntityRecycler extends TileEntityIOManager implements IGuiHolde
 	protected int cachedProcessTime;
 	private int cachedEnergyCost;
 
-	private final ItemStack recipeOutput = new ItemStack(TRItems.part, 1, Part.PartMeta.scrap.metadata());
+	protected static ItemStack recipeOutput = new ItemStack(TRItems.part, 1, Part.PartMeta.scrap.metadata());
 	private final Random random = new Random();
 	private final int chance = 6;
 	protected int processTime = 0;
 	private boolean isActive = false;
 
 	public TileEntityRecycler() {
-		super(1, 1, 4000, 128, 0, true);
+		super(1, 1, TechRebornConfig.machineConfig.recycler.maxEnergy,
+				TechRebornConfig.machineConfig.recycler.maxInput, 0, true);
 		this.maxReceive = 128;
 		totalProcessTime = 45;
 		cachedProcessMultiplier = 1.0f;

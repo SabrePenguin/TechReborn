@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.jei;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.jei.categories.AlloyCategory;
 import com.sabrepenguin.techreborn.jei.categories.OneToOneCategory;
 import com.sabrepenguin.techreborn.jei.categories.SingleItemCategory;
@@ -11,6 +12,7 @@ import com.sabrepenguin.techreborn.jei.wrappers.FluidRecipeJEIWrapper;
 import com.sabrepenguin.techreborn.jei.wrappers.SingleItemRecipeWrapper;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeWrapper;
+import com.sabrepenguin.techreborn.util.ModLoadedUtil;
 import mezz.jei.api.*;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
@@ -67,7 +69,9 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipes(
 				handler.getPlateBenderRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),
 				PLATE_BENDING_UID);
-		registry.addRecipes(Arrays.asList(new SingleItemRecipeWrapper(SingleItemRecipeWrapper.SCRAP_INPUT, SingleItemRecipeWrapper.SCRAP, 45, 8)), RECYCLER_UID);
+		if (ModLoadedUtil.IC2_LOADED && !TechRebornConfig.machineConfig.recycler.ic2Scrap) {
+			registry.addRecipes(Arrays.asList(new SingleItemRecipeWrapper(SingleItemRecipeWrapper.SCRAP_INPUT, SingleItemRecipeWrapper.SCRAP, 45, 8)), RECYCLER_UID);
+		}
 		registry.addRecipes(
 				handler.getWireMillRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),
 				WIRE_MILL_UID);
