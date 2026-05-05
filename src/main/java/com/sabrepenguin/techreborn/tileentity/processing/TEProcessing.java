@@ -4,6 +4,7 @@ import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.tileentity.common.TileEntityOneToOne;
+import com.sabrepenguin.techreborn.tileentity.common.TileEntityTwoToOne;
 
 public class TEProcessing {
 	public static class TileEntityGrinder extends TileEntityOneToOne {
@@ -34,6 +35,14 @@ public class TEProcessing {
 		public TileEntityCompressor() {
 			super("tile.techreborn.compressor.name", TechRebornConfig.machineConfig.compressor.maxEnergy,
 					TechRebornConfig.machineConfig.compressor.maxInput, RegistryHandler.instance().getCompressorRegistry(), TRRecipePlugin.COMPRESSOR_UID);
+		}
+	}
+
+	public static class TileEntityAssemblingMachine extends TileEntityTwoToOne {
+		public TileEntityAssemblingMachine() {
+			super("tile.techreborn.assembling_machine.name", TechRebornConfig.machineConfig.assemblingMachine.maxEnergy,
+					TechRebornConfig.machineConfig.assemblingMachine.maxInput, RegistryHandler.instance()
+							.getAssemblingMachineRegistry(), TRRecipePlugin.ASSEMBLING_MACHINE_UID);
 		}
 	}
 }

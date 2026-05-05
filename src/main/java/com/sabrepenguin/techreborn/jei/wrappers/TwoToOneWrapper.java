@@ -16,10 +16,10 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AlloyWrapper implements IRecipeWrapper {
+public class TwoToOneWrapper implements IRecipeWrapper {
 	private final BasicOutputRecipe recipe;
 
-	public AlloyWrapper(BasicOutputRecipe recipe) {
+	public TwoToOneWrapper(BasicOutputRecipe recipe) {
 		this.recipe = recipe;
 	}
 

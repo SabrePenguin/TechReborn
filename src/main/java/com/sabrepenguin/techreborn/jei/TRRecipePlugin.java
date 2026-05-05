@@ -3,7 +3,7 @@ package com.sabrepenguin.techreborn.jei;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
-import com.sabrepenguin.techreborn.jei.categories.AlloyCategory;
+import com.sabrepenguin.techreborn.jei.categories.TwoToOneCategory;
 import com.sabrepenguin.techreborn.jei.categories.OneToOneCategory;
 import com.sabrepenguin.techreborn.jei.categories.SingleItemCategory;
 import com.sabrepenguin.techreborn.jei.wrappers.*;
@@ -29,18 +29,20 @@ public class TRRecipePlugin implements IModPlugin {
 	public static final String RECYCLER_UID = "tile." + Tags.MODID + ".recycler.name";
 	public static final String WIRE_MILL_UID = "tile." + Tags.MODID + ".wire_mill.name";
 	public static final String COMPRESSOR_UID = "tile." + Tags.MODID + ".compressor.name";
+	public static final String ASSEMBLING_MACHINE_UID = "tile." + Tags.MODID + ".assembling_machine.name";
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
 		IGuiHelper helper = registry.getJeiHelpers().getGuiHelper();
 		JEITextures.init(helper);
-		registry.addRecipeCategories(new AlloyCategory(helper, ALLOY_UID));
+		registry.addRecipeCategories(new TwoToOneCategory(helper, ALLOY_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, GRINDER_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, EXTRACTOR_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, PLATE_BENDING_UID));
 		registry.addRecipeCategories(new SingleItemCategory(helper, RECYCLER_UID, 58));
 		registry.addRecipeCategories(new OneToOneCategory(helper, WIRE_MILL_UID));
 		registry.addRecipeCategories(new OneToOneCategory(helper, COMPRESSOR_UID));
+		registry.addRecipeCategories(new TwoToOneCategory(helper, ASSEMBLING_MACHINE_UID));
 	}
 
 	@Override
@@ -53,8 +55,8 @@ public class TRRecipePlugin implements IModPlugin {
 
 		RegistryHandler handler = RegistryHandler.instance();
 
-		Collection<AlloyWrapper> alloyWrappers = handler.getAlloyRegistry().getRecipes().stream()
-						.map(AlloyWrapper::new).collect(Collectors.toList());
+		Collection<TwoToOneWrapper> alloyWrappers = handler.getAlloyRegistry().getRecipes().stream()
+						.map(TwoToOneWrapper::new).collect(Collectors.toList());
 		registry.addRecipes(alloyWrappers, ALLOY_UID);
 
 		Collection<OneToOneRecipeWrapper> grinderWrappers = handler.getGrinderRegistry().getRecipes().stream()
@@ -75,6 +77,10 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipes(
 				handler.getCompressorRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),
 				COMPRESSOR_UID);
+		registry.addRecipes(
+				handler.getAssemblingMachineRegistry().getRecipes().stream().map(TwoToOneWrapper::new).collect(Collectors.toList()),
+				ASSEMBLING_MACHINE_UID
+		);
 		addDefaultCatalysts(registry);
 		addCatalysts(registry);
 	}
@@ -95,5 +101,6 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.recycler), RECYCLER_UID);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.wire_mill), WIRE_MILL_UID);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.compressor), COMPRESSOR_UID);
+		registry.addRecipeCatalyst(new ItemStack(TRBlocks.assembling_machine), ASSEMBLING_MACHINE_UID);
 	}
 }

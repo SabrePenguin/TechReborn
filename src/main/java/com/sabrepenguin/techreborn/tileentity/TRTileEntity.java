@@ -24,6 +24,8 @@ public class TRTileEntity {
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityWireMill.class, new ResourceLocation(Tags.MODID, "wire_mill"));
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityCompressor.class, new ResourceLocation(Tags.MODID, "compressor"));
 
+		GameRegistry.registerTileEntity(TEProcessing.TileEntityAssemblingMachine.class, new ResourceLocation(Tags.MODID, "assembling_machine"));
+
 		GameRegistry.registerTileEntity(TileEntityCable.class, new ResourceLocation(Tags.MODID, "cable"));
 	}
 }

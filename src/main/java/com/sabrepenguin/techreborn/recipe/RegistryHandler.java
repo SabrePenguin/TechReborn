@@ -16,6 +16,7 @@ public class RegistryHandler {
 	private final BasicRegistry wireMillRegistry = new BasicRegistry();
 	private final BasicRegistry compressorRegistry = new BasicRegistry();
 	private final List<ItemStack> scrapboxRegistry = new ArrayList<>();
+	private final BasicRegistry assemblingMachineRegistry = new BasicRegistry();
 
 	public BasicRegistry getAlloyRegistry() {
 		return alloyRegistry;
@@ -47,6 +48,10 @@ public class RegistryHandler {
 
 	public List<ItemStack> getScrapboxRegistry() {
 		return scrapboxRegistry;
+	}
+
+	public BasicRegistry getAssemblingMachineRegistry() {
+		return assemblingMachineRegistry;
 	}
 
 	public static RegistryHandler instance() {

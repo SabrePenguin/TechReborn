@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.jei.categories;
 
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.jei.JEITextures;
-import com.sabrepenguin.techreborn.jei.wrappers.AlloyWrapper;
+import com.sabrepenguin.techreborn.jei.wrappers.TwoToOneWrapper;
 import mcp.MethodsReturnNonnullByDefault;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.*;
@@ -18,7 +18,7 @@ import static com.sabrepenguin.techreborn.jei.JEITextures.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class AlloyCategory implements IRecipeCategory<AlloyWrapper> {
+public class TwoToOneCategory implements IRecipeCategory<TwoToOneWrapper> {
 
 	private final IDrawable background;
 	private final String uid;
@@ -28,7 +28,7 @@ public class AlloyCategory implements IRecipeCategory<AlloyWrapper> {
 	protected final IDrawableAnimated right_arrow;
 	protected final IDrawableAnimated left_arrow;
 
-	public AlloyCategory(IGuiHelper helper, String uid) {
+	public TwoToOneCategory(IGuiHelper helper, String uid) {
 		background = helper.createBlankDrawable(114, 47);
 		this.uid = uid;
 
@@ -60,7 +60,7 @@ public class AlloyCategory implements IRecipeCategory<AlloyWrapper> {
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, AlloyWrapper recipeWrapper, IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, TwoToOneWrapper recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup itemStackGroup = recipeLayout.getItemStacks();
 		itemStackGroup.init(0, true, 0, 4);
 		itemStackGroup.init(1, true, 96, 4);

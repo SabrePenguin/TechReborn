@@ -88,6 +88,10 @@ public enum IC2Duplicates {
 		return result;
 	}
 
+	public ItemStack getIc2Stack() {
+		return ic2Stack;
+	}
+
 	public ReplaceableIngredient getIngredient() {
 		return new ReplaceableIngredient(this.trStack, this.ic2Stack);
 	}
