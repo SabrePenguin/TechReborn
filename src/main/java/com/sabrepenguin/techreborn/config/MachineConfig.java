@@ -30,6 +30,9 @@ public class MachineConfig {
 	@Config.LangKey("tile.techreborn.assembling_machine.name")
 	@Config.RequiresWorldRestart
 	public Generic assemblingMachine = new Generic(40000, 128);
+	@Config.LangKey("tile.techreborn.scrapboxinator.name")
+	@Config.RequiresWorldRestart
+	public Generic scrapBoxinator = new Generic(4000, 128);
 
 	public static class Generic {
 		@Config.LangKey("config.max_energy")

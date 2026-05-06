@@ -37,6 +37,12 @@ public class TEProcessing {
 					TechRebornConfig.machineConfig.compressor.maxInput, RegistryHandler.instance().getCompressorRegistry(), TRRecipePlugin.COMPRESSOR_UID);
 		}
 	}
+	public static class TileEntityScrapboxinator extends TileEntityOneToOne {
+		public TileEntityScrapboxinator() {
+			super("tile.techreborn.scrapboxinator.name", TechRebornConfig.machineConfig.scrapBoxinator.maxEnergy,
+					TechRebornConfig.machineConfig.scrapBoxinator.maxInput, RegistryHandler.instance().getScrapboxRegistry(), "");
+		}
+	}
 
 	public static class TileEntityAssemblingMachine extends TileEntityTwoToOne {
 		public TileEntityAssemblingMachine() {

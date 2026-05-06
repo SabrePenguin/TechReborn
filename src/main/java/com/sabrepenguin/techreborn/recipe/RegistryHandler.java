@@ -1,6 +1,8 @@
 package com.sabrepenguin.techreborn.recipe;
 
 import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.SingletonRegistry;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -15,7 +17,8 @@ public class RegistryHandler {
 	private final BasicRegistry recyclerRegistry = new BasicRegistry();
 	private final BasicRegistry wireMillRegistry = new BasicRegistry();
 	private final BasicRegistry compressorRegistry = new BasicRegistry();
-	private final List<ItemStack> scrapboxRegistry = new ArrayList<>();
+	private final List<ItemStack> scrapboxRecipes = new ArrayList<>();
+	private final SingletonRegistry scrapboxRegistry = new SingletonRegistry();
 	private final BasicRegistry assemblingMachineRegistry = new BasicRegistry();
 
 	public BasicRegistry getAlloyRegistry() {
@@ -46,7 +49,11 @@ public class RegistryHandler {
 		return compressorRegistry;
 	}
 
-	public List<ItemStack> getScrapboxRegistry() {
+	public List<ItemStack> getScrapboxRecipes() {
+		return scrapboxRecipes;
+	}
+
+	public ITRRegistry getScrapboxRegistry() {
 		return scrapboxRegistry;
 	}
 

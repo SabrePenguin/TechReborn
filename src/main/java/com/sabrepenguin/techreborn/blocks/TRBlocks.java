@@ -160,7 +160,7 @@ public class TRBlocks {
 				new BlockPlayerDetector(),
 				new BlockHorizontalMachine("pump", "machines/tier1"),
 				new BlockHorizontalMachine("rolling_machine", "machines/tier1"),
-				new BlockHorizontalMachine("scrapboxinator", "machines/tier1"),
+				new BlockHorizontalMachine("scrapboxinator", "machines/tier1", TEProcessing.TileEntityScrapboxinator::new),
 				new BlockOmnidirectionalStatic("low_voltage_su", "machines/energy"),
 				new BlockOmnidirectionalStatic("medium_voltage_su", "machines/energy"),
 				new BlockOmnidirectionalStatic("high_voltage_su", "machines/energy"),
@@ -174,8 +174,9 @@ public class TRBlocks {
 				new BlockHorizontalMachine("extractor", "machines/tier1", TEProcessing.TileEntityExtractor::new),
 				new BlockHorizontalMachine("grinder", "machines/tier1", TEProcessing.TileEntityGrinder::new),
 				new BlockHorizontalMachine("plate_bending_machine", "machines/tier1", TEProcessing.TileEntityPlateBendingMachine::new),
-				ModLoadedUtil.IC2_LOADED ? new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityIC2Recycler::new) :
-				new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityRecycler::new),
+				ModLoadedUtil.IC2_LOADED ?
+						new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityIC2Recycler::new):
+						new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityRecycler::new),
 				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1"),
 				new BlockHorizontalMachine("wire_mill", "machines/tier1", TEProcessing.TileEntityWireMill::new),
 				new BlockLamp("lamp_incandescent", 14, BlockLamp.generateBox(0.25, 0.625)),

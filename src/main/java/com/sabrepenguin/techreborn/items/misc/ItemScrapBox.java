@@ -19,7 +19,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ItemScrapBox extends Item implements INonStandardLocation {
-	protected static final List<ItemStack> REGISTRY = RegistryHandler.instance().getScrapboxRegistry();
+	protected static final List<ItemStack> REGISTRY = RegistryHandler.instance().getScrapboxRecipes();
 
 	public ItemScrapBox() {
 		ItemHelper.registerItem(this, "scrapbox");

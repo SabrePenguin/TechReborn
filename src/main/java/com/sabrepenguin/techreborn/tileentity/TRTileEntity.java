@@ -23,6 +23,7 @@ public class TRTileEntity {
 		GameRegistry.registerTileEntity(TileEntityRecycler.class, new ResourceLocation(Tags.MODID, "recycler"));
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityWireMill.class, new ResourceLocation(Tags.MODID, "wire_mill"));
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityCompressor.class, new ResourceLocation(Tags.MODID, "compressor"));
+		GameRegistry.registerTileEntity(TEProcessing.TileEntityScrapboxinator.class, new ResourceLocation(Tags.MODID, "scrapboxinator"));
 
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityAssemblingMachine.class, new ResourceLocation(Tags.MODID, "assembling_machine"));
 
