@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.jei.wrappers;
 
-import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -17,9 +17,9 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class TwoToOneWrapper implements IRecipeWrapper {
-	private final BasicOutputRecipe recipe;
+	private final ITRRecipe recipe;
 
-	public TwoToOneWrapper(BasicOutputRecipe recipe) {
+	public TwoToOneWrapper(ITRRecipe recipe) {
 		this.recipe = recipe;
 	}
 

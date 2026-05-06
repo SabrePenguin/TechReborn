@@ -1,8 +1,8 @@
 package com.sabrepenguin.techreborn.tileentity.processing;
 
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import com.sabrepenguin.techreborn.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.tileentity.TileEntityIOManager;
 import com.sabrepenguin.techreborn.util.UpgradeUtils;
@@ -28,16 +28,16 @@ public class TileEntityProcessing extends TileEntityIOManager {
 	protected int cachedProcessTime;
 	private int cachedEnergyCost;
 
-	private final BasicRegistry registry;
+	private final ITRRegistry registry;
 	private ITRRecipe cachedRecipe = null;
 	protected int processTime = 0;
 	private boolean isActive = false;
 
-	public TileEntityProcessing(int inputSize, int outputSize, int feCapacity, int maxInput, BasicRegistry recipeRegistry) {
+	public TileEntityProcessing(int inputSize, int outputSize, int feCapacity, int maxInput, ITRRegistry recipeRegistry) {
 		this(inputSize, outputSize, feCapacity, maxInput, recipeRegistry, false);
 	}
 
-	public TileEntityProcessing(int inputSize, int outputSize, int feCapacity, int maxInput, BasicRegistry recipeRegistry, boolean singleInput) {
+	public TileEntityProcessing(int inputSize, int outputSize, int feCapacity, int maxInput, ITRRegistry recipeRegistry, boolean singleInput) {
 		super(inputSize, outputSize, feCapacity, maxInput, 0, singleInput);
 		this.maxReceive = maxInput;
 		totalProcessTime = 0;

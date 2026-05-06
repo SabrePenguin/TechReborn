@@ -18,7 +18,7 @@ import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.*;
 import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
-import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.tileentity.TileEntityIOManager;
@@ -41,7 +41,7 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiHolder<PosGuiData> {
 
-	private BasicOutputRecipe cachedRecipe = null;
+	private ITRRecipe cachedRecipe = null;
 	private int processTime = 0;
 	private boolean isActive = false;
 	private static final int maxReceive = TechRebornConfig.machineConfig.alloySmelter.maxInput;
@@ -91,7 +91,7 @@ public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiH
 			if (RecipeUtils.checkRecipeValid(inputs, cachedRecipe.getInputs()))
 				return;
 		}
-		BasicOutputRecipe newRecipe = RegistryHandler.instance().getAlloyRegistry().getRecipe(inputs);
+		ITRRecipe newRecipe = RegistryHandler.instance().getAlloyRegistry().getRecipe(inputs);
 		if (cachedRecipe != newRecipe) {
 			cachedRecipe = newRecipe;
 			if (cachedRecipe != null) {

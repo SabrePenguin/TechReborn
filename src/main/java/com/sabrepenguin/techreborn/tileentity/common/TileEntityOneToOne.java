@@ -15,7 +15,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.gui.*;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityProcessing;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.BlockHorizontal;
@@ -27,7 +27,7 @@ public class TileEntityOneToOne extends TileEntityProcessing implements IGuiHold
 	private final String lang;
 	private final String jeiKey;
 
-	public TileEntityOneToOne(String lang, int feCapacity, int maxInput, BasicRegistry registry, String jeiKey) {
+	public TileEntityOneToOne(String lang, int feCapacity, int maxInput, ITRRegistry registry, String jeiKey) {
 		super(1, 1, feCapacity, maxInput, registry, true);
 		this.lang = lang;
 		this.jeiKey = jeiKey;
