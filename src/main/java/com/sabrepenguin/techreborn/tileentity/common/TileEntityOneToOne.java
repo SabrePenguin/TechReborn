@@ -28,7 +28,7 @@ public class TileEntityOneToOne extends TileEntityProcessing implements IGuiHold
 	private final String jeiKey;
 
 	public TileEntityOneToOne(String lang, int feCapacity, int maxInput, BasicRegistry registry, String jeiKey) {
-		super(1, 1, feCapacity, maxInput, registry);
+		super(1, 1, feCapacity, maxInput, registry, true);
 		this.lang = lang;
 		this.jeiKey = jeiKey;
 	}

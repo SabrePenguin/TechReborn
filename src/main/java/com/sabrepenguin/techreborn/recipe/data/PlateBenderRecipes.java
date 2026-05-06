@@ -27,6 +27,18 @@ public class PlateBenderRecipes {
 				.setRecipeTime(100)
 				.setEnergyCost(32)
 				.build());
+		REGISTRY.addRecipe(new BasicBuilder<>()
+				.addInput("ingotIron")
+				.setOutput(TRItems.plates, 1, Plate.PlateMeta.iron.metadata())
+				.setRecipeTime(40)
+				.setEnergyCost(100)
+				.build());
+		REGISTRY.addRecipe(new BasicBuilder<>()
+				.addInput("ingotGold")
+				.setOutput(TRItems.plates, 1, Plate.PlateMeta.gold.metadata())
+				.setRecipeTime(40)
+				.setEnergyCost(100)
+				.build());
 		{
 			List<String> inputs = Arrays.stream(OreDictionary.getOreNames()).filter(name -> name.startsWith("ingot") // TODO: Replace with better filter
 							&& !name.contains("iridium") && !name.equals("ingotAdvancedAlloy") && !name.equals("ingotIridiumAlloy") && !name.equals("ingotRefinedIron"))
