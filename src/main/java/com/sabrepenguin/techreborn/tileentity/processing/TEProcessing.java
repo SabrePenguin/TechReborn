@@ -40,7 +40,7 @@ public class TEProcessing {
 	public static class TileEntityScrapboxinator extends TileEntityOneToOne {
 		public TileEntityScrapboxinator() {
 			super("tile.techreborn.scrapboxinator.name", TechRebornConfig.machineConfig.scrapBoxinator.maxEnergy,
-					TechRebornConfig.machineConfig.scrapBoxinator.maxInput, RegistryHandler.instance().getScrapboxRegistry(), "");
+					TechRebornConfig.machineConfig.scrapBoxinator.maxInput, RegistryHandler.instance().getScrapboxRegistry(), TRRecipePlugin.SCRAPBOXINATOR_UID);
 		}
 	}
 

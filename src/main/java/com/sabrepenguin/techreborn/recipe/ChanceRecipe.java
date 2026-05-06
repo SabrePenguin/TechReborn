@@ -36,6 +36,10 @@ public class ChanceRecipe implements ITRRecipe {
 		return Collections.singletonList(output.get(RANDOM.nextInt(output.size())));
 	}
 
+	public List<ItemStack> getAllOutputs() {
+		return output;
+	}
+
 	@Override
 	public int getRecipeTime() {
 		return recipeTime;

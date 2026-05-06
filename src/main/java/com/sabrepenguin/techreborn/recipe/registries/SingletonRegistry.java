@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class SingletonRegistry implements ITRRegistry {
 
 	@Override
 	public Collection<ITRRecipe> getRecipes() {
-		return new ArrayList<>();
+		return Arrays.asList(recipe);
 	}
 
 	@Override
