@@ -20,6 +20,8 @@ public class RegistryHandler {
 	private final List<ItemStack> scrapboxRecipes = new ArrayList<>();
 	private final SingletonRegistry scrapboxRegistry = new SingletonRegistry();
 	private final BasicRegistry assemblingMachineRegistry = new BasicRegistry();
+	private final BasicRegistry solidCanningMachineRegistry = new BasicRegistry();
+	private final BasicRegistry chemicalReactorRegistry = new BasicRegistry();
 
 	public BasicRegistry getAlloyRegistry() {
 		return alloyRegistry;
@@ -59,6 +61,14 @@ public class RegistryHandler {
 
 	public BasicRegistry getAssemblingMachineRegistry() {
 		return assemblingMachineRegistry;
+	}
+
+	public BasicRegistry getChemicalReactorRegistry() {
+		return chemicalReactorRegistry;
+	}
+
+	public BasicRegistry getSolidCanningMachineRegistry() {
+		return solidCanningMachineRegistry;
 	}
 
 	public static RegistryHandler instance() {

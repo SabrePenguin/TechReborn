@@ -57,7 +57,7 @@ public class TRBlocks {
 	public static final BlockChunkLoader chunk_loader = null;
 	public static final BlockMatterFabricator matter_fabricator = null;
 	public static final BlockChargeOMat charge_o_mat = null;
-	public static final BlockChemicalReactor chemical_reactor = null;
+	public static final BlockHorizontalMachine chemical_reactor = null;
 	public static final BlockDigitalChest digital_chest = null;
 	public static final BlockDistillationTower distillation_tower = null;
 	public static final BlockImplosionCompressor implosion_compressor = null;
@@ -145,7 +145,7 @@ public class TRBlocks {
 				new BlockFluidReplicator(),
 				new BlockMatterFabricator(),
 				new BlockChargeOMat(),
-				new BlockChemicalReactor(),
+				new BlockHorizontalMachine("chemical_reactor", "machines/tier2", TEProcessing.TileEntityChemicalReactor::new),
 				new BlockDigitalChest(),
 				new BlockDistillationTower(),
 				new BlockImplosionCompressor(),
@@ -177,7 +177,7 @@ public class TRBlocks {
 				ModLoadedUtil.IC2_LOADED ?
 						new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityIC2Recycler::new):
 						new BlockHorizontalMachine("recycler", "machines/tier1", TileEntityRecycler::new),
-				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1"),
+				new BlockHorizontalMachine("solid_canning_machine", "machines/tier1", TEProcessing.TileEntitySolidCanningMachine::new),
 				new BlockHorizontalMachine("wire_mill", "machines/tier1", TEProcessing.TileEntityWireMill::new),
 				new BlockLamp("lamp_incandescent", 14, BlockLamp.generateBox(0.25, 0.625)),
 				new BlockLamp("lamp_led", 15, BlockLamp.generateBox(0.125, 0.0625)),

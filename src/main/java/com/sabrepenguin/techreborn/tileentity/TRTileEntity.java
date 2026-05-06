@@ -26,6 +26,8 @@ public class TRTileEntity {
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityScrapboxinator.class, new ResourceLocation(Tags.MODID, "scrapboxinator"));
 
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityAssemblingMachine.class, new ResourceLocation(Tags.MODID, "assembling_machine"));
+		GameRegistry.registerTileEntity(TEProcessing.TileEntityChemicalReactor.class, new ResourceLocation(Tags.MODID, "chemical_reactor"));
+		GameRegistry.registerTileEntity(TEProcessing.TileEntitySolidCanningMachine.class, new ResourceLocation(Tags.MODID, "solid_canning_machine"));
 
 		GameRegistry.registerTileEntity(TileEntityCable.class, new ResourceLocation(Tags.MODID, "cable"));
 	}

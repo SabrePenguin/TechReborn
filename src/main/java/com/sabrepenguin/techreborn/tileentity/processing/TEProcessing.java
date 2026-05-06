@@ -51,4 +51,18 @@ public class TEProcessing {
 							.getAssemblingMachineRegistry(), TRRecipePlugin.ASSEMBLING_MACHINE_UID);
 		}
 	}
+	public static class TileEntityChemicalReactor extends TileEntityTwoToOne {
+		public TileEntityChemicalReactor() {
+			super("tile.techreborn.chemical_reactor.name", TechRebornConfig.machineConfig.chemicalReactor.maxEnergy,
+					TechRebornConfig.machineConfig.chemicalReactor.maxInput, RegistryHandler.instance()
+							.getChemicalReactorRegistry(), TRRecipePlugin.CHEMICAL_REACTOR_UID);
+		}
+	}
+	public static class TileEntitySolidCanningMachine extends TileEntityTwoToOne {
+		public TileEntitySolidCanningMachine() {
+			super("tile.techreborn.solid_canning_machine.name", TechRebornConfig.machineConfig.solidCanningMachine.maxEnergy,
+					TechRebornConfig.machineConfig.solidCanningMachine.maxInput, RegistryHandler.instance()
+							.getSolidCanningMachineRegistry(), TRRecipePlugin.SOLID_CANNING_MACHINE_UID);
+		}
+	}
 }

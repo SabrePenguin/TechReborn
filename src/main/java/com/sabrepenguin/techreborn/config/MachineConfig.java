@@ -33,6 +33,12 @@ public class MachineConfig {
 	@Config.LangKey("tile.techreborn.scrapboxinator.name")
 	@Config.RequiresWorldRestart
 	public Generic scrapBoxinator = new Generic(4000, 128);
+	@Config.LangKey("tile.techreborn.chemical_reactor.name")
+	@Config.RequiresWorldRestart
+	public Generic chemicalReactor = new Generic(40000, 512);
+	@Config.LangKey("tile.techreborn.solid_canning_machine.name")
+	@Config.RequiresWorldRestart
+	public Generic solidCanningMachine = new Generic(40000, 512);
 
 	public static class Generic {
 		@Config.LangKey("config.max_energy")
