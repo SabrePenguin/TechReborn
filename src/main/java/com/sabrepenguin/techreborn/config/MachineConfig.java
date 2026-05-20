@@ -38,7 +38,10 @@ public class MachineConfig {
 	public Generic chemicalReactor = new Generic(40000, 512);
 	@Config.LangKey("tile.techreborn.solid_canning_machine.name")
 	@Config.RequiresWorldRestart
-	public Generic solidCanningMachine = new Generic(40000, 512);
+	public Generic solidCanningMachine = new Generic(40000, 128);
+	@Config.LangKey("tile.techreborn.charge_o_mat.name")
+	@Config.RequiresWorldRestart
+	public Generic chargeOMat = new Generic(400_000_000, 2048);
 
 	public static class Generic {
 		@Config.LangKey("config.max_energy")

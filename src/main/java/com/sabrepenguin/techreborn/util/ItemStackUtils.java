@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.capability.energy.SettableEnergyStorage;
+import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -62,4 +63,18 @@ public class ItemStackUtils {
 		stack.setTagCompound(compound);
 	}
 
+	public static boolean chargeItem(TEEnergyStorage energyStorage, ItemStack realStack) {
+		boolean charged = false;
+		if (realStack.hasCapability(CapabilityEnergy.ENERGY, null)) {
+			IEnergyStorage storage = realStack.getCapability(CapabilityEnergy.ENERGY, null);
+			int availablePower = Math.min(energyStorage.getEnergyStored(), energyStorage.getMaxOutput());
+			int consumed = storage.receiveEnergy(availablePower, true);
+			if (consumed > 0) {
+				energyStorage.internalExtract(consumed, false);
+				storage.receiveEnergy(consumed, false);
+				charged = true;
+			}
+		}
+		return charged;
+	}
 }
