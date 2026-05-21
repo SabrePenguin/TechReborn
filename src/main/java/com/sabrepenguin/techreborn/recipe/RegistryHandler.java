@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.recipe;
 
 import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.MatterFabricatorRegistry;
 import com.sabrepenguin.techreborn.recipe.registries.SingletonRegistry;
 import net.minecraft.item.ItemStack;
 
@@ -22,6 +23,7 @@ public class RegistryHandler {
 	private final BasicRegistry assemblingMachineRegistry = new BasicRegistry();
 	private final BasicRegistry solidCanningMachineRegistry = new BasicRegistry();
 	private final BasicRegistry chemicalReactorRegistry = new BasicRegistry();
+	private final MatterFabricatorRegistry matterFabricatorRegistry = new MatterFabricatorRegistry();
 
 	public BasicRegistry getAlloyRegistry() {
 		return alloyRegistry;
@@ -69,6 +71,10 @@ public class RegistryHandler {
 
 	public BasicRegistry getSolidCanningMachineRegistry() {
 		return solidCanningMachineRegistry;
+	}
+
+	public MatterFabricatorRegistry getMatterFabricatorRegistry() {
+		return matterFabricatorRegistry;
 	}
 
 	public static RegistryHandler instance() {

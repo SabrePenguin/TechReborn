@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.tileentity;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.tileentity.cable.TileEntityCable;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityChargeOMat;
+import com.sabrepenguin.techreborn.tileentity.misc.TileEntityMatterFabricator;
 import com.sabrepenguin.techreborn.tileentity.processing.TEProcessing;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAlloySmelter;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityElectricFurnace;
@@ -31,6 +32,7 @@ public class TRTileEntity {
 		GameRegistry.registerTileEntity(TEProcessing.TileEntitySolidCanningMachine.class, new ResourceLocation(Tags.MODID, "solid_canning_machine"));
 
 		GameRegistry.registerTileEntity(TileEntityChargeOMat.class, new ResourceLocation(Tags.MODID, "charge_o_mat"));
+		GameRegistry.registerTileEntity(TileEntityMatterFabricator.class, new ResourceLocation(Tags.MODID, "matter_fabricator"));
 
 		GameRegistry.registerTileEntity(TileEntityCable.class, new ResourceLocation(Tags.MODID, "cable"));
 	}

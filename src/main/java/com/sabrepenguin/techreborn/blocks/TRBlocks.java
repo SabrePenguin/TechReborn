@@ -12,6 +12,7 @@ import com.sabrepenguin.techreborn.blocks.machines.tier3.*;
 import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityChargeOMat;
+import com.sabrepenguin.techreborn.tileentity.misc.TileEntityMatterFabricator;
 import com.sabrepenguin.techreborn.tileentity.processing.*;
 import com.sabrepenguin.techreborn.util.ModLoadedUtil;
 import net.minecraft.block.Block;
@@ -56,7 +57,7 @@ public class TRBlocks {
 	public static final BlockCreativeQuantumChest creative_quantum_chest = null;
 	public static final BlockFluidReplicator fluid_replicator = null;
 	public static final BlockChunkLoader chunk_loader = null;
-	public static final BlockMatterFabricator matter_fabricator = null;
+	public static final BlockHorizontalMachine matter_fabricator = null;
 	public static final BlockHorizontalMachine charge_o_mat = null;
 	public static final BlockHorizontalMachine chemical_reactor = null;
 	public static final BlockDigitalChest digital_chest = null;
@@ -144,7 +145,7 @@ public class TRBlocks {
 				new BlockCreativeQuantumChest(),
 				new BlockChunkLoader(),
 				new BlockFluidReplicator(),
-				new BlockMatterFabricator(),
+				new BlockHorizontalMachine("matter_fabricator", "machines/tier3", TileEntityMatterFabricator::new),
 				new BlockHorizontalMachine("charge_o_mat", "machines/tier2", TileEntityChargeOMat::new),
 				new BlockHorizontalMachine("chemical_reactor", "machines/tier2", TEProcessing.TileEntityChemicalReactor::new),
 				new BlockDigitalChest(),

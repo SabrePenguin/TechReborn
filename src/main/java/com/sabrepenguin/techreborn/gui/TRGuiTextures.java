@@ -9,4 +9,9 @@ public class TRGuiTextures {
 			.imageSize(20, 40)
 			.canApplyTheme()
 			.build();
+	public static UITexture DOWN_PROGRESS_ARROW = UITexture.builder()
+			.location(Tags.MODID, "gui/down_arrow")
+			.imageSize(20, 40)
+			.canApplyTheme()
+			.build();
 }

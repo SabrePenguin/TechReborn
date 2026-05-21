@@ -42,6 +42,9 @@ public class MachineConfig {
 	@Config.LangKey("tile.techreborn.charge_o_mat.name")
 	@Config.RequiresWorldRestart
 	public Generic chargeOMat = new Generic(400_000_000, 2048);
+	@Config.LangKey("tile.techreborn.matter_fabricator.name")
+	@Config.RequiresWorldRestart
+	public MatterFabricator matterFabricator = new MatterFabricator();
 
 	public static class Generic {
 		@Config.LangKey("config.max_energy")
@@ -73,5 +76,17 @@ public class MachineConfig {
 		public int maxEnergy = 4000;
 		@Config.LangKey("config.transfer_limit")
 		public int maxInput = 128;
+	}
+
+	public static class MatterFabricator {
+		@Config.LangKey("config.max_energy")
+		public int maxEnergy = 40_000_000;
+		@Config.LangKey("config.transfer_limit")
+		public int maxInput = 32768;
+		@Config.LangKey("config.max_energy")
+		public int fabricationRate = 6000;
+		@Config.LangKey("config.transfer_limit")
+		@Config.RangeInt(min = 1)
+		public int energyPerAmp = 20;
 	}
 }

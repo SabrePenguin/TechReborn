@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.util.handlers;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Ingot;
+import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -37,6 +38,10 @@ public class OreHandler {
 		OreDictionary.registerOre("gemCharcoal", new ItemStack(Items.COAL, 1, 1));
 
 		OreDictionary.registerOre("ingotAluminium", new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.aluminum.metadata()));
+		OreDictionary.registerOre("itemScrap", new ItemStack(TRItems.part, 1, Part.PartMeta.scrap.metadata()));
+		OreDictionary.registerOre("materialScrap", new ItemStack(TRItems.part, 1, Part.PartMeta.scrap.metadata()));
+		OreDictionary.registerOre("itemScrapBox", TRItems.scrapbox);
+		OreDictionary.registerOre("materialScrapBox", TRItems.scrapbox);
 	}
 
 	public static boolean hasOre(String oreType, String name) {
