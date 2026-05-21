@@ -4,7 +4,7 @@ import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
-import com.sabrepenguin.techreborn.tileentity.TileEntityIOManager;
+import com.sabrepenguin.techreborn.tileentity.common.TileEntityUpgradeableIOManager;
 import com.sabrepenguin.techreborn.util.UpgradeUtils;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +17,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityProcessing extends TileEntityIOManager {
+public class TileEntityProcessing extends TileEntityUpgradeableIOManager {
 
 	private final int maxReceive;
 

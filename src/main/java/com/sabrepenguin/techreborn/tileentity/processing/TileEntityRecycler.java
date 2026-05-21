@@ -23,7 +23,7 @@ import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
-import com.sabrepenguin.techreborn.tileentity.TileEntityIOManager;
+import com.sabrepenguin.techreborn.tileentity.common.TileEntityUpgradeableIOManager;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import com.sabrepenguin.techreborn.util.UpgradeUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -41,7 +41,7 @@ import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityRecycler extends TileEntityIOManager implements IGuiHolder<PosGuiData> {
+public class TileEntityRecycler extends TileEntityUpgradeableIOManager implements IGuiHolder<PosGuiData> {
 
 	private final int maxReceive;
 

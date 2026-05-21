@@ -21,7 +21,7 @@ import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
-import com.sabrepenguin.techreborn.tileentity.TileEntityIOManager;
+import com.sabrepenguin.techreborn.tileentity.common.TileEntityUpgradeableIOManager;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import com.sabrepenguin.techreborn.util.UpgradeUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -39,7 +39,7 @@ import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityAlloySmelter extends TileEntityIOManager implements IGuiHolder<PosGuiData> {
+public class TileEntityAlloySmelter extends TileEntityUpgradeableIOManager implements IGuiHolder<PosGuiData> {
 
 	private ITRRecipe cachedRecipe = null;
 	private int processTime = 0;

@@ -1,8 +1,9 @@
-package com.sabrepenguin.techreborn.tileentity;
+package com.sabrepenguin.techreborn.tileentity.common;
 
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
+import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -31,15 +32,10 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 	protected final LimitedItemStackHandler output;
 	protected final RestrictedItemStackHandler battery;
 	protected final MachineIOManager ioManager;
-	protected final ItemStackHandler upgrades;
-
 
 	protected final TEEnergyStorage energyStorage;
 
-	protected boolean shouldRecalculate = false;
 	protected boolean refreshRecipe = false;
-
-	protected int cachedRevision = -1;
 
 	protected final int baseCapacity;
 
@@ -65,14 +61,10 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 		battery = new RestrictedItemStackHandler(inventory, inputSize + outputSize);
 		ioManager = new MachineIOManager(SideConfig.input(inputs), SideConfig.output(output), SideConfig.bidirectional(battery));
 
-		upgrades = new StackLimitedItemStackHandler(4, 1, () -> shouldRecalculate = true); //TODO: Config slot size
-
 		baseCapacity = capacity;
 		energyStorage = new TEEnergyStorage(baseCapacity, maxReceive, maxOutput);
 		energyStorage.setCanExtract(false);
 	}
-
-	protected abstract void recalculateCosts();
 
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
@@ -102,7 +94,6 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
-		upgrades.deserializeNBT(compound.getCompoundTag("upgrades"));
 		if (compound.hasKey("maxEnergy"))
 			energyStorage.setMaxEnergy(compound.getInteger("maxEnergy"));
 		if (compound.hasKey("energy"))
@@ -114,7 +105,6 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
-		compound.setTag("upgrades", upgrades.serializeNBT());
 		compound.setInteger("energy", energyStorage.getEnergyStored());
 		if (energyStorage.getMaxEnergyStored() != baseCapacity) {
 			compound.setInteger("maxEnergy", energyStorage.getMaxEnergyStored());
@@ -138,15 +128,6 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 	public void update() {
 		if (world.isRemote) {
 			return;
-		}
-
-		if (cachedRevision != TechRebornConfig.getConfigRevision()) {
-			shouldRecalculate = true;
-			cachedRevision = TechRebornConfig.getConfigRevision();
-		}
-		if (shouldRecalculate) {
-			shouldRecalculate = false;
-			recalculateCosts();
 		}
 
 		boolean isDirty = false;
@@ -210,15 +191,6 @@ public abstract class TileEntityIOManager extends TileEntity implements ISideCon
 			return;
 		}
 		refreshRecipe = true;
-		markDirty();
-	}
-
-	public void onUpgradeChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
-		if (world.isRemote || init || onlyAmountChanged) {
-			shouldRecalculate = false;
-			return;
-		}
-		shouldRecalculate = true;
 		markDirty();
 	}
 }
