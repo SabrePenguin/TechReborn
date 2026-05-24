@@ -12,5 +12,5 @@ public interface ITRRegistry {
 	boolean addRecipe(ITRRecipe recipe);
 	ITRRecipe getRecipe(List<ItemStack> ingredientList);
 	ITRRecipe getRecipe(IItemHandler handler);
-	void sortRecipes();
+	default void sortRecipes() {};
 }

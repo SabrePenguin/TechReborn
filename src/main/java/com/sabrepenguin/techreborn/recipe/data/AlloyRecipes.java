@@ -4,13 +4,13 @@ import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Ingot;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.CartesianBuilder;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class AlloyRecipes {
-	public static final BasicRegistry REGISTRY = RegistryHandler.instance().getAlloyRegistry();
+	public static final ITRRegistry REGISTRY = RegistryHandler.instance().getAlloyRegistry();
 
 	public static void init() {
 		List<String> types = Arrays.asList("dust", "ingot");

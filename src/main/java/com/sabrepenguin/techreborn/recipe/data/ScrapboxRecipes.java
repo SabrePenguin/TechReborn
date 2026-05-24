@@ -18,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -195,7 +194,7 @@ public class ScrapboxRecipes {
 		registerDyeable(Blocks.STAINED_GLASS_PANE);
 		registerDyeable(Blocks.STAINED_HARDENED_CLAY);
 
-		REGISTRY.addRecipe(new ChanceRecipe(Arrays.asList(new CountedIngredient(TRItems.scrapbox, 1, 0)),
+		REGISTRY.addRecipe(new ChanceRecipe(Arrays.asList(new CountedIngredient(1, new ItemStack(TRItems.scrapbox, 1, 0))),
 				OUTPUTS, 20, 8));
 	}
 

@@ -1,50 +1,42 @@
 package com.sabrepenguin.techreborn.recipe.utils;
 
-import com.sabrepenguin.techreborn.util.ItemStackWrapper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class CountedIngredient {
 
 	private final int count;
-	private String oreDict;
-	private ItemStack itemStack;
+	private final Ingredient ingredient;
 
-	public CountedIngredient(Item item, int count, int metadata) {
+	public CountedIngredient(Item item, int count) {
 		this.count = count;
-		this.itemStack = new ItemStack(item, count, metadata);
+		ingredient = Ingredient.fromItem(item);
 	}
 
 	public CountedIngredient(int count, ItemStack stack) {
 		this.count = count;
-		this.itemStack = stack.copy();
-		this.itemStack.setCount(count);
+		ingredient = Ingredient.fromStacks(stack);
 	}
 
 	public CountedIngredient(int count, String oreDict) {
 		this.count = count;
-		this.oreDict = oreDict;
 		if (!OreDictionary.doesOreNameExist(oreDict)) {
 			throw new RuntimeException("Could not create ore dictionary counted ingredient");
 		}
+		ingredient = Ingredient.fromStacks(OreDictionary.getOres(oreDict).stream().toArray(ItemStack[]::new));
 	}
 
 	public List<ItemStack> resolveIngredients() {
-		return itemStack == null ? oreToCount(OreDictionary.getOres(oreDict)) : Arrays.asList(itemStack);
-	}
-
-	private List<ItemStack> oreToCount(List<ItemStack> input) {
-		List<ItemStack> output = new ArrayList<>();
-		for (ItemStack item: input) {
-			output.add(new ItemStack(item.getItem(), count, item.getMetadata()));
-		}
-		return output;
+		List<ItemStack> outputs = Arrays.stream(ingredient.getMatchingStacks()).collect(Collectors.toList());
+		outputs.forEach(stack -> stack.setCount(count));
+		return outputs;
 	}
 
 	public int getCount() {
@@ -52,34 +44,8 @@ public class CountedIngredient {
 	}
 
 	public boolean matches(ItemStack stack) {
-		if (stack.isEmpty()) return false;
-		if (stack.getCount() < count) return false;
-		if (oreDict != null) {
-			return OreDictionary.containsMatch(false, OreDictionary.getOres(oreDict), stack);
-		} else {
-			return ItemStack.areItemsEqual(itemStack, stack);
-		}
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof CountedIngredient other) {
-			if (this.oreDict != null && other.oreDict != null)
-				return this.count == other.count && this.oreDict.equals(other.oreDict);
-			if (this.itemStack != null && other.itemStack != null)
-				return this.count == other.count && this.itemStack.isItemEqual(other.itemStack);
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		if (this.oreDict != null) {
-			return Objects.hash(count, oreDict);
-		}
-		if (this.itemStack != null) {
-			return Objects.hash(count, new ItemStackWrapper(this.itemStack));
-		}
-		throw new RuntimeException("Unable to hash item, neither oredict or itemstack set");
+		if (!ingredient.apply(stack))
+			return false;
+		return stack.getCount() >= count;
 	}
 }

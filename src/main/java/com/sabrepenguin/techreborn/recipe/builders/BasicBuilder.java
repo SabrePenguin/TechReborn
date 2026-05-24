@@ -38,7 +38,7 @@ public class BasicBuilder<T extends BasicBuilder<T>> {
 	}
 
 	public T addInput(Item item, int count, int metadata) {
-		this.ingredients.add(new CountedIngredient(item, count, metadata));
+		this.ingredients.add(new CountedIngredient(count, new ItemStack(item, count, metadata)));
 		return self();
 	}
 

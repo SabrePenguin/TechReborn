@@ -1,9 +1,6 @@
 package com.sabrepenguin.techreborn.recipe;
 
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
-import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
-import com.sabrepenguin.techreborn.recipe.registries.MatterFabricatorRegistry;
-import com.sabrepenguin.techreborn.recipe.registries.SingletonRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.*;
 import net.minecraft.item.ItemStack;
 
 import java.util.ArrayList;
@@ -11,7 +8,7 @@ import java.util.List;
 
 public class RegistryHandler {
 	private static final RegistryHandler INSTANCE = new RegistryHandler();
-	private final BasicRegistry alloyRegistry = new BasicRegistry();
+	private final ITRRegistry alloyRegistry = new ShapelessRegistry();
 	private final BasicRegistry grinderRegistry = new BasicRegistry();
 	private final BasicRegistry extractorRegistry = new BasicRegistry();
 	private final BasicRegistry plateBenderRegistry = new BasicRegistry();
@@ -25,7 +22,7 @@ public class RegistryHandler {
 	private final BasicRegistry chemicalReactorRegistry = new BasicRegistry();
 	private final MatterFabricatorRegistry matterFabricatorRegistry = new MatterFabricatorRegistry();
 
-	public BasicRegistry getAlloyRegistry() {
+	public ITRRegistry getAlloyRegistry() {
 		return alloyRegistry;
 	}
 
