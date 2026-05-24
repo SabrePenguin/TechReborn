@@ -99,6 +99,9 @@ public class TileEntityAlloySmelter extends TileEntityUpgradeableIOManager imple
 				cachedProcessTime = (int) (totalProcessTime * cachedProcessMultiplier);
 				energyCost = cachedRecipe.getEnergyCost();
 				cachedEnergyCost = (int) (energyCost * cachedEnergyMultiplier);
+				float newTransfer = UpgradeUtils.getEnergyTransferMultiplier(upgrades);
+				this.energyStorage.setMaxReceive((int) (maxReceive * newTransfer));
+				this.energyStorage.setMaxExtract(cachedEnergyCost);
 			}
 			processTime = 0;
 		}
