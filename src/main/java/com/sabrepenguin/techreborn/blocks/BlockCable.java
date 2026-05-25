@@ -150,7 +150,7 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 		BlockPos offset = pos.offset(facing);
 		IBlockState neighbor = world.getBlockState(offset);
 		if (world.getBlockState(offset).getBlock() == this)
-			return state.getValue(TYPE) == neighbor.getValue(TYPE);
+			return CableEnum.isSameType(state.getValue(TYPE), neighbor.getValue(TYPE));
 		TileEntity te = world instanceof ChunkCache chunkCache ? chunkCache.getTileEntity(offset, Chunk.EnumCreateEntityType.CHECK) : world.getTileEntity(offset);
 		return te != null && te.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
 	}
@@ -350,6 +350,18 @@ public class BlockCable extends Block implements INonStandardLocation, IMetaInfo
 
 		public static boolean isThin(CableEnum cable) {
 			return cable == COPPER || cable == TIN || cable == GOLD || cable == HV || cable == GLASSFIBER;
+		}
+
+		public static boolean isSameType(CableEnum a, CableEnum b) {
+			if (a == b)
+				return true;
+			if ((a == COPPER || a == INSULATEDCOPPER) && (b == COPPER || b == INSULATEDCOPPER))
+				return true;
+			if ((a == GOLD || a == INSULATEDGOLD) && (b == GOLD || b == INSULATEDGOLD))
+				return true;
+			if ((a == HV || a == INSULATEDHV) && (b == HV || b == INSULATEDHV))
+				return true;
+			return false;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.tileentity.cable;
 
 import com.github.bsideup.jabel.Desugar;
+import com.sabrepenguin.techreborn.blocks.BlockCable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -18,21 +19,23 @@ public class NetworkCable {
 	private final Map<BlockPos, Set<EnumFacing>> endpoints = new HashMap<>();
 	private final List<NetworkEndpoint> endpointList = new ArrayList<>();
 
+	private final BlockCable.CableEnum cableEnum;
 	private final long maxTransfer;
 	private final int maxIntTransfer;
 
 	private boolean powered = false;
 	private final World world;
 
-	public NetworkCable(World world, long maxTransfer) {
+	public NetworkCable(World world, BlockCable.CableEnum cableEnum) {
+		this.cableEnum = cableEnum;
 		this.world = world;
-		this.maxTransfer = maxTransfer;
+		this.maxTransfer = cableEnum.getTransferRate();
 		maxIntTransfer = (int) Math.min(Integer.MAX_VALUE, maxTransfer);
 		NetworkCableManager.registerNetwork(world, this);
 	}
 
-	public NetworkCable(World world, long maxTransfer, BlockPos pos) {
-		this(world, maxTransfer);
+	public NetworkCable(World world, BlockCable.CableEnum cable, BlockPos pos) {
+		this(world, cable);
 		addToNetwork(pos);
 	}
 
@@ -218,7 +221,7 @@ public class NetworkCable {
 
 			for (int i = 1; i < subgraphs.size(); i++) {
 				var severedData = subgraphs.get(i);
-				NetworkCable networkCable = new NetworkCable(world, maxTransfer);
+				NetworkCable networkCable = new NetworkCable(world, cableEnum);
 				buildNetwork(networkCable, world, severedData.getLeft(), severedData.getRight());
 			}
 		}

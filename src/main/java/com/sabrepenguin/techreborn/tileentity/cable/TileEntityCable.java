@@ -29,7 +29,7 @@ public class TileEntityCable extends TileEntity {
 				TileEntity te = world.getTileEntity(offset);
 				if (te instanceof TileEntityCable cable && !te.isInvalid()) {
 					IBlockState neighborState = world.getBlockState(offset);
-					if (type == neighborState.getValue(BlockCable.TYPE)) {
+					if (BlockCable.CableEnum.isSameType(type, neighborState.getValue(BlockCable.TYPE))) {
 						if (cable.isPartOfNetwork()) {
 							if (this.network == null) {
 								this.network = cable.network;
@@ -54,7 +54,7 @@ public class TileEntityCable extends TileEntity {
 			}
 		}
 		if (this.network == null) {
-			this.network = new NetworkCable(world, type.getTransferRate() , this.pos);
+			this.network = new NetworkCable(world, type, this.pos);
 		}
 		scanEndpoints();
 		super.onLoad();
