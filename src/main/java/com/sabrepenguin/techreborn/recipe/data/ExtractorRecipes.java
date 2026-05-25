@@ -4,10 +4,10 @@ import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.blocks.fluids.TRFluids;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Part;
-import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import java.util.Arrays;
 
 public class ExtractorRecipes {
-	private static final BasicRegistry REGISTRY = RegistryHandler.instance().getExtractorRegistry();
+	private static final ITRRegistry REGISTRY = RegistryHandler.instance().getExtractorRegistry();
 
 	public static void init() {
 		REGISTRY.addRecipe(new BasicBuilder<>()

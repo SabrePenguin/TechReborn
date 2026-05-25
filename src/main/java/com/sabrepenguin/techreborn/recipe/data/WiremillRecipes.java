@@ -5,10 +5,11 @@ import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
 import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import net.minecraft.item.Item;
 
 public class WiremillRecipes {
-	private static final BasicRegistry REGISTRY = RegistryHandler.instance().getWireMillRegistry();
+	private static final ITRRegistry REGISTRY = RegistryHandler.instance().getWireMillRegistry();
 
 	public static void init() {
 		REGISTRY.addRecipe(new BasicBuilder<>()

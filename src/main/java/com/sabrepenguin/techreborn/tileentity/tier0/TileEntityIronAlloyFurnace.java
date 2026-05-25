@@ -15,7 +15,7 @@ import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockIronAlloyFurnace;
 import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
-import com.sabrepenguin.techreborn.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.tileentity.ISetWorldNameable;

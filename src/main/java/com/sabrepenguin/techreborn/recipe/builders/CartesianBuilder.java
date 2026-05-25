@@ -1,7 +1,7 @@
 package com.sabrepenguin.techreborn.recipe.builders;
 
 import com.google.common.collect.Lists;
-import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;

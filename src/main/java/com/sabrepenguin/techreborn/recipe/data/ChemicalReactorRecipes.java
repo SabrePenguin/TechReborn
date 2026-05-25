@@ -4,13 +4,13 @@ import com.sabrepenguin.techreborn.blocks.fluids.TRFluids;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class ChemicalReactorRecipes {
-	public static final BasicRegistry REGISTRY = RegistryHandler.instance().getChemicalReactorRegistry();
+	public static final ITRRegistry REGISTRY = RegistryHandler.instance().getChemicalReactorRegistry();
 
 	@SuppressWarnings("ConstantConditions")
 	public static void init() {

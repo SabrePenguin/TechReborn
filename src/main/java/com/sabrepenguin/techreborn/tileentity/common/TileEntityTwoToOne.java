@@ -17,6 +17,7 @@ import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.gui.*;
 import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityProcessing;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.BlockHorizontal;
@@ -28,7 +29,7 @@ public class TileEntityTwoToOne extends TileEntityProcessing implements IGuiHold
 	private final String lang;
 	private final String jeiKey;
 
-	public TileEntityTwoToOne(String lang, int feCapacity, int maxInput, BasicRegistry registry, String jeiKey) {
+	public TileEntityTwoToOne(String lang, int feCapacity, int maxInput, ITRRegistry registry, String jeiKey) {
 		super(2, 1, feCapacity, maxInput, registry);
 		this.lang = lang;
 		this.jeiKey = jeiKey;

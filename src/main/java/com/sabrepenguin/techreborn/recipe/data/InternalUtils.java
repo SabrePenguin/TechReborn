@@ -1,7 +1,7 @@
 package com.sabrepenguin.techreborn.recipe.data;
 
 import com.sabrepenguin.techreborn.Tags;
-import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.item.ItemStack;

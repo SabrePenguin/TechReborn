@@ -1,22 +1,21 @@
 package com.sabrepenguin.techreborn.recipe.data;
 
-import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Dust;
 import com.sabrepenguin.techreborn.items.materials.Ingot;
 import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.items.materials.Plate;
-import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class CompressorRecipes {
-	private static final BasicRegistry REGISTRY = RegistryHandler.instance().getCompressorRegistry();
+	private static final ITRRegistry REGISTRY = RegistryHandler.instance().getCompressorRegistry();
 
 	public static void init() {
 		REGISTRY.addRecipe(new BasicBuilder<>()

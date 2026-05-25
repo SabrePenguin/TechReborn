@@ -1,7 +1,7 @@
 package com.sabrepenguin.techreborn.tileentity.processing;
 
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
-import com.sabrepenguin.techreborn.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.tileentity.common.TileEntityUpgradeableIOManager;

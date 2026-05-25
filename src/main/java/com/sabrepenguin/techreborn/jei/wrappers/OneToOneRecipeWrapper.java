@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.jei.wrappers;
 
-import com.sabrepenguin.techreborn.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import mcp.MethodsReturnNonnullByDefault;

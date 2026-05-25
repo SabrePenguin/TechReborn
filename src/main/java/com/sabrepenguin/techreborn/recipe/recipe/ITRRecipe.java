@@ -1,4 +1,4 @@
-package com.sabrepenguin.techreborn.recipe;
+package com.sabrepenguin.techreborn.recipe.recipe;
 
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.item.ItemStack;

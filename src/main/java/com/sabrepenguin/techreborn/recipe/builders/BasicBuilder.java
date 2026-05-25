@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.recipe.builders;
 
-import com.sabrepenguin.techreborn.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

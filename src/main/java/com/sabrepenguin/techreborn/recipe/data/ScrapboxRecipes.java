@@ -7,7 +7,7 @@ import com.sabrepenguin.techreborn.items.materials.Dust;
 import com.sabrepenguin.techreborn.items.materials.Gem;
 import com.sabrepenguin.techreborn.items.materials.Nugget;
 import com.sabrepenguin.techreborn.items.materials.Part;
-import com.sabrepenguin.techreborn.recipe.ChanceRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ChanceRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;

@@ -7,13 +7,13 @@ import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.util.ModLoadedUtil;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 public class AssemblingMachineRecipes {
-	private static final BasicRegistry REGISTRY = RegistryHandler.instance().getAssemblingMachineRegistry();
+	private static final ITRRegistry REGISTRY = RegistryHandler.instance().getAssemblingMachineRegistry();
 
 	@SuppressWarnings("ConstantConditions")
 	public static void init() {

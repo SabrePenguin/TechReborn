@@ -7,10 +7,11 @@ import com.sabrepenguin.techreborn.items.materials.Plate;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
 import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import net.minecraft.item.ItemStack;
 
 public class SolidCanningMachineRecipes {
-	public static final BasicRegistry REGISTRY = RegistryHandler.instance().getSolidCanningMachineRegistry();
+	public static final ITRRegistry REGISTRY = RegistryHandler.instance().getSolidCanningMachineRegistry();
 
 	@SuppressWarnings("ConstantConditions")
 	public static void init() {

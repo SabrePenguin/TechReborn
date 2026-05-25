@@ -5,6 +5,7 @@ import com.sabrepenguin.techreborn.items.materials.Plate;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
 import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PlateBenderRecipes {
-	private static final BasicRegistry REGISTRY = RegistryHandler.instance().getPlateBenderRegistry();
+	private static final ITRRegistry REGISTRY = RegistryHandler.instance().getPlateBenderRegistry();
 
 	public static void init() {
 		REGISTRY.addRecipe(new BasicBuilder<>()

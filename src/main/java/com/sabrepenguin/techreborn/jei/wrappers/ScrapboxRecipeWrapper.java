@@ -1,7 +1,7 @@
 package com.sabrepenguin.techreborn.jei.wrappers;
 
-import com.sabrepenguin.techreborn.recipe.ChanceRecipe;
-import com.sabrepenguin.techreborn.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ChanceRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;

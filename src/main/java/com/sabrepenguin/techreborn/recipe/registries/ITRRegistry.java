@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.recipe.registries;
 
-import com.sabrepenguin.techreborn.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 

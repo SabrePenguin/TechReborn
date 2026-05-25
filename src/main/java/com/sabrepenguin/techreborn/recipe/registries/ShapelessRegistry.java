@@ -2,7 +2,7 @@ package com.sabrepenguin.techreborn.recipe.registries;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.sabrepenguin.techreborn.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
