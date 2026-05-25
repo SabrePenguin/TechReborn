@@ -5,7 +5,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,5 +46,9 @@ public class CountedIngredient {
 		if (!ingredient.apply(stack))
 			return false;
 		return stack.getCount() >= count;
+	}
+
+	public Ingredient getIngredient() {
+		return this.ingredient;
 	}
 }
