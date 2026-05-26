@@ -21,6 +21,7 @@ public class RegistryHandler {
 	private final BasicRegistry solidCanningMachineRegistry = new BasicRegistry();
 	private final BasicRegistry chemicalReactorRegistry = new BasicRegistry();
 	private final MatterFabricatorRegistry matterFabricatorRegistry = new MatterFabricatorRegistry();
+	private final ITRRegistry rollingMachineRegistry = new ShapedRegistry();
 
 	public ITRRegistry getAlloyRegistry() {
 		return alloyRegistry;
@@ -72,6 +73,10 @@ public class RegistryHandler {
 
 	public MatterFabricatorRegistry getMatterFabricatorRegistry() {
 		return matterFabricatorRegistry;
+	}
+
+	public ITRRegistry getRollingMachineRegistry() {
+		return rollingMachineRegistry;
 	}
 
 	public static RegistryHandler instance() {

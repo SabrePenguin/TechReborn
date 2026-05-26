@@ -25,6 +25,7 @@ public class TechRebornConfig {
 	public static ItemConfig itemConfig = new ItemConfig();
 
 	@Config.LangKey("config.machines")
+	@Config.RequiresWorldRestart
 	public static MachineConfig machineConfig = new MachineConfig();
 
 	public static int getConfigRevision() {

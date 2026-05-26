@@ -3,10 +3,7 @@ package com.sabrepenguin.techreborn.jei;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
-import com.sabrepenguin.techreborn.jei.categories.ScrapboxCategory;
-import com.sabrepenguin.techreborn.jei.categories.TwoToOneCategory;
-import com.sabrepenguin.techreborn.jei.categories.OneToOneCategory;
-import com.sabrepenguin.techreborn.jei.categories.SingleItemCategory;
+import com.sabrepenguin.techreborn.jei.categories.*;
 import com.sabrepenguin.techreborn.jei.wrappers.*;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.fluids.FluidRecipeWrapper;
@@ -34,6 +31,7 @@ public class TRRecipePlugin implements IModPlugin {
 	public static final String SCRAPBOXINATOR_UID = "tile." + Tags.MODID + ".scrapboxinator.name";
 	public static final String SOLID_CANNING_MACHINE_UID = "tile." + Tags.MODID + ".solid_canning_machine.name";
 	public static final String CHEMICAL_REACTOR_UID = "tile." + Tags.MODID + ".chemical_reactor.name";
+	public static final String ROLLING_MACHINE_UID = "tile." + Tags.MODID + ".rolling_machine.name";
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
@@ -50,6 +48,7 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCategories(new ScrapboxCategory(helper, SCRAPBOXINATOR_UID));
 		registry.addRecipeCategories(new TwoToOneCategory(helper, SOLID_CANNING_MACHINE_UID));
 		registry.addRecipeCategories(new TwoToOneCategory(helper, CHEMICAL_REACTOR_UID));
+		registry.addRecipeCategories(new RollingMachineCategory(helper, ROLLING_MACHINE_UID));
 	}
 
 	@Override
@@ -62,8 +61,8 @@ public class TRRecipePlugin implements IModPlugin {
 
 		RegistryHandler handler = RegistryHandler.instance();
 
-		Collection<TwoToOneWrapper> alloyWrappers = handler.getAlloyRegistry().getRecipes().stream()
-						.map(TwoToOneWrapper::new).collect(Collectors.toList());
+		Collection<ITRRecipeWrapper> alloyWrappers = handler.getAlloyRegistry().getRecipes().stream()
+						.map(ITRRecipeWrapper::new).collect(Collectors.toList());
 		registry.addRecipes(alloyWrappers, ALLOY_UID);
 
 		Collection<OneToOneRecipeWrapper> grinderWrappers = handler.getGrinderRegistry().getRecipes().stream()
@@ -85,20 +84,24 @@ public class TRRecipePlugin implements IModPlugin {
 				handler.getCompressorRegistry().getRecipes().stream().map(OneToOneRecipeWrapper::new).collect(Collectors.toList()),
 				COMPRESSOR_UID);
 		registry.addRecipes(
-				handler.getAssemblingMachineRegistry().getRecipes().stream().map(TwoToOneWrapper::new).collect(Collectors.toList()),
+				handler.getAssemblingMachineRegistry().getRecipes().stream().map(ITRRecipeWrapper::new).collect(Collectors.toList()),
 				ASSEMBLING_MACHINE_UID
 		);
 		registry.addRecipes(
-				handler.getChemicalReactorRegistry().getRecipes().stream().map(TwoToOneWrapper::new).collect(Collectors.toList()),
+				handler.getChemicalReactorRegistry().getRecipes().stream().map(ITRRecipeWrapper::new).collect(Collectors.toList()),
 				CHEMICAL_REACTOR_UID
 		);
 		registry.addRecipes(
-				handler.getSolidCanningMachineRegistry().getRecipes().stream().map(TwoToOneWrapper::new).collect(Collectors.toList()),
+				handler.getSolidCanningMachineRegistry().getRecipes().stream().map(ITRRecipeWrapper::new).collect(Collectors.toList()),
 				SOLID_CANNING_MACHINE_UID
 		);
 		registry.addRecipes(
 				ScrapboxRecipeWrapper.buildRecipes(handler.getScrapboxRegistry().getRecipes()),
 				SCRAPBOXINATOR_UID
+		);
+		registry.addRecipes(
+				handler.getRollingMachineRegistry().getRecipes().stream().map(ITRRecipeWrapper::new).collect(Collectors.toList()),
+				ROLLING_MACHINE_UID
 		);
 		addDefaultCatalysts(registry);
 		addCatalysts(registry);
@@ -124,5 +127,6 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.scrapboxinator), SCRAPBOXINATOR_UID);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.solid_canning_machine), SOLID_CANNING_MACHINE_UID);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.chemical_reactor), CHEMICAL_REACTOR_UID);
+		registry.addRecipeCatalyst(new ItemStack(TRBlocks.rolling_machine), ROLLING_MACHINE_UID);
 	}
 }

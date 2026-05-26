@@ -4,10 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.tileentity.cable.TileEntityCable;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityChargeOMat;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityMatterFabricator;
-import com.sabrepenguin.techreborn.tileentity.processing.TEProcessing;
-import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAlloySmelter;
-import com.sabrepenguin.techreborn.tileentity.processing.TileEntityElectricFurnace;
-import com.sabrepenguin.techreborn.tileentity.processing.TileEntityRecycler;
+import com.sabrepenguin.techreborn.tileentity.processing.*;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronAlloyFurnace;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
 import net.minecraft.util.ResourceLocation;
@@ -33,6 +30,7 @@ public class TRTileEntity {
 
 		GameRegistry.registerTileEntity(TileEntityChargeOMat.class, new ResourceLocation(Tags.MODID, "charge_o_mat"));
 		GameRegistry.registerTileEntity(TileEntityMatterFabricator.class, new ResourceLocation(Tags.MODID, "matter_fabricator"));
+		GameRegistry.registerTileEntity(TileEntityRollingMachine.class, new ResourceLocation(Tags.MODID, "rolling_machine"));
 
 		GameRegistry.registerTileEntity(TileEntityCable.class, new ResourceLocation(Tags.MODID, "cable"));
 	}

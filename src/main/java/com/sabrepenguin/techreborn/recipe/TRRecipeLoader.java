@@ -65,6 +65,7 @@ public class TRRecipeLoader {
 		ChemicalReactorRecipes.init();
 		SolidCanningMachineRecipes.init();
 		MatterFabricatorData.init();
+		RollingMachineRecipes.init();
 		boolean result = CraftingHelper.findFiles(mod, "assets/" + Tags.MODID + "/trrecipes", this::preProcess, this::process, true, true);
 		for (ITRRegistry registry: registries.values()) {
 			registry.sortRecipes();

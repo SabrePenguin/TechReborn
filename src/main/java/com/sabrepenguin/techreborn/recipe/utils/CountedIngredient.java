@@ -10,9 +10,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CountedIngredient {
+	private static final CountedIngredient EMPTY = new CountedIngredient(Ingredient.EMPTY, 0);
 
 	private final int count;
 	private final Ingredient ingredient;
+
+	public CountedIngredient(Ingredient ingredient, int count) {
+		this.count = count;
+		this.ingredient = ingredient;
+	}
+
+	public static CountedIngredient getEmpty() {
+		return EMPTY;
+	}
 
 	public CountedIngredient(Item item, int count) {
 		this.count = count;

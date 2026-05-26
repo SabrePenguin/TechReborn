@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.jei.wrappers;
 
 import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ShapedRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -16,10 +17,10 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TwoToOneWrapper implements IRecipeWrapper {
+public class ITRRecipeWrapper implements IRecipeWrapper {
 	private final ITRRecipe recipe;
 
-	public TwoToOneWrapper(ITRRecipe recipe) {
+	public ITRRecipeWrapper(ITRRecipe recipe) {
 		this.recipe = recipe;
 	}
 
@@ -28,13 +29,15 @@ public class TwoToOneWrapper implements IRecipeWrapper {
 		int time = recipe.getRecipeTime();
 		int energyCost = recipe.getEnergyCost() * time;
 		String energy = ExtraStringUtils.numberToCompactNumber(energyCost) + " FE";
+		int energyLocation = recipeHeight - ((minecraft.fontRenderer.FONT_HEIGHT*2) + 2);
 		minecraft.fontRenderer.drawString(energy,
 				(recipeWidth / 2) - (minecraft.fontRenderer.getStringWidth(energy) / 2),
-				30, 0x444444);
+				energyLocation, 0x444444);
 		String timeString = (time/20) + " sec";
+		int timeLocation = recipeHeight - (minecraft.fontRenderer.FONT_HEIGHT + 1);
 		minecraft.fontRenderer.drawString(timeString,
 				(recipeWidth / 2) - (minecraft.fontRenderer.getStringWidth(timeString) / 2),
-				30 + minecraft.fontRenderer.FONT_HEIGHT + 1, 0x444444);
+				timeLocation, 0x444444);
 	}
 
 	@Override
@@ -46,5 +49,19 @@ public class TwoToOneWrapper implements IRecipeWrapper {
 		}
 		ingredients.setInputLists(VanillaTypes.ITEM, inputs);
 		ingredients.setOutput(VanillaTypes.ITEM, recipe.getOutput().get(0));
+	}
+
+	public int getWidth() {
+		if (recipe instanceof ShapedRecipe shapedRecipe) {
+			return shapedRecipe.getWidth();
+		}
+		return 0;
+	}
+
+	public int getHeight() {
+		if (recipe instanceof ShapedRecipe shapedRecipe) {
+			return shapedRecipe.getHeight();
+		}
+		return 0;
 	}
 }

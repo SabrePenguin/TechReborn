@@ -59,6 +59,7 @@ public class TechReborn {
     @SubscribeEvent
     public void registerRecipes(RegistryEvent.Register<IRecipe> event) {
 		TRRecipeLoader loader = new TRRecipeLoader();
+		OreHandler.initOres();
 		if (!loader.loadRecipes()) {
 			LOGGER.warn("Could not load recipes properly!");
 		}
@@ -67,7 +68,6 @@ public class TechReborn {
     @EventHandler
     public void init(FMLInitializationEvent event) {
 		GameRegistry.registerWorldGenerator(new WorldGenTrees(), 0);
-		OreHandler.initOres();
 		proxy.init(event);
     }
 
