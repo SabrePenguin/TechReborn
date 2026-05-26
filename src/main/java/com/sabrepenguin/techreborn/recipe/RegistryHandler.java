@@ -9,17 +9,17 @@ import java.util.List;
 public class RegistryHandler {
 	private static final RegistryHandler INSTANCE = new RegistryHandler();
 	private final ITRRegistry alloyRegistry = new ShapelessRegistry();
-	private final BasicRegistry grinderRegistry = new BasicRegistry();
-	private final BasicRegistry extractorRegistry = new BasicRegistry();
-	private final BasicRegistry plateBenderRegistry = new BasicRegistry();
-	private final BasicRegistry recyclerRegistry = new BasicRegistry();
-	private final BasicRegistry wireMillRegistry = new BasicRegistry();
-	private final BasicRegistry compressorRegistry = new BasicRegistry();
+	private final ITRRegistry grinderRegistry = new ShapelessRegistry();
+	private final ITRRegistry extractorRegistry = new ShapelessRegistry();
+	private final ITRRegistry plateBenderRegistry = new ShapelessRegistry();
+	private final ITRRegistry recyclerRegistry = new ShapelessRegistry();
+	private final ITRRegistry wireMillRegistry = new ShapelessRegistry();
+	private final ITRRegistry compressorRegistry = new ShapelessRegistry();
 	private final List<ItemStack> scrapboxRecipes = new ArrayList<>();
 	private final SingletonRegistry scrapboxRegistry = new SingletonRegistry();
-	private final BasicRegistry assemblingMachineRegistry = new BasicRegistry();
-	private final BasicRegistry solidCanningMachineRegistry = new BasicRegistry();
-	private final BasicRegistry chemicalReactorRegistry = new BasicRegistry();
+	private final ITRRegistry assemblingMachineRegistry = new ShapelessRegistry();
+	private final ITRRegistry solidCanningMachineRegistry = new ShapelessRegistry();
+	private final ITRRegistry chemicalReactorRegistry = new ShapelessRegistry();
 	private final MatterFabricatorRegistry matterFabricatorRegistry = new MatterFabricatorRegistry();
 	private final ITRRegistry rollingMachineRegistry = new ShapedRegistry();
 
@@ -27,27 +27,27 @@ public class RegistryHandler {
 		return alloyRegistry;
 	}
 
-	public BasicRegistry getGrinderRegistry() {
+	public ITRRegistry getGrinderRegistry() {
 		return grinderRegistry;
 	}
 
-	public BasicRegistry getExtractorRegistry() {
+	public ITRRegistry getExtractorRegistry() {
 		return extractorRegistry;
 	}
 
-	public BasicRegistry getPlateBenderRegistry() {
+	public ITRRegistry getPlateBenderRegistry() {
 		return plateBenderRegistry;
 	}
 
-	public BasicRegistry getRecyclerRegistry() {
+	public ITRRegistry getRecyclerRegistry() {
 		return recyclerRegistry;
 	}
 
-	public BasicRegistry getWireMillRegistry() {
+	public ITRRegistry getWireMillRegistry() {
 		return wireMillRegistry;
 	}
 
-	public BasicRegistry getCompressorRegistry() {
+	public ITRRegistry getCompressorRegistry() {
 		return compressorRegistry;
 	}
 
@@ -59,15 +59,15 @@ public class RegistryHandler {
 		return scrapboxRegistry;
 	}
 
-	public BasicRegistry getAssemblingMachineRegistry() {
+	public ITRRegistry getAssemblingMachineRegistry() {
 		return assemblingMachineRegistry;
 	}
 
-	public BasicRegistry getChemicalReactorRegistry() {
+	public ITRRegistry getChemicalReactorRegistry() {
 		return chemicalReactorRegistry;
 	}
 
-	public BasicRegistry getSolidCanningMachineRegistry() {
+	public ITRRegistry getSolidCanningMachineRegistry() {
 		return solidCanningMachineRegistry;
 	}
 

@@ -161,7 +161,7 @@ public class TRBlocks {
 				new BlockHorizontalMachine("electric_furnace", "machines/tier1", TileEntityElectricFurnace::new),
 				new BlockPlayerDetector(),
 				new BlockHorizontalMachine("pump", "machines/tier1"),
-				new BlockHorizontalMachine("rolling_machine", "machines/tier1"),
+				new BlockHorizontalMachine("rolling_machine", "machines/tier1", TileEntityRollingMachine::new),
 				new BlockHorizontalMachine("scrapboxinator", "machines/tier1", TEProcessing.TileEntityScrapboxinator::new),
 				new BlockOmnidirectionalStatic("low_voltage_su", "machines/energy"),
 				new BlockOmnidirectionalStatic("medium_voltage_su", "machines/energy"),
