@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @ParametersAreNonnullByDefault
@@ -48,7 +49,12 @@ public class ITRRecipeWrapper implements IRecipeWrapper {
 			inputs.add(countedIngredient.resolveIngredients());
 		}
 		ingredients.setInputLists(VanillaTypes.ITEM, inputs);
-		ingredients.setOutput(VanillaTypes.ITEM, recipe.getOutput().get(0));
+		List<ItemStack> unpreparedOutputs = recipe.getOutput();
+		List<List<ItemStack>> outputs = new ArrayList<>();
+		for (ItemStack output: unpreparedOutputs) {
+			outputs.add(Collections.singletonList(output));
+		}
+		ingredients.setOutputLists(VanillaTypes.ITEM, outputs);
 	}
 
 	public int getWidth() {

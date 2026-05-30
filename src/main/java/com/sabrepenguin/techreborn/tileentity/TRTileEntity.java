@@ -33,6 +33,8 @@ public class TRTileEntity {
 		GameRegistry.registerTileEntity(TileEntityRollingMachine.class, new ResourceLocation(Tags.MODID, "rolling_machine"));
 		GameRegistry.registerTileEntity(TileEntityAutoCraftingTable.class, new ResourceLocation(Tags.MODID, "auto_crafter"));
 
+		GameRegistry.registerTileEntity(TileEntityIndustrialCentrifuge.class, new ResourceLocation(Tags.MODID, "industrial_centrifuge"));
+
 		GameRegistry.registerTileEntity(TileEntityCable.class, new ResourceLocation(Tags.MODID, "cable"));
 	}
 }

@@ -35,6 +35,8 @@ public class MachineConfig {
 	public Generic rollingMachine = new Generic(40_000, 128);
 	@Config.LangKey("tile.techreborn.matter_fabricator.name")
 	public AutoCraftingTable autocrafter = new AutoCraftingTable();
+	@Config.LangKey("tile.techreborn.matter_fabricator.name")
+	public Generic industrialCentrifuge = new Generic(40_000, 128);
 
 	public static class Generic {
 		@Config.LangKey("config.max_energy")

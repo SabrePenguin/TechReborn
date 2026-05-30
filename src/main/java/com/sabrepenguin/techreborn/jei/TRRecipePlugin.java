@@ -32,6 +32,7 @@ public class TRRecipePlugin implements IModPlugin {
 	public static final String SOLID_CANNING_MACHINE_UID = "tile." + Tags.MODID + ".solid_canning_machine.name";
 	public static final String CHEMICAL_REACTOR_UID = "tile." + Tags.MODID + ".chemical_reactor.name";
 	public static final String ROLLING_MACHINE_UID = "tile." + Tags.MODID + ".rolling_machine.name";
+	public static final String INDUSTRIAL_CENTRIFUGE_UID = "tile." + Tags.MODID + ".industrial_centrifuge.name";
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
@@ -49,6 +50,7 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCategories(new TwoToOneCategory(helper, SOLID_CANNING_MACHINE_UID));
 		registry.addRecipeCategories(new TwoToOneCategory(helper, CHEMICAL_REACTOR_UID));
 		registry.addRecipeCategories(new RollingMachineCategory(helper, ROLLING_MACHINE_UID));
+		registry.addRecipeCategories(new IndustrialCentrifugeCategory(helper, INDUSTRIAL_CENTRIFUGE_UID));
 	}
 
 	@Override
@@ -103,6 +105,10 @@ public class TRRecipePlugin implements IModPlugin {
 				handler.getRollingMachineRegistry().getRecipes().stream().map(ITRRecipeWrapper::new).collect(Collectors.toList()),
 				ROLLING_MACHINE_UID
 		);
+		registry.addRecipes(
+				handler.getIndustrialCentrifugeRegistry().getRecipes().stream().map(ITRRecipeWrapper::new).collect(Collectors.toList()),
+				INDUSTRIAL_CENTRIFUGE_UID
+		);
 		addDefaultCatalysts(registry);
 		addCatalysts(registry);
 	}
@@ -129,5 +135,6 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.solid_canning_machine), SOLID_CANNING_MACHINE_UID);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.chemical_reactor), CHEMICAL_REACTOR_UID);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.rolling_machine), ROLLING_MACHINE_UID);
+		registry.addRecipeCatalyst(new ItemStack(TRBlocks.industrial_centrifuge), INDUSTRIAL_CENTRIFUGE_UID);
 	}
 }
