@@ -7,6 +7,7 @@ import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.block.Block;
@@ -98,7 +99,7 @@ public class ExtractorRecipes {
 				.build());
 	}
 
-	private static BasicOutputRecipe plantMetadata(Block block, int inputMeta, Item output, int count, int metadata) {
+	private static ITRRecipe plantMetadata(Block block, int inputMeta, Item output, int count, int metadata) {
 		return new BasicBuilder<>()
 				.addInput(new ItemStack(block, 1, inputMeta))
 				.setOutput(new ItemStack(output, count, metadata))

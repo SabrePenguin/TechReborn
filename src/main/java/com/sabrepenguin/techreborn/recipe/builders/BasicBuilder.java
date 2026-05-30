@@ -1,6 +1,7 @@
 package com.sabrepenguin.techreborn.recipe.builders;
 
 import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -78,7 +79,7 @@ public class BasicBuilder<T extends BasicBuilder<T>> {
 		return self();
 	}
 
-	public BasicOutputRecipe build() {
+	public ITRRecipe build() {
 		if (ingredients.isEmpty())
 			throw new RuntimeException("Recipe ingredients cannot be empty");
 		if (output == null || output.isEmpty())

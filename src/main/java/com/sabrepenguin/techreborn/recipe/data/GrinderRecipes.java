@@ -4,9 +4,9 @@ import com.sabrepenguin.techreborn.TechReborn;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Dust;
 import com.sabrepenguin.techreborn.items.materials.Part;
-import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.util.ExtraStringUtils;
 import net.minecraft.init.Blocks;
@@ -16,11 +16,11 @@ import net.minecraft.item.ItemStack;
 public class GrinderRecipes {
 	public static final ITRRegistry REGISTRY = RegistryHandler.instance().getGrinderRegistry();
 
-	private static BasicOutputRecipe stringToRecipe(String name) {
+	private static ITRRecipe stringToRecipe(String name) {
 		return stringToRecipe(name, 2);
 	}
 
-	private static BasicOutputRecipe stringToRecipe(String name, int count) {
+	private static ITRRecipe stringToRecipe(String name, int count) {
 		return new BasicBuilder<>()
 				.addInput("ore" + ExtraStringUtils.capitalizeByUnderscore(name))
 				.setOutput(TRItems.dust, count, Dust.MetaDust.valueOf(name).metadata())

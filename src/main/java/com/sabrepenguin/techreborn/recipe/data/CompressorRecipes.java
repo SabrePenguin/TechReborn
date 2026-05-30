@@ -5,9 +5,9 @@ import com.sabrepenguin.techreborn.items.materials.Dust;
 import com.sabrepenguin.techreborn.items.materials.Ingot;
 import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.items.materials.Plate;
-import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.recipe.builders.BasicBuilder;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -73,7 +73,7 @@ public class CompressorRecipes {
 				.build());
 	}
 
-	private static BasicOutputRecipe plantball(Item item, int count) {
+	private static ITRRecipe plantball(Item item, int count) {
 		return new BasicBuilder<>()
 				.addInput(new ItemStack(item), count)
 				.setOutput(TRItems.part, 1, Part.PartMeta.compressed_plantball.metadata())

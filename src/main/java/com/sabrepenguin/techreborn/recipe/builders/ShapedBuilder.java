@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.recipe.builders;
 
-import com.sabrepenguin.techreborn.recipe.recipe.BasicOutputRecipe;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.recipe.ShapedRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import it.unimi.dsi.fastutil.chars.Char2ObjectArrayMap;
@@ -78,7 +78,7 @@ public class ShapedBuilder extends BasicBuilder<ShapedBuilder> {
 	}
 
 	@Override
-	public BasicOutputRecipe build() {
+	public ITRRecipe build() {
 		checkRecipe();
 		for (String s: pattern) {
 			for (char c: s.toCharArray()) {
