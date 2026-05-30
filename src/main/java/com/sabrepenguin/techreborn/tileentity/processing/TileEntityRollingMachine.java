@@ -7,9 +7,11 @@ import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.UISettings;
 import com.cleanroommc.modularui.utils.Alignment;
+import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
 import com.cleanroommc.modularui.value.sync.PanelSyncManager;
 import com.cleanroommc.modularui.widgets.ProgressWidget;
+import com.cleanroommc.modularui.widgets.ToggleButton;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
@@ -18,18 +20,70 @@ import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.*;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
+import com.sabrepenguin.techreborn.util.ItemStackWrapper;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Supplier;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public class TileEntityRollingMachine extends TileEntityProcessing implements IGuiHolder<PosGuiData> {
 
 	protected boolean locked = false;
+	protected final Object2ObjectMap<ItemStackWrapper, IntList> balanceCache = new Object2ObjectOpenHashMap<>(9);
 
 	public TileEntityRollingMachine() {
 		super(9, 1, TechRebornConfig.machineConfig.rollingMachine.maxEnergy,
 				TechRebornConfig.machineConfig.rollingMachine.maxInput, RegistryHandler.instance().getRollingMachineRegistry());
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		if (compound.hasKey("locked")) {
+			locked = compound.getBoolean("locked");
+		}
+	}
+
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setBoolean("locked", locked);
+		return super.writeToNBT(compound);
+	}
+
+	@Override
+	protected boolean canProcess() {
+		if (locked) {
+			for (int i = 0; i < inputs.getSlots(); i++) {
+				ItemStack stack = inputs.getStackInSlot(i);
+				if (stack.isEmpty())
+					continue;
+				if (stack.getCount() == 1)
+					return false;
+			}
+		}
+		return super.canProcess();
+	}
+
+	@Override
+	public void update() {
+		if (world.isRemote)
+			return;
+		if (locked) {
+			if (refreshRecipe) {
+				InventoryUtils.setBalanceCache(inputs, balanceCache);
+				InventoryUtils.balanceHandler(inputs, balanceCache);
+			}
+		}
+		super.update();
 	}
 
 	@Override
@@ -41,16 +95,16 @@ public class TileEntityRollingMachine extends TileEntityProcessing implements IG
 				.registerSlotGroup(new SlotGroup("power", 1, 50, true));
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioManager, getFacing,
-				new SlotPosition(SlotAction.INPUT, 34, 39, 0, 0),
-				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 1),
-				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 2),
-				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 3),
-				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 4),
-				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 5),
-				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 6),
-				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 7),
-				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 8),
-				SlotPosition.BigSlot(SlotAction.OUTPUT, 80, 39, 1, 0),
+				new SlotPosition(SlotAction.INPUT, 30, 22, 0, 0),
+				new SlotPosition(SlotAction.INPUT, 48, 22, 0, 1),
+				new SlotPosition(SlotAction.INPUT, 66, 22, 0, 2),
+				new SlotPosition(SlotAction.INPUT, 30, 40, 0, 3),
+				new SlotPosition(SlotAction.INPUT, 48, 40, 0, 4),
+				new SlotPosition(SlotAction.INPUT, 66, 40, 0, 5),
+				new SlotPosition(SlotAction.INPUT, 30, 58, 0, 6),
+				new SlotPosition(SlotAction.INPUT, 48, 58, 0, 7),
+				new SlotPosition(SlotAction.INPUT, 66, 58, 0, 8),
+				SlotPosition.BigSlot(SlotAction.OUTPUT, 120, 39, 1, 0),
 				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)
 		);
 		DoubleSyncValue progress = new DoubleSyncValue(() -> (double) processTime / cachedProcessTime,
@@ -105,6 +159,19 @@ public class TileEntityRollingMachine extends TileEntityProcessing implements IG
 						.slot(new ModularSlot(battery, 0)
 								.slotGroup("power")
 								.filter(InventoryUtils.IS_POWER_ITEM)));
+
+		panel.child(new ToggleButton()
+				.right(5)
+				.top(5)
+				.size(16, 12)
+				.stateOverlay(TRGuiTextures.LOCK)
+				.value(new BooleanSyncValue(() -> locked, val -> {
+					this.markDirty();
+					locked = val;
+					if (locked) {
+						refreshRecipe = true; // TODO find way to set another value
+					}
+				})));
 
 		panel.child(TRGuis.createUpdateTab(upgrades, "upgrades", this::onUpgradeChange).leftRelOffset(1f, 1));
 		return panel;

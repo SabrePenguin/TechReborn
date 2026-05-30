@@ -1,6 +1,9 @@
 package com.sabrepenguin.techreborn.util;
 
 import com.sabrepenguin.techreborn.items.TRItems;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -54,5 +57,71 @@ public class InventoryUtils {
 			}
 		}
 		return ItemStack.EMPTY;
+	}
+
+	// TODO: Make this count aware and previous-iteration aware
+	public static void setBalanceCache(IItemHandler handler, Object2ObjectMap<ItemStackWrapper, IntList> map) {
+		map.clear();
+		for (int slot = 0; slot < handler.getSlots(); slot++) {
+			ItemStack stack = handler.getStackInSlot(slot);
+			if (!stack.isEmpty()) {
+				map.computeIfAbsent(new ItemStackWrapper(stack.copy()), k -> new IntArrayList()).add(slot);
+			}
+		}
+	}
+
+	public static void balanceHandler(IItemHandler handler, Object2ObjectMap<ItemStackWrapper, IntList> cache) {
+		for (var entry: cache.entrySet()) {
+			IntList ints = entry.getValue();
+			int size = ints.size();
+			if (size < 2) // Don't balance one slot
+				continue;
+			int sum = 0;
+			for (int i = 0; i < size; i++) {
+				sum += handler.getStackInSlot(ints.getInt(i)).getCount();
+			}
+			int slotTotal = sum / size;
+			int remainder = sum % size;
+			int tempRemainder = remainder;
+			int sumPool = 0;
+			for (int i = 0; i < size; i++) {
+				int slot = ints.getInt(i);
+				int currentSize = handler.getStackInSlot(slot).getCount();
+				int targetSize = slotTotal + (tempRemainder > 0 ? 1 : 0);
+				if (tempRemainder > 0)
+					tempRemainder--;
+				if (currentSize > targetSize) {
+					int extracted = currentSize - targetSize;
+					sumPool += handler.extractItem(slot, extracted, false).getCount();
+				}
+			}
+
+			if (sumPool <= 0)
+				return;
+
+			ItemStack copy = handler.getStackInSlot(ints.getInt(0));
+
+			for (int i = 0; i < size; i++) {
+				int slot = ints.getInt(i);
+				int currentSize = handler.getStackInSlot(slot).getCount();
+				int targetSize = slotTotal + (remainder > 0 ? 1 : 0);
+				if (remainder > 0) {
+					remainder--;
+				}
+
+				if (currentSize < targetSize) {
+					int toInsert = targetSize - currentSize;
+					if (toInsert > sumPool) {
+						toInsert = sumPool;
+					}
+					ItemStack insert = handler.extractItem(slot, currentSize, false);
+					insert.grow(toInsert);
+					handler.insertItem(slot, insert, false);
+					sumPool -= toInsert;
+					if (sumPool <= 0)
+						break;
+				}
+			}
+		}
 	}
 }

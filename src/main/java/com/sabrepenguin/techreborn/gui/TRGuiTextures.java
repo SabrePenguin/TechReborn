@@ -14,4 +14,9 @@ public class TRGuiTextures {
 			.imageSize(20, 40)
 			.canApplyTheme()
 			.build();
+	public static UITexture LOCK = UITexture.builder()
+			.location(Tags.MODID, "gui/lock")
+			.imageSize(16, 24)
+			.canApplyTheme()
+			.build();
 }

@@ -100,7 +100,7 @@ public class TileEntityProcessing extends TileEntityUpgradeableIOManager {
 		}
 	}
 
-	private boolean canProcess() {
+	protected boolean canProcess() {
 		if (cachedRecipe == null)
 			return false;
 		ItemStack output = this.output.getStackInSlot(0);
