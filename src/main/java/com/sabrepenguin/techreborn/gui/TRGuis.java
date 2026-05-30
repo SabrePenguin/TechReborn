@@ -41,12 +41,6 @@ public class TRGuis {
 
 	public static final int PLAYER_INVENTORY_HEIGHT = 82;
 
-	public static final UITexture OUTPUT = UITexture.builder().location(Tags.MODID, "gui/output_slot").nonOpaque().fullImage().build();
-	public static final UITexture INPUT = UITexture.builder().location(Tags.MODID, "gui/input_slot").nonOpaque().fullImage().build();
-	public static final UITexture CHECK = UITexture.builder().location(Tags.MODID, "gui/check").nonOpaque().fullImage().build();
-	public static final UITexture CONFIG = UITexture.builder().location(Tags.MODID, "gui/config_button").nonOpaque().fullImage().build();
-	public static final UITexture UPGRADE = UITexture.builder().location(Tags.MODID, "gui/upgrade_base").fullImage().build();
-
 	public static ButtonWidget<?> createJeiButton(String recipeUID) {
 		return new ButtonWidget<>()
 				.tooltip(tooltip -> tooltip.addLine(IKey.str("Open JEI")))
@@ -70,11 +64,11 @@ public class TRGuis {
 					r.height = Math.max(20, r.height - 5);
 				})
 				.animationDuration(500)
-				.collapsedView(UPGRADE.asWidget().size(16).pos(4, 4).margin(4))
+				.collapsedView(TRGuiTextures.UPGRADE.asWidget().size(16).pos(4, 4).margin(4))
 				.expandedView(new ParentWidget<>()
 						.name("expanded upgrade tab")
 						.coverChildren()
-						.child(UPGRADE.asWidget().size(16).pos(4, 4).margin(4))
+						.child(TRGuiTextures.UPGRADE.asWidget().size(16).pos(4, 4).margin(4))
 						.child(IKey.str("Upgrades").asWidget().scale(1f).pos(25, 8).marginRight(8))
 						.child(SlotGroupWidget.builder()
 								.matrix("II", "II")
@@ -100,7 +94,7 @@ public class TRGuis {
 				.size(20)
 				.right(5)
 				.bottom(PLAYER_INVENTORY_HEIGHT + 6)
-				.overlay(CONFIG)
+				.overlay(TRGuiTextures.CONFIG)
 				.onMousePressed(mouseButton -> {
 					panelHandler.openPanel();
 					return panelHandler.isPanelOpen();
@@ -127,7 +121,7 @@ public class TRGuis {
 				.size(20)
 				.right(5)
 				.bottom(6)
-				.overlay(CONFIG)
+				.overlay(TRGuiTextures.CONFIG)
 				.onMousePressed(mouseButton -> {
 					if (mouseButton == 0 || mouseButton == 1) {
 						buttonWidget.getPanel().closeIfOpen();
@@ -195,7 +189,7 @@ public class TRGuis {
 					return true;
 				}).overlay((context, x, y, width, height, theme) -> {
 			if (manager.getCurrentValue(index, input)) {
-				CHECK.draw(x, y, width, height);
+				TRGuiTextures.CHECK.draw(x, y, width, height);
 			}
 		});
 	}
@@ -222,8 +216,8 @@ public class TRGuis {
 		button.overlay((context, x, y, width, height, theme) -> {
 			SlotAction currentAction = manager.getSide(absoluteFacing.get()).getSlotAction(handlerIndex, slot);
 			switch (currentAction) {
-				case OUTPUT -> OUTPUT.draw(x, y, width, height);
-				case INPUT -> INPUT.draw(x, y, width, height);
+				case OUTPUT -> TRGuiTextures.OUTPUT.draw(x, y, width, height);
+				case INPUT -> TRGuiTextures.INPUT.draw(x, y, width, height);
 			}
 		});
 		button.onMousePressed(mouseButton -> {
