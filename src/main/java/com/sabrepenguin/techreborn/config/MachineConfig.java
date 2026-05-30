@@ -33,6 +33,8 @@ public class MachineConfig {
 	public MatterFabricator matterFabricator = new MatterFabricator();
 	@Config.LangKey("tile.techreborn.matter_fabricator.name")
 	public Generic rollingMachine = new Generic(40_000, 128);
+	@Config.LangKey("tile.techreborn.matter_fabricator.name")
+	public AutoCraftingTable autocrafter = new AutoCraftingTable();
 
 	public static class Generic {
 		@Config.LangKey("config.max_energy")
@@ -71,10 +73,21 @@ public class MachineConfig {
 		public int maxEnergy = 40_000_000;
 		@Config.LangKey("config.transfer_limit")
 		public int maxInput = 32768;
-		@Config.LangKey("config.max_energy")
+		@Config.LangKey("config.rate")
 		public int fabricationRate = 6000;
-		@Config.LangKey("config.transfer_limit")
+		@Config.LangKey("config.energy_per_amp")
 		@Config.RangeInt(min = 1)
 		public int energyPerAmp = 20;
+	}
+
+	public static class AutoCraftingTable {
+		@Config.LangKey("config.max_energy")
+		public int maxEnergy = 40_000;
+		@Config.LangKey("config.transfer_limit")
+		public int maxInput = 128;
+		@Config.LangKey("config.fe_tick")
+		public int feTick = 40;
+		@Config.LangKey("config.ticks")
+		public int ticks = 120;
 	}
 }

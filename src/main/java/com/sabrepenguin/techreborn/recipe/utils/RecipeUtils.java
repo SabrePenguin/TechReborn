@@ -62,14 +62,39 @@ public class RecipeUtils {
 		return copy.isEmpty();
 	}
 
-	public static void applyRecipeToHandler(IItemHandler handler, List<CountedIngredient> ingredientList) {
-		List<CountedIngredient> copy = new ArrayList<>(ingredientList);
+	public static List<ItemStack> applyRecipeToHandler(IItemHandler handler, List<CountedIngredient> ingredientList) {
+		List<CountedIngredient> remainder = new ArrayList<>(ingredientList);
+		List<ItemStack> leftoverStacks = new ArrayList<>();
 		for (int i = 0; i < handler.getSlots(); i++) {
-			int finalI = i;
-			copy.stream()
-					.filter(ingredient -> ingredient.matches(handler.getStackInSlot(finalI)))
-					.findFirst()
-					.map(ingredient -> handler.extractItem(finalI, ingredient.getCount(), false));
+			ItemStack slotStack = handler.getStackInSlot(i);
+			if (slotStack.isEmpty())
+				continue;
+			CountedIngredient match = null;
+			for (CountedIngredient ingredient: remainder) {
+				if (ingredient.matches(slotStack)) {
+					match = ingredient;
+					break;
+				}
+			}
+			if (match != null) {
+				remainder.remove(match);
+				ItemStack container = ItemStack.EMPTY;
+				if (slotStack.getItem().hasContainerItem(slotStack)) {
+					container = slotStack.getItem().getContainerItem(slotStack);
+				}
+				handler.extractItem(i, match.getCount(), false);
+				if (!container.isEmpty()) {
+					if (handler.getStackInSlot(i).isEmpty()) {
+						ItemStack remains = handler.insertItem(i, container, false);
+						if (!remains.isEmpty()) {
+							leftoverStacks.add(remains);
+						}
+					} else {
+						leftoverStacks.add(container);
+					}
+				}
+			}
 		}
+		return leftoverStacks;
 	}
 }

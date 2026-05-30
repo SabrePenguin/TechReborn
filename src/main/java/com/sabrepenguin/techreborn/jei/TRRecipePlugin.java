@@ -111,6 +111,7 @@ public class TRRecipePlugin implements IModPlugin {
 	public static void addDefaultCatalysts(IModRegistry registry) {
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.iron_furnace), VanillaRecipeCategoryUid.SMELTING);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.electric_furnace), VanillaRecipeCategoryUid.SMELTING);
+		registry.addRecipeCatalyst(new ItemStack(TRBlocks.auto_crafting_table), VanillaRecipeCategoryUid.CRAFTING);
 	}
 
 	@SuppressWarnings("ConstantConditions")

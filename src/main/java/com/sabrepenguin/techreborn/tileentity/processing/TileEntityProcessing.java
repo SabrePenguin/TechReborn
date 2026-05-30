@@ -28,8 +28,8 @@ public class TileEntityProcessing extends TileEntityUpgradeableIOManager {
 	protected int cachedProcessTime;
 	private int cachedEnergyCost;
 
-	private final ITRRegistry registry;
-	private ITRRecipe cachedRecipe = null;
+	protected final ITRRegistry registry;
+	protected ITRRecipe cachedRecipe = null;
 	protected int processTime = 0;
 	private boolean isActive = false;
 
@@ -112,7 +112,7 @@ public class TileEntityProcessing extends TileEntityUpgradeableIOManager {
 		return res <= this.output.getSlotLimit(0) && res <= output.getMaxStackSize();
 	}
 
-	private void processItem() {
+	protected void processItem() {
 		ItemStack outputItem = output.getStackInSlot(0);
 		ItemStack cachedOutput = cachedRecipe.getOutput().get(0);
 		if (outputItem.isEmpty()) {

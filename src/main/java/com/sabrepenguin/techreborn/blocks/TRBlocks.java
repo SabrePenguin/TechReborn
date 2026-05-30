@@ -69,7 +69,7 @@ public class TRBlocks {
 	public static final BlockIndustrialGrinder industrial_grinder = null;
 	public static final BlockIndustrialSawmill industrial_sawmill = null;
 	public static final BlockVacuumFreezer vacuum_freezer = null;
-	public static final BlockAutoCraftingTable auto_crafting_table = null;
+	public static final BlockHorizontalMachine auto_crafting_table = null;
 	public static final BlockHorizontalMachine electric_furnace = null;
 	public static final BlockPlayerDetector player_detector = null;
 	public static final BlockHorizontalMachine pump = null;
@@ -157,7 +157,7 @@ public class TRBlocks {
 				new BlockIndustrialGrinder(),
 				new BlockIndustrialSawmill(),
 				new BlockVacuumFreezer(),
-				new BlockAutoCraftingTable(),
+				new BlockHorizontalMachine("auto_crafting_table", "machines/tier1", TileEntityAutoCraftingTable::new),
 				new BlockHorizontalMachine("electric_furnace", "machines/tier1", TileEntityElectricFurnace::new),
 				new BlockPlayerDetector(),
 				new BlockHorizontalMachine("pump", "machines/tier1"),
