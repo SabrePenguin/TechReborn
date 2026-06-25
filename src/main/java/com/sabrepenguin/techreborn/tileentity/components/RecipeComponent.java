@@ -1,0 +1,159 @@
+package com.sabrepenguin.techreborn.tileentity.components;
+
+import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
+import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
+import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+public class RecipeComponent implements MachineComponent {
+
+	protected final IItemHandlerModifiable inputs;
+	protected final IItemHandlerModifiable internalOutputs;
+	protected final TEEnergyStorage energyStorage;
+
+	protected int processTime;
+	protected int totalProcessTime;
+	protected int energyCost;
+
+	protected float cachedProcessMultiplier;
+	protected float cachedEnergyMultiplier;
+	protected int cachedProcessTime;
+	protected int cachedEnergyCost;
+
+	protected final ITRRegistry registry;
+	protected ITRRecipe cachedRecipe = null;
+
+	private boolean isActive;
+	protected boolean refreshRecipe;
+
+	public RecipeComponent(ITRRegistry registry, IItemHandlerModifiable inputs, IItemHandlerModifiable internalOutput,
+						   TEEnergyStorage storage) {
+		this.registry = registry;
+		isActive = false;
+		this.inputs = inputs;
+		this.internalOutputs = internalOutput;
+		this.energyStorage = storage;
+		cachedEnergyMultiplier = 1;
+		cachedProcessMultiplier = 1;
+	}
+
+	@Override
+	public boolean update() {
+		boolean isDirty = false;
+		if (refreshRecipe) {
+			refreshRecipe();
+		}
+		if (cachedRecipe != null) {
+			if (canProcess()) {
+				if (energyStorage.internalExtract(cachedEnergyCost, true) == cachedEnergyCost) {
+					energyStorage.internalExtract(cachedEnergyCost, false);
+					processTime++;
+				}
+				if (processTime >= cachedProcessTime) {
+					processItem();
+					processTime = 0;
+					isDirty = true;
+				}
+			}
+		} else if (processTime > 0) {
+			processTime = 0;
+			isDirty = true;
+		}
+		return isDirty;
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		processTime = compound.getInteger("Processed");
+		isActive = compound.getBoolean("IsActive");
+		cachedRecipe = registry.getRecipe(inputs);
+		if (cachedRecipe != null) {
+			totalProcessTime = cachedRecipe.getRecipeTime();
+			energyCost = cachedRecipe.getEnergyCost();
+		}
+	}
+
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setInteger("Processed", processTime);
+		compound.setBoolean("IsActive", isActive);
+		return compound;
+	}
+
+	private void refreshRecipe() {
+		refreshRecipe = false;
+		if (cachedRecipe != null) {
+			if (RecipeUtils.checkRecipeValid(inputs, cachedRecipe.getInputs()))
+				return;
+		}
+		ITRRecipe newRecipe = registry.getRecipe(inputs);
+		if (cachedRecipe != newRecipe) {
+			cachedRecipe = newRecipe;
+			if (cachedRecipe != null) {
+				totalProcessTime = cachedRecipe.getRecipeTime();
+				cachedProcessTime = (int) (totalProcessTime * cachedProcessMultiplier);
+				energyCost = cachedRecipe.getEnergyCost();
+				cachedEnergyCost = (int) (energyCost * cachedEnergyMultiplier);
+			}
+			processTime = 0;
+		}
+	}
+
+	protected boolean canProcess() {
+		if (cachedRecipe == null)
+			return false;
+		ItemStack output = this.internalOutputs.getStackInSlot(0);
+		ItemStack recipeOutput = cachedRecipe.getOutput().get(0);
+		if (output.isEmpty()) return true;
+		if (!output.isItemEqual(recipeOutput)) return false;
+		if (!RecipeUtils.checkRecipeValid(inputs, cachedRecipe.getInputs())) return false;
+		int res = output.getCount() + recipeOutput.getCount();
+		return res <= this.internalOutputs.getSlotLimit(0) && res <= output.getMaxStackSize();
+	}
+
+	protected void processItem() {
+		ItemStack outputItem = internalOutputs.getStackInSlot(0);
+		ItemStack cachedOutput = cachedRecipe.getOutput().get(0);
+		if (outputItem.isEmpty()) {
+			internalOutputs.insertItem(0, cachedOutput.copy(), false);
+		}
+		else if (outputItem.isItemEqual(cachedOutput)) {
+			ItemStack outputCopy = cachedOutput.copy();
+			ItemStack remainder = internalOutputs.insertItem(0, outputCopy, true);
+			if (remainder.isEmpty()) {
+				internalOutputs.insertItem(0, outputCopy, false);
+			} else {
+				// Not enough room in output
+				return;
+			}
+		} else {
+			// Output does not match
+			return;
+		}
+		RecipeUtils.applyRecipeToHandler(inputs, cachedRecipe.getInputs());
+	}
+
+	public void informRefreshRecipe() {
+		refreshRecipe = true;
+	}
+
+	public void updateMultipliers(float processMultiplier, float energyMultiplier) {
+		this.cachedProcessMultiplier = processMultiplier;
+		this.cachedEnergyMultiplier = energyMultiplier;
+		this.cachedProcessTime = (int) (this.totalProcessTime * processMultiplier);
+		this.cachedEnergyCost = (int) (this.energyCost * energyMultiplier);
+	}
+
+	public int getProcessTime() {
+		return processTime;
+	}
+
+	public DoubleSyncValue getProgress() {
+		return new DoubleSyncValue(() -> (double) processTime / cachedProcessTime,
+				value -> processTime = (int) (value * cachedProcessTime));
+	}
+}
