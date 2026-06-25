@@ -59,15 +59,23 @@ public class TEEnergyStorage extends EnergyStorage implements IEnergyInformation
 		return this.maxReceive > 0 && canReceive;
 	}
 
+	/**
+	 * Method to grab as much power as requested without any limits or requiring extract to be true
+	 * @return The amount of energy successfully extracted
+	 */
 	public int internalExtract(int maxExtract, boolean simulate) {
-		int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
+		int energyExtracted = Math.min(energy, maxExtract);
 		if (!simulate)
 			energy -= energyExtracted;
 		return energyExtracted;
 	}
 
+	/**
+	 * Method to insert as much power as requested without any limits or requiring insert to be true
+	 * @return The amount of energy received
+	 */
 	public int internalReceive(int maxReceive, boolean simulate) {
-		int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
+		int energyReceived = Math.min(capacity - energy, maxReceive);
 		if (!simulate)
 			energy += energyReceived;
 		return energyReceived;

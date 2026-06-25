@@ -53,7 +53,7 @@ public class LimitedItemStackHandler implements IItemHandlerModifiable {
 	public boolean isItemValid(int slot, ItemStack stack) {
 		if (slot < 0 || slot >= slots.size()) return true;
 		if (stack.isEmpty()) return true;
-		if (!this.filter.test(stack)) return false;
+		if (this.filter != null && !this.filter.test(stack)) return false;
 		return switch (slots.get(slot)) {
 			case INPUT, BIDIRECTIONAL -> true;
 			case OUTPUT, DISABLED -> false;
