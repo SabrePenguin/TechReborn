@@ -6,6 +6,7 @@ import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.crafting.IngredientNBT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +46,11 @@ public class BasicBuilder<T extends BasicBuilder<T>> {
 
 	public T addInput(CountedIngredient ingredient) {
 		this.ingredients.add(ingredient);
+		return self();
+	}
+
+	public T addInputWithNBT(ItemStack item) {
+		this.ingredients.add(new CountedIngredient(new NBTIngredient(item), item.getCount()));
 		return self();
 	}
 
@@ -95,5 +101,11 @@ public class BasicBuilder<T extends BasicBuilder<T>> {
 	@SuppressWarnings("unchecked")
 	protected T self() {
 		return (T) this;
+	}
+
+	private static class NBTIngredient extends IngredientNBT {
+		public NBTIngredient(ItemStack stack) {
+			super(stack);
+		}
 	}
 }
