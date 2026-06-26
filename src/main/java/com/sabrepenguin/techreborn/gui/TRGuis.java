@@ -22,6 +22,7 @@ import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketAutoConfig;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
+import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.state.IBlockState;
@@ -228,6 +229,143 @@ public class TRGuis {
 			return true;
 		});
 		panel.child(button);
+	}
+
+	public static void setupConfigPanel(
+			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, IOManager ioManager,
+			Supplier<EnumFacing> facingSupplier, SlotPosition... slotPositions) {
+		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
+				(manager, handler) ->
+						TRGuis.createConfigPanel(manager, handler, pos, panel.getArea(), ioManager, facingSupplier, slotPositions));
+		addConfigPanel(panel, panelHandler);
+	}
+
+	public static ModularPanel createConfigPanel(
+			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos, Area area,
+			IOManager manager,
+			Supplier<EnumFacing> getFacing,
+			SlotPosition... slotPositions) {
+		ModularPanel panel = new ModularPanel("config_panel") {
+			@Override
+			public boolean isDraggable() {
+				return false;
+			}
+		}.background(IDrawable.EMPTY)
+				.height(area.height - PLAYER_INVENTORY_HEIGHT)
+				.alignX(0.5f)
+				.topRel(0.5f, -(area.height/2) - (area.height%2), 0f);
+		// Close button
+		ButtonWidget<?> buttonWidget = new ButtonWidget<>();
+		panel.child(buttonWidget
+				.size(20)
+				.right(5)
+				.bottom(6)
+				.overlay(TRGuiTextures.CONFIG)
+				.onMousePressed(mouseButton -> {
+					if (mouseButton == 0 || mouseButton == 1) {
+						buttonWidget.getPanel().closeIfOpen();
+						return true;
+					}
+					return false;
+				}));
+		// Button creation. Creates a button on top of each individual slot
+		for (final SlotPosition position : slotPositions) {
+			final int slot = position.slot();
+			final SlotAction action = position.action();
+			IPanelHandler panelHandler = syncManager.syncedPanel("slot_config_" + position.slot(), true,
+					(syncManager1, syncHandler1) ->
+							createSlotConfigPanel(syncManager1, syncHandler1, pos, manager, slot, getFacing, action));
+			panel.child(new TRButtonWidget<>()
+					.pos(position.x() - ((position.size() - 18) / 2), position.y() - ((position.size() - 18) / 2))
+					.size(position.size())
+					.onMousePressed(mouseButton -> {
+						panelHandler.openPanel();
+						return panelHandler.isPanelOpen();
+					}));
+		}
+		return panel;
+	}
+
+	private static void addEnumFacingButtons(
+			BlockPos pos, ModularPanel panel, int relativeIndex,
+			IOManager manager,
+			int slot,
+			Supplier<EnumFacing> getFacing,
+			int bottomOffset) {
+		ButtonWidget<?> button = new ButtonWidget<>().size(32);
+		switch (relativeIndex) {
+			case 0: button.alignX(0.5f).bottom(bottomOffset + 4); break;
+			case 1: button.alignX(0.5f).top(4); break;
+			case 2: button.alignX(0.5f).topRel(0.5f, -bottomOffset/2, 0.5f); break;
+			case 3: button.right(4).bottom(4 + bottomOffset); break;
+			case 4: button.topRel(0.5f, -bottomOffset/2, 0.5f).left(4); break;
+			case 5: button.topRel(0.5f, -bottomOffset/2, 0.5f).right(4); break;
+		}
+		Supplier<EnumFacing> absoluteFacing = () -> TRGuis.getAbsoluteFacing(relativeIndex, getFacing.get());
+		DrawableBlockFace face = new DrawableBlockFace(pos, absoluteFacing);
+		button.background(face);
+		button.hoverBackground(face);
+		button.overlay((context, x, y, width, height, theme) -> {
+			SlotAction currentAction = manager.getSide(absoluteFacing.get()).getSlotAction(slot);
+			switch (currentAction) {
+				case OUTPUT -> TRGuiTextures.OUTPUT.draw(x, y, width, height);
+				case INPUT -> TRGuiTextures.INPUT.draw(x, y, width, height);
+			}
+		});
+		button.onMousePressed(mouseButton -> {
+			int sideIndex = absoluteFacing.get().getIndex();
+			TechRebornPacketHandler.INSTANCE.sendToServer(new PacketSideConfig(
+					pos, sideIndex, 0, slot
+			));
+			return true;
+		});
+		panel.child(button);
+	}
+
+	private static ModularPanel createSlotConfigPanel(
+			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos,
+			IOManager manager,
+			int slot,
+			Supplier<EnumFacing> getFacing, SlotAction action) {
+		int increaseBy = action == SlotAction.BIDIRECTIONAL ? 30 : 15;
+		ModularPanel panel = new Dialog<>("dialog_" + slot).size(104, 104 + increaseBy);
+		panel.child(ButtonWidget.panelCloseButton());
+		for (int i = 0; i < 6; i++) {
+			addEnumFacingButtons(pos, panel, i, manager, slot, getFacing, increaseBy);
+		}
+		switch (action) {
+			case INPUT:
+				panel.child(createButton(pos, manager, slot, true, 6));
+				panel.child(IKey.lang("techreborn.auto_input.gui").asWidget().left(18).bottom(7));
+				break;
+			case OUTPUT:
+				panel.child(createButton(pos, manager, slot, false, 6));
+				panel.child(IKey.lang("techreborn.auto_output.gui").asWidget().left(18).bottom(7));
+				break;
+			case BIDIRECTIONAL:
+				panel.child(createButton(pos, manager, slot, true, 20))
+						.child(IKey.lang("techreborn.auto_input.gui").asWidget().left(18).bottom(21));
+				panel.child(createButton(pos, manager, slot, false, 6))
+						.child(IKey.lang("techreborn.auto_output.gui").asWidget().left(18).bottom(7));
+				break;
+			default: break;
+		}
+		return panel;
+	}
+
+	private static ButtonWidget<?> createButton(BlockPos pos, IOManager manager, int index, boolean input, int bottom) {
+		return new ButtonWidget<>()
+				.left(5)
+				.bottom(bottom)
+				.size(11)
+				.onMousePressed(mouseButton -> {
+					TechRebornPacketHandler.INSTANCE.sendToServer(new PacketAutoConfig(pos, index, input));
+					return true;
+				}).overlay((context, x, y, width, height, theme) -> {
+					if (manager.getCurrentValue(index, input)) {
+						TRGuiTextures.CHECK.draw(x, y, width, height);
+					}
+				});
 	}
 
 	private static EnumFacing getAbsoluteFacing(int side, EnumFacing facing) {
