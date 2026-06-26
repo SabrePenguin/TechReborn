@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class RecipeComponent implements MachineComponent {
@@ -150,24 +151,36 @@ public class RecipeComponent implements MachineComponent {
 		return res <= this.internalOutputs.getSlotLimit(0) && res <= output.getMaxStackSize();
 	}
 
-	protected void processItem() {
-		ItemStack outputItem = internalOutputs.getStackInSlot(0);
-		ItemStack cachedOutput = cachedRecipe.getOutput().get(0);
-		if (outputItem.isEmpty()) {
-			internalOutputs.insertItem(0, cachedOutput.copy(), false);
-		}
-		else if (outputItem.isItemEqual(cachedOutput)) {
-			ItemStack outputCopy = cachedOutput.copy();
-			ItemStack remainder = internalOutputs.insertItem(0, outputCopy, true);
-			if (remainder.isEmpty()) {
-				internalOutputs.insertItem(0, outputCopy, false);
-			} else {
-				// Not enough room in output
-				return;
+	protected boolean canOutputFit() {
+		List<ItemStack> cachedOutput = cachedRecipe.getOutput();
+		for (int i = 0; i < cachedOutput.size(); i++) {
+			ItemStack currentSlotStack = internalOutputs.getStackInSlot(i);
+			ItemStack cachedOutputStack = cachedOutput.get(i);
+			if (currentSlotStack.isEmpty())
+				continue;
+			if (currentSlotStack.isItemEqual(cachedOutputStack)) {
+				if (currentSlotStack.hasTagCompound() && cachedOutputStack.hasTagCompound()) {
+					if (!currentSlotStack.getTagCompound().equals(cachedOutputStack.getTagCompound())) {
+						return false;
+					}
+				} else if (currentSlotStack.hasTagCompound() || cachedOutputStack.hasTagCompound()) {
+					return false;
+				}
+				continue;
 			}
-		} else {
-			// Output does not match
+			return false;
+		}
+		return true;
+	}
+
+	protected void processItem() {
+		if (!canOutputFit()) {
 			return;
+		}
+		List<ItemStack> cachedOutput = cachedRecipe.getOutput();
+		for (int i = 0; i < cachedOutput.size(); i++) {
+			ItemStack cachedOutputStack = cachedOutput.get(i);
+			internalOutputs.insertItem(i, cachedOutputStack, false);
 		}
 		RecipeUtils.applyRecipeToHandler(inputs, cachedRecipe.getInputs());
 	}
