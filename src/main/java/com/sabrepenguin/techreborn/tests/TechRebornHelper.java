@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.tests;
 import com.gtnewhorizons.horizonqa.api.GameTestAssertException;
 import com.gtnewhorizons.horizonqa.api.GameTestHelper;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
+import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.tileentity.common.TileEntityIOManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -11,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -70,6 +72,13 @@ public class TechRebornHelper {
 			assert storage != null;
 			throw new GameTestAssertException("Expected TEEnergyStorage, got" + storage.getClass().getSimpleName(), helper.absolute(pos));
 		}
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	public static ItemStack getFluidWithCount(Fluid fluid, int count) {
+		ItemStack f = TRItems.cell.getCellWithFluid(fluid);
+		f.setCount(count);
+		return f;
 	}
 
 	private static void changeSide(World world, BlockPos pos, EnumFacing facing, int handlerIndex, int index) {

@@ -15,17 +15,15 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.gui.*;
-import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
-import com.sabrepenguin.techreborn.recipe.registries.BasicRegistry;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
-import com.sabrepenguin.techreborn.tileentity.processing.TileEntityProcessing;
+import com.sabrepenguin.techreborn.tileentity.processing.TileEntityGeneric;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.util.EnumFacing;
 
 import java.util.function.Supplier;
 
-public class TileEntityTwoToOne extends TileEntityProcessing implements IGuiHolder<PosGuiData> {
+public class TileEntityTwoToOne extends TileEntityGeneric implements IGuiHolder<PosGuiData> {
 	private final String lang;
 	private final String jeiKey;
 
@@ -37,6 +35,7 @@ public class TileEntityTwoToOne extends TileEntityProcessing implements IGuiHold
 
 	// IGuiHolder
 	@Override
+	@SuppressWarnings("ConstantConditions")
 	public ModularPanel buildUI(PosGuiData data, PanelSyncManager syncManager, UISettings settings) {
 		ModularPanel panel = ModularPanel.defaultPanel(IKey.lang(lang).get());
 		syncManager.registerSlotGroup(new SlotGroup("inputs", 3, 100, true))
@@ -44,14 +43,13 @@ public class TileEntityTwoToOne extends TileEntityProcessing implements IGuiHold
 				.registerSlotGroup(new SlotGroup("power", 1, 50, true));
 
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
-		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioManager, getFacing,
+		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioComponent.getManager(), getFacing,
 				new SlotPosition(SlotAction.INPUT, 34, 39, 0, 0),
 				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 1),
 				SlotPosition.BigSlot(SlotAction.OUTPUT, 80, 39, 1, 0),
 				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)
 		);
-		DoubleSyncValue progress = new DoubleSyncValue(() -> (double) processTime / cachedProcessTime,
-				value -> processTime = (int) (value * cachedProcessTime));
+		DoubleSyncValue progress = recipeComponent.getProgress();
 
 		panel.bindPlayerInventory()
 				.child(IKey.lang(lang)
@@ -73,29 +71,29 @@ public class TileEntityTwoToOne extends TileEntityProcessing implements IGuiHold
 						.value(progress))
 				.child(TRGuis.createJeiButton(jeiKey)
 						.pos(104, 41).size(20, 15))
-				.child(PowerDisplayWidget.fromEnergyStorage(syncManager, energyStorage)
+				.child(PowerDisplayWidget.fromEnergyStorage(syncManager, energyComponent.getEnergyStorage())
 						.pos(9, 6));
 
 		panel.child(new ItemSlot().pos(34, 39)
-						.slot(new ModularSlot(inputs, 0)
+						.slot(new ModularSlot(ioComponent.getInputs(), 0)
 								.slotGroup("inputs")
 								.changeListener(this::onInputChange)
 								.filter(InventoryUtils.IS_UPGRADE.negate())))
 				.child(new ItemSlot().pos(126, 39)
-						.slot(new ModularSlot(inputs, 1)
+						.slot(new ModularSlot(ioComponent.getInputs(), 1)
 								.slotGroup("inputs")
 								.changeListener(this::onInputChange)
 								.filter(InventoryUtils.IS_UPGRADE.negate())))
 				.child(new LargeItemSlot().pos(80, 39)
-						.slot(new ModularSlot(output, 0)
+						.slot(new ModularSlot(ioComponent.getOutputs(), 0)
 								.accessibility(false, true))
 						.size(24))
 				.child(new ItemSlot().pos(7, 59)
-						.slot(new ModularSlot(battery, 0)
+						.slot(new ModularSlot(ioComponent.getBatterySlot(), 0)
 								.slotGroup("power")
 								.filter(InventoryUtils.IS_POWER_ITEM)));
 
-		panel.child(TRGuis.createUpdateTab(upgrades, "upgrades", this::onUpgradeChange).leftRelOffset(1f, 1));
+		panel.child(TRGuis.createUpdateTab(upgradeComponent.getUpgrades(), "upgrades", upgradeComponent::onUpgradeChange).leftRelOffset(1f, 1));
 		return panel;
 	}
 }

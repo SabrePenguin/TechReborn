@@ -6,6 +6,7 @@ import com.gtnewhorizons.horizonqa.api.annotation.GameTestHolder;
 import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.blocks.BlockCable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.blocks.fluids.TRFluids;
 import com.sabrepenguin.techreborn.blocks.meta.OreBlock;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Dust;
@@ -19,6 +20,8 @@ import net.minecraft.util.math.BlockPos;
 @GameTestHolder(Tags.MODID)
 @SuppressWarnings({"ConstantConditions", "unused"})
 public class BlockTests {
+	// TODO: Run through all recipes
+
 	@GameTest(template = "grinder", timeoutTicks = 400)
 	public static void machineTestFail(GameTestHelper helper) {
 		TechRebornHelper trHelper = new TechRebornHelper(helper);
@@ -104,5 +107,44 @@ public class BlockTests {
 		helper.insertItem(target, new ItemStack(TRItems.scrapbox), 0);
 		trHelper.insertPower(target, 3200);
 		helper.succeedWhen(() -> trHelper.itemExists(target, 1));
+	}
+
+	@GameTest(template = "assemblingMachine", timeoutTicks = 810)
+	public static void assemblingMachineTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = new ItemStack(TRItems.part, 2, Part.PartMeta.advanced_circuit_parts.metadata());
+
+		helper.assertBlockPresent(TRBlocks.assembling_machine.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Items.DYE, 1, 4), 0);
+		helper.insertItem(target, new ItemStack(TRItems.dust, 1, Dust.MetaDust.electrum.metadata()), 1);
+		trHelper.insertPower(target, 6400);
+		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetResult, 2));
+	}
+
+	@GameTest(template = "canningMachine", timeoutTicks = 110)
+	public static void canningMachineTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = new ItemStack(TRItems.part, 1, Part.PartMeta.bio_cell.metadata());
+
+		helper.assertBlockPresent(TRBlocks.solid_canning_machine.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(TRItems.part, 1, Part.PartMeta.compressed_plantball.metadata()), 0);
+		helper.insertItem(target, new ItemStack(TRItems.cell), 1);
+		trHelper.insertPower(target, 400);
+		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetResult, 2));
+	}
+
+	@GameTest(template = "chemicalReactor")
+	public static void chemicalReactorTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = TechRebornHelper.getFluidWithCount(TRFluids.SODIUM_SULFIDE, 2);
+
+		helper.assertBlockPresent(TRBlocks.chemical_reactor.getDefaultState(), target);
+		helper.insertItem(target, TechRebornHelper.getFluidWithCount(TRFluids.SULFUR, 1), 0);
+		helper.insertItem(target, TechRebornHelper.getFluidWithCount(TRFluids.SODIUM, 1), 1);
+		trHelper.insertPower(target, 12000);
+		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetResult, 2));
 	}
 }
