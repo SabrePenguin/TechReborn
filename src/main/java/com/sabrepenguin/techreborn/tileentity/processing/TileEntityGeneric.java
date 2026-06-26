@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn.tileentity.processing;
 
+import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
@@ -37,12 +38,17 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 	public TileEntityGeneric(int inputSize, int outputSize, int feCapacity, int maxInput, ITRRegistry registry) {
 		ioComponent = new ItemIOComponent(this, inputSize, outputSize, true, this::refreshSlot);
 		energyComponent = new EnergyComponent(feCapacity, maxInput, maxInput, ioComponent.getBatterySlot());
-		recipeComponent = new RecipeComponent(registry, ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage());
+		recipeComponent = new RecipeComponent(registry, ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(), this::updateState);
 		upgradeComponent = new UpgradeComponent(feCapacity, energyComponent, recipeComponent);
 	}
 
 	protected void refreshSlot(int slot) {
 		recipeComponent.informRefreshRecipe();
+	}
+
+	private void updateState(boolean state) {
+		IBlockState currentState = world.getBlockState(pos);
+		world.setBlockState(pos, currentState.withProperty(BlockHorizontalMachine.ACTIVE, state), 3);
 	}
 
 	@Override
@@ -75,6 +81,7 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 		ioComponent.readFromNBT(compound);
 		energyComponent.readFromNBT(compound);
 		upgradeComponent.readFromNBT(compound);
+		recipeComponent.readFromNBT(compound);
 		super.readFromNBT(compound);
 	}
 
@@ -83,6 +90,7 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 		ioComponent.writeToNBT(compound);
 		energyComponent.writeToNBT(compound);
 		upgradeComponent.writeToNBT(compound);
+		recipeComponent.writeToNBT(compound);
 		return super.writeToNBT(compound);
 	}
 
