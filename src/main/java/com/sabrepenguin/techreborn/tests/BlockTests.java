@@ -43,7 +43,7 @@ public class BlockTests {
 		helper.assertBlockPresent(TRBlocks.grinder.getDefaultState(), target);
 		helper.insertItem(target, new ItemStack(TRBlocks.ore, 1, OreBlock.Ore.LEAD.meta()), 0);
 		trHelper.insertPower(target, 2400);
-		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetResult, 1));
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult, 1));
 	}
 
 	@GameTest(template = "extractor", timeoutTicks = 410)
@@ -56,7 +56,7 @@ public class BlockTests {
 		helper.assertBlockPresent(TRBlocks.extractor.getDefaultState(), target);
 		helper.insertItem(target, new ItemStack(TRBlocks.rubber_sapling), 0);
 		trHelper.insertPower(target, 3200);
-		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetStack, 1));
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetStack, 1));
 	}
 
 	@GameTest(template = "plateBendingMachine", timeoutTicks = 110)
@@ -69,7 +69,7 @@ public class BlockTests {
 		helper.assertBlockPresent(TRBlocks.plate_bending_machine.getDefaultState(), target);
 		helper.insertItem(target, new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.refined_iron.metadata()), 0);
 		trHelper.insertPower(target, 3200);
-		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetStack, 1));
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetStack, 1));
 	}
 
 	@GameTest(template = "wireMill", timeoutTicks = 210)
@@ -82,7 +82,7 @@ public class BlockTests {
 		helper.assertBlockPresent(TRBlocks.wire_mill.getDefaultState(), target);
 		helper.insertItem(target, new ItemStack(Items.GOLD_INGOT), 0);
 		trHelper.insertPower(target, 800);
-		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetStack, 1));
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetStack, 1));
 	}
 
 	@GameTest(template = "compressor", timeoutTicks = 410)
@@ -95,7 +95,7 @@ public class BlockTests {
 		helper.assertBlockPresent(TRBlocks.compressor.getDefaultState(), target);
 		helper.insertItem(target, new ItemStack(TRItems.part, 1, Part.PartMeta.carbon_mesh.metadata()), 0);
 		trHelper.insertPower(target, 3200);
-		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetStack, 1));
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetStack, 1));
 	}
 
 	@GameTest(template = "scrapboxinator")
@@ -119,7 +119,7 @@ public class BlockTests {
 		helper.insertItem(target, new ItemStack(Items.DYE, 1, 4), 0);
 		helper.insertItem(target, new ItemStack(TRItems.dust, 1, Dust.MetaDust.electrum.metadata()), 1);
 		trHelper.insertPower(target, 6400);
-		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetResult, 2));
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult, 2));
 	}
 
 	@GameTest(template = "canningMachine", timeoutTicks = 110)
@@ -132,7 +132,7 @@ public class BlockTests {
 		helper.insertItem(target, new ItemStack(TRItems.part, 1, Part.PartMeta.compressed_plantball.metadata()), 0);
 		helper.insertItem(target, new ItemStack(TRItems.cell), 1);
 		trHelper.insertPower(target, 400);
-		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetResult, 2));
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult, 2));
 	}
 
 	@GameTest(template = "chemicalReactor")
@@ -145,6 +145,65 @@ public class BlockTests {
 		helper.insertItem(target, TechRebornHelper.getFluidWithCount(TRFluids.SULFUR, 1), 0);
 		helper.insertItem(target, TechRebornHelper.getFluidWithCount(TRFluids.SODIUM, 1), 1);
 		trHelper.insertPower(target, 12000);
-		helper.succeedWhen(() -> trHelper.itemOutputEquals(target, targetResult, 2));
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult, 2));
+	}
+
+	@GameTest(template = "autoCraftingTable", timeoutTicks = 120)
+	public static void autoCraftingTableTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = new ItemStack(Items.CAKE);
+
+		helper.assertBlockPresent(TRBlocks.auto_crafting_table.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Items.MILK_BUCKET), 0);
+		helper.insertItem(target, new ItemStack(Items.MILK_BUCKET), 1);
+		helper.insertItem(target, new ItemStack(Items.MILK_BUCKET), 2);
+		helper.insertItem(target, new ItemStack(Items.SUGAR), 3);
+		helper.insertItem(target, new ItemStack(Items.EGG), 4);
+		helper.insertItem(target, new ItemStack(Items.SUGAR), 5);
+		helper.insertItem(target, new ItemStack(Items.WHEAT), 6);
+		helper.insertItem(target, new ItemStack(Items.WHEAT), 7);
+		helper.insertItem(target, new ItemStack(Items.WHEAT), 8);
+		trHelper.insertPower(target, 4800);
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult, 9) &&
+				trHelper.itemEquals(target, new ItemStack(Items.BUCKET), 0) &&
+				trHelper.itemEquals(target, new ItemStack(Items.BUCKET), 1) &&
+				trHelper.itemEquals(target, new ItemStack(Items.BUCKET), 2));
+	}
+
+	@GameTest(template = "rollingMachine", timeoutTicks = 250)
+	public static void rolllingMachineTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack nickel = new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.nickel.metadata());
+		ItemStack copper = new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.copper.metadata());
+		ItemStack targetResult = new ItemStack(TRItems.part, 3, Part.PartMeta.cupronickel_heating_coil.metadata());
+
+		helper.assertBlockPresent(TRBlocks.rolling_machine.getDefaultState(), target);
+		helper.insertItem(target, nickel, 0);
+		helper.insertItem(target, copper, 1);
+		helper.insertItem(target, nickel, 2);
+		helper.insertItem(target, copper, 3);
+		helper.insertItem(target, copper, 5);
+		helper.insertItem(target, nickel, 6);
+		helper.insertItem(target, copper, 7);
+		helper.insertItem(target, nickel, 8);
+		trHelper.insertPower(target, 10000);
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult, 9));
+	}
+
+	@GameTest(template = "rollingMachine", timeoutTicks = 50)
+	public static void balanceTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		ItemStack targetResult = new ItemStack(Items.GOLD_INGOT, 32);
+		BlockPos target = new BlockPos(0, 0, 0);
+
+		trHelper.lockMachine(target);
+		helper.assertBlockPresent(TRBlocks.rolling_machine.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Items.GOLD_INGOT, 63), 0);
+		helper.insertItem(target, new ItemStack(Items.GOLD_INGOT, 1), 1);
+		trHelper.insertPower(target, 4800);
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult, 0) &&
+				trHelper.itemEquals(target, targetResult, 1));
 	}
 }

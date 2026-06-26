@@ -5,6 +5,8 @@ import com.gtnewhorizons.horizonqa.api.GameTestHelper;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.tileentity.common.TileEntityIOManager;
+import com.sabrepenguin.techreborn.tileentity.components.LockableRecipeComponent;
+import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAutoBalance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -13,10 +15,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 
 public class TechRebornHelper {
 
@@ -34,7 +38,25 @@ public class TechRebornHelper {
 		storage.internalReceive(power, false);
 	}
 
-	public boolean itemOutputEquals(BlockPos pos, ItemStack stack, int slot) {
+	public void lockMachine(BlockPos pos) {
+		TileEntity entity = helper.assertTileEntityPresent(pos);
+		if (!(entity instanceof TileEntityAutoBalance autoBalance))
+			throw new GameTestAssertException("TileEntity is not lockable: " + entity.getClass().getSimpleName(), helper.absolute(pos));
+		LockableRecipeComponent component = ObfuscationReflectionHelper.getPrivateValue(
+				TileEntityAutoBalance.class,
+				autoBalance,
+				"recipeComponent"
+		);
+		ObfuscationReflectionHelper.setPrivateValue(
+				LockableRecipeComponent.class,
+				component,
+				true,
+				"locked"
+		);
+		entity.markDirty();
+	}
+
+	public boolean itemEquals(BlockPos pos, ItemStack stack, int slot) {
 		TileEntity entity = helper.assertTileEntityPresent(pos);
 		IItemHandler handler = getItemHandler(entity, pos);
 		ItemStack output = handler.getStackInSlot(slot);
