@@ -191,4 +191,12 @@ public class RecipeComponent implements MachineComponent {
 		return new DoubleSyncValue(() -> (double) processTime / cachedProcessTime,
 				value -> processTime = (int) (value * cachedProcessTime));
 	}
+
+	public ITRRecipe getCachedRecipe() {
+		return cachedRecipe;
+	}
+
+	public ITRRegistry getRegistry() {
+		return registry;
+	}
 }
