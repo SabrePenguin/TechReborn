@@ -7,13 +7,20 @@ import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
+
+import javax.annotation.Nullable;
+import java.util.function.Consumer;
 
 public class RecipeComponent implements MachineComponent {
 
 	protected final IItemHandlerModifiable inputs;
 	protected final IItemHandlerModifiable internalOutputs;
 	protected final TEEnergyStorage energyStorage;
+	@Nullable
+	protected final Consumer<Boolean> stateUpdater;
 
 	protected int processTime;
 	protected int totalProcessTime;
@@ -25,20 +32,35 @@ public class RecipeComponent implements MachineComponent {
 	protected int cachedEnergyCost;
 
 	protected final ITRRegistry registry;
-	protected ITRRecipe cachedRecipe = null;
+	protected ITRRecipe cachedRecipe;
 
 	private boolean isActive;
 	protected boolean refreshRecipe;
 
-	public RecipeComponent(ITRRegistry registry, IItemHandlerModifiable inputs, IItemHandlerModifiable internalOutput,
+	public RecipeComponent(ITRRegistry registry, IItemHandlerModifiable inputs, IItemHandlerModifiable internalOutputs,
 						   TEEnergyStorage storage) {
+		this(registry, inputs, internalOutputs, storage, null);
+	}
+
+	public RecipeComponent(ITRRegistry registry, IItemHandlerModifiable inputs, IItemHandlerModifiable internalOutput,
+						   TEEnergyStorage storage, @Nullable Consumer<Boolean> stateUpdate) {
 		this.registry = registry;
 		isActive = false;
 		this.inputs = inputs;
 		this.internalOutputs = internalOutput;
 		this.energyStorage = storage;
+		this.stateUpdater = stateUpdate;
 		cachedEnergyMultiplier = 1;
 		cachedProcessMultiplier = 1;
+		cachedRecipe = null;
+	}
+
+	public void onUpdatePacket(World world, BlockPos pos, NBTTagCompound compound) {
+		boolean previousState = isActive;
+		readFromNBT(compound);
+		if (world != null && world.isRemote && previousState != isActive) {
+			world.markBlockRangeForRenderUpdate(pos, pos);
+		}
 	}
 
 	@Override
@@ -47,11 +69,13 @@ public class RecipeComponent implements MachineComponent {
 		if (refreshRecipe) {
 			refreshRecipe();
 		}
+		boolean active = false;
 		if (cachedRecipe != null) {
 			if (canProcess()) {
 				if (energyStorage.internalExtract(cachedEnergyCost, true) == cachedEnergyCost) {
 					energyStorage.internalExtract(cachedEnergyCost, false);
 					processTime++;
+					active = true;
 				}
 				if (processTime >= cachedProcessTime) {
 					processItem();
@@ -63,7 +87,18 @@ public class RecipeComponent implements MachineComponent {
 			processTime = 0;
 			isDirty = true;
 		}
+
+		if (stateUpdater != null && active != isActive) {
+			isActive = active;
+			isDirty = true;
+			updateState();
+		}
 		return isDirty;
+	}
+
+	@SuppressWarnings("ConstantConditions")
+	protected void updateState() {
+		stateUpdater.accept(isActive);
 	}
 
 	@Override
