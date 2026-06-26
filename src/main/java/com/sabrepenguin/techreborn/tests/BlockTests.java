@@ -206,4 +206,35 @@ public class BlockTests {
 		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult, 0) &&
 				trHelper.itemEquals(target, targetResult, 1));
 	}
+
+	@GameTest(template = "rollingMachine", timeoutTicks = 300)
+	public static void lockTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		ItemStack targetResult = new ItemStack(Items.GOLD_INGOT, 1);
+		BlockPos target = new BlockPos(0, 0, 0);
+
+		trHelper.lockMachine(target);
+		helper.assertBlockPresent(TRBlocks.rolling_machine.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Items.GOLD_INGOT, 1), 0);
+		helper.insertItem(target, new ItemStack(Items.GOLD_INGOT, 1), 1);
+		trHelper.insertPower(target, 10000);
+		helper.onEachTick(() -> helper.assertTrue(
+				trHelper.itemEquals(target, targetResult, 0) &&
+				trHelper.itemEquals(target, targetResult, 1)));
+		helper.succeedAtTimeout();
+	}
+
+	@GameTest(template = "industrialCentrifuge", timeoutTicks = 500)
+	public static void industrialCentrifugeTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult1 = new ItemStack(Items.SLIME_BALL, 1);
+		ItemStack targetResult2 = new ItemStack(Items.BLAZE_POWDER, 1);
+
+		helper.assertBlockPresent(TRBlocks.industrial_centrifuge.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Items.MAGMA_CREAM), 0);
+		trHelper.insertPower(target, 10000);
+		helper.succeedWhen(() -> trHelper.itemEquals(target, targetResult1, 2) &&
+				trHelper.itemEquals(target, targetResult2, 3));
+	}
 }
