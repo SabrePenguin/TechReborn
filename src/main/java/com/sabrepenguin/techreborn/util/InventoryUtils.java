@@ -97,7 +97,7 @@ public class InventoryUtils {
 			}
 
 			if (sumPool <= 0)
-				return;
+				continue;
 
 			ItemStack copy = handler.getStackInSlot(ints.getInt(0));
 
