@@ -104,7 +104,6 @@ public class LockableRecipeComponent extends RecipeComponent {
 				InventoryHelper.spawnItemStack(parentWorld, pos.getX(), pos.getY(), pos.getZ(), stack);
 			}
 		}
-		super.processItem();
 	}
 
 	@Override
