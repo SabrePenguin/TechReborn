@@ -47,4 +47,7 @@ dependencies {
     shadowImplementation("com.ibm.icu:icu4j:63.1")
     compileOnly("net.industrial-craft:industrialcraft-2:2.8.+")
     devOnlyNonPublishable("net.industrial-craft:industrialcraft-2:2.8.+")
+    compileOnly(rfg.deobf("SabrePenguin:Horizon-QA:0.6.1"))
+    compileOnly("SabrePenguin:Horizon-QA:0.6.1:sources")
+    devOnlyNonPublishable(rfg.deobf("SabrePenguin:Horizon-QA:0.4.1"))
 }

@@ -9,4 +9,15 @@ repositories {
         name = "ic2"
         url = "https://maven.ic2.player.to/"
     }
+
+    ivy {
+        url "https://github.com/SabrePenguin/Horizon-QA/releases/download/"
+        patternLayout {
+            artifact("0.6.1/HorizonQA-0.6.1.jar")
+        }
+
+        metadataSources {
+            artifact()
+        }
+    }
 }
