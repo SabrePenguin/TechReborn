@@ -32,7 +32,7 @@ public class ChemicalReactorRecipes {
 		REGISTRY.addRecipe(new BasicBuilder<>()
 				.addInput(getFluidWithCount(TRFluids.SULFUR, 1))
 				.addInput(getFluidWithCount(TRFluids.SODIUM, 1))
-				.setOutput(getFluidWithCount(TRFluids.SODIUM_SULFIDE, 3))
+				.setOutput(getFluidWithCount(TRFluids.SODIUM_SULFIDE, 2))
 				.setRecipeTime(100)
 				.setEnergyCost(120)
 				.build());
