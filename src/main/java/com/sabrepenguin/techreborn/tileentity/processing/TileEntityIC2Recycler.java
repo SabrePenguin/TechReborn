@@ -12,7 +12,7 @@ public class TileEntityIC2Recycler extends TileEntityRecycler {
 
 	public TileEntityIC2Recycler() {
 		if (TechRebornConfig.machineConfig.recycler.ic2Scrap && ModLoadedUtil.IC2_LOADED) {
-			recipeOutput = ic2Output;
+			recipeOutput = ic2Output; //TODO
 		} else {
 			recipeOutput = originalOutput;
 		}
