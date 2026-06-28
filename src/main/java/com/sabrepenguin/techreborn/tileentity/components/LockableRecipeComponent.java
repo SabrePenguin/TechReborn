@@ -21,7 +21,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class LockableRecipeComponent extends RecipeComponent {
+public class LockableRecipeComponent extends StandardRecipeComponent {
 	protected final TileEntity parent;
 	protected boolean locked;
 	protected boolean rebalance;
