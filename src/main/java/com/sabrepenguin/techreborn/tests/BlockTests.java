@@ -300,4 +300,23 @@ public class BlockTests {
 				})
 				.thenSucceed();
 	}
+
+	@GameTest(template = "alloySmelter", timeoutTicks = 200)
+	public static void alloySmelterTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = new ItemStack(TRItems.ingot, 2, Ingot.IngotMeta.electrum.metadata());
+
+		helper.assertBlockPresent(TRBlocks.alloy_smelter.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Items.GOLD_INGOT, 1), 0);
+		helper.insertItem(target, new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.silver.metadata()), 1);
+		helper.onEachTick(() -> trHelper.insertPower(target, 128));
+		helper.startSequence()
+				.thenIdle(200)
+				.thenExecute(() -> {
+					if (!trHelper.itemEquals(target, targetResult, 2))
+						helper.fail("Failed to alloy");
+				})
+				.thenSucceed();
+	}
 }

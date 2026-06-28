@@ -170,7 +170,7 @@ public class TRBlocks {
 				new BlockOmnidirectionalStatic("interdimensional_su", "machines/energy"),
 				new BlockOmnidirectionalStatic("lapotronic_su", "machines/energy"),
 				new BlockLSUStorage(),
-				new BlockHorizontalMachine("alloy_smelter", "machines/tier1", TileEntityAlloySmelter::new),
+				new BlockHorizontalMachine("alloy_smelter", "machines/tier1", TEProcessing.TileEntityAlloySmelter::new),
 				new BlockHorizontalMachine("assembling_machine", "machines/tier1", TEProcessing.TileEntityAssemblingMachine::new),
 				new BlockHorizontalMachine("compressor", "machines/tier1", TEProcessing.TileEntityCompressor::new),
 				new BlockHorizontalMachine("extractor", "machines/tier1", TEProcessing.TileEntityExtractor::new),

@@ -65,4 +65,11 @@ public class TEProcessing {
 							.getSolidCanningMachineRegistry(), TRRecipePlugin.SOLID_CANNING_MACHINE_UID);
 		}
 	}
+	public static class TileEntityAlloySmelter extends TileEntityTwoToOne {
+		public TileEntityAlloySmelter() {
+			super("tile.techreborn.alloy_smelter.name", TechRebornConfig.machineConfig.alloySmelter.maxEnergy,
+					TechRebornConfig.machineConfig.alloySmelter.maxInput,
+					RegistryHandler.instance().getAlloyRegistry(), TRRecipePlugin.ALLOY_UID);
+		}
+	}
 }
