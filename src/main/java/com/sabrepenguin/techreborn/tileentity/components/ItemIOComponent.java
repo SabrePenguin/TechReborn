@@ -14,6 +14,8 @@ import org.jetbrains.annotations.ApiStatus;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.IntConsumer;
 
 @ParametersAreNonnullByDefault
@@ -22,7 +24,9 @@ public class ItemIOComponent implements MachineComponent {
 	private final ItemStackHandler inventory;
 
 	protected final RestrictedItemStackHandler inputs;
+	@Nullable
 	protected final RestrictedItemStackHandler _internalOutput;
+	@Nullable
 	protected final LimitedItemStackHandler output;
 	protected final RestrictedItemStackHandler battery;
 	protected final IOManager ioManager;
@@ -53,11 +57,23 @@ public class ItemIOComponent implements MachineComponent {
 		};
 
 		inputs = new RestrictedItemStackHandler(inventory, 0, inputSize);
-		_internalOutput = new RestrictedItemStackHandler(inventory, inputSize, inputSize + outputSize);
-		output = new LimitedItemStackHandler(_internalOutput, SlotAction.OUTPUT);
+		if (outputSize != 0) {
+			_internalOutput = new RestrictedItemStackHandler(inventory, inputSize, inputSize + outputSize);
+			output = new LimitedItemStackHandler(_internalOutput, SlotAction.OUTPUT);
+		} else {
+			_internalOutput = null;
+			output = null;
+		}
 		battery = energySlot ? new RestrictedItemStackHandler(inventory, inputSize + outputSize): null;
-
-		ioManager = new IOManager(SideConfig.input(inputs), SideConfig.output(output), SideConfig.bidirectional(battery));
+		List<SideConfig> configs = new ArrayList<>();
+		configs.add(SideConfig.input(inputs));
+		if (outputSize != 0) {
+			configs.add(SideConfig.output(output));
+		}
+		if (battery != null) {
+			configs.add(SideConfig.bidirectional(battery));
+		}
+		ioManager = new IOManager(configs.toArray(new SideConfig[0]));
 	}
 
 	public @Nullable IItemHandlerModifiable getBatterySlot() {
