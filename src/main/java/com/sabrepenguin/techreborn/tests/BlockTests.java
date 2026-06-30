@@ -319,4 +319,29 @@ public class BlockTests {
 				})
 				.thenSucceed();
 	}
+
+	@GameTest(template = "matterFabricator", timeoutTicks = 5)
+	public static void matterFabricatorTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = new ItemStack(TRItems.uumatter);
+
+		helper.assertBlockPresent(TRBlocks.matter_fabricator.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(TRItems.scrapbox, 3), 0);
+		trHelper.insertPower(target, 120000);
+		helper.startSequence()
+				.thenIdle(5)
+				.thenExecute(() -> {
+					if (!trHelper.itemEquals(target, targetResult, 6))
+						helper.fail("Did not create uumatter");
+					int power = trHelper.getPower(target);
+					if (power != 0)
+						helper.fail(powerFail(0, power));
+				})
+				.thenSucceed();
+	}
+
+	public static String powerFail(int expected, int actual) {
+		return "Did not consume required power\n" + "Expected: " + expected + ", Got: " + actual;
+	}
 }

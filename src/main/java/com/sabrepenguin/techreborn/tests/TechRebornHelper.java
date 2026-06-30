@@ -4,7 +4,6 @@ import com.gtnewhorizons.horizonqa.api.GameTestAssertException;
 import com.gtnewhorizons.horizonqa.api.GameTestHelper;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.items.TRItems;
-import com.sabrepenguin.techreborn.tileentity.common.TileEntityIOManager;
 import com.sabrepenguin.techreborn.tileentity.components.LockableRecipeComponent;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAutoBalance;
 import net.minecraft.item.ItemStack;
@@ -20,7 +19,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 
 public class TechRebornHelper {
 
@@ -66,6 +64,18 @@ public class TechRebornHelper {
 		return output.isItemEqual(stack);
 	}
 
+	public boolean powerEquals(BlockPos pos, int power) {
+		TileEntity entity = helper.assertTileEntityPresent(pos);
+		IEnergyStorage storage = getEnergyStorage(entity, pos);
+		return power == storage.getEnergyStored();
+	}
+
+	public int getPower(BlockPos pos) {
+		TileEntity entity = helper.assertTileEntityPresent(pos);
+		IEnergyStorage storage = getEnergyStorage(entity, pos);
+		return storage.getEnergyStored();
+	}
+
 	public boolean itemExists(BlockPos pos, int slot) {
 		TileEntity entity = helper.assertTileEntityPresent(pos);
 		IItemHandler handler = getItemHandler(entity, pos);
@@ -82,6 +92,12 @@ public class TechRebornHelper {
 			throw new GameTestAssertException("Expected IItemHandler", helper.absolute(pos));
 		}
 		return entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
+	}
+
+	private IEnergyStorage getEnergyStorage(TileEntity entity, BlockPos pos) {
+		if (!entity.hasCapability(CapabilityEnergy.ENERGY, null))
+			throw new GameTestAssertException("Expected default CapabilityEnergy", helper.absolute(pos));
+		return entity.getCapability(CapabilityEnergy.ENERGY, null);
 	}
 
 	private TEEnergyStorage getTREnergyStorage(TileEntity entity, BlockPos pos) {
@@ -108,11 +124,6 @@ public class TechRebornHelper {
 		if (entity == null) {
 			return;
 		}
-		if (!(entity instanceof TileEntityIOManager ioManager)) {
-			return;
-		}
-
-		ioManager.rotateSlot(facing.getIndex(), handlerIndex, index);
 	}
 
 	public enum TechRebornTileEntityHelper {
