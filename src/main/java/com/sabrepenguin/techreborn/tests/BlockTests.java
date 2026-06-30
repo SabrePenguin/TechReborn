@@ -341,6 +341,24 @@ public class BlockTests {
 				.thenSucceed();
 	}
 
+	@GameTest(template = "chargeomat", timeoutTicks = 200)
+	public static void chargeomatTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+
+		helper.assertBlockPresent(TRBlocks.charge_o_mat.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(TRItems.lithiumbattery), 0);
+		trHelper.insertPower(target, 120000);
+		helper.startSequence()
+				.thenIdle(200)
+				.thenExecute(() -> {
+					int power = trHelper.getPower(target);
+					if (power != 0)
+						helper.fail(powerFail(0, power));
+				})
+				.thenSucceed();
+	}
+
 	public static String powerFail(int expected, int actual) {
 		return "Did not consume required power\n" + "Expected: " + expected + ", Got: " + actual;
 	}

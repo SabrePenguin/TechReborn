@@ -11,21 +11,20 @@ import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
-import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
-import com.sabrepenguin.techreborn.capability.stackhandler.SideConfig;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
+import com.sabrepenguin.techreborn.tileentity.components.ChargingComponent;
+import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
+import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
-import com.sabrepenguin.techreborn.util.ItemStackUtils;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -37,7 +36,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -46,18 +44,20 @@ import java.util.function.Supplier;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, ITickable, IGuiHolder<PosGuiData> {
-	protected final ItemStackHandler inventory;
-	protected final MachineIOManager ioManager;
-
-	protected final TEEnergyStorage energyStorage;
-
-	protected boolean isActive = false;
+	protected final ItemIOComponent ioComponent;
+	protected final EnergyComponent energyComponent;
+	protected final ChargingComponent chargingComponent;
 
 	public TileEntityChargeOMat() {
-		inventory = new ItemStackHandler(6);
-		ioManager = new MachineIOManager(SideConfig.bidirectional(inventory));
-		energyStorage = new TEEnergyStorage(TechRebornConfig.machineConfig.chargeOMat.maxEnergy, TechRebornConfig.machineConfig.chargeOMat.maxInput);
-		energyStorage.setCanExtract(false);
+		ioComponent = new ItemIOComponent(this, 6, 0, false, (a) -> {});
+		energyComponent = new EnergyComponent(TechRebornConfig.machineConfig.chargeOMat.maxEnergy, TechRebornConfig.machineConfig.chargeOMat.maxInput,
+				TechRebornConfig.machineConfig.chargeOMat.maxInput).setUnextractable();
+		chargingComponent = new ChargingComponent(ioComponent.getInputs(), energyComponent.getEnergyStorage(), this::updateState);
+	}
+
+	private void updateState(boolean state) {
+		IBlockState currentState = world.getBlockState(pos);
+		world.setBlockState(pos, currentState.withProperty(BlockHorizontalMachine.ACTIVE, state), 3);
 	}
 
 	@Override
@@ -67,20 +67,17 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		inventory.deserializeNBT(compound.getCompoundTag("inventory"));
-		if (compound.hasKey("energy"))
-			energyStorage.setEnergy(compound.getInteger("energy"));
-		ioManager.readFromNBT(compound.getCompoundTag("IOManager"));
-		isActive = compound.getBoolean("IsActive");
+		ioComponent.readFromNBT(compound);
+		energyComponent.readFromNBT(compound);
+		chargingComponent.readFromNBT(compound);
 		super.readFromNBT(compound);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setTag("inventory", inventory.serializeNBT());
-		compound.setInteger("energy", energyStorage.getEnergyStored());
-		compound.setTag("IOManager", ioManager.writeToNBT());
-		compound.setBoolean("IsActive", isActive);
+		ioComponent.writeToNBT(compound);
+		energyComponent.writeToNBT(compound);
+		chargingComponent.writeToNBT(compound);
 		return super.writeToNBT(compound);
 	}
 
@@ -96,12 +93,9 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		boolean previousState = isActive;
 		super.onDataPacket(net, pkt);
 		this.readFromNBT(pkt.getNbtCompound());
-		if (world != null && this.world.isRemote && previousState != isActive) {
-			world.markBlockRangeForRenderUpdate(pos, pos);
-		}
+		chargingComponent.onUpdatePacket(world, pos, pkt.getNbtCompound());
 	}
 
 	@Override
@@ -115,11 +109,11 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 	public @Nullable <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			if (facing == null) {
-				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ioComponent.getInputs());
 			}
-			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ioManager.getSide(facing));
+			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ioComponent.getManager().getSide(facing));
 		} else if (capability == CapabilityEnergy.ENERGY) {
-			return CapabilityEnergy.ENERGY.cast(energyStorage);
+			return CapabilityEnergy.ENERGY.cast(energyComponent.getEnergyStorage());
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -132,48 +126,25 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 			return;
 		}
 
-		boolean isDirty = false;
-		if (ioManager.performTransfer(world, pos)) {
-			isDirty = true;
-		}
-		boolean active = false;
-		for (int slot = 0; slot < inventory.getSlots(); slot++) {
-			ItemStack simulated = inventory.getStackInSlot(slot);
-			if (!simulated.isEmpty()) {
-				ItemStack stack = inventory.extractItem(slot, inventory.getSlotLimit(slot), false);
-				active = ItemStackUtils.chargeItem(energyStorage, stack);
-				inventory.insertItem(slot, stack, false);
-			}
-		}
+		boolean updated = ioComponent.update() | energyComponent.update() | chargingComponent.update();
 
-		if (active != isActive) {
-			isActive = active;
-			updateState(active);
-			isDirty = true;
-		}
-
-		if (isDirty) {
+		if (updated) {
 			markDirty();
 		}
-	}
-
-	private void updateState(boolean state) {
-		IBlockState currentState = world.getBlockState(pos);
-		world.setBlockState(pos, currentState.withProperty(BlockHorizontalMachine.ACTIVE, state), 3);
 	}
 
 	// ISidedConfigTE
 
 	@Override
 	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioManager.getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
+		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(localSlotIndex)) {
 			updateTE();
 		}
 	}
 
 	@Override
 	public void swapSlot(int index, boolean input) {
-		ioManager.swapIndex(index, input);
+		ioComponent.getManager().swapIndex(index, input);
 		updateTE();
 	}
 
@@ -186,9 +157,8 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 
 	@Override
 	public MachineIOManager getManager() {
-		return ioManager;
+		return null;
 	}
-
 
 	// IGuiHolder
 
@@ -199,7 +169,7 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 		syncManager.registerSlotGroup(new SlotGroup("charging", 6, 100, true));
 
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
-		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioManager, getFacing,
+		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioComponent.getManager(), getFacing,
 				new SlotPosition(SlotAction.BIDIRECTIONAL, 61, 20, 0, 0),
 				new SlotPosition(SlotAction.BIDIRECTIONAL, 61, 40, 0, 1),
 				new SlotPosition(SlotAction.BIDIRECTIONAL, 61, 60, 0, 2),
@@ -212,32 +182,32 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 						.asWidget()
 						.align(Alignment.TopCenter)
 						.top(7))
-				.child(PowerDisplayWidget.fromEnergyStorage(syncManager, energyStorage)
+				.child(PowerDisplayWidget.fromEnergyStorage(syncManager, energyComponent.getEnergyStorage())
 						.horizontalCenter()
 						.top(23));
 
 		panel.child(new ItemSlot().pos(61, 20)
-						.slot(new ModularSlot(inventory, 0)
+						.slot(new ModularSlot(ioComponent.getInputs(), 0)
 								.slotGroup("charging")
 								.filter(InventoryUtils.IS_POWER_ITEM)))
 				.child(new ItemSlot().pos(61, 40)
-						.slot(new ModularSlot(inventory, 1)
+						.slot(new ModularSlot(ioComponent.getInputs(), 1)
 								.slotGroup("charging")
 								.filter(InventoryUtils.IS_POWER_ITEM)))
 				.child(new ItemSlot().pos(61, 60)
-						.slot(new ModularSlot(inventory, 2)
+						.slot(new ModularSlot(ioComponent.getInputs(), 2)
 								.slotGroup("charging")
 								.filter(InventoryUtils.IS_POWER_ITEM)))
 				.child(new ItemSlot().pos(97, 20)
-						.slot(new ModularSlot(inventory, 3)
+						.slot(new ModularSlot(ioComponent.getInputs(), 3)
 								.slotGroup("charging")
 								.filter(InventoryUtils.IS_POWER_ITEM)))
 				.child(new ItemSlot().pos(97, 40)
-						.slot(new ModularSlot(inventory, 4)
+						.slot(new ModularSlot(ioComponent.getInputs(), 4)
 								.slotGroup("charging")
 								.filter(InventoryUtils.IS_POWER_ITEM)))
 				.child(new ItemSlot().pos(97, 60)
-						.slot(new ModularSlot(inventory, 5)
+						.slot(new ModularSlot(ioComponent.getInputs(), 5)
 								.slotGroup("charging")
 								.filter(InventoryUtils.IS_POWER_ITEM)));
 		return panel;
