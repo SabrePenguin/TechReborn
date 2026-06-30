@@ -30,6 +30,16 @@ public class EnergyComponent implements MachineComponent {
 		this.baseExtract = maxExtract;
 	}
 
+	public EnergyComponent setUnextractable() {
+		this.energyStorage.setCanExtract(false);
+		return this;
+	}
+
+	public EnergyComponent setUninsertable() {
+		this.energyStorage.setCanReceive(false);
+		return this;
+	}
+
 	public TEEnergyStorage getEnergyStorage() {
 		return energyStorage;
 	}

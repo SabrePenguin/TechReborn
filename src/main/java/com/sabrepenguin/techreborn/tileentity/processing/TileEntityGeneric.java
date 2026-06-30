@@ -37,7 +37,7 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 
 	public TileEntityGeneric(int inputSize, int outputSize, int feCapacity, int maxInput, ITRRegistry registry) {
 		ioComponent = new ItemIOComponent(this, inputSize, outputSize, true, this::refreshSlot);
-		energyComponent = new EnergyComponent(feCapacity, maxInput, maxInput, ioComponent.getBatterySlot());
+		energyComponent = new EnergyComponent(feCapacity, maxInput, maxInput, ioComponent.getBatterySlot()).setUnextractable();
 		recipeComponent = new StandardRecipeComponent(registry, ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(), this::updateState);
 		upgradeComponent = new UpgradeComponent(feCapacity, energyComponent, recipeComponent);
 	}
