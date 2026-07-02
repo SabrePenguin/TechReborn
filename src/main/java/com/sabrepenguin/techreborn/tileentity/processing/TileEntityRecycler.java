@@ -26,7 +26,7 @@ import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
-import com.sabrepenguin.techreborn.tileentity.components.RandomRecipeComponent;
+import com.sabrepenguin.techreborn.tileentity.components.specialized.RandomRecipeComponent;
 import com.sabrepenguin.techreborn.tileentity.components.UpgradeComponent;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import mcp.MethodsReturnNonnullByDefault;

@@ -6,7 +6,7 @@ import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
-import com.sabrepenguin.techreborn.tileentity.components.LockableRecipeComponent;
+import com.sabrepenguin.techreborn.tileentity.components.specialized.LockableRecipeComponent;
 import com.sabrepenguin.techreborn.tileentity.components.UpgradeComponent;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.state.IBlockState;

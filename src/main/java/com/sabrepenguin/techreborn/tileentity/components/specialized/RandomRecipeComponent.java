@@ -1,7 +1,9 @@
-package com.sabrepenguin.techreborn.tileentity.components;
+package com.sabrepenguin.techreborn.tileentity.components.specialized;
 
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
+import com.sabrepenguin.techreborn.tileentity.components.MachineComponent;
+import com.sabrepenguin.techreborn.tileentity.components.RecipeComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;

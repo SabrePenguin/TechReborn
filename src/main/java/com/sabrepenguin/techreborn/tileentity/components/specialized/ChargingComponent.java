@@ -1,6 +1,7 @@
-package com.sabrepenguin.techreborn.tileentity.components;
+package com.sabrepenguin.techreborn.tileentity.components.specialized;
 
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
+import com.sabrepenguin.techreborn.tileentity.components.MachineComponent;
 import com.sabrepenguin.techreborn.util.ItemStackUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

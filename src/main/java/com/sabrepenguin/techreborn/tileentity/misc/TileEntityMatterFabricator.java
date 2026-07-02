@@ -19,7 +19,7 @@ import com.sabrepenguin.techreborn.gui.*;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
-import com.sabrepenguin.techreborn.tileentity.components.MatterRecipeComponent;
+import com.sabrepenguin.techreborn.tileentity.components.specialized.MatterRecipeComponent;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockHorizontal;

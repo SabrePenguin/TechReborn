@@ -18,7 +18,7 @@ import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
-import com.sabrepenguin.techreborn.tileentity.components.ChargingComponent;
+import com.sabrepenguin.techreborn.tileentity.components.specialized.ChargingComponent;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
 import com.sabrepenguin.techreborn.util.InventoryUtils;

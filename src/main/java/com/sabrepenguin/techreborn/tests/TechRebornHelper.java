@@ -4,7 +4,7 @@ import com.gtnewhorizons.horizonqa.api.GameTestAssertException;
 import com.gtnewhorizons.horizonqa.api.GameTestHelper;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.items.TRItems;
-import com.sabrepenguin.techreborn.tileentity.components.LockableRecipeComponent;
+import com.sabrepenguin.techreborn.tileentity.components.specialized.LockableRecipeComponent;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAutoBalance;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;

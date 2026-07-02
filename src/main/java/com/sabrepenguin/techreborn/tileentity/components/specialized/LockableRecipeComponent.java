@@ -1,9 +1,10 @@
-package com.sabrepenguin.techreborn.tileentity.components;
+package com.sabrepenguin.techreborn.tileentity.components.specialized;
 
 import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
+import com.sabrepenguin.techreborn.tileentity.components.StandardRecipeComponent;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import com.sabrepenguin.techreborn.util.ItemStackWrapper;
 import it.unimi.dsi.fastutil.ints.IntList;
