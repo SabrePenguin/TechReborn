@@ -46,6 +46,7 @@ public class FuelRecipeComponent implements MachineComponent, RecipeComponent {
 		cachedRecipe = null;
 		burnTime = 0;
 		totalBurnTime = 0;
+		totalProcessTime = 200;
 		burning = false;
 	}
 
@@ -123,9 +124,6 @@ public class FuelRecipeComponent implements MachineComponent, RecipeComponent {
 		burnTime = compound.getInteger("BurnTime");
 		totalBurnTime = compound.getInteger("TotalBurnTime");
 		cachedRecipe = registry.getRecipe(inputs);
-		if (cachedRecipe != null) {
-			totalProcessTime = cachedRecipe.getRecipeTime();
-		}
 	}
 
 	@Override
@@ -145,9 +143,6 @@ public class FuelRecipeComponent implements MachineComponent, RecipeComponent {
 		ITRRecipe newRecipe = registry.getRecipe(inputs);
 		if (cachedRecipe != newRecipe) {
 			cachedRecipe = newRecipe;
-			if (cachedRecipe != null) {
-				totalProcessTime = cachedRecipe.getRecipeTime();
-			}
 			processTime = 0;
 		}
 	}
