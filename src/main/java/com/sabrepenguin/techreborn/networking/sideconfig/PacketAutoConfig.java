@@ -48,7 +48,12 @@ public class PacketAutoConfig implements IMessage {
 				if (world.isBlockLoaded(message.pos)) {
 					TileEntity te = world.getTileEntity(message.pos);
 					if (te instanceof ISideConfigTE sidedConfig) {
-						sidedConfig.swapSlot(message.index, message.input);
+
+						if (sidedConfig.getSidedConfigComponent() != null) {
+							sidedConfig.getSidedConfigComponent().swapSlot(message.index, message.input);
+						} else {
+							sidedConfig.swapSlot(message.index, message.input);
+						}
 					}
 				}
 			});

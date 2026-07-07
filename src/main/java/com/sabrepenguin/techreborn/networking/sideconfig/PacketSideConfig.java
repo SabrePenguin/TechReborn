@@ -52,7 +52,11 @@ public class PacketSideConfig implements IMessage {
 				if (world.isBlockLoaded(message.pos)) {
 					TileEntity te = world.getTileEntity(message.pos);
 					if (te instanceof ISideConfigTE sidedConfig) {
-						sidedConfig.rotateSlot(message.side, message.handlerIndex, message.handlerSlot);
+						if (sidedConfig.getSidedConfigComponent() != null) {
+							sidedConfig.getSidedConfigComponent().rotateSlot(message.side, message.handlerSlot);
+						} else {
+							sidedConfig.rotateSlot(message.side, message.handlerIndex, message.handlerSlot);
+						}
 					}
 				}
 			});
