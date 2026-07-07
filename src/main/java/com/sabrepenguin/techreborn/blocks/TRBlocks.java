@@ -14,6 +14,7 @@ import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityChargeOMat;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityMatterFabricator;
 import com.sabrepenguin.techreborn.tileentity.processing.*;
+import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronAlloyFurnace;
 import com.sabrepenguin.techreborn.util.ModLoadedUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -29,7 +30,7 @@ public class TRBlocks {
     public static final Block storage2 = null;
 	public static final Block ore = null;
     public static final IronFurnace iron_furnace = null;
-	public static final BlockIronAlloyFurnace iron_alloy_furnace = null;
+	public static final BlockHorizontalMachine iron_alloy_furnace = null;
 	public static final Block ore2 = null;
 	public static final Block machine_frame = null;
 	public static final Block machine_casing = null;
@@ -116,7 +117,7 @@ public class TRBlocks {
 				new BlockStorage(),
 				new BlockStorage2(),
 				new IronFurnace(),
-				new BlockIronAlloyFurnace(),
+				new BlockHorizontalMachine("iron_alloy_furnace", "machines/tier0", TileEntityIronAlloyFurnace::new),
 				new OreBlock(),
 				new OreBlock2(),
 				new BlockMachineFrame(),
