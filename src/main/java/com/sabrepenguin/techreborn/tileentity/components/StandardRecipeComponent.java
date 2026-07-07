@@ -38,11 +38,6 @@ public class StandardRecipeComponent implements MachineComponent, RecipeComponen
 	protected boolean isActive;
 	protected boolean refreshRecipe;
 
-	public StandardRecipeComponent(ITRRegistry registry, IItemHandlerModifiable inputs, IItemHandlerModifiable internalOutputs,
-								   TEEnergyStorage storage) {
-		this(registry, inputs, internalOutputs, storage, null);
-	}
-
 	public StandardRecipeComponent(ITRRegistry registry, IItemHandlerModifiable inputs, IItemHandlerModifiable internalOutput,
 								   TEEnergyStorage storage, @Nullable Consumer<Boolean> stateUpdate) {
 		this.registry = registry;
@@ -109,7 +104,9 @@ public class StandardRecipeComponent implements MachineComponent, RecipeComponen
 		cachedRecipe = registry.getRecipe(inputs);
 		if (cachedRecipe != null) {
 			totalProcessTime = cachedRecipe.getRecipeTime();
+			cachedProcessTime = (int) (totalProcessTime * cachedProcessMultiplier);
 			energyCost = cachedRecipe.getEnergyCost();
+			cachedEnergyCost = (int) (energyCost * cachedEnergyMultiplier);
 		}
 	}
 

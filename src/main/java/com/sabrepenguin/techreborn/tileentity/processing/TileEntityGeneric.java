@@ -6,6 +6,7 @@ import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
+import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
 import com.sabrepenguin.techreborn.tileentity.components.StandardRecipeComponent;
 import com.sabrepenguin.techreborn.tileentity.components.UpgradeComponent;
 import mcp.MethodsReturnNonnullByDefault;
@@ -34,12 +35,14 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 	protected final EnergyComponent energyComponent;
 	protected final UpgradeComponent upgradeComponent;
 	protected final StandardRecipeComponent recipeComponent;
+	protected final SidedConfigComponent configComponent;
 
 	public TileEntityGeneric(int inputSize, int outputSize, int feCapacity, int maxInput, ITRRegistry registry) {
 		ioComponent = new ItemIOComponent(this, inputSize, outputSize, true, this::refreshSlot);
 		energyComponent = new EnergyComponent(feCapacity, maxInput, maxInput, ioComponent.getBatterySlot()).setUnextractable();
 		recipeComponent = new StandardRecipeComponent(registry, ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(), this::updateState);
 		upgradeComponent = new UpgradeComponent(feCapacity, energyComponent, recipeComponent);
+		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -133,6 +136,11 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 	public void swapSlot(int index, boolean input) {
 		ioComponent.getManager().swapIndex(index, input);
 		updateTE();
+	}
+
+	@Override
+	public SidedConfigComponent getSidedConfigComponent() {
+		return configComponent;
 	}
 
 	@Override
