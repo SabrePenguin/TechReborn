@@ -1,14 +1,18 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
+import com.sabrepenguin.techreborn.util.ObjIntPredicate;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
 
 public class RestrictedItemStackHandler implements IItemHandlerModifiable {
 
 	private final IItemHandlerModifiable inventory;
 	private final int minSlot;
 	private final int size;
+	private @Nullable ObjIntPredicate<ItemStack> filter;
 
 	public RestrictedItemStackHandler(IItemHandlerModifiable inventory, int slot) {
 		this(inventory, slot, slot+1);
@@ -48,6 +52,11 @@ public class RestrictedItemStackHandler implements IItemHandlerModifiable {
 	}
 
 	@Override
+	public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+		return filter == null || filter.test(stack, slot);
+	}
+
+	@Override
 	public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
 		if (slot < 0 || slot >= size) return stack;
 		return inventory.insertItem(minSlot + slot, stack, simulate);
@@ -67,5 +76,10 @@ public class RestrictedItemStackHandler implements IItemHandlerModifiable {
 	@Override
 	public void setStackInSlot(int slot, @NotNull ItemStack stack) {
 		inventory.setStackInSlot(minSlot + slot, stack);
+	}
+
+	public RestrictedItemStackHandler setFilter(@Nullable ObjIntPredicate<ItemStack> filter) {
+		this.filter = filter;
+		return this;
 	}
 }

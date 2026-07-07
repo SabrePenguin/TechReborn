@@ -5,7 +5,9 @@ import com.sabrepenguin.techreborn.capability.stackhandler.RestrictedItemStackHa
 import com.sabrepenguin.techreborn.capability.stackhandler.SideConfig;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
+import com.sabrepenguin.techreborn.util.ObjIntPredicate;
 import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -74,6 +76,11 @@ public class ItemIOComponent implements MachineComponent {
 			configs.add(SideConfig.bidirectional(battery));
 		}
 		ioManager = new IOManager(configs.toArray(new SideConfig[0]));
+	}
+
+	public ItemIOComponent addInputFilter(ObjIntPredicate<ItemStack> filter) {
+		inputs.setFilter(filter);
+		return this;
 	}
 
 	public @Nullable IItemHandlerModifiable getBatterySlot() {
