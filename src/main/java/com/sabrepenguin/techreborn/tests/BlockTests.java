@@ -13,6 +13,7 @@ import com.sabrepenguin.techreborn.items.materials.Dust;
 import com.sabrepenguin.techreborn.items.materials.Ingot;
 import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.items.materials.Plate;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -315,6 +316,25 @@ public class BlockTests {
 				.thenIdle(200)
 				.thenExecute(() -> {
 					if (!trHelper.itemEquals(target, targetResult, 2))
+						helper.fail("Failed to alloy");
+				})
+				.thenSucceed();
+	}
+
+	@GameTest(template = "ironAlloyFurnace", timeoutTicks = 200)
+	public static void ironAlloyFurnaceTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = new ItemStack(TRItems.ingot, 2, Ingot.IngotMeta.electrum.metadata());
+
+		helper.assertBlockPresent(TRBlocks.iron_alloy_furnace.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Items.GOLD_INGOT, 1), 0);
+		helper.insertItem(target, new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.silver.metadata()), 1);
+		helper.insertItem(target, new ItemStack(Blocks.PLANKS), 2);
+		helper.startSequence()
+				.thenIdle(200)
+				.thenExecute(() -> {
+					if (!trHelper.itemEquals(target, targetResult, 3))
 						helper.fail("Failed to alloy");
 				})
 				.thenSucceed();
