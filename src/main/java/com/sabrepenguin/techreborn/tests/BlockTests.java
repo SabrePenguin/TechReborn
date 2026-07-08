@@ -340,6 +340,24 @@ public class BlockTests {
 				.thenSucceed();
 	}
 
+	@GameTest(template = "ironFurnace", timeoutTicks = 160)
+	public static void ironFurnaceTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = new ItemStack(Items.GOLD_INGOT);
+
+		helper.assertBlockPresent(TRBlocks.iron_furnace.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Blocks.GOLD_ORE), 0);
+		helper.insertItem(target, new ItemStack(Blocks.PLANKS), 1);
+		helper.startSequence()
+				.thenIdle(160)
+				.thenExecute(() -> {
+					if (!trHelper.itemEquals(target, targetResult, 2))
+						helper.fail("Failed to smelt");
+				})
+				.thenSucceed();
+	}
+
 	@GameTest(template = "matterFabricator", timeoutTicks = 5)
 	public static void matterFabricatorTest(GameTestHelper helper) {
 		TechRebornHelper trHelper = new TechRebornHelper(helper);
