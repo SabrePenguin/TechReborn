@@ -126,12 +126,6 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 	}
 
 	@Override
-	public void swapSlot(int index, boolean input) {
-		ioComponent.getManager().swapIndex(index, input);
-		updateTE();
-	}
-
-	@Override
 	public SidedConfigComponent getSidedConfigComponent() {
 		return configComponent;
 	}
@@ -145,7 +139,7 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 
 	@Override
 	public IOManager getManager() {
-		return ioComponent.getManager(); //TODO
+		return ioComponent.getManager();
 	}
 
 	public void onInputChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {

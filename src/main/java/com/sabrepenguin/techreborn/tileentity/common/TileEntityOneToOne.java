@@ -48,8 +48,8 @@ public class TileEntityOneToOne extends TileEntityGeneric implements IGuiHolder<
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioComponent.getManager(), getFacing,
 				new SlotPosition(SlotAction.INPUT, 55, 39, 0, 0),
-				SlotPosition.BigSlot(SlotAction.OUTPUT, 101, 39, 1, 0),
-				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)
+				SlotPosition.BigSlot(SlotAction.OUTPUT, 101, 39, 1, 1),
+				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 2)
 		);
 
 		panel.bindPlayerInventory()

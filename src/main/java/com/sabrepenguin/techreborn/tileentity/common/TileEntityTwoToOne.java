@@ -46,8 +46,8 @@ public class TileEntityTwoToOne extends TileEntityGeneric implements IGuiHolder<
 		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioComponent.getManager(), getFacing,
 				new SlotPosition(SlotAction.INPUT, 34, 39, 0, 0),
 				new SlotPosition(SlotAction.INPUT, 126, 39, 0, 1),
-				SlotPosition.BigSlot(SlotAction.OUTPUT, 80, 39, 1, 0),
-				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)
+				SlotPosition.BigSlot(SlotAction.OUTPUT, 80, 39, 1, 2),
+				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 3)
 		);
 		DoubleSyncValue progress = recipeComponent.getProgress();
 

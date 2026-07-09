@@ -4,11 +4,7 @@ import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
 
 public interface ISideConfigTE {
-	default void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {}
-	default void swapSlot(int index, boolean input) {}
-	default void updateTE() {}
-	default SidedConfigComponent getSidedConfigComponent() {
-		return null;
-	}
+	void updateTE();
+	SidedConfigComponent getSidedConfigComponent();
 	IOManager getManager();
 }

@@ -18,6 +18,7 @@ import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
+import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
 import com.sabrepenguin.techreborn.tileentity.components.specialized.ChargingComponent;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
@@ -47,12 +48,14 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 	protected final ItemIOComponent ioComponent;
 	protected final EnergyComponent energyComponent;
 	protected final ChargingComponent chargingComponent;
+	protected final SidedConfigComponent configComponent;
 
 	public TileEntityChargeOMat() {
 		ioComponent = new ItemIOComponent(this, 6, 0, false, (a) -> {});
 		energyComponent = new EnergyComponent(TechRebornConfig.machineConfig.chargeOMat.maxEnergy, TechRebornConfig.machineConfig.chargeOMat.maxInput,
 				TechRebornConfig.machineConfig.chargeOMat.maxInput).setUnextractable();
 		chargingComponent = new ChargingComponent(ioComponent.getInputs(), energyComponent.getEnergyStorage(), this::updateState);
+		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
 	}
 
 	private void updateState(boolean state) {
@@ -136,19 +139,6 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 	// ISidedConfigTE
 
 	@Override
-	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
-			updateTE();
-		}
-	}
-
-	@Override
-	public void swapSlot(int index, boolean input) {
-		ioComponent.getManager().swapIndex(index, input);
-		updateTE();
-	}
-
-	@Override
 	public void updateTE() {
 		markDirty();
 		IBlockState state = world.getBlockState(pos);
@@ -158,6 +148,11 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 	@Override
 	public IOManager getManager() {
 		return ioComponent.getManager();
+	}
+
+	@Override
+	public SidedConfigComponent getSidedConfigComponent() {
+		return configComponent;
 	}
 
 	// IGuiHolder

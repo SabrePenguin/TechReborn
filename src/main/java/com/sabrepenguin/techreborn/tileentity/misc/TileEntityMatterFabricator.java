@@ -19,6 +19,7 @@ import com.sabrepenguin.techreborn.gui.*;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
+import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
 import com.sabrepenguin.techreborn.tileentity.components.specialized.MatterRecipeComponent;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import mcp.MethodsReturnNonnullByDefault;
@@ -48,6 +49,7 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 	protected final ItemIOComponent ioComponent;
 	protected final EnergyComponent energyComponent;
 	protected final MatterRecipeComponent recipeComponent;
+	protected final SidedConfigComponent configComponent;
 
 	public TileEntityMatterFabricator() {
 		ioComponent = new ItemIOComponent(this, 6, 5, true, this::refreshSlot);
@@ -56,6 +58,7 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 				.setUnextractable();
 		recipeComponent = new MatterRecipeComponent(ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(),
 				this::updateState, TechRebornConfig.machineConfig.matterFabricator.fabricationRate);
+		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -136,19 +139,6 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 	}
 
 	@Override
-	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
-			updateTE();
-		}
-	}
-
-	@Override
-	public void swapSlot(int index, boolean input) {
-		ioComponent.getManager().swapIndex(index, input);
-		updateTE();
-	}
-
-	@Override
 	public void updateTE() {
 		markDirty();
 		IBlockState state = world.getBlockState(pos);
@@ -157,7 +147,12 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 
 	@Override
 	public IOManager getManager() {
-		return ioComponent.getManager(); //TODO
+		return ioComponent.getManager();
+	}
+
+	@Override
+	public SidedConfigComponent getSidedConfigComponent() {
+		return configComponent;
 	}
 
 	@Override
@@ -176,12 +171,12 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 				new SlotPosition(SlotAction.INPUT, 90, 20, 0, 3),
 				new SlotPosition(SlotAction.INPUT, 110, 20, 0, 4),
 				new SlotPosition(SlotAction.INPUT, 130, 20, 0, 5),
-				new SlotPosition(SlotAction.OUTPUT, 40, 66, 1, 0),
-				new SlotPosition(SlotAction.OUTPUT, 60, 66, 1, 1),
-				new SlotPosition(SlotAction.OUTPUT, 80, 66, 1, 2),
-				new SlotPosition(SlotAction.OUTPUT, 100, 66, 1, 3),
-				new SlotPosition(SlotAction.OUTPUT, 120, 66, 1, 4),
-				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 69, 2, 0)
+				new SlotPosition(SlotAction.OUTPUT, 40, 66, 1, 6),
+				new SlotPosition(SlotAction.OUTPUT, 60, 66, 1, 7),
+				new SlotPosition(SlotAction.OUTPUT, 80, 66, 1, 8),
+				new SlotPosition(SlotAction.OUTPUT, 100, 66, 1, 9),
+				new SlotPosition(SlotAction.OUTPUT, 120, 66, 1, 10),
+				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 69, 2, 11)
 		);
 
 		panel.bindPlayerInventory()

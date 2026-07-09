@@ -26,6 +26,7 @@ import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
+import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
 import com.sabrepenguin.techreborn.tileentity.components.specialized.RandomRecipeComponent;
 import com.sabrepenguin.techreborn.tileentity.components.UpgradeComponent;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
@@ -57,6 +58,7 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 	protected final EnergyComponent energyComponent;
 	protected final UpgradeComponent upgradeComponent;
 	protected final RandomRecipeComponent recipeComponent;
+	protected final SidedConfigComponent configComponent;
 
 	@SuppressWarnings("ConstantConditions")
 	protected static ItemStack recipeOutput = new ItemStack(TRItems.part, 1, Part.PartMeta.scrap.metadata());
@@ -68,6 +70,7 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 		this.recipeComponent = new RandomRecipeComponent(ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(),
 				this::updateState, recipeOutput, TechRebornConfig.machineConfig.recycler.scrapChance); //TODO
 		this.upgradeComponent = new UpgradeComponent(TechRebornConfig.machineConfig.recycler.maxEnergy, energyComponent, recipeComponent);
+		this.configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -151,19 +154,6 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 	}
 
 	@Override
-	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
-			updateTE();
-		}
-	}
-
-	@Override
-	public void swapSlot(int index, boolean input) {
-		ioComponent.getManager().swapIndex(index, input);
-		updateTE();
-	}
-
-	@Override
 	public void updateTE() {
 		markDirty();
 		IBlockState state = world.getBlockState(pos);
@@ -172,7 +162,12 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 
 	@Override
 	public IOManager getManager() {
-		return ioComponent.getManager(); //TODO
+		return ioComponent.getManager();
+	}
+
+	@Override
+	public SidedConfigComponent getSidedConfigComponent() {
+		return configComponent;
 	}
 
 	public void onInputChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {
@@ -197,8 +192,8 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioComponent.getManager(), getFacing,
 				new SlotPosition(SlotAction.INPUT, 55, 39, 0, 0),
-				SlotPosition.BigSlot(SlotAction.OUTPUT, 101, 39, 1, 0),
-				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)
+				SlotPosition.BigSlot(SlotAction.OUTPUT, 101, 39, 1, 1),
+				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 2)
 		);
 
 		panel.bindPlayerInventory()

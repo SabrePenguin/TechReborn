@@ -6,6 +6,7 @@ import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
+import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
 import com.sabrepenguin.techreborn.tileentity.components.specialized.LockableRecipeComponent;
 import com.sabrepenguin.techreborn.tileentity.components.UpgradeComponent;
 import mcp.MethodsReturnNonnullByDefault;
@@ -34,12 +35,14 @@ public class TileEntityAutoBalance extends TileEntity implements ITickable, ISid
 	protected final EnergyComponent energyComponent;
 	protected final UpgradeComponent upgradeComponent;
 	protected final LockableRecipeComponent recipeComponent;
+	protected final SidedConfigComponent configComponent;
 
 	public TileEntityAutoBalance(int inputSize, int outputSize, int feCapacity, int maxInput, ITRRegistry registry) {
 		ioComponent = new ItemIOComponent(this, inputSize, outputSize, true, this::refreshSlot);
 		energyComponent = new EnergyComponent(feCapacity, maxInput, maxInput, ioComponent.getBatterySlot()).setUnextractable();
 		recipeComponent = new LockableRecipeComponent(this, registry, ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(), this::updateState);
 		upgradeComponent = new UpgradeComponent(feCapacity, energyComponent, recipeComponent);
+		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -124,19 +127,6 @@ public class TileEntityAutoBalance extends TileEntity implements ITickable, ISid
 	}
 
 	@Override
-	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
-			updateTE();
-		}
-	}
-
-	@Override
-	public void swapSlot(int index, boolean input) {
-		ioComponent.getManager().swapIndex(index, input);
-		updateTE();
-	}
-
-	@Override
 	public void updateTE() {
 		markDirty();
 		IBlockState state = world.getBlockState(pos);
@@ -146,6 +136,11 @@ public class TileEntityAutoBalance extends TileEntity implements ITickable, ISid
 	@Override
 	public IOManager getManager() {
 		return ioComponent.getManager();
+	}
+
+	@Override
+	public SidedConfigComponent getSidedConfigComponent() {
+		return configComponent;
 	}
 
 	public void onInputChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {

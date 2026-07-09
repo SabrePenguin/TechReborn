@@ -67,8 +67,8 @@ public class TileEntityAutoCraftingTable extends TileEntityAutoBalance implement
 				new SlotPosition(SlotAction.INPUT, 30, 58, 0, 6),
 				new SlotPosition(SlotAction.INPUT, 48, 58, 0, 7),
 				new SlotPosition(SlotAction.INPUT, 66, 58, 0, 8),
-				SlotPosition.BigSlot(SlotAction.OUTPUT, 120, 39, 1, 0),
-				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)
+				SlotPosition.BigSlot(SlotAction.OUTPUT, 120, 49, 1, 9),
+				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 10)
 		);
 		DoubleSyncValue progress = recipeComponent.getProgress();
 		panel.bindPlayerInventory()

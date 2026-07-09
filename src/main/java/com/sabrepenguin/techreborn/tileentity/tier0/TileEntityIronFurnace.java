@@ -51,11 +51,13 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, IOnS
 
 	protected final ItemIOComponent ioComponent;
 	protected final FurnaceRecipeComponent recipeComponent;
+	protected final SidedConfigComponent configComponent;
 
 	public TileEntityIronFurnace() {
 		ioComponent = new ItemIOComponent(this, 2, 1, false, this::refreshSlot)
 				.addInputFilter(ObjIntPredicate.fuel(1));
 		recipeComponent = new FurnaceRecipeComponent(RegistryHandler.instance().getFurnaceRegistry(), ioComponent.getInputs(), ioComponent.getInternalOutputs(), 1, this::updateState, 160);
+		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -83,7 +85,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, IOnS
 
 	@Override
 	public SidedConfigComponent getSidedConfigComponent() {
-		return ISideConfigTE.super.getSidedConfigComponent();
+		return configComponent;
 	}
 
 	@Override
@@ -161,8 +163,8 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, IOnS
 								ioComponent.getManager(),
 								getFacing,
 								new SlotPosition(SlotAction.INPUT, 56, 17, 0, 0),
-								new SlotPosition(SlotAction.INPUT, 56, 53, 1, 0),
-								new SlotPosition(SlotAction.OUTPUT, 116, 35, 2, 0)));
+								new SlotPosition(SlotAction.INPUT, 56, 53, 0, 1),
+								new SlotPosition(SlotAction.OUTPUT, 116, 35, 1, 2)));
 		TRGuis.addConfigPanel(panel, panelHandler);
 
 		panel.child(IKey.lang("tile.techreborn.iron_furnace.name")
