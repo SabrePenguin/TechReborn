@@ -160,7 +160,7 @@ public class TRBlocks {
 				new BlockIndustrialSawmill(),
 				new BlockVacuumFreezer(),
 				new BlockHorizontalMachine("auto_crafting_table", "machines/tier1", TileEntityAutoCraftingTable::new),
-				new BlockHorizontalMachine("electric_furnace", "machines/tier1", TileEntityElectricFurnace::new),
+				new BlockHorizontalMachine("electric_furnace", "machines/tier1", TEProcessing.TileEntityElectricFurnace::new),
 				new BlockPlayerDetector(),
 				new BlockHorizontalMachine("pump", "machines/tier1"),
 				new BlockHorizontalMachine("rolling_machine", "machines/tier1", TileEntityRollingMachine::new),

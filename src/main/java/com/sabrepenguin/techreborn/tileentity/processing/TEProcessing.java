@@ -7,6 +7,12 @@ import com.sabrepenguin.techreborn.tileentity.common.TileEntityOneToOne;
 import com.sabrepenguin.techreborn.tileentity.common.TileEntityTwoToOne;
 
 public class TEProcessing {
+	public static class TileEntityElectricFurnace extends TileEntityOneToOne {
+		public TileEntityElectricFurnace() {
+			super("tile.techreborn.electric_furnace.name", TechRebornConfig.machineConfig.electricFurnace.maxEnergy,
+					TechRebornConfig.machineConfig.electricFurnace.maxInput, RegistryHandler.instance().getFurnaceRegistry(), "minecraft.smelting");
+		}
+	}
 	public static class TileEntityGrinder extends TileEntityOneToOne {
 		public TileEntityGrinder() {
 			super("tile.techreborn.grinder.name", TechRebornConfig.machineConfig.grinder.maxEnergy,

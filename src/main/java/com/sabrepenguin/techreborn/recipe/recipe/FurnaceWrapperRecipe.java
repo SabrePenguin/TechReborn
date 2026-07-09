@@ -31,12 +31,12 @@ public class FurnaceWrapperRecipe implements ITRRecipe {
 
 	@Override
 	public int getRecipeTime() {
-		return 0;
+		return 200;
 	}
 
 	@Override
 	public int getEnergyCost() {
-		return 0;
+		return 24;
 	}
 
 	public void setRecipe(ItemStack input) {

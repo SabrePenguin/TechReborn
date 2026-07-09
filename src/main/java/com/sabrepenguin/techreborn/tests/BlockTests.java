@@ -358,6 +358,24 @@ public class BlockTests {
 				.thenSucceed();
 	}
 
+	@GameTest(template = "electricFurnace", timeoutTicks = 200)
+	public static void electricFurnaceTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack targetResult = new ItemStack(Items.GOLD_INGOT);
+
+		helper.assertBlockPresent(TRBlocks.electric_furnace.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(Blocks.GOLD_ORE), 0);
+		helper.onEachTick(() -> trHelper.insertPower(target, 24));
+		helper.startSequence()
+				.thenIdle(200)
+				.thenExecute(() -> {
+					if (!trHelper.itemEquals(target, targetResult, 1))
+						helper.fail("Failed to smelt");
+				})
+				.thenSucceed();
+	}
+
 	@GameTest(template = "matterFabricator", timeoutTicks = 5)
 	public static void matterFabricatorTest(GameTestHelper helper) {
 		TechRebornHelper trHelper = new TechRebornHelper(helper);

@@ -15,7 +15,7 @@ public class TRTileEntity {
 	public static void registerTileEntity() {
 		GameRegistry.registerTileEntity(TileEntityIronFurnace.class, new ResourceLocation(Tags.MODID, "iron_furnace"));
 		GameRegistry.registerTileEntity(TileEntityIronAlloyFurnace.class, new ResourceLocation(Tags.MODID, "iron_alloy_furnace"));
-		GameRegistry.registerTileEntity(TileEntityElectricFurnace.class, new ResourceLocation(Tags.MODID, "electric_furnace"));
+		GameRegistry.registerTileEntity(TEProcessing.TileEntityElectricFurnace.class, new ResourceLocation(Tags.MODID, "electric_furnace"));
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityAlloySmelter.class, new ResourceLocation(Tags.MODID, "alloy_furnace"));
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityExtractor.class, new ResourceLocation(Tags.MODID, "extractor"));
 		GameRegistry.registerTileEntity(TEProcessing.TileEntityGrinder.class, new ResourceLocation(Tags.MODID, "grinder"));
