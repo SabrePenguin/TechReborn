@@ -2,8 +2,10 @@ package com.sabrepenguin.techreborn.recipe.recipe;
 
 import com.google.common.base.Objects;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
+import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.util.ItemStackWrapper;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,5 +70,10 @@ public class ChanceRecipe implements ITRRecipe {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean matches(IItemHandler handler) {
+		return RecipeUtils.checkRecipeValid(handler, inputs);
 	}
 }

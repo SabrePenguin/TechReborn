@@ -2,9 +2,11 @@ package com.sabrepenguin.techreborn.recipe.recipe;
 
 import com.google.common.base.Objects;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
+import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import com.sabrepenguin.techreborn.util.ItemStackWrapper;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Collections;
@@ -61,5 +63,10 @@ public class BasicOutputRecipe implements ITRRecipe {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean matches(IItemHandler handler) {
+		return RecipeUtils.checkRecipeValid(handler, inputs);
 	}
 }

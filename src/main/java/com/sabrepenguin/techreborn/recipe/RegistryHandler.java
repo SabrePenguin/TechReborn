@@ -89,6 +89,10 @@ public class RegistryHandler {
 		return industrialCentrifugeRegistry;
 	}
 
+	public ITRRegistry getFurnaceRegistry() {
+		return new FurnaceWrapperRegistry();
+	}
+
 	public static RegistryHandler instance() {
 		return INSTANCE;
 	}
