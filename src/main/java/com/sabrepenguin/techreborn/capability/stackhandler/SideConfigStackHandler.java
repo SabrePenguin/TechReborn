@@ -46,9 +46,9 @@ public class SideConfigStackHandler extends CombinedInvWrapper {
 		return handlers;
 	}
 
-	public boolean rotateSlot(int slot) {
+	public boolean rotateSlot(int handlerIndex, int slot) {
 		if (slot < 0 || slot >= getSlots()) return false;
-		this.slotDirection[slot] = this.handlerDirection[slot].rotate(this.slotDirection[slot]);
+		this.slotDirection[slot] = this.handlerDirection[handlerIndex].rotate(this.slotDirection[slot]);
 		return true;
 	}
 

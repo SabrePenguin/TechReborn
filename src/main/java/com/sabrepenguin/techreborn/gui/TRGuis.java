@@ -130,10 +130,11 @@ public class TRGuis {
 		// Button creation. Creates a button on top of each individual slot
 		for (final SlotPosition position : slotPositions) {
 			final int slot = position.slot();
+			final int handlerIndex = position.handlerSlot();
 			final SlotAction action = position.action();
 			IPanelHandler panelHandler = syncManager.syncedPanel("slot_config_" + position.slot(), true,
 					(syncManager1, syncHandler1) ->
-							createSlotConfigPanel(syncManager1, syncHandler1, pos, manager, slot, getFacing, action));
+							createSlotConfigPanel(syncManager1, syncHandler1, pos, manager, handlerIndex, slot, getFacing, action));
 			panel.child(new TRButtonWidget<>()
 					.pos(position.x() - ((position.size() - 18) / 2), position.y() - ((position.size() - 18) / 2))
 					.size(position.size())
@@ -148,6 +149,7 @@ public class TRGuis {
 	private static void addEnumFacingButtons(
 			BlockPos pos, ModularPanel panel, int relativeIndex,
 			IOManager manager,
+			int handlerIndex,
 			int slot,
 			Supplier<EnumFacing> getFacing,
 			int bottomOffset) {
@@ -174,7 +176,7 @@ public class TRGuis {
 		button.onMousePressed(mouseButton -> {
 			int sideIndex = absoluteFacing.get().getIndex();
 			TechRebornPacketHandler.INSTANCE.sendToServer(new PacketSideConfig(
-					pos, sideIndex, 0, slot
+					pos, sideIndex, handlerIndex, slot
 			));
 			return true;
 		});
@@ -184,13 +186,14 @@ public class TRGuis {
 	private static ModularPanel createSlotConfigPanel(
 			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos,
 			IOManager manager,
+			int handlerIndex,
 			int slot,
 			Supplier<EnumFacing> getFacing, SlotAction action) {
 		int increaseBy = action == SlotAction.BIDIRECTIONAL ? 30 : 15;
 		ModularPanel panel = new Dialog<>("dialog_" + slot).size(104, 104 + increaseBy);
 		panel.child(ButtonWidget.panelCloseButton());
 		for (int i = 0; i < 6; i++) {
-			addEnumFacingButtons(pos, panel, i, manager, slot, getFacing, increaseBy);
+			addEnumFacingButtons(pos, panel, i, manager, handlerIndex, slot, getFacing, increaseBy);
 		}
 		switch (action) {
 			case INPUT:

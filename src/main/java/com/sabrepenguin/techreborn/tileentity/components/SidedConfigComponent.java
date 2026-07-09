@@ -11,8 +11,8 @@ public class SidedConfigComponent {
 		this.updateTE = updateTE;
 	}
 
-	public void rotateSlot(int sideIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(localSlotIndex)) {
+	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
+		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
 			updateTE();
 		}
 	}

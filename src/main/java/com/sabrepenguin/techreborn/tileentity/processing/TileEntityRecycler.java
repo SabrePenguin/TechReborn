@@ -152,7 +152,7 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 
 	@Override
 	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(localSlotIndex)) {
+		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
 			updateTE();
 		}
 	}

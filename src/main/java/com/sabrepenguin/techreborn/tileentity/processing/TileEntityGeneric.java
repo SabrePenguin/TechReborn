@@ -126,13 +126,6 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 	}
 
 	@Override
-	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(localSlotIndex)) {
-			updateTE();
-		}
-	}
-
-	@Override
 	public void swapSlot(int index, boolean input) {
 		ioComponent.getManager().swapIndex(index, input);
 		updateTE();

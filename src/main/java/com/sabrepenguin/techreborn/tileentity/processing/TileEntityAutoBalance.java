@@ -125,7 +125,7 @@ public class TileEntityAutoBalance extends TileEntity implements ITickable, ISid
 
 	@Override
 	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(localSlotIndex)) {
+		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
 			updateTE();
 		}
 	}

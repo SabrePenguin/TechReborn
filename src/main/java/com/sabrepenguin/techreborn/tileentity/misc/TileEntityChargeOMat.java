@@ -137,7 +137,7 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 
 	@Override
 	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(localSlotIndex)) {
+		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
 			updateTE();
 		}
 	}

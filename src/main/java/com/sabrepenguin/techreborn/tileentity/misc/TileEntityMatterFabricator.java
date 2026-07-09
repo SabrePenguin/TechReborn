@@ -137,7 +137,7 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 
 	@Override
 	public void rotateSlot(int sideIndex, int handlerIndex, int localSlotIndex) {
-		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(localSlotIndex)) {
+		if (ioComponent.getManager().getSide(sideIndex).rotateSlot(handlerIndex, localSlotIndex)) {
 			updateTE();
 		}
 	}
