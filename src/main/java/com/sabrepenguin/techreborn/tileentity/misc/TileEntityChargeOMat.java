@@ -51,7 +51,7 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 	protected final SidedConfigComponent configComponent;
 
 	public TileEntityChargeOMat() {
-		ioComponent = new ItemIOComponent(this, 6, 0, false, (a) -> {});
+		ioComponent = new ItemIOComponent.ItemIOComponentBuilder(this).bidirectionalSize(6).build();
 		energyComponent = new EnergyComponent(TechRebornConfig.machineConfig.chargeOMat.maxEnergy, TechRebornConfig.machineConfig.chargeOMat.maxInput,
 				TechRebornConfig.machineConfig.chargeOMat.maxInput).setUnextractable();
 		chargingComponent = new ChargingComponent(ioComponent.getInputs(), energyComponent.getEnergyStorage(), this::updateState);

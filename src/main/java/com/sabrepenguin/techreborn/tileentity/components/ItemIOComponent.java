@@ -25,6 +25,7 @@ import java.util.function.IntConsumer;
 public class ItemIOComponent implements MachineComponent {
 	private final ItemStackHandler inventory;
 
+	@Nullable
 	protected final RestrictedItemStackHandler inputs;
 	@Nullable
 	protected final RestrictedItemStackHandler _internalOutput;
@@ -34,6 +35,50 @@ public class ItemIOComponent implements MachineComponent {
 	protected final IOManager ioManager;
 
 	private final TileEntity parent;
+
+	ItemIOComponent(TileEntity parent, int inputSize, int outputSize, int bidirectionalSize, boolean energySlot, IntConsumer runnable) {
+		this.parent = parent;
+		int invSize = inputSize + outputSize + bidirectionalSize + (energySlot ? 1 : 0);
+		if (inputSize > 0) {
+			inventory = new ItemStackHandler(invSize) {
+				@Override
+				protected void onContentsChanged(int slot) {
+					if (slot < inputSize) {
+						runnable.accept(slot);
+					}
+				}
+			};
+		} else {
+			inventory = new ItemStackHandler(invSize);
+		}
+		if (inputSize != 0) {
+			inputs = new RestrictedItemStackHandler(inventory, 0, inputSize);
+		} else if (bidirectionalSize != 0) {
+			inputs = new RestrictedItemStackHandler(inventory, 0, bidirectionalSize);
+		} else {
+			inputs = null;
+		}
+		if (outputSize != 0) {
+			_internalOutput = new RestrictedItemStackHandler(inventory, inputSize, inputSize + outputSize);
+			output = new LimitedItemStackHandler(_internalOutput, SlotAction.OUTPUT);
+		} else {
+			_internalOutput = null;
+			output = null;
+		}
+		battery = energySlot ? new RestrictedItemStackHandler(inventory, inputSize + outputSize): null;
+		List<SideConfig> configs = new ArrayList<>();
+		if (inputSize != 0) {
+			configs.add(SideConfig.input(inputs));
+		} else if (bidirectionalSize != 0) {
+			configs.add(SideConfig.bidirectional(inputs));
+		}
+		if (outputSize != 0)
+			configs.add(SideConfig.output(output));
+		if (battery != null) {
+			configs.add(SideConfig.bidirectional(battery));
+		}
+		ioManager = new IOManager(configs.toArray(new SideConfig[0]));
+	}
 
 	public ItemIOComponent(TileEntity parent, int inputSize, int outputSize, boolean energySlot) {
 		this.parent = parent;
@@ -79,7 +124,8 @@ public class ItemIOComponent implements MachineComponent {
 	}
 
 	public ItemIOComponent addInputFilter(ObjIntPredicate<ItemStack> filter) {
-		inputs.setFilter(filter);
+		if (inputs != null)
+			inputs.setFilter(filter);
 		return this;
 	}
 
@@ -124,5 +170,56 @@ public class ItemIOComponent implements MachineComponent {
 		compound.setTag("inventory", inventory.serializeNBT());
 		compound.setTag("IOManager", ioManager.writeToNBT());
 		return compound;
+	}
+
+	public static class ItemIOComponentBuilder {
+		final TileEntity parent;
+		boolean hasEnergySlot;
+		IntConsumer runnable;
+
+		int inputSize;
+		int outputSize;
+		int bidirectionalSize;
+
+		public ItemIOComponentBuilder(TileEntity parent) {
+			this.parent = parent;
+			hasEnergySlot = false;
+			runnable = null;
+		}
+
+		public ItemIOComponentBuilder inputSize(int size) {
+			if (bidirectionalSize != 0) {
+				throw new RuntimeException("Input size cannot be larger than 0 if bidirectional is larger than 0");
+			}
+			inputSize = size;
+			return this;
+		}
+
+		public ItemIOComponentBuilder outputSize(int size) {
+			outputSize = size;
+			return this;
+		}
+
+		public ItemIOComponentBuilder bidirectionalSize(int size) {
+			if (inputSize > 0) {
+				throw new RuntimeException("Bidirectional size cannot be larger than 0 if input is larger than 0");
+			}
+			bidirectionalSize = size;
+			return this;
+		}
+
+		public ItemIOComponentBuilder hasEnergySlot() {
+			hasEnergySlot = true;
+			return this;
+		}
+
+		public ItemIOComponentBuilder onSlotChangedAction(IntConsumer runnable) {
+			this.runnable = runnable;
+			return this;
+		}
+
+		public ItemIOComponent build() {
+			return new ItemIOComponent(parent, inputSize, outputSize, bidirectionalSize, hasEnergySlot, runnable);
+		}
 	}
 }
