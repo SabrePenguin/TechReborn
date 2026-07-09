@@ -179,7 +179,7 @@ public class StandardRecipeComponent implements MachineComponent, RecipeComponen
 			ItemStack cachedOutputStack = cachedOutput.get(i).copy();
 			internalOutputs.insertItem(i, cachedOutputStack, false);
 		}
-		RecipeUtils.applyRecipeToHandler(inputs, cachedRecipe.getInputs());
+		cachedRecipe.apply(inputs);
 	}
 
 	public void informRefreshRecipe() {

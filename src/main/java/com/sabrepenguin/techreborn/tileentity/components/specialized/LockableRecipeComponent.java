@@ -96,7 +96,7 @@ public class LockableRecipeComponent extends StandardRecipeComponent {
 			// Output does not match
 			return;
 		}
-		List<ItemStack> leftovers = RecipeUtils.applyRecipeToHandler(inputs, cachedRecipe.getInputs());
+		List<ItemStack> leftovers =  cachedRecipe.apply(inputs);
 		if (!leftovers.isEmpty()) {
 			BlockPos parentPos = parent.getPos();
 			World parentWorld = parent.getWorld();

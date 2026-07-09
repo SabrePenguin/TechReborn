@@ -52,4 +52,9 @@ public class VanillaRecipeWrapper implements ITRRecipe {
 	public boolean matches(IItemHandler handler) {
 		return RecipeUtils.checkRecipeValid(handler, ingredients); //TODO
 	}
+
+	@Override
+	public List<ItemStack> apply(IItemHandler handler) {
+		return RecipeUtils.applyRecipeToHandler(handler, ingredients); //TODO
+	}
 }

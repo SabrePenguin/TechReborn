@@ -69,4 +69,9 @@ public class BasicOutputRecipe implements ITRRecipe {
 	public boolean matches(IItemHandler handler) {
 		return RecipeUtils.checkRecipeValid(handler, inputs);
 	}
+
+	@Override
+	public List<ItemStack> apply(IItemHandler handler) {
+		return RecipeUtils.applyRecipeToHandler(handler, inputs);
+	}
 }

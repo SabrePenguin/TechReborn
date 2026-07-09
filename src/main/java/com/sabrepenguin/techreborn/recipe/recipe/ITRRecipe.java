@@ -19,7 +19,5 @@ public interface ITRRecipe {
 	 * @param handler The input handler
 	 * @return Any container items
 	 */
-	default List<ItemStack> apply(IItemHandler handler) {
-		return Collections.emptyList();
-	}
+	List<ItemStack> apply(IItemHandler handler);
 }
