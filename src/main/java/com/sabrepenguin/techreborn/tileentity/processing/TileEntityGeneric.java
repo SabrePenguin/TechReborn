@@ -3,7 +3,7 @@ package com.sabrepenguin.techreborn.tileentity.processing;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
-import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
+import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
 import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
@@ -151,8 +151,8 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 	}
 
 	@Override
-	public MachineIOManager getManager() {
-		return null; //TODO
+	public IOManager getManager() {
+		return ioComponent.getManager(); //TODO
 	}
 
 	public void onInputChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {

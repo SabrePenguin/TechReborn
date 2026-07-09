@@ -17,7 +17,7 @@ import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
-import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
+import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.specialized.ChargingComponent;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
@@ -156,8 +156,8 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 	}
 
 	@Override
-	public MachineIOManager getManager() {
-		return null;
+	public IOManager getManager() {
+		return ioComponent.getManager();
 	}
 
 	// IGuiHolder

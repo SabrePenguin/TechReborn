@@ -23,7 +23,7 @@ import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Part;
 import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
-import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
+import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
 import com.sabrepenguin.techreborn.tileentity.components.specialized.RandomRecipeComponent;
@@ -171,8 +171,8 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 	}
 
 	@Override
-	public MachineIOManager getManager() {
-		return null; //TODO
+	public IOManager getManager() {
+		return ioComponent.getManager(); //TODO
 	}
 
 	public void onInputChange(ItemStack newItem, boolean onlyAmountChanged, boolean client, boolean init) {

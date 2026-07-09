@@ -1,6 +1,6 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
-import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
+import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
 
 public interface ISideConfigTE {
@@ -10,5 +10,5 @@ public interface ISideConfigTE {
 	default SidedConfigComponent getSidedConfigComponent() {
 		return null;
 	}
-	MachineIOManager getManager();
+	IOManager getManager();
 }

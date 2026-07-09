@@ -16,7 +16,7 @@ import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.*;
-import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
+import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
 import com.sabrepenguin.techreborn.tileentity.components.specialized.MatterRecipeComponent;
@@ -156,8 +156,8 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 	}
 
 	@Override
-	public MachineIOManager getManager() {
-		return null; //TODO
+	public IOManager getManager() {
+		return ioComponent.getManager(); //TODO
 	}
 
 	@Override

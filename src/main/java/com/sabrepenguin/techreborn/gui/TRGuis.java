@@ -5,7 +5,6 @@ import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.drawable.GuiTextures;
-import com.cleanroommc.modularui.drawable.UITexture;
 import com.cleanroommc.modularui.integration.jei.ModularUIJeiPlugin;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.viewport.GuiContext;
@@ -17,13 +16,11 @@ import com.cleanroommc.modularui.widgets.*;
 import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
-import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketAutoConfig;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
-import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -81,15 +78,6 @@ public class TRGuis {
 								.margin(5, 5, 25, 15).name("crafting").alignX(0.5f)));
 	}
 
-	public static void setupConfigPanel(
-			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, MachineIOManager ioManager,
-			Supplier<EnumFacing> facingSupplier, SlotPosition... slotPositions) {
-		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
-				(manager, handler) ->
-						TRGuis.createConfigPanel(manager, handler, pos, panel.getArea(), ioManager, facingSupplier, slotPositions));
-		addConfigPanel(panel, panelHandler);
-	}
-
 	public static void addConfigPanel(ModularPanel mainPanel, IPanelHandler panelHandler) {
 		mainPanel.child(new ButtonWidget<>()
 				.size(20)
@@ -100,135 +88,6 @@ public class TRGuis {
 					panelHandler.openPanel();
 					return panelHandler.isPanelOpen();
 				}));
-	}
-
-	public static ModularPanel createConfigPanel(
-			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos, Area area,
-			MachineIOManager manager,
-			Supplier<EnumFacing> getFacing,
-			SlotPosition... slotPositions) {
-		ModularPanel panel = new ModularPanel("config_panel") {
-			@Override
-			public boolean isDraggable() {
-				return false;
-			}
-		}.background(IDrawable.EMPTY)
-				.height(area.height - PLAYER_INVENTORY_HEIGHT)
-				.alignX(0.5f)
-				.topRel(0.5f, -(area.height/2) - (area.height%2), 0f);
-		// Close button
-		ButtonWidget<?> buttonWidget = new ButtonWidget<>();
-		panel.child(buttonWidget
-				.size(20)
-				.right(5)
-				.bottom(6)
-				.overlay(TRGuiTextures.CONFIG)
-				.onMousePressed(mouseButton -> {
-					if (mouseButton == 0 || mouseButton == 1) {
-						buttonWidget.getPanel().closeIfOpen();
-						return true;
-					}
-					return false;
-				}));
-		// Button creation. Creates a button on top of each individual slot
-		for (int i = 0; i < slotPositions.length; i++) {
-			SlotPosition position = slotPositions[i];
-			IPanelHandler panelHandler = syncManager.syncedPanel("slot_config_" + i, true,
-					(syncManager1, syncHandler1) ->
-							createSlotConfigPanel(syncManager1, syncHandler1, pos, manager, position.handlerSlot(), position.slot(), getFacing, position.action()));
-			panel.child(new TRButtonWidget<>()
-					.pos(position.x() - ((position.size() - 18) / 2), position.y() - ((position.size() - 18) / 2))
-					.size(position.size())
-					.onMousePressed(mouseButton -> {
-						panelHandler.openPanel();
-						return panelHandler.isPanelOpen();
-					}));
-		}
-		return panel;
-	}
-
-	private static ModularPanel createSlotConfigPanel(
-			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos,
-			MachineIOManager manager,
-			int handlerIndex, int slot,
-			Supplier<EnumFacing> getFacing, SlotAction action) {
-		SlotAction slotAction = manager.getHandlerActionType(handlerIndex);
-		int increaseBy = slotAction == SlotAction.BIDIRECTIONAL ? 30 : 15;
-		ModularPanel panel = new Dialog<>("dialog_" + handlerIndex + "_" + slot).size(104, 104 + increaseBy);
-		panel.child(ButtonWidget.panelCloseButton());
-		for (int i = 0; i < 6; i++) {
-			addEnumFacingButtons(pos, panel, i, manager, handlerIndex, slot, getFacing, increaseBy);
-		}
-		int index = manager.getRealIndex(handlerIndex, slot);
-		switch (slotAction) {
-			case INPUT:
-				panel.child(createButton(pos, manager, index, true, 6));
-				panel.child(IKey.lang("techreborn.auto_input.gui").asWidget().left(18).bottom(7));
-				break;
-			case OUTPUT:
-				panel.child(createButton(pos, manager, index, false, 6));
-				panel.child(IKey.lang("techreborn.auto_output.gui").asWidget().left(18).bottom(7));
-				break;
-			case BIDIRECTIONAL:
-				panel.child(createButton(pos, manager, index, true, 20))
-						.child(IKey.lang("techreborn.auto_input.gui").asWidget().left(18).bottom(21));
-				panel.child(createButton(pos, manager, index, false, 6))
-						.child(IKey.lang("techreborn.auto_output.gui").asWidget().left(18).bottom(7));
-				break;
-			default: break;
-		}
-		return panel;
-	}
-
-	private static ButtonWidget<?> createButton(BlockPos pos, MachineIOManager manager, int index, boolean input, int bottom) {
-		return new ButtonWidget<>()
-				.left(5)
-				.bottom(bottom)
-				.size(11)
-				.onMousePressed(mouseButton -> {
-					TechRebornPacketHandler.INSTANCE.sendToServer(new PacketAutoConfig(pos, index, input));
-					return true;
-				}).overlay((context, x, y, width, height, theme) -> {
-			if (manager.getCurrentValue(index, input)) {
-				TRGuiTextures.CHECK.draw(x, y, width, height);
-			}
-		});
-	}
-
-	private static void addEnumFacingButtons(
-			BlockPos pos, ModularPanel panel, int relativeIndex,
-			MachineIOManager manager,
-			int handlerIndex, int slot,
-			Supplier<EnumFacing> getFacing,
-			int bottomOffset) {
-		ButtonWidget<?> button = new ButtonWidget<>().size(32);
-		switch (relativeIndex) {
-			case 0: button.alignX(0.5f).bottom(bottomOffset + 4); break;
-			case 1: button.alignX(0.5f).top(4); break;
-			case 2: button.alignX(0.5f).topRel(0.5f, -bottomOffset/2, 0.5f); break;
-			case 3: button.right(4).bottom(4 + bottomOffset); break;
-			case 4: button.topRel(0.5f, -bottomOffset/2, 0.5f).left(4); break;
-			case 5: button.topRel(0.5f, -bottomOffset/2, 0.5f).right(4); break;
-		}
-		Supplier<EnumFacing> absoluteFacing = () -> TRGuis.getAbsoluteFacing(relativeIndex, getFacing.get());
-		DrawableBlockFace face = new DrawableBlockFace(pos, absoluteFacing);
-		button.background(face);
-		button.hoverBackground(face);
-		button.overlay((context, x, y, width, height, theme) -> {
-			SlotAction currentAction = manager.getSide(absoluteFacing.get()).getSlotAction(handlerIndex, slot);
-			switch (currentAction) {
-				case OUTPUT -> TRGuiTextures.OUTPUT.draw(x, y, width, height);
-				case INPUT -> TRGuiTextures.INPUT.draw(x, y, width, height);
-			}
-		});
-		button.onMousePressed(mouseButton -> {
-			int sideIndex = absoluteFacing.get().getIndex();
-			TechRebornPacketHandler.INSTANCE.sendToServer(new PacketSideConfig(
-					pos, sideIndex, handlerIndex, slot
-			));
-			return true;
-		});
-		panel.child(button);
 	}
 
 	public static void setupConfigPanel(
