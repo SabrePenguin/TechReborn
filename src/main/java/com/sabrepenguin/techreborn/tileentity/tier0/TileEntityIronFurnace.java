@@ -19,6 +19,7 @@ import com.sabrepenguin.techreborn.capability.stackhandler.*;
 import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
+import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.tileentity.MachineIOManager;
 import com.sabrepenguin.techreborn.tileentity.components.ItemIOComponent;
 import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
@@ -54,7 +55,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, IOnS
 	public TileEntityIronFurnace() {
 		ioComponent = new ItemIOComponent(this, 2, 1, false, this::refreshSlot)
 				.addInputFilter(ObjIntPredicate.fuel(1));
-		recipeComponent = new FurnaceRecipeComponent(ioComponent.getInputs(), ioComponent.getInternalOutputs(), 1, this::updateState, 160);
+		recipeComponent = new FurnaceRecipeComponent(RegistryHandler.instance().getFurnaceRegistry(), ioComponent.getInputs(), ioComponent.getInternalOutputs(), 1, this::updateState, 160);
 	}
 
 	protected void refreshSlot(int slot) {

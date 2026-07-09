@@ -137,7 +137,7 @@ public class FuelRecipeComponent implements MachineComponent, RecipeComponent {
 	private void refreshRecipe() {
 		refreshRecipe = false;
 		if (cachedRecipe != null) {
-			if (RecipeUtils.checkRecipeValid(inputs, cachedRecipe.getInputs()))
+			if (cachedRecipe.matches(inputs))
 				return;
 		}
 		ITRRecipe newRecipe = registry.getRecipe(inputs);
@@ -152,9 +152,9 @@ public class FuelRecipeComponent implements MachineComponent, RecipeComponent {
 			return false;
 		ItemStack output = this.internalOutputs.getStackInSlot(0);
 		ItemStack recipeOutput = cachedRecipe.getOutput().get(0);
+		if (!cachedRecipe.matches(inputs)) return false;
 		if (output.isEmpty()) return true;
 		if (!output.isItemEqual(recipeOutput)) return false;
-		if (!RecipeUtils.checkRecipeValid(inputs, cachedRecipe.getInputs())) return false;
 		int res = output.getCount() + recipeOutput.getCount();
 		return res <= this.internalOutputs.getSlotLimit(0) && res <= output.getMaxStackSize();
 	}
@@ -187,7 +187,7 @@ public class FuelRecipeComponent implements MachineComponent, RecipeComponent {
 		}
 		List<ItemStack> cachedOutput = cachedRecipe.getOutput();
 		for (int i = 0; i < cachedOutput.size(); i++) {
-			ItemStack cachedOutputStack = cachedOutput.get(i);
+			ItemStack cachedOutputStack = cachedOutput.get(i).copy();
 			internalOutputs.insertItem(i, cachedOutputStack, false);
 		}
 		RecipeUtils.applyRecipeToHandler(inputs, cachedRecipe.getInputs());

@@ -1,18 +1,19 @@
 package com.sabrepenguin.techreborn.tileentity.components.specialized;
 
 import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
+import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
+import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.tileentity.components.MachineComponent;
 import com.sabrepenguin.techreborn.tileentity.components.RecipeComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
-import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class FurnaceRecipeComponent implements MachineComponent, RecipeComponent {
@@ -28,19 +29,20 @@ public class FurnaceRecipeComponent implements MachineComponent, RecipeComponent
 	protected int burnTime;
 	protected int totalBurnTime;
 
-	@Nonnull
-	protected ItemStack cachedRecipe;
+	protected final ITRRegistry registry;
+	protected ITRRecipe cachedRecipe;
 
 	protected boolean refreshRecipe;
 	protected boolean burning;
 
-	public FurnaceRecipeComponent(IItemHandlerModifiable inputs, IItemHandlerModifiable internalOutput,
+	public FurnaceRecipeComponent(ITRRegistry registry, IItemHandlerModifiable inputs, IItemHandlerModifiable internalOutput,
 							   int fuelSlot, Consumer<Boolean> stateUpdate, int totalProcessTime) {
 		this.inputs = inputs;
 		this.internalOutputs = internalOutput;
 		this.stateUpdater = stateUpdate;
 		this.fuelSlot = fuelSlot;
-		cachedRecipe = ItemStack.EMPTY;
+		this.registry = registry;
+		cachedRecipe = null;
 		burnTime = 0;
 		totalBurnTime = 0;
 		this.totalProcessTime = totalProcessTime;
@@ -67,7 +69,7 @@ public class FurnaceRecipeComponent implements MachineComponent, RecipeComponent
 			burnTime--;
 		}
 
-		if (!cachedRecipe.isEmpty()) {
+		if (cachedRecipe != null) {
 			boolean canProcess = canProcess();
 			if (!isBurning() && canProcess) {
 				ItemStack fuel = inputs.getStackInSlot(fuelSlot);
@@ -120,10 +122,7 @@ public class FurnaceRecipeComponent implements MachineComponent, RecipeComponent
 		processTime = compound.getInteger("Processed");
 		burnTime = compound.getInteger("BurnTime");
 		totalBurnTime = compound.getInteger("TotalBurnTime");
-		ItemStack in = inputs.getStackInSlot(0);
-		if (!in.isEmpty()) {
-			cachedRecipe = FurnaceRecipes.instance().getSmeltingResult(inputs.getStackInSlot(0));
-		}
+		cachedRecipe = registry.getRecipe(inputs);
 	}
 
 	@Override
@@ -136,28 +135,23 @@ public class FurnaceRecipeComponent implements MachineComponent, RecipeComponent
 
 	private void refreshRecipe() {
 		refreshRecipe = false;
-		ItemStack in = inputs.getStackInSlot(0);
-		if (!cachedRecipe.isEmpty()) {
-			if (cachedRecipe.isItemEqual(FurnaceRecipes.instance().getSmeltingResult(in)))
+		if (cachedRecipe != null) {
+			if (cachedRecipe.matches(inputs))
 				return;
 		}
-		ItemStack newRecipe;
-		if (!in.isEmpty()) {
-			newRecipe = FurnaceRecipes.instance().getSmeltingResult(in);
-		} else {
-			newRecipe = ItemStack.EMPTY;
-		}
-		if (!cachedRecipe.isItemEqual(newRecipe)) {
+		ITRRecipe newRecipe = registry.getRecipe(inputs);
+		if (cachedRecipe != newRecipe) {
 			cachedRecipe = newRecipe;
 			processTime = 0;
 		}
 	}
 
 	protected boolean canProcess() {
-		if (cachedRecipe.isEmpty())
+		if (cachedRecipe == null)
 			return false;
 		ItemStack output = this.internalOutputs.getStackInSlot(0);
-		ItemStack recipeOutput = cachedRecipe;
+		ItemStack recipeOutput = cachedRecipe.getOutput().get(0);
+		if (!cachedRecipe.matches(inputs)) return false;
 		if (output.isEmpty()) return true;
 		if (!output.isItemEqual(recipeOutput)) return false;
 		int res = output.getCount() + recipeOutput.getCount();
@@ -166,7 +160,7 @@ public class FurnaceRecipeComponent implements MachineComponent, RecipeComponent
 
 	protected boolean canOutputFit() {
 		ItemStack currentSlotStack = internalOutputs.getStackInSlot(0);
-		ItemStack cachedOutputStack = cachedRecipe;
+		ItemStack cachedOutputStack = cachedRecipe.getOutput().get(0);
 		if (currentSlotStack.isEmpty())
 			return true;
 		if (currentSlotStack.isItemEqual(cachedOutputStack)) {
@@ -186,9 +180,12 @@ public class FurnaceRecipeComponent implements MachineComponent, RecipeComponent
 		if (!canOutputFit()) {
 			return;
 		}
-		ItemStack cachedOutputStack = cachedRecipe;
-		internalOutputs.insertItem(0, cachedOutputStack, false);
-		inputs.extractItem(0, 1, false);
+		List<ItemStack> cachedOutput = cachedRecipe.getOutput();
+		for (int i = 0; i < cachedOutput.size(); i++) {
+			ItemStack cachedOutputStack = cachedOutput.get(i).copy();
+			internalOutputs.insertItem(i, cachedOutputStack, false);
+		}
+		cachedRecipe.apply(inputs);
 	}
 
 	public void informRefreshRecipe() {
