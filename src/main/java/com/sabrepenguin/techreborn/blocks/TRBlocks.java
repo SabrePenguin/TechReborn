@@ -67,7 +67,7 @@ public class TRBlocks {
 	public static final BlockImplosionCompressor implosion_compressor = null;
 	public static final BlockIndustrialBlastFurnace industrial_blast_furnace = null;
 	public static final BlockHorizontalMachine industrial_centrifuge = null;
-	public static final BlockIndustrialElectrolyzer industrial_electrolyzer = null;
+	public static final BlockHorizontalMachine industrial_electrolyzer = null;
 	public static final BlockIndustrialGrinder industrial_grinder = null;
 	public static final BlockIndustrialSawmill industrial_sawmill = null;
 	public static final BlockVacuumFreezer vacuum_freezer = null;
@@ -155,7 +155,7 @@ public class TRBlocks {
 				new BlockImplosionCompressor(),
 				new BlockIndustrialBlastFurnace(),
 				new BlockHorizontalMachine("industrial_centrifuge", "machines/tier2", TileEntityIndustrialCentrifuge::new),
-				new BlockIndustrialElectrolyzer(),
+				new BlockHorizontalMachine("industrial_electrolyzer", "machines/tier2", TileEntityIndustrialElectrolyzer::new),
 				new BlockIndustrialGrinder(),
 				new BlockIndustrialSawmill(),
 				new BlockVacuumFreezer(),

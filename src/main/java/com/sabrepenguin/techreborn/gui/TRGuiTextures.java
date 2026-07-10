@@ -20,6 +20,16 @@ public class TRGuiTextures {
 			.imageSize(20, 40)
 			.canApplyTheme()
 			.build();
+	public static UITexture UP_PROGRESS_ARROW = UITexture.builder()
+			.location(Tags.MODID, "gui/up_arrow")
+			.imageSize(20, 40)
+			.canApplyTheme()
+			.build();
+	public static UITexture UP_PROGRESS_ARROWS = UITexture.builder()
+			.location(Tags.MODID, "gui/up_arrows")
+			.imageSize(24, 20)
+			.canApplyTheme()
+			.build();
 	public static UITexture LOCK = UITexture.builder()
 			.location(Tags.MODID, "gui/lock")
 			.imageSize(16, 24)

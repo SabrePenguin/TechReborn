@@ -397,6 +397,34 @@ public class BlockTests {
 				.thenSucceed();
 	}
 
+	@GameTest(template = "industrialElectrolyzer", timeoutTicks = 200)
+	public static void industrialElectrolyzerTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(0, 0, 0);
+		ItemStack target1 = TRItems.cell.getCellWithFluid(TRFluids.LITHIUM);
+		ItemStack target2 = TRItems.cell.getCellWithFluid(TRFluids.SILICON);
+		target2.setCount(2);
+		ItemStack target3 = new ItemStack(TRItems.dust, 2, Dust.MetaDust.aluminum.metadata());
+		ItemStack target4 = TRItems.cell.getCellWithFluid(TRFluids.SODIUM);
+		target4.setCount(2);
+
+		helper.assertBlockPresent(TRBlocks.industrial_electrolyzer.getDefaultState(), target);
+		helper.insertItem(target, new ItemStack(TRItems.dust, 8, Dust.MetaDust.clay.metadata()), 0);
+		helper.insertItem(target, new ItemStack(TRItems.cell, 5), 1);
+		helper.onEachTick(() -> trHelper.insertPower(target, 200));
+		helper.startSequence()
+				.thenIdle(200)
+				.thenExecute(() -> {
+					if (!trHelper.itemEquals(target, target1, 2) ||
+							!trHelper.itemEquals(target, target2, 3) ||
+							!trHelper.itemEquals(target, target3, 4) ||
+							!trHelper.itemEquals(target, target4, 5)
+					)
+						helper.fail("Did not create outputs");
+				})
+				.thenSucceed();
+	}
+
 	@GameTest(template = "chargeomat", timeoutTicks = 200)
 	public static void chargeomatTest(GameTestHelper helper) {
 		TechRebornHelper trHelper = new TechRebornHelper(helper);
