@@ -18,6 +18,7 @@ import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
 import com.sabrepenguin.techreborn.gui.SlotPosition;
 import com.sabrepenguin.techreborn.gui.TRGuis;
+import com.sabrepenguin.techreborn.jei.TRRecipePlugin;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.BlockHorizontal;
@@ -56,7 +57,7 @@ public class TileEntityIndustrialCentrifuge extends TileEntityGeneric implements
 						.pos(61, 39)
 						.texture(GuiTextures.PROGRESS_ARROW, 20)
 						.value(recipeComponent.getProgress()))
-				.child(TRGuis.createJeiButton(lang)
+				.child(TRGuis.createJeiButton(TRRecipePlugin.INDUSTRIAL_CENTRIFUGE_UID)
 						.pos(61, 41).size(20, 15))
 				.child(PowerDisplayWidget.fromEnergyStorage(syncManager, energyComponent.getEnergyStorage())
 						.pos(9, 6));

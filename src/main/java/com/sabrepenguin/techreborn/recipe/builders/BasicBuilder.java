@@ -31,7 +31,7 @@ public class BasicBuilder<T extends BasicBuilder<T>> {
 	}
 
 	public T addInput(ItemStack item) {
-		return addInput(item, 1);
+		return addInput(item, item.getCount());
 	}
 
 	public T addInput(ItemStack item, int count) {
@@ -51,6 +51,12 @@ public class BasicBuilder<T extends BasicBuilder<T>> {
 
 	public T addInputWithNBT(ItemStack item) {
 		this.ingredients.add(new CountedIngredient(new NBTIngredient(item), item.getCount()));
+		return self();
+	}
+
+	public T addInputWithNBT(ItemStack item, int count) {
+		item.setCount(count);
+		this.addInputWithNBT(item);
 		return self();
 	}
 

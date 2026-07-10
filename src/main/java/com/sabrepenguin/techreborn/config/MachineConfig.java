@@ -31,11 +31,11 @@ public class MachineConfig {
 	public Generic chargeOMat = new Generic(400_000_000, 2048);
 	@Config.LangKey("tile.techreborn.matter_fabricator.name")
 	public MatterFabricator matterFabricator = new MatterFabricator();
-	@Config.LangKey("tile.techreborn.matter_fabricator.name")
+	@Config.LangKey("tile.techreborn.rolling_machine.name")
 	public Generic rollingMachine = new Generic(40_000, 128);
-	@Config.LangKey("tile.techreborn.matter_fabricator.name")
+	@Config.LangKey("tile.techreborn.auto_crafting_table.name")
 	public AutoCraftingTable autocrafter = new AutoCraftingTable();
-	@Config.LangKey("tile.techreborn.matter_fabricator.name")
+	@Config.LangKey("tile.techreborn.industrial_centrifuge.name")
 	public Generic industrialCentrifuge = new Generic(40_000, 128);
 
 	public static class Generic {

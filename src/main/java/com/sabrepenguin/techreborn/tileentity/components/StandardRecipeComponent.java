@@ -4,7 +4,6 @@ import com.cleanroommc.modularui.value.sync.DoubleSyncValue;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
-import com.sabrepenguin.techreborn.recipe.utils.RecipeUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -139,13 +138,7 @@ public class StandardRecipeComponent implements MachineComponent, RecipeComponen
 	protected boolean canProcess() {
 		if (cachedRecipe == null)
 			return false;
-		ItemStack output = this.internalOutputs.getStackInSlot(0);
-		ItemStack recipeOutput = cachedRecipe.getOutput().get(0);
-		if (!cachedRecipe.matches(inputs)) return false;
-		if (output.isEmpty()) return true;
-		if (!output.isItemEqual(recipeOutput)) return false;
-		int res = output.getCount() + recipeOutput.getCount();
-		return res <= this.internalOutputs.getSlotLimit(0) && res <= output.getMaxStackSize();
+		return canOutputFit();
 	}
 
 	protected boolean canOutputFit() {
@@ -163,6 +156,8 @@ public class StandardRecipeComponent implements MachineComponent, RecipeComponen
 				} else if (currentSlotStack.hasTagCompound() || cachedOutputStack.hasTagCompound()) {
 					return false;
 				}
+				if (currentSlotStack.getCount() + cachedOutputStack.getCount() > currentSlotStack.getMaxStackSize())
+					return false;
 				continue;
 			}
 			return false;
