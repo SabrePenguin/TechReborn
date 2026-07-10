@@ -17,7 +17,7 @@ public class IndustrialCentrifugeRecipes {
 		final ITRRegistry registry = RegistryHandler.instance().getIndustrialCentrifugeRegistry();
 
 		registry.addRecipe(new MultiOutputBuilder()
-				.addInput(TRItems.cell.getCellWithFluid(FluidRegistry.getFluid("lava")), 16)
+				.addInputWithNBT(TRItems.cell.getCellWithFluid(FluidRegistry.getFluid("lava")), 16)
 				.addOutput(new ItemStack(TRItems.ingot, 18, Ingot.IngotMeta.tin.metadata()))
 				.addOutput(new ItemStack(TRItems.ingot, 4, Ingot.IngotMeta.copper.metadata()))
 				.addOutput(new ItemStack(TRItems.ingot, 1, Ingot.IngotMeta.electrum.metadata()))
