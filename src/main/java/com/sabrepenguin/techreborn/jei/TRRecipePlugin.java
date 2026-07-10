@@ -33,6 +33,7 @@ public class TRRecipePlugin implements IModPlugin {
 	public static final String CHEMICAL_REACTOR_UID = "tile." + Tags.MODID + ".chemical_reactor.name";
 	public static final String ROLLING_MACHINE_UID = "tile." + Tags.MODID + ".rolling_machine.name";
 	public static final String INDUSTRIAL_CENTRIFUGE_UID = "tile." + Tags.MODID + ".industrial_centrifuge.name";
+	public static final String INDUSTRIAL_ELECTROLYZER_UID = "tile." + Tags.MODID + ".industrial_electrolyzer.name";
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {
@@ -51,6 +52,7 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCategories(new TwoToOneCategory(helper, CHEMICAL_REACTOR_UID));
 		registry.addRecipeCategories(new RollingMachineCategory(helper, ROLLING_MACHINE_UID));
 		registry.addRecipeCategories(new IndustrialCentrifugeCategory(helper, INDUSTRIAL_CENTRIFUGE_UID));
+		registry.addRecipeCategories(new IndustrialElectrolyzerCategory(helper, INDUSTRIAL_ELECTROLYZER_UID));
 	}
 
 	@Override
@@ -109,6 +111,10 @@ public class TRRecipePlugin implements IModPlugin {
 				handler.getIndustrialCentrifugeRegistry().getRecipes().stream().map(ITRRecipeWrapper::new).collect(Collectors.toList()),
 				INDUSTRIAL_CENTRIFUGE_UID
 		);
+		registry.addRecipes(
+				handler.getIndustrialElectrolyzerRegistry().getRecipes().stream().map(ITRRecipeWrapper::new).collect(Collectors.toList()),
+				INDUSTRIAL_ELECTROLYZER_UID
+		);
 		addDefaultCatalysts(registry);
 		addCatalysts(registry);
 	}
@@ -136,5 +142,6 @@ public class TRRecipePlugin implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.chemical_reactor), CHEMICAL_REACTOR_UID);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.rolling_machine), ROLLING_MACHINE_UID);
 		registry.addRecipeCatalyst(new ItemStack(TRBlocks.industrial_centrifuge), INDUSTRIAL_CENTRIFUGE_UID);
+		registry.addRecipeCatalyst(new ItemStack(TRBlocks.industrial_electrolyzer), INDUSTRIAL_ELECTROLYZER_UID);
 	}
 }

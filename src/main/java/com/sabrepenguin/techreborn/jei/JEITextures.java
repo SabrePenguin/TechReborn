@@ -13,6 +13,7 @@ public class JEITextures {
 	private static final ResourceLocation LEFT_ARROW_OUTLINE_LOCATION = new ResourceLocation(Tags.MODID, "textures/gui/jei/left_arrow_dark.png");
 	private static final ResourceLocation RIGHT_ARROW_LOCATION = new ResourceLocation(Tags.MODID, "textures/gui/jei/right_arrow.png");
 	private static final ResourceLocation RIGHT_ARROW_OUTLINE_LOCATION = new ResourceLocation(Tags.MODID, "textures/gui/jei/right_arrow_dark.png");
+	private static final ResourceLocation UP_ARROW_RESOURCE = new ResourceLocation(Tags.MODID, "textures/gui/up_arrows.png");
 
 	public static IDrawableStatic BIG_SLOT;
 
@@ -20,6 +21,8 @@ public class JEITextures {
 	public static IDrawableStatic LEFT_ARROW_OUTLINE;
 	public static IDrawableBuilder RIGHT_ARROW;
 	public static IDrawableStatic RIGHT_ARROW_OUTLINE;
+	public static IDrawableBuilder UP_ARROW;
+	public static IDrawableStatic UP_ARROW_OUTLINE;
 
 	public static void init(IGuiHelper helper) {
 		BIG_SLOT = helper.drawableBuilder(BIG_SLOT_LOCATION, 0, 0, 26, 26).setTextureSize(26, 26).build();
@@ -29,5 +32,8 @@ public class JEITextures {
 
 		RIGHT_ARROW = helper.drawableBuilder(RIGHT_ARROW_LOCATION, 0, 0, 18, 16).setTextureSize(18, 16);
 		RIGHT_ARROW_OUTLINE = helper.drawableBuilder(RIGHT_ARROW_OUTLINE_LOCATION, 0, 0, 18, 16).setTextureSize(18, 16).build();
+
+		UP_ARROW = helper.drawableBuilder(UP_ARROW_RESOURCE, 0, 10, 24, 10).setTextureSize(24, 20);
+		UP_ARROW_OUTLINE = helper.drawableBuilder(UP_ARROW_RESOURCE, 0, 0, 24, 10).setTextureSize(24, 20).build();
 	}
 }

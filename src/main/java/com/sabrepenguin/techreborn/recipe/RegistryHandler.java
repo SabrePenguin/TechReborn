@@ -24,6 +24,7 @@ public class RegistryHandler {
 	private final ITRRegistry rollingMachineRegistry = new ShapedRegistry();
 	private final ITRRegistry craftingRegistry = new VanillaRegistry();
 	private final ITRRegistry industrialCentrifugeRegistry = new ShapelessRegistry();
+	private final ITRRegistry industrialElectrolyzerRegistry = new ShapelessRegistry();
 
 	public ITRRegistry getAlloyRegistry() {
 		return alloyRegistry;
@@ -87,6 +88,10 @@ public class RegistryHandler {
 
 	public ITRRegistry getIndustrialCentrifugeRegistry() {
 		return industrialCentrifugeRegistry;
+	}
+
+	public ITRRegistry getIndustrialElectrolyzerRegistry() {
+		return industrialElectrolyzerRegistry;
 	}
 
 	public ITRRegistry getFurnaceRegistry() {
