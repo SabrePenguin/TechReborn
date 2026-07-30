@@ -5,6 +5,7 @@ import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.proxy.IProxy;
 import com.sabrepenguin.techreborn.recipe.TRRecipeLoader;
 import com.sabrepenguin.techreborn.tabs.TRTab;
+import com.sabrepenguin.techreborn.tileentity.multis.MultiblockStructure;
 import com.sabrepenguin.techreborn.util.ModLoadedUtil;
 import com.sabrepenguin.techreborn.util.handlers.OreHandler;
 import com.sabrepenguin.techreborn.worldgen.WorldGenTrees;
@@ -78,6 +79,7 @@ public class TechReborn {
 			DatagenInit.init(System.getProperty(Tags.MODID + ".srcroot", ""));
 		}
 		proxy.postInit(event);
+		MultiblockStructure.init();
     }
 
     @EventHandler
