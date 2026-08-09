@@ -39,6 +39,10 @@ public class MachineConfig {
 	public Generic industrialCentrifuge = new Generic(40_000, 128);
 	@Config.LangKey("tile.techreborn.industrial_electrolyzer.name")
 	public Generic industrialElectrolyzer = new Generic(40_000, 512);
+	@Config.LangKey("tile.techreborn.distillation_tower.name")
+	public GenericMulti distillationTower = new GenericMulti(40_000, 512, false);
+	@Config.LangKey("config.misc")
+	public Misc misc = new Misc();
 
 	public static class Generic {
 		@Config.LangKey("config.max_energy")
@@ -49,6 +53,21 @@ public class MachineConfig {
 		public Generic(int energy, int maxInput) {
 			this.maxEnergy = energy;
 			this.maxInput = maxInput;
+		}
+	}
+
+	public static class GenericMulti {
+		@Config.LangKey("config.max_energy")
+		public int maxEnergy;
+		@Config.LangKey("config.transfer_limit")
+		public int maxInput;
+		@Config.LangKey("config.async")
+		public boolean async;
+
+		public GenericMulti(int energy, int maxInput, boolean async) {
+			this.maxEnergy = energy;
+			this.maxInput = maxInput;
+			this.async = async;
 		}
 	}
 
@@ -93,5 +112,12 @@ public class MachineConfig {
 		public int feTick = 40;
 		@Config.LangKey("config.ticks")
 		public int ticks = 120;
+	}
+
+	public static class Misc {
+		@Config.LangKey("config.multiblock_check_time")
+		@Config.Comment("The amount of time between checks")
+		@Config.RangeInt(min = 5, max = 100)
+		public int asyncTime = 40;
 	}
 }

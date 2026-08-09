@@ -2,6 +2,8 @@ package com.sabrepenguin.techreborn.tileentity.multis;
 
 import com.github.bsideup.jabel.Desugar;
 import com.sabrepenguin.techreborn.TechReborn;
+import com.sabrepenguin.techreborn.blocks.TRBlocks;
+import com.sabrepenguin.techreborn.blocks.meta.BlockMachineCasing;
 import it.unimi.dsi.fastutil.chars.Char2CharArrayMap;
 import it.unimi.dsi.fastutil.chars.Char2CharMap;
 import it.unimi.dsi.fastutil.chars.Char2ObjectArrayMap;
@@ -15,32 +17,39 @@ import net.minecraft.util.math.BlockPos;
 public record MultiblockStructure(char[][][] blocks, Char2ObjectMap<IBlockState> palette, BlockPos controllerOffset) {
 
 
-	public static MultiblockStructure[] TEST_BLOCKS;
+	public static MultiblockStructure[] DISTILLATION_TOWER;
 	static {
 		Char2ObjectMap<IBlockState> TEST_MAP = new Char2ObjectArrayMap<>();
 		TEST_MAP.put(' ', null);
-		TEST_MAP.put('B', Blocks.DIRT.getDefaultState());
-		TEST_MAP.put('A', Blocks.GRAVEL.getDefaultState());
+		TEST_MAP.put('S', TRBlocks.machine_casing.getDefaultState().withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.STANDARD));
+		TEST_MAP.put('A', TRBlocks.machine_casing.getDefaultState().withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.ADVANCED));
+		TEST_MAP.put('E', Blocks.AIR.getDefaultState());
 		TEST_MAP.put('C', null);
-//		TEST_MAP.put('D', state -> TRBlocks.distillation_tower.getDefaultState().withRotation(Rotation.CLOCKWISE_90).getValue(HorizontalMachineBlock.FACING) == state.getValue(HorizontalMachineBlock.FACING));
-//		TEST_MAP.put('E', state -> TRBlocks.distillation_tower.getDefaultState().withRotation(Rotation.CLOCKWISE_180).getValue(HorizontalMachineBlock.FACING) == state.getValue(HorizontalMachineBlock.FACING));
-//		TEST_MAP.put('F', state -> TRBlocks.distillation_tower.getDefaultState().withRotation(Rotation.COUNTERCLOCKWISE_90).getValue(HorizontalMachineBlock.FACING) == state.getValue(HorizontalMachineBlock.FACING));
 		Char2CharArrayMap swapMap = new Char2CharArrayMap();
 //		swapMap.put('C', 'D');
-//		swapMap.put('D', 'E');
-//		swapMap.put('E', 'F');
-//		swapMap.put('F', 'C');
-		TEST_BLOCKS = createStruct(new char[][][] {
+		DISTILLATION_TOWER = createStruct(new char[][][] {
 				{
-						{'B', 'B', 'B'},
-						{'B', 'B', 'B'},
-						{'B', 'B', 'B'},
+						{'S', 'S', 'S'},
+						{'S', 'S', 'S'},
+						{'S', 'S', 'S'},
 						{' ', 'C', ' '}
 				},
 				{
-						{'B', 'B', 'B'},
-						{'B', 'B', 'B'},
-						{'B', 'A', 'B'},
+						{'A', 'A', 'A'},
+						{'A', 'E', 'A'},
+						{'A', 'A', 'A'},
+						{' ', ' ', ' '}
+				},
+				{
+						{'S', 'S', 'S'},
+						{'S', 'E', 'S'},
+						{'S', 'S', 'S'},
+						{' ', ' ', ' '}
+				},
+				{
+						{'A', 'A', 'A'},
+						{'A', 'A', 'A'},
+						{'A', 'A', 'A'},
 						{' ', ' ', ' '}
 				},
 		}, TEST_MAP, swapMap, new BlockPos(1, 0, 3));

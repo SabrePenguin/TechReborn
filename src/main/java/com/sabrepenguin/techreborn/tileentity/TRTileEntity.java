@@ -4,6 +4,7 @@ import com.sabrepenguin.techreborn.Tags;
 import com.sabrepenguin.techreborn.tileentity.cable.TileEntityCable;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityChargeOMat;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityMatterFabricator;
+import com.sabrepenguin.techreborn.tileentity.multis.TileEntityDistillationTower;
 import com.sabrepenguin.techreborn.tileentity.processing.*;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronAlloyFurnace;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
@@ -36,6 +37,7 @@ public class TRTileEntity {
 
 		GameRegistry.registerTileEntity(TileEntityIndustrialCentrifuge.class, new ResourceLocation(Tags.MODID, "industrial_centrifuge"));
 		GameRegistry.registerTileEntity(TileEntityIndustrialElectrolyzer.class, new ResourceLocation(Tags.MODID, "industrial_electrolyzer"));
+		GameRegistry.registerTileEntity(TileEntityDistillationTower.class, new ResourceLocation(Tags.MODID, "distillation_tower"));
 
 		GameRegistry.registerTileEntity(TileEntityCable.class, new ResourceLocation(Tags.MODID, "cable"));
 

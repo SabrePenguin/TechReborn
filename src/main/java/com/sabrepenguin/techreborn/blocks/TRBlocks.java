@@ -13,6 +13,7 @@ import com.sabrepenguin.techreborn.blocks.meta.*;
 import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityChargeOMat;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityMatterFabricator;
+import com.sabrepenguin.techreborn.tileentity.multis.TileEntityDistillationTower;
 import com.sabrepenguin.techreborn.tileentity.processing.*;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronAlloyFurnace;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
@@ -63,7 +64,7 @@ public class TRBlocks {
 	public static final BlockHorizontalMachine charge_o_mat = null;
 	public static final BlockHorizontalMachine chemical_reactor = null;
 	public static final BlockDigitalChest digital_chest = null;
-	public static final BlockDistillationTower distillation_tower = null;
+	public static final BlockHorizontalMachine distillation_tower = null;
 	public static final BlockImplosionCompressor implosion_compressor = null;
 	public static final BlockIndustrialBlastFurnace industrial_blast_furnace = null;
 	public static final BlockHorizontalMachine industrial_centrifuge = null;
@@ -151,7 +152,7 @@ public class TRBlocks {
 				new BlockHorizontalMachine("charge_o_mat", "machines/tier2", TileEntityChargeOMat::new),
 				new BlockHorizontalMachine("chemical_reactor", "machines/tier2", TEProcessing.TileEntityChemicalReactor::new),
 				new BlockDigitalChest(),
-				new BlockDistillationTower(),
+				new BlockHorizontalMachine("distillation_tower", "machines/tier2", TileEntityDistillationTower::new),
 				new BlockImplosionCompressor(),
 				new BlockIndustrialBlastFurnace(),
 				new BlockHorizontalMachine("industrial_centrifuge", "machines/tier2", TileEntityIndustrialCentrifuge::new),

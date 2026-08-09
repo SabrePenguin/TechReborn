@@ -5,6 +5,7 @@ import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.drawable.GuiTextures;
+import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.integration.jei.ModularUIJeiPlugin;
 import com.cleanroommc.modularui.screen.ModularPanel;
 import com.cleanroommc.modularui.screen.viewport.GuiContext;
@@ -20,7 +21,9 @@ import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketAutoConfig;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
+import com.sabrepenguin.techreborn.proxy.ClientEventHandler;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
+import com.sabrepenguin.techreborn.tileentity.multis.MultiblockStructure;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -33,6 +36,7 @@ import net.minecraftforge.items.IItemHandler;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class TRGuis {
@@ -50,6 +54,20 @@ public class TRGuis {
 					}
 					return false;
 				});
+	}
+
+	public static void createMultiblockCover(ModularPanel panel, EnumFacing direction, PosGuiData data, BooleanSupplier enabled) {
+		panel.child(new TRButtonWidget<>()
+				.size(20)
+				.overlay(TRGuiTextures.WARNING)
+				.right(5)
+				.top(3)
+				.tooltip(tooltip -> tooltip.addLine("Display Multiblock Hologram"))
+				.onMousePressed(mouseButton -> {
+					ClientEventHandler.setRenderData(MultiblockStructure.DISTILLATION_TOWER[direction.getHorizontalIndex()], data.getBlockPos());
+					return true;
+				})
+				.setEnabledIf(w -> !enabled.getAsBoolean()));
 	}
 
 	public static Expandable createUpdateTab(IItemHandler handler, String groupName, IOnSlotChanged listener) {
@@ -253,6 +271,7 @@ public class TRGuis {
 		}
 
 		@Override
+		@SuppressWarnings("ConstantConditions")
 		public void draw(GuiContext context, int x, int y, int width, int height, WidgetTheme widgetTheme) {
 			Minecraft mc = Minecraft.getMinecraft();
 			if (mc.world == null) return;
