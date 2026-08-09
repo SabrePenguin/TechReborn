@@ -42,9 +42,13 @@ public class TileEntityIndustrialCentrifuge extends TileEntityGeneric implements
 
 		Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
 		TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioComponent.getManager(), getFacing,
-				new SlotPosition(SlotAction.INPUT, 55, 39, 0, 0),
-				SlotPosition.BigSlot(SlotAction.OUTPUT, 101, 39, 1, 0),
-				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 0)
+				new SlotPosition(SlotAction.INPUT, 40, 30, 0, 0),
+				new SlotPosition(SlotAction.INPUT, 40, 50, 0, 1),
+				new SlotPosition(SlotAction.OUTPUT, 84, 40, 1, 2),
+				new SlotPosition(SlotAction.OUTPUT, 103, 21, 1, 3),
+				new SlotPosition(SlotAction.OUTPUT, 122, 40, 1, 4),
+				new SlotPosition(SlotAction.OUTPUT, 103, 59, 1, 5),
+				new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 6)
 		);
 
 		panel.bindPlayerInventory()
