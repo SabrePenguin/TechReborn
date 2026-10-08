@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 public class JEITextures {
 
 	private static final ResourceLocation BIG_SLOT_LOCATION = new ResourceLocation(Tags.MODID, "textures/gui/big_slot.png");
+	private static final ResourceLocation FLUID_TANK_LOCATION = new ResourceLocation(Tags.MODID, "textures/gui/jei/fluid_tank.png");
 	private static final ResourceLocation LEFT_ARROW_LOCATION = new ResourceLocation(Tags.MODID, "textures/gui/jei/left_arrow.png");
 	private static final ResourceLocation LEFT_ARROW_OUTLINE_LOCATION = new ResourceLocation(Tags.MODID, "textures/gui/jei/left_arrow_dark.png");
 	private static final ResourceLocation RIGHT_ARROW_LOCATION = new ResourceLocation(Tags.MODID, "textures/gui/jei/right_arrow.png");
@@ -16,6 +17,7 @@ public class JEITextures {
 	private static final ResourceLocation UP_ARROW_RESOURCE = new ResourceLocation(Tags.MODID, "textures/gui/up_arrows.png");
 
 	public static IDrawableStatic BIG_SLOT;
+	public static IDrawableStatic FLUID_TANK;
 
 	public static IDrawableBuilder LEFT_ARROW;
 	public static IDrawableStatic LEFT_ARROW_OUTLINE;
@@ -26,6 +28,7 @@ public class JEITextures {
 
 	public static void init(IGuiHelper helper) {
 		BIG_SLOT = helper.drawableBuilder(BIG_SLOT_LOCATION, 0, 0, 26, 26).setTextureSize(26, 26).build();
+		FLUID_TANK = helper.drawableBuilder(FLUID_TANK_LOCATION, 0, 0, 20, 55).setTextureSize(20, 55).build();
 
 		LEFT_ARROW = helper.drawableBuilder(LEFT_ARROW_LOCATION, 0, 0, 18, 16).setTextureSize(18, 16);
 		LEFT_ARROW_OUTLINE = helper.drawableBuilder(LEFT_ARROW_OUTLINE_LOCATION, 0, 0, 18, 16).setTextureSize(18, 16).build();

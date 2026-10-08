@@ -69,6 +69,7 @@ public class TRRecipeLoader {
 		IndustrialCentrifugeRecipes.init();
 		IndustrialElectrolyzerRecipes.init();
 		DistillationTowerRecipes.init();
+		SawmillRecipes.init();
 		boolean result = CraftingHelper.findFiles(mod, "assets/" + Tags.MODID + "/trrecipes", this::preProcess, this::process, true, true);
 		for (ITRRegistry registry: registries.values()) {
 			registry.sortRecipes();
