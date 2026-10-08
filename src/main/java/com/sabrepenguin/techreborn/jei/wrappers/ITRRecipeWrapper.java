@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn.jei.wrappers;
 
+import com.sabrepenguin.techreborn.recipe.recipe.ITRFluidRecipe;
 import com.sabrepenguin.techreborn.recipe.recipe.ITRRecipe;
 import com.sabrepenguin.techreborn.recipe.recipe.ShapedRecipe;
 import com.sabrepenguin.techreborn.recipe.utils.CountedIngredient;
@@ -10,6 +11,7 @@ import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
@@ -55,6 +57,21 @@ public class ITRRecipeWrapper implements IRecipeWrapper {
 			outputs.add(Collections.singletonList(output));
 		}
 		ingredients.setOutputLists(VanillaTypes.ITEM, outputs);
+
+		if (recipe instanceof ITRFluidRecipe fluidRecipe) {
+			List<FluidStack> unpreparedFluidIngredients = fluidRecipe.getFluidInputs();
+			List<List<FluidStack>> fluidInputs = new ArrayList<>();
+			for (FluidStack stack: unpreparedFluidIngredients) {
+				fluidInputs.add(Collections.singletonList(stack));
+			}
+			ingredients.setInputLists(VanillaTypes.FLUID, fluidInputs);
+			List<FluidStack> unpreparedFluidOutputs = fluidRecipe.getFluidOutputs();
+			List<List<FluidStack>> fluidOutputs = new ArrayList<>();
+			for (FluidStack stack: unpreparedFluidOutputs) {
+				fluidOutputs.add(Collections.singletonList(stack));
+			}
+			ingredients.setOutputLists(VanillaTypes.FLUID, fluidOutputs);
+		}
 	}
 
 	public int getWidth() {
