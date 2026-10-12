@@ -14,45 +14,188 @@ import net.minecraft.util.math.BlockPos;
 
 
 @Desugar
-public record MultiblockStructure(char[][][] blocks, Char2ObjectMap<IBlockState> palette, BlockPos controllerOffset) {
+public record MultiblockStructure(char[][][] blocks, Char2ObjectMap<IBlockState> palette, BlockPos controllerOffset) { //TODO: Replace rotated identical
 
 
 	public static MultiblockStructure[] DISTILLATION_TOWER;
+	public static MultiblockStructure[] SAWMILL;
+	public static MultiblockStructure[] INDUSTRIAL_BLAST_FURNACE;
+	public static MultiblockStructure[] IMPLOSION_COMPRESSOR;
+	public static MultiblockStructure[] VACUUM_FREEZER;
+	public static MultiblockStructure[] FLUID_REPLICATOR;
 	static {
-		Char2ObjectMap<IBlockState> TEST_MAP = new Char2ObjectArrayMap<>();
-		TEST_MAP.put(' ', null);
-		TEST_MAP.put('S', TRBlocks.machine_casing.getDefaultState().withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.STANDARD));
-		TEST_MAP.put('A', TRBlocks.machine_casing.getDefaultState().withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.ADVANCED));
-		TEST_MAP.put('E', Blocks.AIR.getDefaultState());
-		TEST_MAP.put('C', null);
-		Char2CharArrayMap swapMap = new Char2CharArrayMap();
-//		swapMap.put('C', 'D');
-		DISTILLATION_TOWER = createStruct(new char[][][] {
-				{
-						{'S', 'S', 'S'},
-						{'S', 'S', 'S'},
-						{'S', 'S', 'S'},
-						{' ', 'C', ' '}
-				},
-				{
-						{'A', 'A', 'A'},
-						{'A', 'E', 'A'},
-						{'A', 'A', 'A'},
-						{' ', ' ', ' '}
-				},
-				{
-						{'S', 'S', 'S'},
-						{'S', 'E', 'S'},
-						{'S', 'S', 'S'},
-						{' ', ' ', ' '}
-				},
-				{
-						{'A', 'A', 'A'},
-						{'A', 'A', 'A'},
-						{'A', 'A', 'A'},
-						{' ', ' ', ' '}
-				},
-		}, TEST_MAP, swapMap, new BlockPos(1, 0, 3));
+		{
+			Char2ObjectMap<IBlockState> DISTILLATION_MAP = new Char2ObjectArrayMap<>();
+			DISTILLATION_MAP.put(' ', null);
+			DISTILLATION_MAP.put('S', TRBlocks.machine_casing.getDefaultState()
+					.withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.STANDARD));
+			DISTILLATION_MAP.put('A', TRBlocks.machine_casing.getDefaultState()
+					.withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.ADVANCED));
+			DISTILLATION_MAP.put('E', Blocks.AIR.getDefaultState());
+			DISTILLATION_MAP.put('C', null);
+			Char2CharArrayMap swapMap = new Char2CharArrayMap();
+			DISTILLATION_TOWER = createStruct(new char[][][]{
+					{
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{' ', 'C', ' '}
+					},
+					{
+							{'A', 'A', 'A'},
+							{'A', 'E', 'A'},
+							{'A', 'A', 'A'},
+							{' ', ' ', ' '}
+					},
+					{
+							{'S', 'S', 'S'},
+							{'S', 'E', 'S'},
+							{'S', 'S', 'S'},
+							{' ', ' ', ' '}
+					},
+					{
+							{'A', 'A', 'A'},
+							{'A', 'A', 'A'},
+							{'A', 'A', 'A'},
+							{' ', ' ', ' '}
+					},
+			}, DISTILLATION_MAP, swapMap, new BlockPos(1, 0, 3));
+		}
+		{
+			Char2ObjectMap<IBlockState> SAWMILL_MAP = new Char2ObjectArrayMap<>();
+			SAWMILL_MAP.put(' ', null);
+			SAWMILL_MAP.put('S', TRBlocks.machine_casing.getDefaultState()
+					.withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.STANDARD));
+			SAWMILL_MAP.put('A', TRBlocks.machine_casing.getDefaultState()
+					.withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.REINFORCED));
+			SAWMILL_MAP.put('E', Blocks.AIR.getDefaultState());
+			SAWMILL_MAP.put('C', null);
+			Char2CharArrayMap swapMap = new Char2CharArrayMap();
+			SAWMILL = createStruct(new char[][][]{
+					{
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{' ', ' ', ' '}
+					},
+					{
+							{'A', 'A', 'A'},
+							{'A', 'E', 'A'},
+							{'A', 'A', 'A'},
+							{' ', 'C', ' '}
+					},
+					{
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{' ', ' ', ' '}
+					}
+			}, SAWMILL_MAP, swapMap, new BlockPos(1, 1, 3));
+		}
+		{
+			Char2ObjectMap<IBlockState> BLAST_MAP = new Char2ObjectArrayMap<>();
+			BLAST_MAP.put(' ', null);
+			BLAST_MAP.put('S', TRBlocks.machine_casing.getDefaultState()
+					.withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.STANDARD));
+			BLAST_MAP.put('E', Blocks.AIR.getDefaultState());
+			BLAST_MAP.put('C', null);
+			Char2CharArrayMap swapMap = new Char2CharArrayMap();
+			INDUSTRIAL_BLAST_FURNACE = createStruct(new char[][][]{
+					{
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{' ', 'C', ' '}
+					},
+					{
+							{'S', 'S', 'S'},
+							{'S', 'E', 'S'},
+							{'S', 'S', 'S'},
+							{' ', ' ', ' '}
+					},
+					{
+							{'S', 'S', 'S'},
+							{'S', 'E', 'S'},
+							{'S', 'S', 'S'},
+							{' ', ' ', ' '}
+					},
+					{
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{' ', ' ', ' '}
+					},
+			}, BLAST_MAP, swapMap, new BlockPos(1, 0, 3));
+		}
+		{
+			Char2ObjectMap<IBlockState> IMPLOSION_MAP = new Char2ObjectArrayMap<>();
+			IMPLOSION_MAP.put(' ', null);
+			IMPLOSION_MAP.put('S', TRBlocks.machine_casing.getDefaultState()
+					.withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.REINFORCED));
+			IMPLOSION_MAP.put('E', Blocks.AIR.getDefaultState());
+			IMPLOSION_MAP.put('C', null);
+			Char2CharArrayMap swapMap = new Char2CharArrayMap();
+			IMPLOSION_COMPRESSOR = createStruct(new char[][][]{
+					{
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'}
+					},
+					{
+							{'S', 'S', 'S'},
+							{'S', 'E', 'S'},
+							{'S', 'S', 'S'}
+					},
+					{
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'}
+					},
+					{
+							{' ', ' ', ' '},
+							{' ', 'C', ' '},
+							{' ', ' ', ' '}
+					},
+			}, IMPLOSION_MAP, swapMap, new BlockPos(1, 3, 1));
+		}
+		{
+			Char2ObjectMap<IBlockState> IMPLOSION_MAP = new Char2ObjectArrayMap<>();
+			IMPLOSION_MAP.put(' ', null);
+			IMPLOSION_MAP.put('S', TRBlocks.machine_casing.getDefaultState()
+					.withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.REINFORCED));
+			IMPLOSION_MAP.put('E', Blocks.AIR.getDefaultState());
+			IMPLOSION_MAP.put('C', null);
+			Char2CharArrayMap swapMap = new Char2CharArrayMap();
+			VACUUM_FREEZER = createStruct(new char[][][]{
+					{
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'},
+							{'S', 'S', 'S'}
+					},
+					{
+							{' ', ' ', ' '},
+							{' ', 'C', ' '},
+							{' ', ' ', ' '}
+					},
+			}, IMPLOSION_MAP, swapMap, new BlockPos(1, 1, 1));
+		}
+		{
+			Char2ObjectMap<IBlockState> REPLICATOR_MAP = new Char2ObjectArrayMap<>();
+			REPLICATOR_MAP.put(' ', null);
+			REPLICATOR_MAP.put('S', TRBlocks.machine_casing.getDefaultState()
+					.withProperty(BlockMachineCasing.TYPE, BlockMachineCasing.Casing.REINFORCED));
+			REPLICATOR_MAP.put('E', Blocks.AIR.getDefaultState());
+			REPLICATOR_MAP.put('C', null);
+			Char2CharArrayMap swapMap = new Char2CharArrayMap();
+			FLUID_REPLICATOR = createStruct(new char[][][]{
+					{
+							{'S', 'S', 'S'},
+							{'S', ' ', 'S'},
+							{'S', 'S', 'S'},
+							{' ', 'C', ' '}
+					}
+			}, REPLICATOR_MAP, swapMap, new BlockPos(1, 0, 3));
+		}
 	}
 
 	public static void init() {
