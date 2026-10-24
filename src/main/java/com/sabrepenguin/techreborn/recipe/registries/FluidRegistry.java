@@ -136,6 +136,8 @@ public class FluidRegistry implements ITRFluidRegistry {
 				searchList = findList;
 			}
 		}
+		if (fluidHandler == null)
+			return null;
 		IFluidTankProperties[] properties = fluidHandler.getTankProperties();
 		for (IFluidTankProperties property : properties) {
 			FluidStack contents = property.getContents();

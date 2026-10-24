@@ -9,6 +9,9 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.items.IItemHandler;
 
@@ -96,5 +99,28 @@ public class RecipeUtils {
 			}
 		}
 		return leftoverStacks;
+	}
+
+	public static List<FluidStack> applyRecipeToHandler(IFluidHandler handler, List<FluidStack> fluidInputs) {
+		List<FluidStack> remainder = new ArrayList<>(fluidInputs);
+		List<FluidStack> leftoverStacks = new ArrayList<>();
+		for (IFluidTankProperties tank: handler.getTankProperties()) {
+			FluidStack contents = tank.getContents();
+			if (contents == null || contents.amount == 0) {
+				continue;
+			}
+			FluidStack match = null;
+			for (FluidStack ingredient: remainder) {
+				if (ingredient.isFluidEqual(contents)) {
+					match = ingredient;
+					break;
+				}
+			}
+			if (match != null) {
+				remainder.remove(match);
+				handler.drain(match, true);
+			}
+		}
+		return  leftoverStacks;
 	}
 }
