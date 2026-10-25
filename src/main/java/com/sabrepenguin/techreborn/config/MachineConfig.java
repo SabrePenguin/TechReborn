@@ -41,6 +41,8 @@ public class MachineConfig {
 	public Generic industrialElectrolyzer = new Generic(40_000, 512);
 	@Config.LangKey("tile.techreborn.distillation_tower.name")
 	public GenericMulti distillationTower = new GenericMulti(40_000, 512, false);
+	@Config.LangKey("tile.techreborn.industrial_sawmill.name")
+	public GenericMulti industrialSawmill = new GenericMulti(40_000, 512, false);
 	@Config.LangKey("config.misc")
 	public Misc misc = new Misc();
 

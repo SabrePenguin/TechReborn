@@ -14,6 +14,7 @@ import com.sabrepenguin.techreborn.tileentity.TRTileEntity;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityChargeOMat;
 import com.sabrepenguin.techreborn.tileentity.misc.TileEntityMatterFabricator;
 import com.sabrepenguin.techreborn.tileentity.multis.TileEntityDistillationTower;
+import com.sabrepenguin.techreborn.tileentity.multis.TileEntitySawmill;
 import com.sabrepenguin.techreborn.tileentity.processing.*;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronAlloyFurnace;
 import com.sabrepenguin.techreborn.tileentity.tier0.TileEntityIronFurnace;
@@ -70,7 +71,7 @@ public class TRBlocks {
 	public static final BlockHorizontalMachine industrial_centrifuge = null;
 	public static final BlockHorizontalMachine industrial_electrolyzer = null;
 	public static final BlockIndustrialGrinder industrial_grinder = null;
-	public static final BlockIndustrialSawmill industrial_sawmill = null;
+	public static final BlockHorizontalMachine industrial_sawmill = null;
 	public static final BlockVacuumFreezer vacuum_freezer = null;
 	public static final BlockHorizontalMachine auto_crafting_table = null;
 	public static final BlockHorizontalMachine electric_furnace = null;
@@ -158,7 +159,7 @@ public class TRBlocks {
 				new BlockHorizontalMachine("industrial_centrifuge", "machines/tier2", TileEntityIndustrialCentrifuge::new),
 				new BlockHorizontalMachine("industrial_electrolyzer", "machines/tier2", TileEntityIndustrialElectrolyzer::new),
 				new BlockIndustrialGrinder(),
-				new BlockIndustrialSawmill(),
+				new BlockHorizontalMachine("industrial_sawmill", "machines/tier2", TileEntitySawmill::new),
 				new BlockVacuumFreezer(),
 				new BlockHorizontalMachine("auto_crafting_table", "machines/tier1", TileEntityAutoCraftingTable::new),
 				new BlockHorizontalMachine("electric_furnace", "machines/tier1", TEProcessing.TileEntityElectricFurnace::new),

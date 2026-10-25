@@ -31,15 +31,30 @@ public class ItemIOComponent implements MachineComponent {
 	protected final RestrictedItemStackHandler _internalOutput;
 	@Nullable
 	protected final LimitedItemStackHandler output;
+	@Nullable
+	protected final RestrictedItemStackHandler fluidItemInputs;
+	@Nullable
+	protected final RestrictedItemStackHandler _internalFluidItemOutputs;
+	protected final LimitedItemStackHandler fluidItemOutputs;
 	protected final RestrictedItemStackHandler battery;
 	protected final IOManager ioManager;
 
 	private final TileEntity parent;
 
-	ItemIOComponent(TileEntity parent, int inputSize, int outputSize, int bidirectionalSize, boolean energySlot, IntConsumer runnable) {
+	// TODO: Make everything use this instead
+	ItemIOComponent(TileEntity parent, int inputSize, int outputSize, int bidirectionalSize, boolean energySlot, IntConsumer runnable, int fluidTanks) {
 		this.parent = parent;
-		int invSize = inputSize + outputSize + bidirectionalSize + (energySlot ? 1 : 0);
-		if (inputSize > 0) {
+		int invSize = inputSize + outputSize + bidirectionalSize + (energySlot ? 1 : 0) + (fluidTanks * 2);
+		if (inputSize > 0 && fluidTanks != 0) {
+			inventory = new ItemStackHandler(invSize) {
+				@Override
+				protected void onContentsChanged(int slot) {
+					if (slot < inputSize || (invSize - (fluidTanks * 2) < slot) && slot < invSize) {
+						runnable.accept(slot);
+					}
+				}
+			};
+		} else if (inputSize > 0) {
 			inventory = new ItemStackHandler(invSize) {
 				@Override
 				protected void onContentsChanged(int slot) {
@@ -51,7 +66,8 @@ public class ItemIOComponent implements MachineComponent {
 		} else {
 			inventory = new ItemStackHandler(invSize);
 		}
-		if (inputSize != 0) {
+		//TODO: Make the calculation logic a little cleaner. What is the number where?
+		if (inputSize != 0) { //TODO: Fix this logic. What if inputSize = 1 and bidirectionalSize = 1?
 			inputs = new RestrictedItemStackHandler(inventory, 0, inputSize);
 		} else if (bidirectionalSize != 0) {
 			inputs = new RestrictedItemStackHandler(inventory, 0, bidirectionalSize);
@@ -66,6 +82,16 @@ public class ItemIOComponent implements MachineComponent {
 			output = null;
 		}
 		battery = energySlot ? new RestrictedItemStackHandler(inventory, inputSize + outputSize): null;
+		if (fluidTanks != 0) {
+			int fluidTanksStart = inputSize + outputSize + (energySlot ? 1 : 0);
+			fluidItemInputs = new RestrictedItemStackHandler(inventory, fluidTanksStart, fluidTanksStart + fluidTanks);
+			_internalFluidItemOutputs = new RestrictedItemStackHandler(inventory, fluidTanksStart + fluidTanks, fluidTanksStart + (fluidTanks * 2));
+			fluidItemOutputs = new LimitedItemStackHandler(_internalFluidItemOutputs, SlotAction.OUTPUT);
+		} else {
+			fluidItemInputs = null;
+			_internalFluidItemOutputs = null;
+			fluidItemOutputs = null;
+		}
 		List<SideConfig> configs = new ArrayList<>();
 		if (inputSize != 0) {
 			configs.add(SideConfig.input(inputs));
@@ -76,6 +102,10 @@ public class ItemIOComponent implements MachineComponent {
 			configs.add(SideConfig.output(output));
 		if (battery != null) {
 			configs.add(SideConfig.bidirectional(battery));
+		}
+		if (fluidTanks != 0) {
+			configs.add(SideConfig.input(fluidItemInputs));
+			configs.add(SideConfig.output(fluidItemOutputs));
 		}
 		ioManager = new IOManager(configs.toArray(new SideConfig[0]));
 	}
@@ -90,6 +120,9 @@ public class ItemIOComponent implements MachineComponent {
 		battery = energySlot ? new RestrictedItemStackHandler(inventory, inputSize + outputSize): null;
 
 		ioManager = new IOManager(SideConfig.input(inputs), SideConfig.output(output), SideConfig.bidirectional(battery));
+		fluidItemInputs = null;
+		_internalFluidItemOutputs = null;
+		fluidItemOutputs = null;
 	}
 
 	public ItemIOComponent(TileEntity parent, int inputSize, int outputSize, boolean energySlot, IntConsumer runnable) {
@@ -121,6 +154,9 @@ public class ItemIOComponent implements MachineComponent {
 			configs.add(SideConfig.bidirectional(battery));
 		}
 		ioManager = new IOManager(configs.toArray(new SideConfig[0]));
+		fluidItemInputs = null;
+		_internalFluidItemOutputs = null;
+		fluidItemOutputs = null;
 	}
 
 	public ItemIOComponent addInputFilter(ObjIntPredicate<ItemStack> filter) {
@@ -149,9 +185,28 @@ public class ItemIOComponent implements MachineComponent {
 		return output;
 	}
 
+	@Nullable
+	public RestrictedItemStackHandler getFluidItemInputs() {
+		return fluidItemInputs;
+	}
+
+	@Nullable
+	public LimitedItemStackHandler getFluidItemOutputs() {
+		return fluidItemOutputs;
+	}
+
 	@ApiStatus.Internal
 	public @Nullable IItemHandlerModifiable getInternalOutputs() {
 		return _internalOutput;
+	}
+
+	/**
+	 * A helper intended to allow easy insertion and removal into a slot the player should never insert into
+	 * @return An insertable version of getFluidItemOutputs()
+	 */
+	@ApiStatus.Internal
+	public @Nullable IItemHandlerModifiable getInternalFluidOutputs() {
+		return _internalFluidItemOutputs;
 	}
 
 	@Override
@@ -180,6 +235,7 @@ public class ItemIOComponent implements MachineComponent {
 		int inputSize;
 		int outputSize;
 		int bidirectionalSize;
+		int interactableFluidTanks;
 
 		public ItemIOComponentBuilder(TileEntity parent) {
 			this.parent = parent;
@@ -208,6 +264,11 @@ public class ItemIOComponent implements MachineComponent {
 			return this;
 		}
 
+		public ItemIOComponentBuilder fluidTanksSize(int size) {
+			interactableFluidTanks = size;
+			return this;
+		}
+
 		public ItemIOComponentBuilder hasEnergySlot() {
 			hasEnergySlot = true;
 			return this;
@@ -219,7 +280,7 @@ public class ItemIOComponent implements MachineComponent {
 		}
 
 		public ItemIOComponent build() {
-			return new ItemIOComponent(parent, inputSize, outputSize, bidirectionalSize, hasEnergySlot, runnable);
+			return new ItemIOComponent(parent, inputSize, outputSize, bidirectionalSize, hasEnergySlot, runnable, interactableFluidTanks);
 		}
 	}
 }
