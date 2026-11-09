@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn.networking.sideconfig;
 
+import com.sabrepenguin.techreborn.capability.fluid.ISidedConfigFluidTE;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,11 +18,13 @@ public class PacketAutoConfig implements IMessage {
 	private BlockPos pos;
 	private int index;
 	private boolean input;
+	private boolean fluid;
 
-	public PacketAutoConfig(BlockPos pos, int index, boolean input) {
+	public PacketAutoConfig(BlockPos pos, int index, boolean input, boolean isFluid) {
 		this.pos = pos;
 		this.index = index;
 		this.input = input;
+		this.fluid = isFluid;
 	}
 
 	@Override
@@ -29,6 +32,7 @@ public class PacketAutoConfig implements IMessage {
 		this.pos = BlockPos.fromLong(buf.readLong());
 		this.index = buf.readInt();
 		this.input = buf.readBoolean();
+		this.fluid = buf.readBoolean();
 	}
 
 	@Override
@@ -36,6 +40,7 @@ public class PacketAutoConfig implements IMessage {
 		buf.writeLong(this.pos.toLong());
 		buf.writeInt(this.index);
 		buf.writeBoolean(this.input);
+		buf.writeBoolean(this.fluid);
 	}
 
 	public static class PacketAutoConfigMessageHandler implements IMessageHandler<PacketAutoConfig, IMessage> {
@@ -47,8 +52,14 @@ public class PacketAutoConfig implements IMessage {
 			world.addScheduledTask(() -> {
 				if (world.isBlockLoaded(message.pos)) {
 					TileEntity te = world.getTileEntity(message.pos);
-					if (te instanceof ISideConfigTE sidedConfig) {
-						sidedConfig.getSidedConfigComponent().swapSlot(message.index, message.input);
+					if (!message.fluid) {
+						if (te instanceof ISideConfigTE sidedConfig) {
+							sidedConfig.getSidedConfigComponent().swapSlot(message.index, message.input);
+						}
+					} else {
+						if (te instanceof ISidedConfigFluidTE sidedConfig) {
+							sidedConfig.getFluidConfigComponent().swapSlot(message.index, message.input);
+						}
 					}
 				}
 			});

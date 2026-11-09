@@ -1,5 +1,8 @@
 package com.sabrepenguin.techreborn.tileentity.components;
 
+import com.sabrepenguin.techreborn.capability.stackhandler.SideConfig;
+import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
+import com.sabrepenguin.techreborn.tileentity.IOFluidManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -8,6 +11,7 @@ import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerConcatenate;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
@@ -16,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FluidIOComponent implements MachineComponent {
+    private final IOFluidManager ioFluidManager;
+    private final FluidHandlerConcatenate fluidInventory;
     private final @Nullable IItemHandlerModifiable bucketInputs;
     private final @Nullable IItemHandlerModifiable bucketOutputs;
     private final @Nullable FluidHandlerConcatenate input;
@@ -30,6 +36,8 @@ public class FluidIOComponent implements MachineComponent {
         this.parent = parent;
         this.bucketInputs = bucketInputs;
         this.bucketOutputs = bucketOutputs;
+        List<IFluidHandler> topHandlers = new ArrayList<>();
+        List<SideConfig<IFluidHandler>> handlers = new ArrayList<>();
         if (inputSize == 0) {
             input = null;
             inputTanks = null;
@@ -39,6 +47,8 @@ public class FluidIOComponent implements MachineComponent {
                 inputTanks.add(new FluidTank(inputCapacity));
             }
             input = new FluidHandlerConcatenate(new ArrayList<>(inputTanks));
+            topHandlers.add(input);
+            handlers.add(new SideConfig<>(input, SlotAction.INPUT));
         }
         if (outputSize == 0) {
             output = null;
@@ -49,7 +59,11 @@ public class FluidIOComponent implements MachineComponent {
                 outputTanks.add(new FluidTank(outputCapacity));
             }
             output = new FluidHandlerConcatenate(new ArrayList<>(outputTanks));
+            topHandlers.add(output);
+            handlers.add(new SideConfig<>(output, SlotAction.OUTPUT));
         }
+        fluidInventory = new FluidHandlerConcatenate(topHandlers);
+        ioFluidManager = new IOFluidManager(handlers.toArray(new SideConfig[0]));
     }
 
     @Override
@@ -92,7 +106,7 @@ public class FluidIOComponent implements MachineComponent {
                 }
             }
         }
-        return false;
+        return ioFluidManager.performTransfer(parent.getWorld(), parent.getPos());
     }
 
     @Override
@@ -109,6 +123,7 @@ public class FluidIOComponent implements MachineComponent {
                 outputTanks.get(i).readFromNBT(list.getCompoundTagAt(i));
             }
         }
+        ioFluidManager.readFromNBT(compound.getCompoundTag("FluidManager"));
     }
 
     @Override
@@ -127,7 +142,16 @@ public class FluidIOComponent implements MachineComponent {
             }
             compound.setTag("outputTanks", list);
         }
+        compound.setTag("FluidManager", ioFluidManager.writeToNBT());
         return compound;
+    }
+
+    public IOFluidManager getIoFluidManager() {
+        return ioFluidManager;
+    }
+
+    public IFluidHandler getFluidHandler() {
+        return fluidInventory;
     }
 
     @Nullable

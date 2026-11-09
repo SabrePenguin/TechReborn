@@ -43,6 +43,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
@@ -162,9 +163,10 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, IOnS
 						TRGuis.createConfigPanel(syncManager1, syncHandler, this.getPos(), panel.getArea(),
 								ioComponent.getManager(),
 								getFacing,
+								Arrays.asList(
 								new SlotPosition(SlotAction.INPUT, 56, 17, 0, 0),
 								new SlotPosition(SlotAction.INPUT, 56, 53, 0, 1),
-								new SlotPosition(SlotAction.OUTPUT, 116, 35, 1, 2)));
+								new SlotPosition(SlotAction.OUTPUT, 116, 35, 1, 2)), null, null));
 		TRGuis.addConfigPanel(panel, panelHandler);
 
 		panel.child(IKey.lang("tile.techreborn.iron_furnace.name")

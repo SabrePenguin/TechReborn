@@ -17,12 +17,13 @@ import com.cleanroommc.modularui.widgets.*;
 import com.cleanroommc.modularui.widgets.slot.IOnSlotChanged;
 import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
+import com.sabrepenguin.techreborn.capability.ISlotChange;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketAutoConfig;
 import com.sabrepenguin.techreborn.networking.sideconfig.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.proxy.ClientEventHandler;
-import com.sabrepenguin.techreborn.tileentity.IOManager;
+import com.sabrepenguin.techreborn.tileentity.IOFluidManager;
 import com.sabrepenguin.techreborn.tileentity.manager.IManager;
 import com.sabrepenguin.techreborn.tileentity.multis.MultiblockStructure;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
@@ -35,6 +36,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BooleanSupplier;
@@ -57,7 +60,7 @@ public class TRGuis {
 				});
 	}
 
-	public static void createMultiblockCover(ModularPanel panel, EnumFacing direction, PosGuiData data, BooleanSupplier enabled) {
+	public static void createMultiblockCover(ModularPanel panel, PosGuiData data, BooleanSupplier enabled, MultiblockStructure structure) {
 		panel.child(new TRButtonWidget<>()
 				.size(20)
 				.overlay(TRGuiTextures.WARNING)
@@ -65,7 +68,7 @@ public class TRGuis {
 				.top(3)
 				.tooltip(tooltip -> tooltip.addLine("Display Multiblock Hologram"))
 				.onMousePressed(mouseButton -> {
-					ClientEventHandler.setRenderData(MultiblockStructure.DISTILLATION_TOWER[direction.getHorizontalIndex()], data.getBlockPos());
+					ClientEventHandler.setRenderData(structure, data.getBlockPos());
 					return true;
 				})
 				.setEnabledIf(w -> !enabled.getAsBoolean()));
@@ -109,21 +112,39 @@ public class TRGuis {
 				}));
 	}
 
-	public static void setupConfigPanel(
-			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, IOManager ioManager,
-			Supplier<EnumFacing> facingSupplier, SlotPosition... slotPositions) {
-			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, IManager<? extends ISlotChange> ioManager,
+	public static void setupConfigPanel(ModularPanel panel, PanelSyncManager syncManager, BlockPos pos,
+										IManager<? extends ISlotChange> ioManager, Supplier<EnumFacing> facingSupplier,
+										List<SlotPosition> slotPositions, IManager<? extends ISlotChange> fluidManager,
+										List<SlotPosition> fluidPositions) {
 		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
 				(manager, handler) ->
-						TRGuis.createConfigPanel(manager, handler, pos, panel.getArea(), ioManager, facingSupplier, slotPositions));
+						TRGuis.createConfigPanel(manager, handler, pos, panel.getArea(), ioManager, facingSupplier, slotPositions, fluidManager, fluidPositions));
 		addConfigPanel(panel, panelHandler);
+	}
+
+	public static void setupConfigPanel(
+			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, IManager<? extends ISlotChange> ioManager,
+			Supplier<EnumFacing> facingSupplier, List<SlotPosition> slotPositions) {
+		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
+				(manager, handler) ->
+						TRGuis.createConfigPanel(manager, handler, pos, panel.getArea(), ioManager, facingSupplier, slotPositions, null, null));
+		addConfigPanel(panel, panelHandler);
+
+	}
+
+	public static void setupConfigPanel(
+			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, IManager<? extends ISlotChange> ioManager,
+			Supplier<EnumFacing> facingSupplier, SlotPosition... slotPositions) {
+		setupConfigPanel(panel, syncManager, pos, ioManager, facingSupplier, Arrays.asList(slotPositions));
 	}
 
 	public static ModularPanel createConfigPanel(
 			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos, Area area,
 			IManager<? extends ISlotChange> manager,
 			Supplier<EnumFacing> getFacing,
-			SlotPosition... slotPositions) {
+			List<SlotPosition> slotPositions,
+			@Nullable IManager<? extends ISlotChange> fluidManager,
+			@Nullable List<SlotPosition> fluidPositions) {
 		ModularPanel panel = new ModularPanel("config_panel") {
 			@Override
 			public boolean isDraggable() {
@@ -156,12 +177,29 @@ public class TRGuis {
 					(syncManager1, syncHandler1) ->
 							createSlotConfigPanel(syncManager1, syncHandler1, pos, manager, handlerIndex, slot, getFacing, action));
 			panel.child(new TRButtonWidget<>()
-					.pos(position.x() - ((position.size() - 18) / 2), position.y() - ((position.size() - 18) / 2))
-					.size(position.size())
+					.pos(position.x() - ((position.width() - 18) / 2), position.y() - ((position.height() - 18) / 2))
+					.size(position.width(), position.height())
 					.onMousePressed(mouseButton -> {
 						panelHandler.openPanel();
 						return panelHandler.isPanelOpen();
 					}));
+		}
+		if (fluidManager != null && fluidPositions != null) {
+			for (final SlotPosition position : fluidPositions) {
+				final int slot = position.slot();
+				final int handlerIndex = position.handlerSlot();
+				final SlotAction action = position.action();
+				IPanelHandler panelHandler = syncManager.syncedPanel("fluid_config_" + position.slot(), true,
+						(syncManager1, syncHandler1) ->
+								createSlotConfigPanel(syncManager1, syncHandler1, pos, fluidManager, handlerIndex, slot, getFacing, action));
+				panel.child(new TRButtonWidget<>()
+						.pos(position.x() - ((position.width() - 18) / 2), position.y() - ((position.height() - 18) / 2)) //TODO: Fix offset
+						.size(position.width(), position.height())
+						.onMousePressed(mouseButton -> {
+							panelHandler.openPanel();
+							return panelHandler.isPanelOpen();
+						}));
+			}
 		}
 		return panel;
 	}
@@ -196,7 +234,7 @@ public class TRGuis {
 		button.onMousePressed(mouseButton -> {
 			int sideIndex = absoluteFacing.get().getIndex();
 			TechRebornPacketHandler.INSTANCE.sendToServer(new PacketSideConfig(
-					pos, sideIndex, handlerIndex, slot
+					pos, sideIndex, handlerIndex, slot, (manager instanceof IOFluidManager)
 			));
 			return true;
 		});
@@ -241,7 +279,7 @@ public class TRGuis {
 				.bottom(bottom)
 				.size(11)
 				.onMousePressed(mouseButton -> {
-					TechRebornPacketHandler.INSTANCE.sendToServer(new PacketAutoConfig(pos, index, input));
+					TechRebornPacketHandler.INSTANCE.sendToServer(new PacketAutoConfig(pos, index, input, (manager instanceof IOFluidManager)));
 					return true;
 				}).overlay((context, x, y, width, height, theme) -> {
 					if (manager.getCurrentValue(index, input)) {

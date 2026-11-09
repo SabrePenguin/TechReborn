@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn.networking.sideconfig;
 
+import com.sabrepenguin.techreborn.capability.fluid.ISidedConfigFluidTE;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -18,12 +19,14 @@ public class PacketSideConfig implements IMessage {
 	private int side;
 	private int handlerIndex;
 	private int handlerSlot;
+	private boolean fluid;
 
-	public PacketSideConfig(BlockPos pos, int side, int handlerIndex, int handlerSlot) {
+	public PacketSideConfig(BlockPos pos, int side, int handlerIndex, int handlerSlot, boolean fluid) {
 		this.pos = pos;
 		this.side = side;
 		this.handlerIndex = handlerIndex;
 		this.handlerSlot = handlerSlot;
+		this.fluid = fluid;
 	}
 
 	@Override
@@ -32,6 +35,7 @@ public class PacketSideConfig implements IMessage {
 		this.side = buf.readInt();
 		this.handlerIndex = buf.readInt();
 		this.handlerSlot = buf.readInt();
+		this.fluid = buf.readBoolean();
 	}
 
 	@Override
@@ -40,6 +44,7 @@ public class PacketSideConfig implements IMessage {
 		buf.writeInt(this.side);
 		buf.writeInt(this.handlerIndex);
 		buf.writeInt(this.handlerSlot);
+		buf.writeBoolean(this.fluid);
 	}
 
 	public static class PacketSideConfigMessageHandler implements IMessageHandler<PacketSideConfig, IMessage> {
@@ -51,8 +56,14 @@ public class PacketSideConfig implements IMessage {
 			world.addScheduledTask(() -> {
 				if (world.isBlockLoaded(message.pos)) {
 					TileEntity te = world.getTileEntity(message.pos);
-					if (te instanceof ISideConfigTE sidedConfig) {
-						sidedConfig.getSidedConfigComponent().rotateSlot(message.side, message.handlerIndex, message.handlerSlot);
+					if (!message.fluid) {
+						if (te instanceof ISideConfigTE sidedConfig) {
+							sidedConfig.getSidedConfigComponent().rotateSlot(message.side, message.handlerIndex, message.handlerSlot);
+						}
+					} else {
+						if (te instanceof ISidedConfigFluidTE sidedConfig) {
+							sidedConfig.getFluidConfigComponent().rotateSlot(message.side, message.handlerIndex, message.handlerSlot);
+						}
 					}
 				}
 			});

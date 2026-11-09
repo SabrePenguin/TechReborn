@@ -119,4 +119,8 @@ public class MultiblockCheckerComponent implements MachineComponent {
 	public BooleanSyncValue getValid() {
 		return new BooleanSyncValue(() -> isValid.get(), val -> isValid.set(val));
 	}
+
+	public MultiblockStructure getCurrentStructure() {
+		return structure;
+	}
 }

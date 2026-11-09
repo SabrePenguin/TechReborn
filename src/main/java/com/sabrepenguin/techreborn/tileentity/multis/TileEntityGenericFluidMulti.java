@@ -2,9 +2,11 @@ package com.sabrepenguin.techreborn.tileentity.multis;
 
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.blocks.machines.HorizontalMachineBlock;
-import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
+import com.sabrepenguin.techreborn.capability.fluid.ISidedConfigFluidTE;
+import com.sabrepenguin.techreborn.capability.fluid.SideConfigFluidHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigStackHandler;
 import com.sabrepenguin.techreborn.recipe.registries.ITRFluidRegistry;
+import com.sabrepenguin.techreborn.tileentity.IOFluidManager;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
 import com.sabrepenguin.techreborn.tileentity.components.FluidIOComponent;
@@ -26,6 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,15 +37,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 //TODO: See about merging with GenericMulti somehow
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class TileEntityGenericFluidMulti extends TileEntity implements ITickable, ISideConfigTE {
+public class TileEntityGenericFluidMulti extends TileEntity implements ITickable, ISidedConfigFluidTE {
 
 	protected final ItemIOComponent ioComponent;
 	protected final FluidIOComponent fluidIoComponent;
 	protected final EnergyComponent energyComponent;
 	protected final UpgradeComponent upgradeComponent;
 	protected final FluidRecipeComponent recipeComponent;
-	protected final SidedConfigComponent configComponent;
 	protected final SidedConfigComponent<IOManager, SideConfigStackHandler> configComponent;
+	protected final SidedConfigComponent<IOFluidManager, SideConfigFluidHandler> fluidConfigComponent;
 	protected final MultiblockCheckerComponent multiblockComponent;
 
 	public TileEntityGenericFluidMulti(int inputSize, int outputSize, int inputTanks, int inputCapacity, int outputTanks,
@@ -57,15 +60,15 @@ public class TileEntityGenericFluidMulti extends TileEntity implements ITickable
 		fluidIoComponent = new FluidIOComponent.FluidIOComponentBuilder(this)
 				.input(inputTanks, inputCapacity)
 				.output(outputTanks, outputCapacity)
-				.handlers(ioComponent.getFluidItemInputs(), ioComponent.getFluidItemOutputs())
+				.handlers(ioComponent.getFluidItemInputs(), ioComponent.getInternalFluidOutputs())
 				.build();
 		energyComponent = new EnergyComponent(feCapacity, maxInput, maxInput, ioComponent.getBatterySlot()).setUnextractable();
 		recipeComponent = new FluidRecipeComponent(registry, ioComponent.getInputs(), ioComponent.getInternalOutputs(),
 				fluidIoComponent.getInput(), fluidIoComponent.getOutput(),
 				energyComponent.getEnergyStorage(), this::updateState);
 		upgradeComponent = new UpgradeComponent(feCapacity, energyComponent, recipeComponent);
-		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
 		configComponent = new SidedConfigComponent<>(ioComponent.getManager(), this::updateTE);
+		fluidConfigComponent = new SidedConfigComponent<>(fluidIoComponent.getIoFluidManager(), this::updateTE);
 		multiblockComponent = new MultiblockCheckerComponent(this, structure, async);
 	}
 
@@ -92,6 +95,7 @@ public class TileEntityGenericFluidMulti extends TileEntity implements ITickable
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY
 				|| capability == CapabilityEnergy.ENERGY
+				|| capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY
 				|| super.hasCapability(capability, facing);
 	}
 
@@ -104,6 +108,11 @@ public class TileEntityGenericFluidMulti extends TileEntity implements ITickable
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(ioComponent.getManager().getSide(facing));
 		} else if (capability == CapabilityEnergy.ENERGY) {
 			return CapabilityEnergy.ENERGY.cast(energyComponent.getEnergyStorage());
+		} else if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+			if (facing == null) {
+				return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(fluidIoComponent.getFluidHandler());
+			}
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(fluidIoComponent.getIoFluidManager().getSide(facing));
 		}
 		return super.getCapability(capability, facing);
 	}
@@ -171,6 +180,11 @@ public class TileEntityGenericFluidMulti extends TileEntity implements ITickable
 	@Override
 	public SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent() {
 		return configComponent;
+	}
+
+	@Override
+	public SidedConfigComponent<IOFluidManager, SideConfigFluidHandler> getFluidConfigComponent() {
+		return fluidConfigComponent;
 	}
 
 	@Override

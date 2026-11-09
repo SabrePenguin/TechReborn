@@ -13,7 +13,6 @@ import com.cleanroommc.modularui.widgets.slot.ItemSlot;
 import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.TechReborn;
-import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
@@ -106,7 +105,7 @@ public class TileEntityDistillationTower extends TileEntityGenericMulti implemen
 								.slotGroup("power")
 								.filter(InventoryUtils.IS_POWER_ITEM)));
 
-		TRGuis.createMultiblockCover(panel, world.getBlockState(pos).getValue(BlockHorizontalMachine.FACING), data, multiblockComponent::isValid);
+		TRGuis.createMultiblockCover(panel, data, multiblockComponent::isValid, multiblockComponent.getCurrentStructure());
 		panel.child(TRGuis.createUpdateTab(upgradeComponent.getUpgrades(), "upgrades", upgradeComponent::onUpgradeChange).leftRelOffset(1f, 1));
 		return panel;
 	}
