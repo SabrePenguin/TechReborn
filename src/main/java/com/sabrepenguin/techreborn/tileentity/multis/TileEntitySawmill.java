@@ -53,13 +53,13 @@ public class TileEntitySawmill extends TileEntityGenericFluidMulti implements IG
         Supplier<EnumFacing> getFacing = () -> getWorld().getBlockState(getPos()).getValue(BlockHorizontal.FACING);
         TRGuis.setupConfigPanel(panel, syncManager, getPos(), ioComponent.getManager(), getFacing,
                 Arrays.asList(
-                new SlotPosition(SlotAction.INPUT, 81, 35, 0, 0),
-                new SlotPosition(SlotAction.OUTPUT, 126, 17, 1, 1),
-                new SlotPosition(SlotAction.OUTPUT, 126, 35, 1, 2),
-                new SlotPosition(SlotAction.OUTPUT, 126, 53, 1, 3),
-                new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 4),
-                new SlotPosition(SlotAction.INPUT, 30, 24, 3, 5),
-                new SlotPosition(SlotAction.OUTPUT, 30, 46, 4, 6)),
+                    new SlotPosition(SlotAction.INPUT, 81, 35, 0, 0),
+                    new SlotPosition(SlotAction.OUTPUT, 126, 17, 1, 1),
+                    new SlotPosition(SlotAction.OUTPUT, 126, 35, 1, 2),
+                    new SlotPosition(SlotAction.OUTPUT, 126, 53, 1, 3),
+                    new SlotPosition(SlotAction.BIDIRECTIONAL, 7, 59, 2, 4),
+                    new SlotPosition(SlotAction.INPUT, 30, 24, 3, 5),
+                    new SlotPosition(SlotAction.OUTPUT, 30, 46, 4, 6)),
                 this.fluidIoComponent.getIoFluidManager(),
                 Arrays.asList(
                         new SlotPosition(SlotAction.INPUT, 54, 18, 0, 0, 17, 51)
@@ -76,7 +76,7 @@ public class TileEntitySawmill extends TileEntityGenericFluidMulti implements IG
                         .pos(103, 34)
                         .texture(GuiTextures.PROGRESS_ARROW, 20)
                         .value(recipeComponent.getProgress()))
-                .child(TRGuis.createJeiButton(TRRecipePlugin.DISTILLATION_TOWER_UID)
+                .child(TRGuis.createJeiButton(TRRecipePlugin.SAWMILL_UID)
                         .pos(103, 36).size(20, 15))
                 .child(PowerDisplayWidget.fromEnergyStorage(syncManager, energyComponent.getEnergyStorage())
                         .pos(9, 6));

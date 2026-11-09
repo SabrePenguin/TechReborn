@@ -1,6 +1,8 @@
 package com.sabrepenguin.techreborn.gui;
 
+import com.cleanroommc.modularui.drawable.Rectangle;
 import com.cleanroommc.modularui.drawable.UITexture;
+import com.cleanroommc.modularui.utils.Color;
 import com.sabrepenguin.techreborn.Tags;
 
 public class TRGuiTextures {
@@ -39,4 +41,11 @@ public class TRGuiTextures {
 			.imageSize(16, 24)
 			.canApplyTheme()
 			.build();
+
+	public static Rectangle INPUT_BUTTON = new Rectangle().color(Color.rgb(135, 135, 255));
+	public static Rectangle INPUT_BUTTON_OUTLINE = new Rectangle().color(Color.rgb(0, 0, 255)).hollow(2);
+	public static Rectangle OUTPUT_BUTTON = new Rectangle().color(Color.rgb(255, 190, 123));
+	public static Rectangle OUTPUT_BUTTON_OUTLINE = new Rectangle().color(Color.rgb(255, 172, 86)).hollow(2);
+	public static Rectangle BIDIRECTIONAL_BUTTON = new Rectangle().color(Color.rgb(255, 57, 57));
+	public static Rectangle BIDIRECTIONAL_BUTTON_OUTLINE = new Rectangle().color(Color.rgb(255, 0, 0)).hollow(2);
 }

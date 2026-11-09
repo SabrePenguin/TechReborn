@@ -5,6 +5,7 @@ import com.cleanroommc.modularui.api.drawable.IDrawable;
 import com.cleanroommc.modularui.api.drawable.IKey;
 import com.cleanroommc.modularui.drawable.GuiDraw;
 import com.cleanroommc.modularui.drawable.GuiTextures;
+import com.cleanroommc.modularui.drawable.Rectangle;
 import com.cleanroommc.modularui.factory.PosGuiData;
 import com.cleanroommc.modularui.integration.jei.ModularUIJeiPlugin;
 import com.cleanroommc.modularui.screen.ModularPanel;
@@ -173,10 +174,15 @@ public class TRGuis {
 			final int slot = position.slot();
 			final int handlerIndex = position.handlerSlot();
 			final SlotAction action = position.action();
+			Rectangle texture = action == SlotAction.INPUT ? TRGuiTextures.INPUT_BUTTON :
+					action == SlotAction.OUTPUT ? TRGuiTextures.OUTPUT_BUTTON : TRGuiTextures.BIDIRECTIONAL_BUTTON;
+			Rectangle border = action == SlotAction.INPUT ? TRGuiTextures.INPUT_BUTTON_OUTLINE :
+					action == SlotAction.OUTPUT ? TRGuiTextures.OUTPUT_BUTTON_OUTLINE : TRGuiTextures.BIDIRECTIONAL_BUTTON_OUTLINE;
 			IPanelHandler panelHandler = syncManager.syncedPanel("slot_config_" + position.slot(), true,
 					(syncManager1, syncHandler1) ->
 							createSlotConfigPanel(syncManager1, syncHandler1, pos, manager, handlerIndex, slot, getFacing, action));
 			panel.child(new TRButtonWidget<>()
+					.overlay(texture, border)
 					.pos(position.x() - ((position.width() - 18) / 2), position.y() - ((position.height() - 18) / 2))
 					.size(position.width(), position.height())
 					.onMousePressed(mouseButton -> {
@@ -189,11 +195,16 @@ public class TRGuis {
 				final int slot = position.slot();
 				final int handlerIndex = position.handlerSlot();
 				final SlotAction action = position.action();
+				Rectangle texture = action == SlotAction.INPUT ? TRGuiTextures.INPUT_BUTTON :
+						action == SlotAction.OUTPUT ? TRGuiTextures.OUTPUT_BUTTON : TRGuiTextures.BIDIRECTIONAL_BUTTON;
+				Rectangle border = action == SlotAction.INPUT ? TRGuiTextures.INPUT_BUTTON_OUTLINE :
+						action == SlotAction.OUTPUT ? TRGuiTextures.OUTPUT_BUTTON_OUTLINE : TRGuiTextures.BIDIRECTIONAL_BUTTON_OUTLINE;
 				IPanelHandler panelHandler = syncManager.syncedPanel("fluid_config_" + position.slot(), true,
 						(syncManager1, syncHandler1) ->
 								createSlotConfigPanel(syncManager1, syncHandler1, pos, fluidManager, handlerIndex, slot, getFacing, action));
 				panel.child(new TRButtonWidget<>()
-						.pos(position.x() - ((position.width() - 18) / 2), position.y() - ((position.height() - 18) / 2)) //TODO: Fix offset
+						.pos(position.x(), position.y())
+						.overlay(texture, border)
 						.size(position.width(), position.height())
 						.onMousePressed(mouseButton -> {
 							panelHandler.openPanel();
