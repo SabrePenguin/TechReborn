@@ -212,14 +212,18 @@ public class FluidRecipeComponent implements MachineComponent, RecipeComponent {
 
 	protected void processFluid() {
 		processItem();
-		if (fluidOutputs == null || !(cachedRecipe instanceof ITRFluidRecipe fluidRecipe)) {
+		if (!(cachedRecipe instanceof ITRFluidRecipe fluidRecipe)) {
 			return;
 		}
 		List<FluidStack> cachedOutput = fluidRecipe.getFluidOutputs();
-		IFluidTankProperties[] tanks = fluidOutputs.getTankProperties();
-		for(int i = 0; i < cachedOutput.size(); i++) {
-			FluidStack copy = cachedOutput.get(i).copy();
-			fluidOutputs.fill(copy, true); //TODO: Check this
+		if (fluidOutputs != null) {
+            for (FluidStack fluidStack : cachedOutput) {
+                FluidStack copy = fluidStack.copy();
+                fluidOutputs.fill(copy, true); //TODO: Check this
+            }
+		}
+		if (fluidInputs != null) {
+			fluidRecipe.apply(fluidInputs);
 		}
 	}
 
