@@ -5,6 +5,6 @@ import com.sabrepenguin.techreborn.tileentity.components.SidedConfigComponent;
 
 public interface ISideConfigTE {
 	void updateTE();
-	SidedConfigComponent getSidedConfigComponent();
+	SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent();
 	IOManager getManager();
 }

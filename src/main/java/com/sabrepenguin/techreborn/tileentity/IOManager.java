@@ -3,14 +3,16 @@ package com.sabrepenguin.techreborn.tileentity;
 import com.sabrepenguin.techreborn.capability.stackhandler.SideConfig;
 import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
+import com.sabrepenguin.techreborn.tileentity.manager.IManager;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class IOManager {
+public class IOManager implements IManager<SideConfigStackHandler> {
 	private final SideConfigStackHandler[] sides;
 
 	private final boolean[] autoInput;
@@ -18,7 +20,8 @@ public class IOManager {
 
 	private int cycle;
 
-	public IOManager(SideConfig... configs) {
+	@SafeVarargs
+    public IOManager(SideConfig<IItemHandlerModifiable>... configs) {
 		sides = new SideConfigStackHandler[6];
 		for (int i = 0; i < 6; i++) {
 			sides[i] = new SideConfigStackHandler(configs);
@@ -69,6 +72,7 @@ public class IOManager {
 		return changed;
 	}
 
+	@Override
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagList list = new NBTTagList();
@@ -104,6 +108,7 @@ public class IOManager {
 		return new NBTTagIntArray(storedData);
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		NBTTagList list = compound.getTagList("Slots", 10);
 		for(int i = 0; i < list.tagCount(); i++) {

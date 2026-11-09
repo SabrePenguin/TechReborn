@@ -1,5 +1,6 @@
 package com.sabrepenguin.techreborn.capability.stackhandler;
 
+import com.sabrepenguin.techreborn.capability.ISlotChange;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagByte;
@@ -19,12 +20,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class SideConfigStackHandler extends CombinedInvWrapper {
+public class SideConfigStackHandler extends CombinedInvWrapper implements ISlotChange {
 
 	private final SlotAction[] handlerDirection;
 	private final SlotAction[] slotDirection;
 
-	public SideConfigStackHandler(SideConfig... configs) {
+	@SafeVarargs
+    public SideConfigStackHandler(SideConfig<IItemHandlerModifiable>... configs) {
 		super(getHandlers(configs));
 		this.handlerDirection = new SlotAction[configs.length];
 		for(int i = 0; i < configs.length; i++) {
@@ -38,7 +40,8 @@ public class SideConfigStackHandler extends CombinedInvWrapper {
 		}
 	}
 
-	private static IItemHandlerModifiable[] getHandlers(SideConfig... configs) {
+	@SafeVarargs
+    private static IItemHandlerModifiable[] getHandlers(SideConfig<IItemHandlerModifiable>... configs) {
 		IItemHandlerModifiable[] handlers = new IItemHandlerModifiable[configs.length];
 		for (int i = 0; i < configs.length; i++) {
 			handlers[i] = configs[i].handler();

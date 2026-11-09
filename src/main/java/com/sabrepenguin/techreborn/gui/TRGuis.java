@@ -23,6 +23,7 @@ import com.sabrepenguin.techreborn.networking.sideconfig.PacketSideConfig;
 import com.sabrepenguin.techreborn.networking.TechRebornPacketHandler;
 import com.sabrepenguin.techreborn.proxy.ClientEventHandler;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
+import com.sabrepenguin.techreborn.tileentity.manager.IManager;
 import com.sabrepenguin.techreborn.tileentity.multis.MultiblockStructure;
 import com.sabrepenguin.techreborn.util.InventoryUtils;
 import net.minecraft.block.state.IBlockState;
@@ -111,6 +112,7 @@ public class TRGuis {
 	public static void setupConfigPanel(
 			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, IOManager ioManager,
 			Supplier<EnumFacing> facingSupplier, SlotPosition... slotPositions) {
+			ModularPanel panel, PanelSyncManager syncManager, BlockPos pos, IManager<? extends ISlotChange> ioManager,
 		IPanelHandler panelHandler = syncManager.syncedPanel("config", true,
 				(manager, handler) ->
 						TRGuis.createConfigPanel(manager, handler, pos, panel.getArea(), ioManager, facingSupplier, slotPositions));
@@ -119,7 +121,7 @@ public class TRGuis {
 
 	public static ModularPanel createConfigPanel(
 			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos, Area area,
-			IOManager manager,
+			IManager<? extends ISlotChange> manager,
 			Supplier<EnumFacing> getFacing,
 			SlotPosition... slotPositions) {
 		ModularPanel panel = new ModularPanel("config_panel") {
@@ -166,7 +168,7 @@ public class TRGuis {
 
 	private static void addEnumFacingButtons(
 			BlockPos pos, ModularPanel panel, int relativeIndex,
-			IOManager manager,
+			IManager<? extends ISlotChange> manager,
 			int handlerIndex,
 			int slot,
 			Supplier<EnumFacing> getFacing,
@@ -203,7 +205,7 @@ public class TRGuis {
 
 	private static ModularPanel createSlotConfigPanel(
 			PanelSyncManager syncManager, IPanelHandler syncHandler, BlockPos pos,
-			IOManager manager,
+			IManager<? extends ISlotChange> manager,
 			int handlerIndex,
 			int slot,
 			Supplier<EnumFacing> getFacing, SlotAction action) {
@@ -233,7 +235,7 @@ public class TRGuis {
 		return panel;
 	}
 
-	private static ButtonWidget<?> createButton(BlockPos pos, IOManager manager, int index, boolean input, int bottom) {
+	private static ButtonWidget<?> createButton(BlockPos pos, IManager<?> manager, int index, boolean input, int bottom) {
 		return new ButtonWidget<>()
 				.left(5)
 				.bottom(bottom)

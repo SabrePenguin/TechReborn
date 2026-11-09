@@ -51,13 +51,13 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, IOnS
 
 	protected final ItemIOComponent ioComponent;
 	protected final FurnaceRecipeComponent recipeComponent;
-	protected final SidedConfigComponent configComponent;
+	protected final SidedConfigComponent<IOManager, SideConfigStackHandler> configComponent;
 
 	public TileEntityIronFurnace() {
 		ioComponent = new ItemIOComponent(this, 2, 1, false, this::refreshSlot)
 				.addInputFilter(ObjIntPredicate.fuel(1));
 		recipeComponent = new FurnaceRecipeComponent(RegistryHandler.instance().getFurnaceRegistry(), ioComponent.getInputs(), ioComponent.getInternalOutputs(), 1, this::updateState, 160);
-		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
+		configComponent = new SidedConfigComponent<>(ioComponent.getManager(), this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -84,7 +84,7 @@ public class TileEntityIronFurnace extends TileEntity implements ITickable, IOnS
     }
 
 	@Override
-	public SidedConfigComponent getSidedConfigComponent() {
+	public SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent() {
 		return configComponent;
 	}
 

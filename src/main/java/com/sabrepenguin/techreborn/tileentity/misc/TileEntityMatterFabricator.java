@@ -13,6 +13,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
+import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.*;
@@ -49,7 +50,7 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 	protected final ItemIOComponent ioComponent;
 	protected final EnergyComponent energyComponent;
 	protected final MatterRecipeComponent recipeComponent;
-	protected final SidedConfigComponent configComponent;
+	protected final SidedConfigComponent<IOManager, SideConfigStackHandler> configComponent;
 
 	public TileEntityMatterFabricator() {
 		ioComponent = new ItemIOComponent(this, 6, 5, true, this::refreshSlot);
@@ -58,7 +59,7 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 				.setUnextractable();
 		recipeComponent = new MatterRecipeComponent(ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(),
 				this::updateState, TechRebornConfig.machineConfig.matterFabricator.fabricationRate);
-		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
+		configComponent = new SidedConfigComponent<>(ioComponent.getManager(), this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -151,7 +152,7 @@ public class TileEntityMatterFabricator extends TileEntity implements IGuiHolder
 	}
 
 	@Override
-	public SidedConfigComponent getSidedConfigComponent() {
+	public SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent() {
 		return configComponent;
 	}
 

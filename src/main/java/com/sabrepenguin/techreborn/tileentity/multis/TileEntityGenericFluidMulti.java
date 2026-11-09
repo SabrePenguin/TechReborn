@@ -3,6 +3,7 @@ package com.sabrepenguin.techreborn.tileentity.multis;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.blocks.machines.HorizontalMachineBlock;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
+import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigStackHandler;
 import com.sabrepenguin.techreborn.recipe.registries.ITRFluidRegistry;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
@@ -41,6 +42,7 @@ public class TileEntityGenericFluidMulti extends TileEntity implements ITickable
 	protected final UpgradeComponent upgradeComponent;
 	protected final FluidRecipeComponent recipeComponent;
 	protected final SidedConfigComponent configComponent;
+	protected final SidedConfigComponent<IOManager, SideConfigStackHandler> configComponent;
 	protected final MultiblockCheckerComponent multiblockComponent;
 
 	public TileEntityGenericFluidMulti(int inputSize, int outputSize, int inputTanks, int inputCapacity, int outputTanks,
@@ -63,6 +65,7 @@ public class TileEntityGenericFluidMulti extends TileEntity implements ITickable
 				energyComponent.getEnergyStorage(), this::updateState);
 		upgradeComponent = new UpgradeComponent(feCapacity, energyComponent, recipeComponent);
 		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
+		configComponent = new SidedConfigComponent<>(ioComponent.getManager(), this::updateTE);
 		multiblockComponent = new MultiblockCheckerComponent(this, structure, async);
 	}
 
@@ -166,7 +169,7 @@ public class TileEntityGenericFluidMulti extends TileEntity implements ITickable
 	}
 
 	@Override
-	public SidedConfigComponent getSidedConfigComponent() {
+	public SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent() {
 		return configComponent;
 	}
 

@@ -14,6 +14,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
+import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigStackHandler;
 import com.sabrepenguin.techreborn.gui.FurnaceFuelWidget;
 import com.sabrepenguin.techreborn.gui.TRGuis;
 import com.sabrepenguin.techreborn.recipe.RegistryHandler;
@@ -41,13 +42,13 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 
 	protected final ItemIOComponent ioComponent;
 	protected final FuelRecipeComponent recipeComponent;
-	protected final SidedConfigComponent configComponent;
+	protected final SidedConfigComponent<IOManager, SideConfigStackHandler> configComponent;
 
 	public TileEntityIronAlloyFurnace() {
 		ioComponent = new ItemIOComponent(this, 3, 1, false, this::refreshSlot)
 				.addInputFilter(ObjIntPredicate.fuel(2));
 		recipeComponent = new FuelRecipeComponent(RegistryHandler.instance().getAlloyRegistry(), ioComponent.getInputs(), ioComponent.getInternalOutputs(), 2, this::updateState);
-		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
+		configComponent = new SidedConfigComponent<>(ioComponent.getManager(), this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -137,7 +138,7 @@ public class TileEntityIronAlloyFurnace extends TileEntity implements ITickable,
 	}
 
 	@Override
-	public SidedConfigComponent getSidedConfigComponent() {
+	public SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent() {
 		return configComponent;
 	}
 

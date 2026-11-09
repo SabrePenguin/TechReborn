@@ -12,6 +12,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
+import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.PowerDisplayWidget;
@@ -48,14 +49,14 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 	protected final ItemIOComponent ioComponent;
 	protected final EnergyComponent energyComponent;
 	protected final ChargingComponent chargingComponent;
-	protected final SidedConfigComponent configComponent;
+	protected final SidedConfigComponent<IOManager, SideConfigStackHandler> configComponent;
 
 	public TileEntityChargeOMat() {
 		ioComponent = new ItemIOComponent.ItemIOComponentBuilder(this).bidirectionalSize(6).build();
 		energyComponent = new EnergyComponent(TechRebornConfig.machineConfig.chargeOMat.maxEnergy, TechRebornConfig.machineConfig.chargeOMat.maxInput,
 				TechRebornConfig.machineConfig.chargeOMat.maxInput).setUnextractable();
 		chargingComponent = new ChargingComponent(ioComponent.getInputs(), energyComponent.getEnergyStorage(), this::updateState);
-		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
+		configComponent = new SidedConfigComponent<>(ioComponent.getManager(), this::updateTE);
 	}
 
 	private void updateState(boolean state) {
@@ -151,7 +152,7 @@ public class TileEntityChargeOMat extends TileEntity implements ISideConfigTE, I
 	}
 
 	@Override
-	public SidedConfigComponent getSidedConfigComponent() {
+	public SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent() {
 		return configComponent;
 	}
 

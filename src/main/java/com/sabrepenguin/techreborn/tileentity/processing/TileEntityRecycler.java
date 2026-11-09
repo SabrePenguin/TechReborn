@@ -14,6 +14,7 @@ import com.cleanroommc.modularui.widgets.slot.ModularSlot;
 import com.cleanroommc.modularui.widgets.slot.SlotGroup;
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
+import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigStackHandler;
 import com.sabrepenguin.techreborn.capability.stackhandler.SlotAction;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.gui.LargeItemSlot;
@@ -58,7 +59,7 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 	protected final EnergyComponent energyComponent;
 	protected final UpgradeComponent upgradeComponent;
 	protected final RandomRecipeComponent recipeComponent;
-	protected final SidedConfigComponent configComponent;
+	protected final SidedConfigComponent<IOManager, SideConfigStackHandler> configComponent;
 
 	@SuppressWarnings("ConstantConditions")
 	protected static ItemStack recipeOutput = new ItemStack(TRItems.part, 1, Part.PartMeta.scrap.metadata());
@@ -70,7 +71,7 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 		this.recipeComponent = new RandomRecipeComponent(ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(),
 				this::updateState, recipeOutput, TechRebornConfig.machineConfig.recycler.scrapChance); //TODO
 		this.upgradeComponent = new UpgradeComponent(TechRebornConfig.machineConfig.recycler.maxEnergy, energyComponent, recipeComponent);
-		this.configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
+		this.configComponent = new SidedConfigComponent<>(ioComponent.getManager(), this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -166,7 +167,7 @@ public class TileEntityRecycler extends TileEntity implements IGuiHolder<PosGuiD
 	}
 
 	@Override
-	public SidedConfigComponent getSidedConfigComponent() {
+	public SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent() {
 		return configComponent;
 	}
 

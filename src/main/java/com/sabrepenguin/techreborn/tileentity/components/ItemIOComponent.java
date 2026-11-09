@@ -92,7 +92,7 @@ public class ItemIOComponent implements MachineComponent {
 			_internalFluidItemOutputs = null;
 			fluidItemOutputs = null;
 		}
-		List<SideConfig> configs = new ArrayList<>();
+		List<SideConfig<IItemHandlerModifiable>> configs = new ArrayList<>();
 		if (inputSize != 0) {
 			configs.add(SideConfig.input(inputs));
 		} else if (bidirectionalSize != 0) {
@@ -145,7 +145,7 @@ public class ItemIOComponent implements MachineComponent {
 			output = null;
 		}
 		battery = energySlot ? new RestrictedItemStackHandler(inventory, inputSize + outputSize): null;
-		List<SideConfig> configs = new ArrayList<>();
+		List<SideConfig<IItemHandlerModifiable>> configs = new ArrayList<>();
 		configs.add(SideConfig.input(inputs));
 		if (outputSize != 0) {
 			configs.add(SideConfig.output(output));

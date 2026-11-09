@@ -2,6 +2,7 @@ package com.sabrepenguin.techreborn.tileentity.processing;
 
 import com.sabrepenguin.techreborn.blocks.machines.BlockHorizontalMachine;
 import com.sabrepenguin.techreborn.capability.stackhandler.ISideConfigTE;
+import com.sabrepenguin.techreborn.capability.stackhandler.SideConfigStackHandler;
 import com.sabrepenguin.techreborn.recipe.registries.ITRRegistry;
 import com.sabrepenguin.techreborn.tileentity.IOManager;
 import com.sabrepenguin.techreborn.tileentity.components.EnergyComponent;
@@ -35,14 +36,14 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 	protected final EnergyComponent energyComponent;
 	protected final UpgradeComponent upgradeComponent;
 	protected final StandardRecipeComponent recipeComponent;
-	protected final SidedConfigComponent configComponent;
+	protected final SidedConfigComponent<IOManager, SideConfigStackHandler> configComponent;
 
 	public TileEntityGeneric(int inputSize, int outputSize, int feCapacity, int maxInput, ITRRegistry registry) {
 		ioComponent = new ItemIOComponent(this, inputSize, outputSize, true, this::refreshSlot);
 		energyComponent = new EnergyComponent(feCapacity, maxInput, maxInput, ioComponent.getBatterySlot()).setUnextractable();
 		recipeComponent = new StandardRecipeComponent(registry, ioComponent.getInputs(), ioComponent.getInternalOutputs(), energyComponent.getEnergyStorage(), this::updateState);
 		upgradeComponent = new UpgradeComponent(feCapacity, energyComponent, recipeComponent);
-		configComponent = new SidedConfigComponent(ioComponent, this::updateTE);
+		configComponent = new SidedConfigComponent<>(ioComponent.getManager(), this::updateTE);
 	}
 
 	protected void refreshSlot(int slot) {
@@ -126,7 +127,7 @@ public class TileEntityGeneric extends TileEntity implements ITickable, ISideCon
 	}
 
 	@Override
-	public SidedConfigComponent getSidedConfigComponent() {
+	public SidedConfigComponent<IOManager, SideConfigStackHandler> getSidedConfigComponent() {
 		return configComponent;
 	}
 
