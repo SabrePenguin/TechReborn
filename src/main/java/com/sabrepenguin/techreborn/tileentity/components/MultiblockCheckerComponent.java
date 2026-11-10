@@ -4,6 +4,7 @@ import com.cleanroommc.modularui.value.sync.BooleanSyncValue;
 import com.sabrepenguin.techreborn.config.TechRebornConfig;
 import com.sabrepenguin.techreborn.tileentity.multis.MultiblockStructure;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -39,6 +40,17 @@ public class MultiblockCheckerComponent implements MachineComponent {
 		this.async = async;
 		isValid = new AtomicBoolean(false);
 		this.checkedPos = new BlockPos.MutableBlockPos();
+	}
+
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		isValid.set(compound.getBoolean("MValid"));
+	}
+
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		compound.setBoolean("MValid", isValid.get());
+		return compound;
 	}
 
 	public void setStructureRotation(EnumFacing horizontalFacing) {

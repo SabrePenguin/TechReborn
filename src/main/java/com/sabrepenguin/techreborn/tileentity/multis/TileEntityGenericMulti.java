@@ -95,6 +95,7 @@ public class TileEntityGenericMulti extends TileEntity implements ITickable, ISi
 		energyComponent.readFromNBT(compound);
 		upgradeComponent.readFromNBT(compound);
 		recipeComponent.readFromNBT(compound);
+		multiblockComponent.readFromNBT(compound);
 		super.readFromNBT(compound);
 	}
 
@@ -104,6 +105,7 @@ public class TileEntityGenericMulti extends TileEntity implements ITickable, ISi
 		energyComponent.writeToNBT(compound);
 		upgradeComponent.writeToNBT(compound);
 		recipeComponent.writeToNBT(compound);
+		multiblockComponent.writeToNBT(compound);
 		return super.writeToNBT(compound);
 	}
 
