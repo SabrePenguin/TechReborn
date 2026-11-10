@@ -4,6 +4,7 @@ import com.gtnewhorizons.horizonqa.api.GameTestAssertException;
 import com.gtnewhorizons.horizonqa.api.GameTestHelper;
 import com.sabrepenguin.techreborn.capability.energy.TEEnergyStorage;
 import com.sabrepenguin.techreborn.items.TRItems;
+import com.sabrepenguin.techreborn.tileentity.components.UpgradeComponent;
 import com.sabrepenguin.techreborn.tileentity.components.specialized.LockableRecipeComponent;
 import com.sabrepenguin.techreborn.tileentity.processing.TileEntityAutoBalance;
 import net.minecraft.item.ItemStack;
@@ -14,11 +15,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 
 public class TechRebornHelper {
 
@@ -34,6 +39,48 @@ public class TechRebornHelper {
 		TileEntity entity = helper.assertTileEntityPresent(pos);
 		TEEnergyStorage storage = getTREnergyStorage(entity, pos);
 		storage.internalReceive(power, false);
+	}
+
+	public void insertUpgrade(BlockPos pos, int slot, ItemStack stack) {
+		TileEntity entity = helper.assertTileEntityPresent(pos);
+		try {
+			Class<?> clazz = entity.getClass();
+			Field field = getField(clazz, UpgradeComponent.class);
+			Object component = field.get(entity);
+			if (component instanceof UpgradeComponent upgrade) {
+				upgrade.getUpgrades().insertItem(slot, stack, false);
+			}
+		} catch (NoSuchFieldException e) {
+            throw new GameTestAssertException("TileEntity has no UpgradeComponent", pos);
+        } catch (IllegalAccessException e) {
+            throw new GameTestAssertException("Could not access UpgradeComponent", pos);
+        }
+    }
+
+	private static Field getField(Class<?> target, Class<?> type) throws NoSuchFieldException {
+		Class<?> current = target;
+		while (current != null && TileEntity.class.isAssignableFrom(current)) {
+			for (Field field: current.getDeclaredFields()) {
+				if (type.isAssignableFrom(field.getType())) {
+					field.setAccessible(true);
+					return field;
+				}
+			}
+			if (current.equals(TileEntity.class))
+				break;
+			current = current.getSuperclass();
+		}
+		throw new NoSuchFieldException();
+	}
+
+	public int insertFluid(BlockPos pos, FluidStack fluid) {
+		TileEntity entity = helper.assertTileEntityPresent(pos);
+		if (!entity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null))
+			throw new GameTestAssertException("Fluid Handler does not allow null", pos);
+		IFluidHandler handler = entity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+		if (handler == null)
+			throw new GameTestAssertException("Fluid Handler reported null was allowed but returned null", pos);
+		return handler.fill(fluid, true);
 	}
 
 	public void lockMachine(BlockPos pos) {

@@ -8,6 +8,7 @@ import com.sabrepenguin.techreborn.blocks.BlockCable;
 import com.sabrepenguin.techreborn.blocks.TRBlocks;
 import com.sabrepenguin.techreborn.blocks.fluids.TRFluids;
 import com.sabrepenguin.techreborn.blocks.meta.OreBlock;
+import com.sabrepenguin.techreborn.items.ItemUpgrade;
 import com.sabrepenguin.techreborn.items.TRItems;
 import com.sabrepenguin.techreborn.items.materials.Dust;
 import com.sabrepenguin.techreborn.items.materials.Ingot;
@@ -17,6 +18,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 
 @GameTestHolder(Tags.MODID)
 @SuppressWarnings({"ConstantConditions", "unused"})
@@ -439,6 +442,69 @@ public class BlockTests {
 					int power = trHelper.getPower(target);
 					if (power != 0)
 						helper.fail(powerFail(0, power));
+				})
+				.thenSucceed();
+	}
+
+	@GameTest(template = "distillationTower", timeoutTicks = ((800*20)+40)/100)
+	public static void distillationTowerTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(1, 0, 0);
+		ItemStack oil = TRItems.cell.getCellWithFluid(TRFluids.OIL);
+		oil.setCount(16);
+		ItemStack cells = new ItemStack(TRItems.cell, 33);
+
+		ItemStack target1 = TRItems.cell.getCellWithFluid(TRFluids.SULFURIC_ACID);
+		target1.setCount(16);
+		ItemStack target2 = TRItems.cell.getCellWithFluid(TRFluids.DIESEL);
+		target2.setCount(16);
+		ItemStack target3 = TRItems.cell.getCellWithFluid(TRFluids.METHANE);
+		target3.setCount(16);
+		ItemStack target4 = TRItems.cell.getCellWithFluid(TRFluids.GLYCERYL);
+
+		helper.assertBlockPresent(TRBlocks.distillation_tower.getDefaultState(), target);
+		helper.insertItem(target, oil, 0);
+		helper.insertItem(target, cells, 1);
+		trHelper.insertUpgrade(target, 0, new ItemStack(TRItems.upgrades, 1, ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()));
+		trHelper.insertUpgrade(target, 1, new ItemStack(TRItems.upgrades, 1, ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()));
+		trHelper.insertUpgrade(target, 2, new ItemStack(TRItems.upgrades, 1, ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()));
+		trHelper.insertUpgrade(target, 3, new ItemStack(TRItems.upgrades, 1, ItemUpgrade.UpgradeEnum.OVERCLOCK.metadata()));
+		helper.onEachTick(() -> trHelper.insertPower(target, 6400));
+		helper.startSequence()
+				.thenIdle(((800*20)+40)/100)
+				.thenExecute(() -> {
+					if (!trHelper.itemEquals(target, target1, 2) ||
+							!trHelper.itemEquals(target, target2, 3) ||
+							!trHelper.itemEquals(target, target3, 4) ||
+							!trHelper.itemEquals(target, target4, 5)
+					)
+						helper.fail("Did not create outputs");
+				})
+				.thenSucceed();
+	}
+
+	@GameTest(template = "industrialSawmill", timeoutTicks = 140)
+	public static void industrialSawmillTest(GameTestHelper helper) {
+		TechRebornHelper trHelper = new TechRebornHelper(helper);
+		BlockPos target = new BlockPos(1, 1, 0);
+		ItemStack wood = new ItemStack(Blocks.LOG, 1, 0);
+		ItemStack target1 = new ItemStack(Blocks.PLANKS, 4, 0);
+		ItemStack target2 = new ItemStack(TRItems.dust, 3, Dust.MetaDust.saw_dust.metadata());
+		ItemStack target3 = new ItemStack(Items.PAPER, 1);
+
+		helper.assertBlockPresent(TRBlocks.industrial_sawmill.getDefaultState(), target);
+		helper.insertItem(target, wood, 0);
+		helper.onEachTick(() -> trHelper.insertPower(target, 512));
+		trHelper.insertFluid(target, new FluidStack(FluidRegistry.getFluid("water"), 1000));
+		helper.startSequence()
+				.thenIdle(140)
+				.thenExecute(() -> {
+					//helper.assertFluidTank(target, new FluidStack(FluidRegistry.getFluid("water"), 0));
+					if (!trHelper.itemEquals(target, target1, 1) ||
+							!trHelper.itemEquals(target, target2, 2) ||
+							!trHelper.itemEquals(target, target3, 3)
+					)
+						helper.fail("Did not create outputs");
 				})
 				.thenSucceed();
 	}
